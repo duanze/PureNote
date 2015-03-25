@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_note_show"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textSize="17sp"
+        android:padding="13dp"
+        android:lineSpacingMultiplier="1.3"
+        android:scrollbars="vertical"
+        android:textColor="@color/dimgrey"/>
+
+    <EditText
+        android:id="@+id/et_note_edit"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top|left"
+        android:textSize="17sp"
+        android:padding="13dp"
+        android:lineSpacingMultiplier="1.3"
+        android:background="@null"
+        android:maxLength="2048"
+        android:scrollbars="vertical"
+        style="@android:style/Widget.TextView"
+        android:textColor="@color/dimgrey"
+        android:visibility="gone"/>
+
+    <HorizontalScrollView
+        android:id="@+id/hsv_btns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <Button
+                android:id="@+id/transparent_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:textSize="12sp"
+                android:text="None"
+                android:gravity="center"
+                android:textColor="@color/dimgrey"
+                android:background="#00000000"/>
+
+
+            <Button
+                android:id="@+id/light_grey_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:background="#2AC0C0C0"/>
+
+            <Button
+                android:id="@+id/blue_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:background="#22FF0000"/>
+
+            <Button
+                android:id="@+id/green_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:background="#4AFFC0CB"/>
+
+            <Button
+                android:id="@+id/yellow_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:background="#4ADA70D6"/>
+
+            <Button
+                android:id="@+id/gold_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:background="#6AADD8E6"/>
+
+            <Button
+                android:id="@+id/pink_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:background="#3AFFD700"/>
+
+            <Button
+                android:id="@+id/red_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:background="#52FFFF00"/>
+
+
+            <Button
+                android:id="@+id/purple_btn"
+                android:layout_width="@dimen/color_picker_size"
+                android:layout_height="@dimen/color_picker_size"
+                android:layout_margin="@dimen/color_picker_margin"
+                android:background="#4A90EE90"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="@dimen/grid_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.duanze.gasst.view.GridUnit
+            android:id="@+id/sun"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/grid_margin"
+
+            android:layout_weight="1"
+            android:background="#5AFFFF00"/>
+
+        <com.duanze.gasst.view.GridUnit
+            android:id="@+id/mon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/grid_margin"
+
+            android:layout_weight="1"
+            android:background="#5A90EE90"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.duanze.gasst.view.GridUnit
+            android:id="@+id/tue"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/grid_margin"
+
+            android:layout_weight="1"
+            android:background="#5ADA70D6"/>
+
+        <com.duanze.gasst.view.GridUnit
+            android:id="@+id/wed"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/grid_margin"
+
+            android:layout_weight="1"
+            android:background="#5AADD8E6"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.duanze.gasst.view.GridUnit
+            android:id="@+id/thu"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/grid_margin"
+
+            android:layout_weight="1"
+            android:background="#5A808080"/>
+
+        <com.duanze.gasst.view.GridUnit
+            android:id="@+id/fri"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/grid_margin"
+
+            android:layout_weight="1"
+            android:background="#5AC0C0C0"/>
+    </LinearLayout>
+
+    <com.duanze.gasst.view.GridUnit
+        android:id="@+id/sat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/grid_margin"
+
+        android:layout_weight="1"
+        android:background="#5AFFC0CB"/>
+
+</LinearLayout>

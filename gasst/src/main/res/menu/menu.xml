@@ -1,0 +1,44 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.duanze.gasst.MainActivity">
+    <item
+        android:id="@+id/action_plus"
+        android:icon="@drawable/actionbar_add_icon"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_plus"/>
+
+    <item
+        android:id="@+id/action_change_mode"
+        android:icon="@drawable/browsers"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_change_mode">
+        <!--  submenu -->
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/m_color_grid"
+                    android:title="@string/m_color_grid"/>
+                <item
+                    android:id="@+id/m_classic_list"
+                    android:title="@string/m_classic_list"/>
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/bind_evernote"
+        android:icon="@drawable/evernote"
+        android:title="@string/bind_evernote"/>
+    <item
+        android:id="@+id/feedback"
+        android:icon="@drawable/feedback"
+        android:title="@string/action_feedback"/>
+    <item
+        android:id="@+id/evaluate"
+        android:icon="@drawable/gift"
+        android:title="@string/action_evaluate"/>
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/tea_cup"
+        android:title="@string/action_setting"/>
+</menu>

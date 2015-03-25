@@ -1,0 +1,46 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.duanze.gasst">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name="com.duanze.gasst.MyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.duanze.gasst.MainActivity"
+            android:logo="@drawable/notebook"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.duanze.gasst.activity.NoteActivity"
+            android:logo="@drawable/bookmarks"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.duanze.gasst.activity.Settings"
+            android:logo="@drawable/tea_cup"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!--evernote-->
+        <activity
+            android:name="com.evernote.client.android.EvernoteOAuthActivity"
+            android:configChanges="orientation|keyboardHidden" />
+
+        <service android:name=".service.AlarmService">
+        </service>
+        <receiver android:name=".receiver.AlarmReceiver">
+        </receiver>
+    </application>
+
+</manifest>
