@@ -12,6 +12,6 @@ Trying to make it can supply EverNote service.But the sdk give me so many "no re
 
 #Special Thanks
 [PixelLove](http://www.pixellove.com/)
-flavienlaurent，[DateTimePicker](https://github.com/flavienlaurent/datetimepicker)
+<br>flavienlaurent，[DateTimePicker](https://github.com/flavienlaurent/datetimepicker)
 <br>FaizMalkani，[FloatingActionButton](https://github.com/ FaizMalkani/FloatingActionButton)
 <br> baoyongzhang，[SwipeMenuListView](https://github.com/baoyongzhang/SwipeMenuListView)
