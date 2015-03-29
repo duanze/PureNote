@@ -3,6 +3,7 @@ package com.duanze.gasst.syn;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.util.LogUtil;
@@ -147,32 +148,6 @@ public class Evernote {
         }
     }
 
-    public void isNotebookExsist(final String guid, final String name) throws Exception {
-        try {
-            mEvernoteSession.getClientFactory()
-                    .createNoteStoreClient()
-                    .getNotebook(guid, new OnClientCallback<Notebook>() {
-                        @Override
-                        public void onSuccess(Notebook data) {
-                            if (data.getName().equals(name)) {
-                                LogUtil.e(TAG, guid + "笔记本存在:" + name);
-                                mSharedPreferences.edit()
-                                        .putString(EVERNOTE_NOTEBOOK_GUID, data.getGuid())
-                                        .apply();
-                            }
-                        }
-
-                        @Override
-                        public void onException(Exception exception) {
-                            LogUtil.e(TAG, guid + "笔记本不存在");
-                        }
-                    });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * create a notebook by bookname
      *
@@ -180,7 +155,7 @@ public class Evernote {
      * @return
      * @throws Exception
      */
-    public void createNotebook(final String bookname) throws Exception {
+    public void createNotebook(final String bookname){
         Notebook notebook = new Notebook();
         notebook.setDefaultNotebook(false);
         notebook.setName(bookname);
@@ -201,13 +176,41 @@ public class Evernote {
                         @Override
                         public void onException(Exception exception) {
                             LogUtil.i(TAG, "创建notebook失败");
+                            Toast.makeText(mContext,"创建笔记本失败",Toast.LENGTH_SHORT).show();
                         }
                     });
 
         } catch (Exception e) {
+            Toast.makeText(mContext,"创建笔记本失败",Toast.LENGTH_SHORT).show();
             LogUtil.i(TAG, "传输出现错误");
-            throw e;
+            e.printStackTrace();
         }
     }
 
+    public void isNotebookExsist(final String guid, final String name){
+        try {
+            mEvernoteSession.getClientFactory()
+                    .createNoteStoreClient()
+                    .getNotebook(guid, new OnClientCallback<Notebook>() {
+                        @Override
+                        public void onSuccess(Notebook data) {
+                            if (data.getName().equals(name)) {
+                                LogUtil.e(TAG, guid + "笔记本存在:" + name);
+                                mSharedPreferences.edit()
+                                        .putString(EVERNOTE_NOTEBOOK_GUID, data.getGuid())
+                                        .apply();
+                            }
+                        }
+
+                        @Override
+                        public void onException(Exception exception) {
+                            LogUtil.e(TAG, guid + "笔记本不存在");
+                            createNotebook(name);
+                        }
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

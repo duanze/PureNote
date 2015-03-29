@@ -1125,13 +1125,10 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 if (mi.getTitle() == getResources().getString(R.string.bind_evernote)) {
                     mEvernote.auth();
                 } else {
-                    try {
-                        mEvernote.createNotebook(Evernote.NOTEBOOK_NAME);
-                        mEvernote.isNotebookExsist(preferences.getString(Evernote
-                                .EVERNOTE_NOTEBOOK_GUID,""), Evernote.NOTEBOOK_NAME);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    mEvernote.createNotebook(Evernote.NOTEBOOK_NAME);
+                    mEvernote.isNotebookExsist(preferences.getString(Evernote
+                            .EVERNOTE_NOTEBOOK_GUID, ""), Evernote.NOTEBOOK_NAME);
+
                 }
             default:
                 break;
