@@ -28,6 +28,7 @@ public class GNoteDB {
     public static final String CREATED_TIME = "created_time";
     public static final String SYN_STATUS = "syn_status";
     public static final String GUID = "guid";
+    public static final String BOOK_GUID = "book_guid";
 
     /**
      * 数据库版本
@@ -68,6 +69,7 @@ public class GNoteDB {
             values.put(CREATED_TIME, gNote.getCreatedTime());
             values.put(SYN_STATUS, gNote.getSynStatus());
             values.put(GUID, gNote.getGuid());
+            values.put(BOOK_GUID, gNote.getBookGuid());
 
             db.insert(TABLE_NAME, null, values);
         }
@@ -93,6 +95,7 @@ public class GNoteDB {
                 gNote.setCreatedTime(cursor.getLong(cursor.getColumnIndex(CREATED_TIME)));
                 gNote.setSynStatus(cursor.getInt(cursor.getColumnIndex(SYN_STATUS)));
                 gNote.setGuid(cursor.getString(cursor.getColumnIndex(GUID)));
+                gNote.setBookGuid(cursor.getString(cursor.getColumnIndex(BOOK_GUID)));
 
                 list.add(gNote);
             } while (cursor.moveToNext());
@@ -140,9 +143,37 @@ public class GNoteDB {
             gNote.setCreatedTime(cursor.getLong(cursor.getColumnIndex(CREATED_TIME)));
             gNote.setSynStatus(cursor.getInt(cursor.getColumnIndex(SYN_STATUS)));
             gNote.setGuid(cursor.getString(cursor.getColumnIndex(GUID)));
+            gNote.setBookGuid(cursor.getString(cursor.getColumnIndex(BOOK_GUID)));
 
+            cursor.close();
             return gNote;
         }
+        cursor.close();
+        return null;
+    }
+
+    public GNote getGNoteByGuid(String guid) {
+        Cursor cursor = db.query(TABLE_NAME, null, "guid = ?", new String[]{guid}, null, null,
+                null);
+        if (cursor.moveToFirst()) {
+            GNote gNote = new GNote();
+            gNote.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+            gNote.setTime(cursor.getString(cursor.getColumnIndex(TIME)));
+            gNote.setAlertTime(cursor.getString(cursor.getColumnIndex(ALERT_TIME)));
+            gNote.setPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
+            gNote.setNote(cursor.getString(cursor.getColumnIndex(CONTENT)));
+            gNote.setDone(cursor.getInt(cursor.getColumnIndex(IS_DONE)));
+            gNote.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
+            gNote.setEditTime(cursor.getLong(cursor.getColumnIndex(EDIT_TIME)));
+            gNote.setCreatedTime(cursor.getLong(cursor.getColumnIndex(CREATED_TIME)));
+            gNote.setSynStatus(cursor.getInt(cursor.getColumnIndex(SYN_STATUS)));
+            gNote.setGuid(cursor.getString(cursor.getColumnIndex(GUID)));
+            gNote.setBookGuid(cursor.getString(cursor.getColumnIndex(BOOK_GUID)));
+
+            cursor.close();
+            return gNote;
+        }
+        cursor.close();
         return null;
     }
 
@@ -171,6 +202,7 @@ public class GNoteDB {
         values.put(CREATED_TIME, gNote.getCreatedTime());
         values.put(SYN_STATUS, gNote.getSynStatus());
         values.put(GUID, gNote.getGuid());
+        values.put(BOOK_GUID, gNote.getBookGuid());
 
         if (db.update(TABLE_NAME, values, "id = ?", new String[]{"" + gNote.getId()}) == 1) {
             return true;

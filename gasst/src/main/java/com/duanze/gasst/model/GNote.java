@@ -3,12 +3,17 @@ package com.duanze.gasst.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
+import com.evernote.client.android.EvernoteUtil;
+import com.evernote.edam.type.Note;
 
 import java.util.Calendar;
 
 public class GNote implements Parcelable {
+    public static final String TAG = "GNote";
+
     public static final int TRUE = 1;
     public static final int FALSE = 0;
 
@@ -28,6 +33,15 @@ public class GNote implements Parcelable {
     private long createdTime;//创建时间
     private int synStatus = NOTHING;//同步状态，仅登录EverNote后有效
     private String guid;//evernote 标志符，惟一确定一条note
+    private String bookGuid = "";
+
+    public String getBookGuid() {
+        return bookGuid;
+    }
+
+    public void setBookGuid(String bookGuid) {
+        this.bookGuid = bookGuid;
+    }
 
     public String getGuid() {
         return guid;
@@ -36,6 +50,7 @@ public class GNote implements Parcelable {
     public void setGuid(String guid) {
         this.guid = guid;
     }
+
     public long getCreatedTime() {
         return createdTime;
     }
@@ -124,6 +139,52 @@ public class GNote implements Parcelable {
         this.note = note;
     }
 
+    public boolean needUpdate() {
+        return synStatus == UPDATE;
+    }
+
+    public boolean needDelete() {
+        return synStatus == DELETE;
+    }
+
+    public boolean needCreate() {
+        return synStatus == NEW;
+    }
+
+    public Note toNote() {
+        Note note = new Note();
+        note.setTitle("PureNote " + Util.timeStamp(this));
+        note.setContent(convertContentToEvernote());
+        if (!bookGuid.equals("")) {
+            note.setNotebookGuid(bookGuid);
+        }
+        return note;
+    }
+
+    public static GNote parseGNote(Note n) {
+        GNote gNote = new GNote();
+        gNote.note = n.getContent();
+        gNote.guid = n.getGuid();
+        gNote.bookGuid = n.getNotebookGuid();
+        gNote.createdTime = n.getCreated();
+        gNote.editTime = n.getUpdated();
+        return gNote;
+    }
+
+    public Note toDeleteNote() {
+        Note note = new Note();
+        note.setGuid(guid);
+        return note;
+    }
+
+    private String convertContentToEvernote() {
+        String EvernoteContent = EvernoteUtil.NOTE_PREFIX
+                + note.replace("<br>", "<br/>")
+                + EvernoteUtil.NOTE_SUFFIX;
+        LogUtil.i(TAG, "同步文字:" + EvernoteContent);
+        return EvernoteContent;
+    }
+
     /**
      * 与一个Calendar进行日期（年月日）比较，小于返回-1，等于返回0，大于返回1
      *
@@ -179,6 +240,7 @@ public class GNote implements Parcelable {
         parcel.writeLong(createdTime);
         parcel.writeInt(synStatus);
         parcel.writeString(guid);
+        parcel.writeString(bookGuid);
     }
 
     public static final Creator<GNote> CREATOR = new Creator<GNote>() {
@@ -196,6 +258,7 @@ public class GNote implements Parcelable {
             gNote.createdTime = parcel.readLong();
             gNote.synStatus = parcel.readInt();
             gNote.guid = parcel.readString();
+            gNote.bookGuid = parcel.readString();
             return gNote;
         }
 

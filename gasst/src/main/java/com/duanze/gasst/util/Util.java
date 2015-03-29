@@ -43,32 +43,42 @@ public class Util {
      * @return
      */
     public static String timeString(GNote gNote) {
+        if (gNote.getPassed() == GNote.FALSE) {
+            return alertTimeStamp(gNote);
+        } else {
+           return timeStamp(gNote);
+        }
+    }
+
+    public static String alertTimeStamp(GNote gNote){
         String tmp = "";
         String[] allInfo;
-        if (gNote.getPassed() == GNote.FALSE) {
-            allInfo = gNote.getAlertTime().split(",");
-            if (allInfo.length == 5) {
-                tmp = "Link"
-                        + twoDigit(Integer.parseInt(allInfo[1]) + 1)
-                        + allInfo[2]
-                        + "At"
-                        + allInfo[3]
-                        + ":"
-                        + allInfo[4];
-            }
-        } else {
-            allInfo = gNote.getTime().split(",");
-            if (allInfo.length == 3) {
-                tmp = MONTH_ARR[Integer.parseInt(allInfo[1])]
-                        + "."
-                        + DATE_ARR[Integer.parseInt(allInfo[2]) - 1]
-                        + "."
-                        + allInfo[0];
-            }
+        allInfo = gNote.getAlertTime().split(",");
+        if (allInfo.length == 5) {
+            tmp = "Link"
+                    + twoDigit(Integer.parseInt(allInfo[1]) + 1)
+                    + allInfo[2]
+                    + "At"
+                    + allInfo[3]
+                    + ":"
+                    + allInfo[4];
         }
         return tmp;
     }
 
+    public static String timeStamp(GNote gNote){
+        String tmp = "";
+        String[] allInfo;
+        allInfo = gNote.getTime().split(",");
+        if (allInfo.length == 3) {
+            tmp = MONTH_ARR[Integer.parseInt(allInfo[1])]
+                    + "."
+                    + DATE_ARR[Integer.parseInt(allInfo[2]) - 1]
+                    + "."
+                    + allInfo[0];
+        }
+        return tmp;
+    }
 
     /**
      * 随机设置背景色

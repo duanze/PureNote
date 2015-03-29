@@ -266,6 +266,8 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     public void onLoginResult(Boolean result) {
         if (result) {
             bindSuccess();
+            //make sure notebook exists
+            mEvernote.createNotebook(Evernote.NOTEBOOK_NAME);
         }
     }
 

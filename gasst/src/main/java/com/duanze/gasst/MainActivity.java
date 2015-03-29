@@ -198,6 +198,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     public void onLoginResult(Boolean result) {
         if (result) {
             loginSuccess();
+            //make sure notebook exists
+            mEvernote.createNotebook(Evernote.NOTEBOOK_NAME);
         }
     }
 
@@ -1125,9 +1127,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 if (mi.getTitle() == getResources().getString(R.string.bind_evernote)) {
                     mEvernote.auth();
                 } else {
-                    mEvernote.createNotebook(Evernote.NOTEBOOK_NAME);
-                    mEvernote.isNotebookExsist(preferences.getString(Evernote
-                            .EVERNOTE_NOTEBOOK_GUID, ""), Evernote.NOTEBOOK_NAME);
 
                 }
             default:

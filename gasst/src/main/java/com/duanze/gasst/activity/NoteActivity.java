@@ -417,6 +417,10 @@ public class NoteActivity extends FragmentActivity {
 
         if (mode == MODE_NEW) {
             gNote.setNote(tmp);
+
+            //needCreate
+            gNote.setSynStatus(GNote.NEW);
+
             if (gNote.getNote().length() > 0) {
                 dbFlag = DB_SAVE;
             }
@@ -424,6 +428,10 @@ public class NoteActivity extends FragmentActivity {
             if (!tmp.equals(gNote.getNote())) {
                 gNote.setNote(tmp);
                 if (gNote.getNote().length() > 0) {
+
+                    //needUpdate
+                    gNote.setSynStatus(GNote.UPDATE);
+
                     dbFlag = DB_UPDATE;
                 } else {// gAsstNote.getNoteTextView().length() == 0，删除该记事
                     dbFlag = DB_DELETE;
