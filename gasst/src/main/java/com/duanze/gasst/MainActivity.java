@@ -1127,7 +1127,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 if (mi.getTitle() == getResources().getString(R.string.bind_evernote)) {
                     mEvernote.auth();
                 } else {
-
+//                    mEvernote.uploadData(gNoteList);
                 }
             default:
                 break;

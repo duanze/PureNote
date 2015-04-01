@@ -429,8 +429,10 @@ public class NoteActivity extends FragmentActivity {
                 gNote.setNote(tmp);
                 if (gNote.getNote().length() > 0) {
 
-                    //needUpdate
-                    gNote.setSynStatus(GNote.UPDATE);
+                    if (gNote.getSynStatus() == GNote.NOTHING) {
+                        //needUpdate
+                        gNote.setSynStatus(GNote.UPDATE);
+                    }
 
                     dbFlag = DB_UPDATE;
                 } else {// gAsstNote.getNoteTextView().length() == 0，删除该记事

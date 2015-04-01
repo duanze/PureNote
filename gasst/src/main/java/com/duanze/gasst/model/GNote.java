@@ -155,8 +155,11 @@ public class GNote implements Parcelable {
         Note note = new Note();
         note.setTitle("PureNote " + Util.timeStamp(this));
         note.setContent(convertContentToEvernote());
-        if (!bookGuid.equals("")) {
+        if (!"".equals(bookGuid)) {
             note.setNotebookGuid(bookGuid);
+        }
+        if (!"".equals(guid)) {
+            note.setGuid(guid);
         }
         return note;
     }

@@ -231,23 +231,35 @@ public class Evernote {
         }
     }
 
-    private void actionFinish(GNote gNote, int code) {
-        gNote.setSynStatus(GNote.NOTHING);
+    private void actionFinish(GNote gNote, int code, Note note) {
         if (code == GNote.DELETE) {
             db.deleteGNote(gNote.getId());
         } else {
+            gNote.setSynStatus(GNote.NOTHING);
+            gNote.setGuid(note.getGuid());
+            gNote.setEditTime(note.getUpdated());
+            gNote.setCreatedTime(note.getCreated());
+            gNote.setBookGuid(note.getNotebookGuid());
+
             db.updateGNote(gNote);
         }
     }
 
+    private String NoteBookGuid(){
+        return mSharedPreferences.getString(EVERNOTE_NOTEBOOK_GUID,"");
+    }
+
     private void createNote(final GNote gNote) {
         final Note note = gNote.toNote();
+        if ("".equals(gNote.getBookGuid())){
+            note.setNotebookGuid(NoteBookGuid());
+        }
         try {
             mEvernoteSession.getClientFactory().createNoteStoreClient().createNote(note,
                     new OnClientCallback<Note>() {
                         @Override
                         public void onSuccess(Note data) {
-                            actionFinish(gNote, GNote.NEW);
+                            actionFinish(gNote, GNote.NEW, data);
                             LogUtil.i(TAG, "created note title:" + note.getTitle());
                         }
 
@@ -268,7 +280,7 @@ public class Evernote {
                     new OnClientCallback<Integer>() {
                         @Override
                         public void onSuccess(Integer data) {
-                            actionFinish(gNote, GNote.DELETE);
+                            actionFinish(gNote, GNote.DELETE, null);
                         }
 
                         @Override
@@ -287,7 +299,7 @@ public class Evernote {
             mEvernoteSession.getClientFactory().createNoteStoreClient().updateNote(note, new OnClientCallback<Note>() {
                 @Override
                 public void onSuccess(Note data) {
-                    actionFinish(gNote, GNote.UPDATE);
+                    actionFinish(gNote, GNote.UPDATE, data);
                 }
 
                 @Override
@@ -418,7 +430,7 @@ public class Evernote {
         }
         downloading = true;
         final NoteFilter noteFilter = new NoteFilter();
-        final String guid = mSharedPreferences.getString(EVERNOTE_NOTEBOOK_GUID, "");
+        final String guid = NoteBookGuid();
         noteFilter.setNotebookGuid(guid);
         final NotesMetadataResultSpec notesMetadataResultSpec = new NotesMetadataResultSpec();
         notesMetadataResultSpec.setIncludeUpdated(true);
