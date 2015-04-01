@@ -4,49 +4,49 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/login_evernote"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:background="@drawable/setting_item"
-        android:orientation="horizontal"
-        android:clickable="true">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/login_evernote"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="55dp"-->
+        <!--android:paddingLeft="15dp"-->
+        <!--android:paddingRight="15dp"-->
+        <!--android:background="@drawable/setting_item"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:clickable="true">-->
 
-        <ImageView
-            android:id="@+id/login_img"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:contentDescription="@null"
-            android:src="@drawable/evernote"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/login_img"-->
+            <!--android:layout_width="35dp"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:contentDescription="@null"-->
+            <!--android:src="@drawable/evernote"/>-->
 
-        <TextView
-            android:id="@+id/login_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            android:textColor="@color/dimgrey"
-            android:textSize="17sp"
-            android:text="@string/login_evernote"/>
+        <!--<TextView-->
+            <!--android:id="@+id/login_text"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="@color/dimgrey"-->
+            <!--android:textSize="17sp"-->
+            <!--android:text="@string/login_evernote"/>-->
 
-        <ImageView
-            android:id="@+id/bind_arrow"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:contentDescription="@null"
-            android:src="@drawable/next"/>
-    </LinearLayout>
+        <!--<ImageView-->
+            <!--android:id="@+id/bind_arrow"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:contentDescription="@null"-->
+            <!--android:src="@drawable/next"/>-->
+    <!--</LinearLayout>-->
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/divider_line_color"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:background="@color/divider_line_color"/>-->
 
     <TextView
         android:layout_width="wrap_content"

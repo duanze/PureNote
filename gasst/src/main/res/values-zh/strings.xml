@@ -98,7 +98,7 @@
     <string name="new_note">启动时进入新Note</string>
     <string name="customize_color">自定义Note色彩</string>
     <string name="color_read">查看Note时填充背景</string>
-    <string name="random_color">Note格子随机填色</string>
+    <string name="random_color">Note格子随机填色（覆盖全局设置）</string>
     <string name="fold">过期Note单行折叠</string>
     <string name="max_lines">最大显示行数</string>
     <string name="no_weather">禁用天气同步</string>

@@ -3,9 +3,7 @@ package com.duanze.gasst.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,7 +22,6 @@ import android.widget.Toast;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.syn.Evernote;
-import com.duanze.gasst.util.LogUtil;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
 
@@ -79,15 +76,15 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         actionBar.setTitle(R.string.action_setting);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        loginEvernote = (LinearLayout) findViewById(R.id.login_evernote);
-        loginImg = (ImageView) findViewById(R.id.login_img);
-        loginText = (TextView) findViewById(R.id.login_text);
-
-        mEvernote = new Evernote(this, this);
-        if (mEvernote.isLogin()) {
-            bindSuccess();
-        }
-        loginEvernote.setOnClickListener(this);
+//        loginEvernote = (LinearLayout) findViewById(R.id.login_evernote);
+//        loginImg = (ImageView) findViewById(R.id.login_img);
+//        loginText = (TextView) findViewById(R.id.login_text);
+//
+//        mEvernote = new Evernote(this, this);
+//        if (mEvernote.isLogin()) {
+//            bindSuccess();
+//        }
+//        loginEvernote.setOnClickListener(this);
     }
 
     /**
@@ -228,34 +225,34 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.login_evernote:
-                if (!mEvernote.isLogin()) {
-                    LogUtil.i(TAG, "try to login");
-                    mEvernote.auth();
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
-                    builder.setMessage(R.string.logout_text)
-                            .setTitle(R.string.alert)
-                            .setPositiveButton(R.string.confirm,
-                                    new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog,
-                                                            int which) {
-                                            mEvernote.Logout();
-                                        }
-                                    })
-                            .setNegativeButton(R.string.cancel,
-                                    new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog,
-                                                            int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }).create().show();
-                }
-                break;
+//            case R.id.login_evernote:
+//                if (!mEvernote.isLogin()) {
+//                    LogUtil.i(TAG, "try to login");
+//                    mEvernote.auth();
+//                } else {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+//                    builder.setMessage(R.string.logout_text)
+//                            .setTitle(R.string.alert)
+//                            .setPositiveButton(R.string.confirm,
+//                                    new DialogInterface.OnClickListener() {
+//
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog,
+//                                                            int which) {
+//                                            mEvernote.Logout();
+//                                        }
+//                                    })
+//                            .setNegativeButton(R.string.cancel,
+//                                    new DialogInterface.OnClickListener() {
+//
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog,
+//                                                            int which) {
+//                                            dialog.dismiss();
+//                                        }
+//                                    }).create().show();
+//                }
+//                break;
 
             default:
                 break;

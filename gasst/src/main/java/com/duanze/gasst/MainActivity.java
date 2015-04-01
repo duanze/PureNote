@@ -274,7 +274,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         datePickerDialog.setCloseOnSingleTapDay(true);
 
         //如果是第一次启动应用，在数据库中添加note
-        firstLaunch();
+//        firstLaunch();
         gNoteList = db.loadGNotes();
 
         readSetting();
@@ -575,13 +575,13 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         }
 
         //evernote
-        if (bindItem != null) {
-            if (mEvernote.isLogin()) {
-                loginSuccess();
-            } else {
-                logoutSuccess();
-            }
-        }
+//        if (bindItem != null) {
+//            if (mEvernote.isLogin()) {
+//                loginSuccess();
+//            } else {
+//                logoutSuccess();
+//            }
+//        }
     }
 
     private void refreshUI() {
@@ -1075,11 +1075,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         //bind-evernote item
         bindItem = menu.getItem(2);
         //evernote
-        if (mEvernote.isLogin()) {
-            loginSuccess();
-        } else {
-            logoutSuccess();
-        }
+//        if (mEvernote.isLogin()) {
+//            loginSuccess();
+//        } else {
+//            logoutSuccess();
+//        }
         return true;
     }
 
@@ -1123,12 +1123,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 break;
 
             //evernote
-            case R.id.bind_evernote:
-                if (mi.getTitle() == getResources().getString(R.string.bind_evernote)) {
-                    mEvernote.auth();
-                } else {
+//            case R.id.bind_evernote:
+//                if (mi.getTitle() == getResources().getString(R.string.bind_evernote)) {
+//                    mEvernote.auth();
+//                } else {
 //                    mEvernote.uploadData(gNoteList);
-                }
+//                }
             default:
                 break;
         }

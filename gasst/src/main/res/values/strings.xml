@@ -98,7 +98,7 @@
     <string name="new_note">New note when start-up</string>
     <string name="customize_color">Customize note color</string>
     <string name="color_read">Color when read note</string>
-    <string name="random_color">Color note grid randomly</string>
+    <string name="random_color">Color note grid randomly(Override Global)</string>
     <string name="fold">Fold overdue note</string>
     <string name="max_lines">Max lines</string>
     <string name="no_weather">Ban weather</string>
