@@ -64,6 +64,7 @@
     <string name="app_name">PureNote</string>
     <string name="action_search">Search</string>
     <string name="action_plus">Plus</string>
+    <string name="edit_date">Edit date</string>
     <string name="action_change_mode">Change…</string>
     <string name="action_trash">Delete</string>
     <string name="action_edit">Edit</string>

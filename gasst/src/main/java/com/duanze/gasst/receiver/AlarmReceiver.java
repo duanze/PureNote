@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.NotificationCompat;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.NoteActivity;
@@ -37,7 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         mIntent.putExtra("mode", NoteActivity.MODE_SHOW);
         PendingIntent pi = PendingIntent.getActivity(context, no, mIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        Notification notification = new Notification.Builder(context)
+        Notification notification = new NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setContentTitle(Util.timeString(gNote))
                 .setContentText(gNote.getNote())

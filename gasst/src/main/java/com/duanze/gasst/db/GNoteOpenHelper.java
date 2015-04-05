@@ -22,7 +22,8 @@ public class GNoteOpenHelper extends SQLiteOpenHelper {
                     + "created_time integer,"
                     + "syn_status integer,"
                     + "guid text,"
-                    + "book_guid text"
+                    + "book_guid text,"
+                    + "deleted integer"
                     + ")";
 
     public GNoteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,

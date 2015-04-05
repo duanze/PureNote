@@ -55,6 +55,7 @@ public class NoteActivity extends FragmentActivity {
     private Calendar today;
 
     private DatePickerDialog pickerDialog;
+    private DatePickerDialog datePickerDialog;
     public static final String DATEPICKER_TAG = "datepicker";
     public static final String TIMEPICKER_TAG = "timepicker";
 
@@ -120,6 +121,15 @@ public class NoteActivity extends FragmentActivity {
         }
     };
 
+    private class MyDatePickerListener implements DatePickerDialog.OnDateSetListener {
+        @Override
+        public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+            gNote.setTimeFromDate(year, month, day);
+            checkDbFlag();
+
+            updateActionBarTitle();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +160,13 @@ public class NoteActivity extends FragmentActivity {
         pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10,
                 today.get(Calendar.YEAR) + 10);
         pickerDialog.setCloseOnSingleTapDay(true);
+
+        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(),
+                today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+                today.get(Calendar.DAY_OF_MONTH), false);
+        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10,
+                today.get(Calendar.YEAR) + 10);
+        datePickerDialog.setCloseOnSingleTapDay(true);
 
         gNote = getIntent().getParcelableExtra("gAsstNote_data");
         isPassed = gNote.getPassed();
@@ -189,7 +206,7 @@ public class NoteActivity extends FragmentActivity {
         if (mode == MODE_NEW || mode == MODE_EDIT) {
             textView.setVisibility(View.GONE);
             editText.setVisibility(View.VISIBLE);
-            editText.setText(gNote.getNote());
+            editText.setText(gNote.getNoteFromHtml());
             editText.setSelection(0);
         } else if (mode == MODE_SHOW) {
             int no = getIntent().getIntExtra("no", -1);
@@ -201,7 +218,7 @@ public class NoteActivity extends FragmentActivity {
                 manager.cancel(no);
                 uiShouldUpdate();
             }
-            textView.setText(gNote.getNote());
+            textView.setText(gNote.getNoteFromHtml());
             textView.setMovementMethod(ScrollingMovementMethod.getInstance());
         }
     }
@@ -333,6 +350,9 @@ public class NoteActivity extends FragmentActivity {
                 activityStart(this, gNote, MODE_EDIT);
                 finish();
                 return true;
+            case R.id.edit_date:
+                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+                return true;
             default:
                 return true;
         }
@@ -375,15 +395,59 @@ public class NoteActivity extends FragmentActivity {
                         // TODO Auto-generated method stub
                         //需不是新建记事，方可从数据库中删除数据
                         if (mode != MODE_NEW) {
-                            db.deleteGNote(gNote.getId());
-                            if (!gNote.isPassed()) {
-                                AlarmService.cancelTask(NoteActivity.this, gNote);
-                            }
+                            deleteNote();
                             uiShouldUpdate();
                         }
                         finish();
                     }
                 }).show();
+    }
+
+    private void deleteNote() {
+//        db.deleteGNote(gNote.getId());
+
+        gNote.setDeleted(GNote.TRUE);
+        if ("".equals(gNote.getGuid())) {
+            db.deleteGNote(gNote.getId());
+        } else {
+            gNote.setSynStatus(GNote.DELETE);
+            db.updateGNote(gNote);
+        }
+
+        if (!gNote.isPassed()) {
+            AlarmService.cancelTask(NoteActivity.this, gNote);
+        }
+    }
+
+    private void createNote() {
+        gNote.setNoteToHtml(editText.getText());
+
+        //needCreate
+        gNote.setSynStatus(GNote.NEW);
+
+        db.saveGNote(gNote);
+        //当有定时提醒
+        if (!gNote.isPassed()) {
+            //新建记事尚无id，需存储后从数据库中提取
+            gNote.setId(db.getNewestGNoteId());
+            AlarmService.alarmTask(this);
+        }
+    }
+
+    private void updateNote() {
+        gNote.setNoteToHtml(editText.getText());
+        if (gNote.getSynStatus() == GNote.NOTHING) {
+            //needUpdate
+            gNote.setSynStatus(GNote.UPDATE);
+        }
+
+        db.updateGNote(gNote);
+        //当有定时提醒
+        if (!gNote.isPassed()) {
+            AlarmService.alarmTask(this);
+        } else if (isPassed == GNote.FALSE) {//手动取消定时提醒
+            AlarmService.cancelTask(this, gNote);
+        }
     }
 
     /**
@@ -413,58 +477,32 @@ public class NoteActivity extends FragmentActivity {
      * 退出时的操作，用于 重写Back键 与 导航键
      */
     private void exitOperation() {
-        String tmp = editText.getText().toString();
+        String tmp = editText.getText().toString().trim();
 
         if (mode == MODE_NEW) {
-            gNote.setNote(tmp);
+            if (tmp.length() > 0) {
 
-            //needCreate
-            gNote.setSynStatus(GNote.NEW);
-
-            if (gNote.getNote().length() > 0) {
                 dbFlag = DB_SAVE;
             }
         } else if (mode == MODE_EDIT) {
-            if (!tmp.equals(gNote.getNote())) {
-                gNote.setNote(tmp);
-                if (gNote.getNote().length() > 0) {
-
-                    if (gNote.getSynStatus() == GNote.NOTHING) {
-                        //needUpdate
-                        gNote.setSynStatus(GNote.UPDATE);
-                    }
+            if (tmp.length() > 0) {
+                if (!tmp.equals(gNote.getNoteFromHtml().toString().trim())) {
 
                     dbFlag = DB_UPDATE;
-                } else {// gAsstNote.getNoteTextView().length() == 0，删除该记事
-                    dbFlag = DB_DELETE;
                 }
+            } else {
+                dbFlag = DB_DELETE;
             }
         }
 
         if (dbFlag == DB_SAVE) {
-            db.saveGNote(gNote);
-            //当有定时提醒
-            if (!gNote.isPassed()) {
-                //新建记事尚无id，需存储后从数据库中提取
-                gNote.setId(db.getNewestGNoteId());
-                AlarmService.alarmTask(this);
-            }
+            createNote();
             uiShouldUpdate();
         } else if (dbFlag == DB_UPDATE) {
-            db.updateGNote(gNote);
-            //当有定时提醒
-            if (!gNote.isPassed()) {
-                AlarmService.alarmTask(this);
-            } else if (isPassed == GNote.FALSE) {//手动取消定时提醒
-                AlarmService.cancelTask(this, gNote);
-            }
+            updateNote();
             uiShouldUpdate();
         } else if (dbFlag == DB_DELETE) {
-            db.deleteGNote(gNote.getId());
-            //当有定时提醒,取消之
-            if (!gNote.isPassed()) {
-                AlarmService.cancelTask(this, gNote);
-            }
+            deleteNote();
             uiShouldUpdate();
         }
 

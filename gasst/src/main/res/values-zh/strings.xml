@@ -62,6 +62,7 @@
     <string name="app_name">极简笔记</string>
     <string name="action_search">搜索</string>
     <string name="action_plus">添加Note</string>
+    <string name="edit_date">修改日期</string>
     <string name="action_change_mode">显示…</string>
     <string name="action_trash">删除</string>
     <string name="action_edit">编辑</string>

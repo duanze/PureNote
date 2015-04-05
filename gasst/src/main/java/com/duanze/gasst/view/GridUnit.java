@@ -3,6 +3,7 @@ package com.duanze.gasst.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
@@ -126,8 +127,11 @@ public class GridUnit extends RelativeLayout {
     /**
      * 对viewUnit的note(TextView)写入数据
      *
-     * @param text String
+     * @param text Spanned
      */
+    public void setViewNote(Spanned text) {
+        note.setText("        " + text);
+    }
     public void setViewNote(String text) {
         note.setText("        " + text);
     }

@@ -2,6 +2,8 @@ package com.duanze.gasst.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.Html;
+import android.text.Spanned;
 
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
@@ -23,7 +25,7 @@ public class GNote implements Parcelable {
     public static final int DELETE = 3;
 
     private int id = -1;
-    private String time;
+    private String time = "";
     private String alertTime = "";
     private int passed = TRUE;
     private String note = "";
@@ -34,6 +36,16 @@ public class GNote implements Parcelable {
     private int synStatus = NOTHING;//同步状态，仅登录EverNote后有效
     private String guid;//evernote 标志符，惟一确定一条note
     private String bookGuid = "";
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
+    private int deleted = FALSE;
 
     public String getBookGuid() {
         return bookGuid;
@@ -115,8 +127,8 @@ public class GNote implements Parcelable {
         return passed;
     }
 
-    public String getNote() {
-        return note;
+    public Spanned getNoteFromHtml() {
+        return Html.fromHtml(note);
     }
 
     public void setId(int id) {
@@ -135,8 +147,16 @@ public class GNote implements Parcelable {
         this.alertTime = alertTime;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setNoteToHtml(Spanned note) {
+        this.note = Html.toHtml(note);
+    }
+
+    public void setNote(String tmp) {
+        note = tmp;
+    }
+
+    public String getNote() {
+        return note;
     }
 
     public boolean needUpdate() {
@@ -149,6 +169,10 @@ public class GNote implements Parcelable {
 
     public boolean needCreate() {
         return synStatus == NEW;
+    }
+
+    public boolean isDeleted() {
+        return deleted == TRUE;
     }
 
     public Note toNote() {
@@ -164,6 +188,14 @@ public class GNote implements Parcelable {
         return note;
     }
 
+    public void setTimeFromDate(int year, int month, int day) {
+        time = year
+                + ","
+                + Util.twoDigit(month)
+                + ","
+                + Util.twoDigit(day);
+    }
+
     public static GNote parseGNote(Note n) {
         GNote gNote = new GNote();
         gNote.note = n.getContent();
@@ -171,6 +203,21 @@ public class GNote implements Parcelable {
         gNote.bookGuid = n.getNotebookGuid();
         gNote.createdTime = n.getCreated();
         gNote.editTime = n.getUpdated();
+
+        boolean setTime = false;
+        String title = n.getTitle();
+        String[] tmp = title.split(" ");
+        if (tmp.length == 2) {
+            String[] allInfo = tmp[1].split("\\.");
+            if (allInfo.length == 3){
+                gNote.setTime(Util.parseTimeStamp(allInfo));
+                setTime = true;
+            }
+        }
+        if (!setTime) {
+            Calendar today = Calendar.getInstance();
+            gNote.setTimeFromDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
+        }
         return gNote;
     }
 
@@ -244,6 +291,7 @@ public class GNote implements Parcelable {
         parcel.writeInt(synStatus);
         parcel.writeString(guid);
         parcel.writeString(bookGuid);
+        parcel.writeInt(deleted);
     }
 
     public static final Creator<GNote> CREATOR = new Creator<GNote>() {
@@ -262,6 +310,7 @@ public class GNote implements Parcelable {
             gNote.synStatus = parcel.readInt();
             gNote.guid = parcel.readString();
             gNote.bookGuid = parcel.readString();
+            gNote.deleted = parcel.readInt();
             return gNote;
         }
 

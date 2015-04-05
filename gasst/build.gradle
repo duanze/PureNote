@@ -7,8 +7,8 @@ android {
         applicationId "com.duanze.gasst"
         minSdkVersion 17
         targetSdkVersion 19
-        versionCode 10
-        versionName "1.9"
+        versionCode 11
+        versionName "2.0"
     }
     buildTypes {
         release {
@@ -19,9 +19,11 @@ android {
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':datetimepicker-library')
     compile project(':FloatingActionButton')
-    compile project(':EverNote-library')
+    compile 'com.android.support:support-v4:19.+'
+    compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile project(':EverNoteEx')
 }
 
 repositories {

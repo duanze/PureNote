@@ -46,11 +46,11 @@ public class Util {
         if (gNote.getPassed() == GNote.FALSE) {
             return alertTimeStamp(gNote);
         } else {
-           return timeStamp(gNote);
+            return timeStamp(gNote);
         }
     }
 
-    public static String alertTimeStamp(GNote gNote){
+    public static String alertTimeStamp(GNote gNote) {
         String tmp = "";
         String[] allInfo;
         allInfo = gNote.getAlertTime().split(",");
@@ -66,7 +66,7 @@ public class Util {
         return tmp;
     }
 
-    public static String timeStamp(GNote gNote){
+    public static String timeStamp(GNote gNote) {
         String tmp = "";
         String[] allInfo;
         allInfo = gNote.getTime().split(",");
@@ -80,9 +80,32 @@ public class Util {
         return tmp;
     }
 
+    public static String parseTimeStamp(String[] info) {
+        String year = info[2];
+        int month = 1;
+        int day = 0;
+
+        for (int i = 0; i < MONTH_ARR.length; i++) {
+            String m = MONTH_ARR[i];
+            if (m.equals(info[0])) {
+                month = i;
+                break;
+            }
+        }
+
+        for (int i = 0; i < DATE_ARR.length; i++) {
+            String d = DATE_ARR[i];
+            if (d.equals(info[1])) {
+                day = i + 1;
+                break;
+            }
+        }
+
+        return year + "," + month + "," + day;
+    }
+
     /**
      * 随机设置背景色
-     *
      */
     public static void randomBackground(FloatingActionButton b) {
         int color = GREY;

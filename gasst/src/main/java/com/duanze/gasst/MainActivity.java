@@ -11,6 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -54,6 +56,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback {
     public static final String TAG = "MainActivity";
@@ -147,6 +151,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private MenuItem bindItem;
     private Evernote mEvernote;
 
+    private Timer syncTimer;
+
     public int getMaxLines() {
         return maxLines;
     }
@@ -184,12 +190,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         }
     };
 
-    private void loginSuccess() {
+    private void loginNow() {
         bindItem.setTitle(R.string.syn_evernote);
         bindItem.setIcon(R.drawable.flags);
     }
 
-    private void logoutSuccess() {
+    private void logoutNow() {
         bindItem.setTitle(R.string.bind_evernote);
         bindItem.setIcon(R.drawable.evernote);
     }
@@ -197,9 +203,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     @Override
     public void onLoginResult(Boolean result) {
         if (result) {
-            loginSuccess();
-            //make sure notebook exists
-            mEvernote.createNotebook(Evernote.NOTEBOOK_NAME);
+            loginNow();
+            mEvernote.sync(true, true, new SyncHandler());
         }
     }
 
@@ -217,11 +222,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         @Override
         public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
             GNote gNote = new GNote();
-            gNote.setTime(year
-                    + ","
-                    + Util.twoDigit(month)
-                    + ","
-                    + Util.twoDigit(day));
+            gNote.setTimeFromDate(year, month, day);
             NoteActivity.activityStart(MainActivity.this, gNote, NoteActivity.MODE_NEW);
         }
     }
@@ -247,7 +248,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         setContent();
         setOverflowShowingAlways();
 
-
+        if (mEvernote.isLogin()) {
+            mEvernote.sync(true, true, null);
+        }
         //test code
 //        TypedArray array = getTheme().obtainStyledAttributes(new int[]{
 //                android.R.attr.colorBackground,
@@ -274,7 +277,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         datePickerDialog.setCloseOnSingleTapDay(true);
 
         //如果是第一次启动应用，在数据库中添加note
-//        firstLaunch();
+        firstLaunch();
         gNoteList = db.loadGNotes();
 
         readSetting();
@@ -285,7 +288,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         LogUtil.i(TAG, "width: " + screenWidth);
         leftEdge = -screenWidth;
         rightEdge = screenWidth;
-        defaultSpeed = screenWidth / 12;
+        defaultSpeed = screenWidth / 10;
 
         //evernote
         mEvernote = new Evernote(this, this);
@@ -300,29 +303,18 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             editor.apply();
 
             GNote one = new GNote();
-            one.setTime(today.get(Calendar.YEAR)
-                    + ","
-                    + Util.twoDigit(today.get(Calendar.MONTH))
-                    + ","
-                    + Util.twoDigit(today.get(Calendar.DAY_OF_MONTH)));
+            one.setCalToTime(today);
             one.setNote(getResources().getString(R.string.tip1) + "(・8・)");
             db.saveGNote(one);
 
             GNote two = new GNote();
-            two.setTime(today.get(Calendar.YEAR)
-                    + ","
-                    + Util.twoDigit(today.get(Calendar.MONTH))
-                    + ","
-                    + Util.twoDigit(today.get(Calendar.DAY_OF_MONTH) - 1));
+            two.setTimeFromDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH) - 1);
             two.setNote(getResources().getString(R.string.tip2));
             db.saveGNote(two);
 
             GNote three = new GNote();
-            three.setTime(today.get(Calendar.YEAR)
-                    + ","
-                    + Util.twoDigit(today.get(Calendar.MONTH))
-                    + ","
-                    + Util.twoDigit(today.get(Calendar.DAY_OF_MONTH) - 2));
+            three.setTimeFromDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+                    today.get(Calendar.DAY_OF_MONTH) - 2);
             three.setNote(getResources().getString(R.string.tip3));
             db.saveGNote(three);
         }
@@ -368,44 +360,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         });
 
         if (creator == null) {
-            creator = new SwipeMenuCreator() {
-                @Override
-                public void create(SwipeMenu menu) {
-                    // create "remind" item
-                    SwipeMenuItem remindItem = new SwipeMenuItem(
-                            getApplicationContext());
-                    // set item background
-                    remindItem.setBackground(new ColorDrawable(Color.rgb(0x33,
-                            0xB5, 0xE5)));
-                    // set item width
-                    remindItem.setWidth(dp2px(66));
-                    // set item title
-                    remindItem.setTitle(R.string.remind);
-                    // set item title fontsize
-                    remindItem.setTitleSize(17);
-                    // set item title font color
-                    remindItem.setTitleColor(Color.WHITE);
-                    // add to menu
-                    menu.addMenuItem(remindItem);
-
-                    // create "delete" item
-                    SwipeMenuItem deleteItem = new SwipeMenuItem(
-                            getApplicationContext());
-                    // set item background
-                    deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                            0x3F, 0x25)));
-                    // set item width
-                    deleteItem.setWidth(dp2px(66));
-                    // set item title
-                    deleteItem.setTitle(R.string.delete);
-                    // set item title fontsize
-                    deleteItem.setTitleSize(17);
-                    // set item title font color
-                    deleteItem.setTitleColor(Color.WHITE);
-                    // add to menu
-                    menu.addMenuItem(deleteItem);
-                }
-            };
+            buildCreator();
         }
         // set creator
         noteTitleListView.setMenuCreator(creator);
@@ -422,7 +377,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                     case 1:
                         // delete
                         gNote = gNoteList.get(position);
-                        db.deleteGNote(gNoteList.get(position).getId());
+//                        db.deleteGNote(gNoteList.get(position).getId());
+                        deleteNote();
                         refreshUI();
                         if (!gNote.isPassed()) {
                             AlarmService.cancelTask(MainActivity.this, gNote);
@@ -442,6 +398,63 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             }
         });
         fabButton.listenTo(noteTitleListView);
+    }
+
+    private void buildCreator() {
+        creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "remind" item
+                SwipeMenuItem remindItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                remindItem.setBackground(new ColorDrawable(Color.rgb(0x33,
+                        0xB5, 0xE5)));
+                // set item width
+                remindItem.setWidth(dp2px(66));
+                // set item title
+                remindItem.setTitle(R.string.remind);
+                // set item title fontsize
+                remindItem.setTitleSize(17);
+                // set item title font color
+                remindItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(remindItem);
+
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(dp2px(66));
+                // set item title
+                deleteItem.setTitle(R.string.delete);
+                // set item title fontsize
+                deleteItem.setTitleSize(17);
+                // set item title font color
+                deleteItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+            }
+        };
+    }
+
+    private void deleteNote() {
+//        db.deleteGNote(gNote.getId());
+
+        gNote.setDeleted(GNote.TRUE);
+        if ("".equals(gNote.getGuid())) {
+            db.deleteGNote(gNote.getId());
+        } else {
+            gNote.setSynStatus(GNote.DELETE);
+            db.updateGNote(gNote);
+        }
+
+        if (!gNote.isPassed()) {
+            AlarmService.cancelTask(this, gNote);
+        }
     }
 
     private void initModeGrid() {
@@ -529,7 +542,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         //记事格子随机填色
         randomColor = preferences.getBoolean(Settings.RANDOM_COLOR, true);
         //最大显示行数
-        maxLines = preferences.getInt(Settings.MAX_LINES, 5);
+        maxLines = preferences.getInt(Settings.MAX_LINES, 3);
 
         customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
     }
@@ -575,27 +588,59 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         }
 
         //evernote
-//        if (bindItem != null) {
-//            if (mEvernote.isLogin()) {
-//                loginSuccess();
-//            } else {
-//                logoutSuccess();
-//            }
-//        }
+        if (bindItem != null) {
+            if (mEvernote.isLogin()) {
+                loginNow();
+            } else {
+                logoutNow();
+            }
+        }
+
+        boolean syncNow = preferences.getBoolean("sync_now", false);
+        if (syncNow) {
+            preferences.edit().putBoolean("sync_now", false).apply();
+            mEvernote.sync(true, true, new SyncHandler());
+        }
+
+        if (mEvernote.isLogin()) {
+            syncTimer = new Timer();
+            LogUtil.i(TAG, "启动自动更新任务");
+            syncTimer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    mEvernote.sync(true, true, null);
+                }
+            }, 30000, 50000);
+        }
     }
 
-    private void refreshUI() {
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (syncTimer != null) {
+            LogUtil.i(TAG, "结束定时同步任务");
+            syncTimer.cancel();
+        }
+    }
+
+    private void updateGNoteList() {
         gNoteList.clear();
         List<GNote> tmpList = db.loadGNotes();
         for (GNote g : tmpList) {
             gNoteList.add(g);
         }
+    }
+
+    private void refreshUI() {
+        updateGNoteList();
 
         if (mode == MODE_LIST) {
             listRefresh();
         } else if (mode == MODE_GRID) {
             gridRefresh();
         }
+
     }
 
 
@@ -637,7 +682,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                     }
                     if (gNoteList.get(index).compareToCalendar(tmpCal) == 0) {
                         final GNote note = gNoteList.get(index);
-                        gridUnit.setViewNote(note.getNote());
+                        gridUnit.setViewNote(note.getNoteFromHtml());
 
                         //判断格子色彩
                         if (randomColor) {
@@ -865,16 +910,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             switch (motionEvent.getAction()) {
                 //手指按下时的逻辑
                 case MotionEvent.ACTION_DOWN:
-                    LogUtil.i(TAG, "MotionEvent.ACTION_DOWN");
+//                    LogUtil.i(TAG, "MotionEvent.ACTION_DOWN");
                     xDown = motionEvent.getRawX();
                     break;
                 //手指移动时的逻辑
                 case MotionEvent.ACTION_MOVE:
-                    LogUtil.i(TAG, "ACTION_MOVE");
+//                    LogUtil.i(TAG, "ACTION_MOVE");
                     xMove = motionEvent.getRawX();
                     //手指滑动的距离
                     xDistance = -(int) (xMove - xDown);
-                    LogUtil.i(TAG, "-----------------dist = " + xDistance);
+//                    LogUtil.i(TAG, "-----------------dist = " + xDistance);
 
                     changeViewport(xDistance);
                     //当有移动发生，截断点击
@@ -884,7 +929,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                     break;
                 //手指抬起时的逻辑
                 case MotionEvent.ACTION_UP:
-                    LogUtil.i(TAG, "ACTION_UP");
+//                    LogUtil.i(TAG, "ACTION_UP");
                     xUp = motionEvent.getRawX();
                     //判断用户手指的意图，这块可以自己改写逻辑
                     if (wantToShowPrevious()) {
@@ -1075,11 +1120,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         //bind-evernote item
         bindItem = menu.getItem(2);
         //evernote
-//        if (mEvernote.isLogin()) {
-//            loginSuccess();
-//        } else {
-//            logoutSuccess();
-//        }
+        if (mEvernote.isLogin()) {
+            loginNow();
+        } else {
+            logoutNow();
+        }
         return true;
     }
 
@@ -1123,16 +1168,35 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 break;
 
             //evernote
-//            case R.id.bind_evernote:
-//                if (mi.getTitle() == getResources().getString(R.string.bind_evernote)) {
-//                    mEvernote.auth();
-//                } else {
-//                    mEvernote.uploadData(gNoteList);
-//                }
+            case R.id.bind_evernote:
+                if (!mEvernote.isLogin()) {
+                    mEvernote.auth();
+                } else {
+
+                    mEvernote.sync(true, true, new SyncHandler());
+                }
             default:
                 break;
         }
         return true;
+    }
+
+    class SyncHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Evernote.SYNC_START:
+//                    findViewById(R.id.sync_progress).setVisibility(View.VISIBLE);
+                    break;
+                case Evernote.SYNC_END:
+//                    findViewById(R.id.sync_progress).setVisibility(View.GONE);
+                    refreshUI();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     /**

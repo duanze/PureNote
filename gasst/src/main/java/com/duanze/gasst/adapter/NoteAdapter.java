@@ -54,7 +54,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
             holder = (Holder) view.getTag();
         }
 
-        holder.title.setText(gNote.getNote());
+        holder.title.setText(gNote.getNoteFromHtml());
         //如果设置了过期单行折叠并且该条note已过期
         if (isFold && gNote.compareToCalendar(today) < 0) {
             holder.title.setMaxLines(1);
