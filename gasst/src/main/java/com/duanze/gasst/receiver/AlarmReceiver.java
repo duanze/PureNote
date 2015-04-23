@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
+import android.text.Html;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.NoteActivity;
@@ -41,11 +42,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification notification = new NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setContentTitle(Util.timeString(gNote))
-                .setContentText(gNote.getNote())
+                .setContentText(Html.fromHtml(gNote.getNote()))
                 .setSmallIcon(R.drawable.small_logo)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                         R.drawable.logo))
-                .setTicker(gNote.getNote())
+                .setTicker(Html.fromHtml(gNote.getNote()))
                 .setContentIntent(pi)
                 .build();
         notification.flags |= Notification.FLAG_INSISTENT; // 声音一直响到用户相应，就是通知会一直响起，直到你触碰通知栏的时间就会停止

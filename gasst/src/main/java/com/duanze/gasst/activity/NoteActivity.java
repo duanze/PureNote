@@ -103,6 +103,15 @@ public class NoteActivity extends FragmentActivity {
     }
 
     /**
+     * 以cal为日期写一篇新记事
+     */
+    public static void writeNewNote(Context mContext, Calendar cal) {
+        GNote note = new GNote();
+        note.setCalToTime(cal);
+        NoteActivity.activityStart(mContext, note, NoteActivity.MODE_NEW);
+    }
+
+    /**
      * 内部类，监听时间选择器专用
      */
     private CallBackListener listener = new CallBackListener() {
@@ -481,13 +490,11 @@ public class NoteActivity extends FragmentActivity {
 
         if (mode == MODE_NEW) {
             if (tmp.length() > 0) {
-
                 dbFlag = DB_SAVE;
             }
         } else if (mode == MODE_EDIT) {
             if (tmp.length() > 0) {
                 if (!tmp.equals(gNote.getNoteFromHtml().toString().trim())) {
-
                     dbFlag = DB_UPDATE;
                 }
             } else {

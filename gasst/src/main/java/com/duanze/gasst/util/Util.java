@@ -80,10 +80,10 @@ public class Util {
         return tmp;
     }
 
-    public static String parseTimeStamp(String[] info) {
+    public static String parseTimeStamp (String[] info) {
         String year = info[2];
-        int month = 1;
-        int day = 0;
+        int month = 0;
+        int day = 1;
 
         for (int i = 0; i < MONTH_ARR.length; i++) {
             String m = MONTH_ARR[i];
@@ -101,7 +101,11 @@ public class Util {
             }
         }
 
-        return year + "," + month + "," + day;
+        return year
+                + ","
+                + Util.twoDigit(month)
+                + ","
+                + Util.twoDigit(day);
     }
 
     /**

@@ -35,13 +35,11 @@ public class MyActionProvider extends ActionProvider {
         subMenu.add(R.string.m_color_grid).setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (activity.getMode() == MainActivity.MODE_LIST) {
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("mode", MainActivity.MODE_GRID);
-                    editor.apply();
+                if (activity.getMode() != MainActivity.MODE_GRID) {
+                    preferences.edit().putInt("mode", MainActivity.MODE_GRID).apply();
                     activity.setMode(MainActivity.MODE_GRID);
                     activity.setContent();
-                    activity.gridRefresh();
+//                    activity.gridRefresh();
                 }
                 return true;
             }
@@ -49,13 +47,11 @@ public class MyActionProvider extends ActionProvider {
         subMenu.add(R.string.m_classic_list).setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (activity.getMode() == MainActivity.MODE_GRID) {
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("mode", MainActivity.MODE_LIST);
-                    editor.apply();
+                if (activity.getMode() != MainActivity.MODE_LIST) {
+                    preferences.edit().putInt("mode", MainActivity.MODE_LIST).apply();
                     activity.setMode(MainActivity.MODE_LIST);
                     activity.setContent();
-                    activity.listRefresh();
+//                    activity.listRefresh();
                 }
                 return true;
             }

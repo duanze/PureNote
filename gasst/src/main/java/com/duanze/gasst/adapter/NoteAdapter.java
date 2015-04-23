@@ -46,6 +46,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
             view = LayoutInflater.from(getContext()).inflate(resourceId, null);
             holder = new Holder();
             holder.listItem = (RelativeLayout) view.findViewById(R.id.rl_list_item);
+            holder.noteColor = (TextView) view.findViewById(R.id.tv_note_color);
             holder.title = (TextView) view.findViewById(R.id.note_title);
             holder.time = (TextView) view.findViewById(R.id.note_time);
             view.setTag(holder);
@@ -54,7 +55,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
             holder = (Holder) view.getTag();
         }
 
-        holder.title.setText(gNote.getNoteFromHtml());
+        holder.title.setText(gNote.getNoteFromHtml().toString().trim());
         //如果设置了过期单行折叠并且该条note已过期
         if (isFold && gNote.compareToCalendar(today) < 0) {
             holder.title.setMaxLines(1);
@@ -63,15 +64,42 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
         }
         holder.time.setText(Util.timeString(gNote));
         if (customizeColor) {
-            holder.listItem.setBackgroundColor(gNote.getColor());
-        }else {
-            holder.listItem.setBackgroundColor(GridUnit.THRANSPARENT);
+//            holder.listItem.setBackgroundColor(gNote.getColor());
+
+            measureView(holder.listItem);
+            int height = holder.listItem.getMeasuredHeight();
+            holder.noteColor.setHeight(height * 11 / 20);
+            holder.noteColor.setBackgroundColor(gNote.getColor());
+        } else {
+//            holder.listItem.setBackgroundColor(GridUnit.THRANSPARENT);
+            holder.noteColor.setBackgroundColor(GridUnit.THRANSPARENT);
         }
         return view;
     }
 
+    private void measureView(View child) {
+        ViewGroup.LayoutParams lp = child.getLayoutParams();
+        if (lp == null) {
+            lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+        //headerView的宽度信息
+        int childMeasureWidth = ViewGroup.getChildMeasureSpec(0, 0, lp.width);
+        int childMeasureHeight;
+        if (lp.height > 0) {
+            childMeasureHeight = View.MeasureSpec.makeMeasureSpec(lp.height, View.MeasureSpec.EXACTLY);
+            //最后一个参数表示：适合、匹配
+        } else {
+            childMeasureHeight = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);//未指定
+        }
+//System.out.println("childViewWidth"+childMeasureWidth);
+//System.out.println("childViewHeight"+childMeasureHeight);
+        //将宽和高设置给child
+        child.measure(childMeasureWidth, childMeasureHeight);
+    }
+
     class Holder {
         RelativeLayout listItem;
+        TextView noteColor;
         TextView title;
         TextView time;
     }

@@ -122,7 +122,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         spinner.setAdapter(adapter);
 
 
-        spinner.setSelection(preferences.getInt(MAX_LINES, 3) - 2);
+        spinner.setSelection(preferences.getInt(MAX_LINES, 5) - 2);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
