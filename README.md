@@ -7,7 +7,15 @@ A pure,fast,concise Android note app.
 I am trying to make it better through the nice OpenSource projects help.
 
 #Lastest Action
-Trying to make it can supply EverNote service.But the sdk give me so many "no retern value",asynchronized functions.I am so confused to design a Class for using it.
+Record voice,picture and so on.<br>
+<br>
+<br>
+~~ClassicList mode,the new colorful mark.~~<br>
+![](https://github.com/duanze/PureNote/raw/master/mark.png)
+<br>
+<br>
+~~Trying to make it can supply EverNote service.But the sdk give me so many "no retern value",asynchronized functions.I am so confused to design a Class for using it.~~<br>
+![](https://github.com/duanze/PureNote/raw/master/evernote.jpeg) 
 
 #Special Thanks
 [PixelLove](http://www.pixellove.com/)
