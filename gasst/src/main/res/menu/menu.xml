@@ -29,14 +29,20 @@
         android:id="@+id/bind_evernote"
         android:icon="@drawable/evernote"
         android:title="@string/bind_evernote"/>
+
+    <!--<item-->
+    <!--android:id="@+id/evaluate"-->
+    <!--android:icon="@drawable/gift"-->
+    <!--android:title="@string/action_evaluate"/>-->
+
+    <item
+        android:id="@+id/folder"
+        android:icon="@drawable/folder"
+        android:title="@string/action_folder"/>
     <item
         android:id="@+id/feedback"
         android:icon="@drawable/feedback"
         android:title="@string/action_feedback"/>
-    <item
-        android:id="@+id/evaluate"
-        android:icon="@drawable/gift"
-        android:title="@string/action_evaluate"/>
     <item
         android:id="@+id/setting"
         android:icon="@drawable/tea_cup"

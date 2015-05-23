@@ -1,7 +1,11 @@
 package com.duanze.gasst;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -17,6 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.NoteActivity;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.fragment.ClassicList;
@@ -30,21 +35,25 @@ import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback {
     public static final String TAG = "MainActivity";
 
+    public static final String ShownRate = "shown_rate";
     public static final String UPDATE_UI = "update_ui";
 
     public static final int MODE_LIST = 0;
     public static final int MODE_GRID = 1;
     private int mode;
+    private Context mContext;
 
     /**
      * 获取当前屏幕密度
@@ -79,12 +88,26 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private boolean customizeColor;
 
+    public int getgNotebookId() {
+        return gNotebookId;
+    }
+
+    //当前所用的笔记本id
+    private int gNotebookId;
+
+    public SharedPreferences getPreferences() {
+        return preferences;
+    }
+
     SharedPreferences preferences;
 
     private MenuItem bindItem;
     private Evernote mEvernote;
 
     private Timer syncTimer;
+
+    private final int DIALOG_PROGRESS = 101;
+    private final int INITIAL = 102;
 
     public int getMaxLines() {
         return maxLines;
@@ -177,10 +200,39 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //        array.recycle();
 //        LogUtil.i(TAG, "backgroundColor" + backgroundColor);
 //        LogUtil.i(TAG, "backgroundColor:tohex" + Integer.toHexString(backgroundColor));
-        LogUtil.i(TAG, "onCreate before ... end.");
+//        LogUtil.i(TAG, "onCreate before ... end.");
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DIALOG_PROGRESS:
+                return new ProgressDialog(MainActivity.this);
+            case INITIAL:
+                return new ProgressDialog(MainActivity.this);
+        }
+        // TODO onCreateDialog(int) is deprecated
+        return super.onCreateDialog(id);
+    }
+
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        switch (id) {
+            case DIALOG_PROGRESS:
+                ((ProgressDialog) dialog).setIndeterminate(true);
+                dialog.setCancelable(false);
+                ((ProgressDialog) dialog).setMessage(getString(com.evernote.androidsdk.R.string.esdk__loading));
+                break;
+            case INITIAL:
+                ((ProgressDialog) dialog).setIndeterminate(true);
+                dialog.setCancelable(false);
+                ((ProgressDialog) dialog).setMessage(getString(R.string.initial));
+                break;
+        }
     }
 
     private void initValues() {
+        mContext = this;
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         dm = getResources().getDisplayMetrics();
         today = Calendar.getInstance();
@@ -196,8 +248,32 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         //如果是第一次启动应用，在数据库中添加note
         firstLaunch();
         readSetting();
+
+        //        below_version_2.0.4
+        if (preferences.getBoolean("below_version_2.0.4", true)) {
+            showDialog(INITIAL);
+            preferences.edit().putBoolean("below_version_2.0.4", false).commit();
+            calNoteNum();
+            removeDialog(INITIAL);
+        }
+
         //evernote
         mEvernote = new Evernote(this, this);
+    }
+
+    private int calNoteNum() {
+        int n = preferences.getInt(Folder.PURENOTE_NOTE_NUM, -1);
+        if (n == -1) {
+//            将所有原有数据转移至默认文件夹中
+            List<GNote> list = db.loadGNotes();
+            for (GNote gNote : list) {
+                gNote.setGNotebookId(0);
+                db.updateGNote(gNote);
+            }
+            n = list.size();
+            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, n).commit();
+        }
+        return n;
     }
 
     private void firstLaunch() {
@@ -211,22 +287,26 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             GNote one = new GNote();
             one.setCalToTime(today);
             one.setNote(getResources().getString(R.string.tip1) + "(・8・)");
-            one.setSynStatus(GNote.NEW);
+//            one.setSynStatus(GNote.NEW);
             one.setColor(GridUnit.PURPLE);
             db.saveGNote(one);
 
             GNote two = new GNote();
             two.setTimeFromDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH) - 1);
             two.setNote(getResources().getString(R.string.tip2));
-            two.setSynStatus(GNote.NEW);
+//            two.setSynStatus(GNote.NEW);
             db.saveGNote(two);
 
             GNote three = new GNote();
             three.setTimeFromDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DAY_OF_MONTH) - 2);
             three.setNote(getResources().getString(R.string.tip3));
-            three.setSynStatus(GNote.NEW);
+//            three.setSynStatus(GNote.NEW);
             db.saveGNote(three);
+
+//            GNotebook test = new GNotebook();
+//            test.setName("Test");
+//            db.saveGNotebook(test);
         }
     }
 
@@ -266,6 +346,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         maxLines = preferences.getInt(Settings.MAX_LINES, 5);
 
         customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
+
+        gNotebookId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
     }
 
 
@@ -286,29 +368,25 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         super.onResume();
 
         boolean settingsChanged = preferences.getBoolean(Settings.SETTINGS_CHANGED, false);
-        //如果改变了设置
-        if (settingsChanged) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(Settings.SETTINGS_CHANGED, false).apply();
-
-            readSetting();
-        }
-
         boolean updateUI = preferences.getBoolean(UPDATE_UI, false);
         //是否因各种改变而需要进行UI刷新
         if (updateUI || settingsChanged) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(UPDATE_UI, false);
+            editor.putBoolean(Settings.SETTINGS_CHANGED, false).apply();
             editor.apply();
 
+            readSetting();
             refreshUI();
+
+            LogUtil.i(TAG, "readingSetting & updateUI in onResume.");
         }
 
         if (mode == MODE_LIST) {
             classicList.randomfabButtonColor();
         }
 
-        LogUtil.i(TAG, "readingSetting in onResume end.");
+
         //evernote
         if (bindItem != null) {
             if (mEvernote.isLogin()) {
@@ -329,6 +407,51 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 }
             }, 30000, 50000);
         }
+
+        rateForPureNote();
+        //        umeng
+        MobclickAgent.onResume(this);
+    }
+
+    //    一次性评分弹窗
+    private void rateForPureNote() {
+        if (preferences.getInt(NoteActivity.EditCount, 0) >= 5
+                && preferences.getBoolean(ShownRate, false) == false) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setMessage(R.string.rate_for_purenote)
+                    .setPositiveButton(R.string.rate_rate,
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    Uri uri = Uri.parse("market://details?id="
+                                            + mContext.getPackageName());
+                                    Intent goToMarket = new Intent(
+                                            Intent.ACTION_VIEW, uri);
+                                    try {
+                                        startActivity(goToMarket);
+                                    } catch (ActivityNotFoundException e) {
+                                        Toast.makeText(mContext,
+                                                "Couldn't launch the market!",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            })
+                    .setNegativeButton(R.string.rate_feedback,
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    feedback();
+                                }
+                            }).create().show();
+
+            preferences.edit().putBoolean(ShownRate, true).commit();
+        }
     }
 
     @Override
@@ -338,6 +461,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             LogUtil.i(TAG, "结束定时同步任务");
             syncTimer.cancel();
         }
+
+        //        umeng
+        MobclickAgent.onPause(this);
     }
 
     private void refreshUI() {
@@ -426,8 +552,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             case R.id.feedback:
                 feedback();
                 break;
-            case R.id.evaluate:
-                evaluate(MainActivity.this);
+//            case R.id.evaluate:
+//                evaluate(MainActivity.this);
+//                break;
+            case R.id.folder:
+                Folder.activityStart(mContext, Folder.MODE_FOLDER);
                 break;
             case R.id.setting:
                 Settings.activityStart(this);
@@ -473,9 +602,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             switch (msg.what) {
                 case Evernote.SYNC_START:
 //                    findViewById(R.id.sync_progress).setVisibility(View.VISIBLE);
+                    showDialog(DIALOG_PROGRESS);
                     break;
                 case Evernote.SYNC_END:
 //                    findViewById(R.id.sync_progress).setVisibility(View.GONE);
+                    removeDialog(DIALOG_PROGRESS);
                     refreshUI();
                     break;
                 default:

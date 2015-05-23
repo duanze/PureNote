@@ -2,10 +2,10 @@
           package="com.duanze.gasst">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name="com.duanze.gasst.MyApplication"
@@ -34,11 +34,26 @@
             android:logo="@drawable/tea_cup"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name="com.duanze.gasst.activity.Folder"
+            android:logo="@drawable/folder"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="portrait">
+        </activity>
+
+
+        <!--umeng-->
+        <meta-data
+            android:value="555f243b67e58e446f00248a"
+            android:name="UMENG_APPKEY"></meta-data>
+        <meta-data
+            android:value="MiMarket"
+            android:name="UMENG_CHANNEL"/>
 
         <!--evernote-->
         <activity
             android:name="com.evernote.client.android.EvernoteOAuthActivity"
-            android:configChanges="orientation|keyboardHidden" />
+            android:configChanges="orientation|keyboardHidden"/>
 
         <service android:name=".service.AlarmService">
         </service>

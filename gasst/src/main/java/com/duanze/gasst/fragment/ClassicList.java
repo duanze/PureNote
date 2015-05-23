@@ -18,10 +18,12 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.MyPickerListener;
 import com.duanze.gasst.R;
+import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.NoteActivity;
 import com.duanze.gasst.adapter.NoteAdapter;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.CallBackListener;
 import com.duanze.gasst.util.Util;
@@ -70,21 +72,23 @@ public class ClassicList extends Fragment {
 
     public void refreshUI() {
         gNoteList.clear();
-        List<GNote> tmpList = db.loadGNotes();
+//        List<GNote> tmpList = db.loadGNotes();
+        List<GNote> tmpList = db.loadGNotesByBookId(((MainActivity) mContext).getgNotebookId());
         for (GNote g : tmpList) {
             gNoteList.add(g);
         }
 
         adapter.setValues((MainActivity) mContext);
         adapter.notifyDataSetChanged();
-        noteTitleListView.setSelection(0);
+//        noteTitleListView.setSelection(0);
     }
 
     private void initValues() {
         mContext = getActivity();
         today = Calendar.getInstance();
         db = GNoteDB.getInstance(mContext);
-        gNoteList = db.loadGNotes();
+//        gNoteList = db.loadGNotes();
+        gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getgNotebookId());
 
         pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(mContext, today, listener),
                 today.get(Calendar.YEAR), today.get(Calendar.MONTH),
@@ -108,7 +112,7 @@ public class ClassicList extends Fragment {
 
         View view = inflater.inflate(R.layout.classic_list, container, false);
         noteTitleListView = (SwipeMenuListView) view.findViewById(R.id.swipe_lv);
-        adapter = new NoteAdapter(mContext, R.layout.list_item, gNoteList);
+        adapter = new NoteAdapter(mContext, R.layout.list_item, gNoteList, noteTitleListView);
         adapter.setValues((MainActivity) mContext);
         noteTitleListView.setAdapter(adapter);
         noteTitleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -154,7 +158,7 @@ public class ClassicList extends Fragment {
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NoteActivity.writeNewNote(mContext,today);
+                NoteActivity.writeNewNote(mContext, today);
             }
         });
         fabButton.listenTo(noteTitleListView);
@@ -176,6 +180,26 @@ public class ClassicList extends Fragment {
         if (!gNote.isPassed()) {
             AlarmService.cancelTask(mContext, gNote);
         }
+        updateGNotebook(((MainActivity) getActivity()).getPreferences().getInt(Folder.GNOTEBOOK_ID, 0), -1);
+    }
+
+    private void updateGNotebook(int id, int value) {
+        if (id == 0) {
+            int cnt = ((MainActivity) getActivity()).getPreferences().getInt(Folder.PURENOTE_NOTE_NUM,
+                    3);
+            ((MainActivity) getActivity()).getPreferences().edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+        } else {
+            List<GNotebook> gNotebooks = db.loadGNotebooks();
+            for (GNotebook gNotebook : gNotebooks) {
+                if (gNotebook.getId() == id) {
+                    int cnt = gNotebook.getNum();
+                    gNotebook.setNum(cnt + value);
+
+                    db.updateGNotebook(gNotebook);
+                    break;
+                }
+            }
+        }
     }
 
     private void buildCreator() {
@@ -186,16 +210,12 @@ public class ClassicList extends Fragment {
                 SwipeMenuItem remindItem = new SwipeMenuItem(
                         mContext.getApplicationContext());
                 // set item background
-                remindItem.setBackground(new ColorDrawable(Color.rgb(0x33,
-                        0xB5, 0xE5)));
+                remindItem.setBackground(new ColorDrawable(Color.argb(0x00, 0xEE,
+                        0xF0, 0xED)));
                 // set item width
-                remindItem.setWidth(dp2px(66));
-                // set item title
-                remindItem.setTitle(R.string.remind);
-                // set item title fontsize
-                remindItem.setTitleSize(17);
-                // set item title font color
-                remindItem.setTitleColor(Color.WHITE);
+                remindItem.setWidth(dp2px(60));
+                // set a icon
+                remindItem.setIcon(R.drawable.remind_blue);
                 // add to menu
                 menu.addMenuItem(remindItem);
 
@@ -203,16 +223,12 @@ public class ClassicList extends Fragment {
                 SwipeMenuItem deleteItem = new SwipeMenuItem(
                         mContext.getApplicationContext());
                 // set item background
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                        0x3F, 0x25)));
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xE2,
+                        0xE2, 0xE2)));
                 // set item width
-                deleteItem.setWidth(dp2px(66));
-                // set item title
-                deleteItem.setTitle(R.string.delete);
-                // set item title fontsize
-                deleteItem.setTitleSize(17);
-                // set item title font color
-                deleteItem.setTitleColor(Color.WHITE);
+                deleteItem.setWidth(dp2px(60));
+                // set a icon
+                deleteItem.setIcon(R.drawable.trash_red);
                 // add to menu
                 menu.addMenuItem(deleteItem);
             }
@@ -224,7 +240,7 @@ public class ClassicList extends Fragment {
                 getResources().getDisplayMetrics());
     }
 
-    public void randomfabButtonColor(){
+    public void randomfabButtonColor() {
         Util.randomBackground(fabButton);
     }
 }

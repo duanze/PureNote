@@ -6,47 +6,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
-import com.duanze.gasst.model.GNote;
-import com.duanze.gasst.util.Util;
-import com.duanze.gasst.view.GridUnit;
+import com.duanze.gasst.activity.Folder;
+import com.duanze.gasst.model.GNotebook;
 
 import java.util.Calendar;
 import java.util.List;
 
-public class NoteAdapter extends ArrayAdapter<GNote> {
+public class NotebookAdapter extends ArrayAdapter<GNotebook> {
     private int resourceId;
     private boolean isFold;
     private int maxLines;
     private Calendar today;
     private boolean customizeColor;
     private AbsListView mListView;
+    private Context mContext;
 
-    public NoteAdapter(Context context, int textViewResourceId, List<GNote> objects) {
+    public NotebookAdapter(Context context, int textViewResourceId, List<GNotebook> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
+        mContext = context;
     }
 
-    public NoteAdapter(Context context, int textViewResourceId, List<GNote> objects,
-                       AbsListView listView){
-        this(context,textViewResourceId,objects);
+    public NotebookAdapter(Context context, int textViewResourceId, List<GNotebook> objects,
+                           AbsListView listView) {
+        this(context, textViewResourceId, objects);
         mListView = listView;
-    }
-
-    public void setValues(MainActivity activity) {
-        isFold = activity.getIsFold();
-        today = activity.getToday();
-        maxLines = activity.getMaxLines();
-        customizeColor = activity.isCustomizeColor();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        GNote gNote = getItem(position);
+        GNotebook gNotebook = getItem(position);
         View view;
         Holder holder;
         if (convertView == null) {
@@ -59,33 +54,29 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
                     resourceId, mListView, false);
 
             holder = new Holder();
-            holder.listItem = (RelativeLayout) view.findViewById(R.id.rl_list_item);
-            holder.noteColor = (TextView) view.findViewById(R.id.tv_note_color);
-            holder.title = (TextView) view.findViewById(R.id.note_title);
-            holder.time = (TextView) view.findViewById(R.id.note_time);
+            holder.folderUnit = (LinearLayout) view.findViewById(R.id.ll_folder_unit);
+            holder.flag = (ImageView) view.findViewById(R.id.iv_folder_unit_flag);
+            holder.name = (TextView) view.findViewById(R.id.tv_folder_unit_name);
+            holder.num = (TextView) view.findViewById(R.id.tv_folder_unit_num);
+            holder.chk = (CheckBox) view.findViewById(R.id.cb_folder_unit);
             view.setTag(holder);
         } else {
             view = convertView;
             holder = (Holder) view.getTag();
         }
 
-        holder.title.setText(gNote.getNoteFromHtml().toString().trim());
-        //如果设置了过期单行折叠并且该条note已过期
-        if (isFold && gNote.compareToCalendar(today) < 0) {
-            holder.title.setMaxLines(1);
-        } else {
-            holder.title.setMaxLines(maxLines);
+//不是被选中的文件夹
+        if (gNotebook.getSelected() == GNotebook.FALSE) {
+            holder.flag.setVisibility(View.INVISIBLE);
+        }else {
+            holder.flag.setVisibility(View.VISIBLE);
         }
-        holder.time.setText(Util.timeString(gNote));
-        if (customizeColor) {
-            measureView(holder.listItem);
-
-            int height = holder.listItem.getMeasuredHeight();
-            holder.noteColor.setHeight(height * 11 / 20);
-            holder.noteColor.setBackgroundColor(gNote.getColor());
-        } else {
-            holder.noteColor.setBackgroundColor(GridUnit.THRANSPARENT);
-        }
+        holder.name.setText(gNotebook.getName());
+//        下面这句注意，num为Int类型，运行时被当作resourceId报错
+        holder.num.setText(mContext.getString(R.string.folder_note_num,
+                gNotebook.getNum()));
+        holder.chk.setVisibility(View.INVISIBLE);
+        holder.chk.setOnCheckedChangeListener((Folder)mContext);
         return view;
     }
 
@@ -111,9 +102,10 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
     }
 
     class Holder {
-        RelativeLayout listItem;
-        TextView noteColor;
-        TextView title;
-        TextView time;
+        LinearLayout folderUnit;
+        ImageView flag;
+        TextView name;
+        TextView num;
+        CheckBox chk;
     }
 }

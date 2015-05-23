@@ -6,9 +6,11 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 
+import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.util.LogUtil;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.InvalidAuthenticationException;
@@ -352,6 +354,25 @@ public class Evernote {
     private void saveNote(Note note) {
         GNote gNote = GNote.parseGNote(note);
         db.saveGNote(gNote);
+        updateGNotebook(0, +1);
+    }
+
+    private void updateGNotebook(int id, int value) {
+        if (id == 0) {
+            int cnt = mSharedPreferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
+            mSharedPreferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+        } else {
+            List<GNotebook> gNotebooks = db.loadGNotebooks();
+            for (GNotebook gNotebook : gNotebooks) {
+                if (gNotebook.getId() == id) {
+                    int cnt = gNotebook.getNum();
+                    gNotebook.setNum(cnt + value);
+
+                    db.updateGNotebook(gNotebook);
+                    break;
+                }
+            }
+        }
     }
 
     private void downloadNote(String guid) {

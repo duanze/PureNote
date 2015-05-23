@@ -37,6 +37,17 @@ public class GNote implements Parcelable {
     private String guid;//evernote 标志符，惟一确定一条note
     private String bookGuid = "";
 
+    public int getGNotebookId() {
+        return gnotebookId;
+    }
+
+    public void setGNotebookId(int gnotebookId) {
+        this.gnotebookId = gnotebookId;
+    }
+
+    //数据表中笔记本的id号，为0时使用默认笔记本PureNote
+    private int gnotebookId = 0;
+
     public int getDeleted() {
         return deleted;
     }
@@ -292,6 +303,7 @@ public class GNote implements Parcelable {
         parcel.writeString(guid);
         parcel.writeString(bookGuid);
         parcel.writeInt(deleted);
+        parcel.writeInt(gnotebookId);
     }
 
     public static final Creator<GNote> CREATOR = new Creator<GNote>() {
@@ -311,6 +323,7 @@ public class GNote implements Parcelable {
             gNote.guid = parcel.readString();
             gNote.bookGuid = parcel.readString();
             gNote.deleted = parcel.readInt();
+            gNote.gnotebookId = parcel.readInt();
             return gNote;
         }
 

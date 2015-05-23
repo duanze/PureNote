@@ -7,8 +7,8 @@ android {
         applicationId "com.duanze.gasst"
         minSdkVersion 17
         targetSdkVersion 19
-        versionCode 14
-        versionName "2.0.3"
+        versionCode 15
+        versionName "2.0.4"
     }
     buildTypes {
         release {
@@ -24,6 +24,7 @@ dependencies {
     compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile project(':EverNoteEx')
+    compile files('src/main/libs/umeng-analytics-v5.5.2.jar')
 }
 
 repositories {

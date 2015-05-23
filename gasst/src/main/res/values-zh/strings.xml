@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="initial">初始化…</string>
+
     <!--date-->
     <string name="month1">壹月</string>
     <string name="month2">贰月</string>
@@ -69,10 +71,12 @@
     <string name="action_remind">定时提醒</string>
     <string name="action_cancel_remind">取消提醒</string>
     <string name="action_share">分享至…</string>
+    <string name="action_move">移动至…</string>
     <string name="action_weather">天气</string>
     <string name="action_setting">设置</string>
     <string name="action_feedback">反馈</string>
     <string name="action_evaluate">评分</string>
+    <string name="action_folder">文件夹</string>
     <string name="action_about">关于</string>
     <string name="bind_evernote">绑定EverNote</string>
     <string name="syn_evernote">同步数据</string>
@@ -88,6 +92,19 @@
     <string name="cancel">取消</string>
 
     <string name="logout_text">确认登出EverNote?</string>
+
+    <!--activity Folder-->
+    <string name="purenote">PureNote</string>
+    <string name="folder_cancel">取消</string>
+    <string name="folder_delete_num">删除(%1$d)</string>
+    <string name="folder_delete">删除</string>
+    <string name="folder_new">新建</string>
+    <string name="folder_note_num">%1$d note(s)</string>
+
+    <!--create folder dialog-->
+    <string name="create_folder_title">新建文件夹</string>
+    <string name="create_folder">创建</string>
+    <string name="create_folder_err">文件夹创建失败！</string>
 
     <!--setting-->
     <string name="login_evernote">同步至EverNote</string>
@@ -123,4 +140,10 @@
 
     <string name="done">DONE</string>
     <string name="undone">UNDONE</string>
+
+    <!--rate for purenote-->
+    <string name="rate_for_purenote">喜欢PureNote？</string>
+    <string name="rate_rate">去评价</string>
+    <string name="rate_feedback">我要吐槽!</string>
+
 </resources>

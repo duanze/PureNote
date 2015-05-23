@@ -11,13 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GNoteDB {
+    public static final String TAG = "GNoteDB";
     /**
      * 数据库名
      */
     public static final String DB_NAME = "db_gnote";
-    public static final String TABLE_NAME = "table_gnote";
 
+    public static final String TABLE_NAME = "table_gnote";
+    public static final String TABLE_NOTEBOOK = "table_gnotebook";
+
+    // common
     public static final String ID = "id";
+    public static final String SYN_STATUS = "syn_status";
+    public static final String DELETED = "deleted";
+
+    //    table_gnote
     public static final String TIME = "time";
     public static final String ALERT_TIME = "alert_time";
     public static final String IS_PASSED = "is_passed";
@@ -26,15 +34,22 @@ public class GNoteDB {
     public static final String COLOR = "color";
     public static final String EDIT_TIME = "edit_time";
     public static final String CREATED_TIME = "created_time";
-    public static final String SYN_STATUS = "syn_status";
+
     public static final String GUID = "guid";
     public static final String BOOK_GUID = "book_guid";
-    public static final String DELETED = "deleted";
+    public static final String GNOTEBOOK_ID = "gnotebook_id";
+
+    //    table_gnotebook
+    public static final String NAME = "name";
+    public static final String NOTEBOOK_GUID = "notebook_guid";
+    public static final String NUM = "num";
+    public static final String SELECTED = "selected";
+
 
     /**
      * 数据库版本
      */
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     private static GNoteDB gNoteDB;
     private SQLiteDatabase db;
@@ -72,6 +87,7 @@ public class GNoteDB {
             values.put(GUID, gNote.getGuid());
             values.put(BOOK_GUID, gNote.getBookGuid());
             values.put(DELETED, gNote.getDeleted());
+            values.put(GNOTEBOOK_ID, gNote.getGNotebookId());
 
             db.insert(TABLE_NAME, null, values);
         }
@@ -99,6 +115,41 @@ public class GNoteDB {
                 gNote.setGuid(cursor.getString(cursor.getColumnIndex(GUID)));
                 gNote.setBookGuid(cursor.getString(cursor.getColumnIndex(BOOK_GUID)));
                 gNote.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
+                gNote.setGNotebookId(cursor.getInt(cursor.getColumnIndex(GNOTEBOOK_ID)));
+
+                //if the note isn't deleted
+                if (!gNote.isDeleted()) {
+                    list.add(gNote);
+                }
+            } while (cursor.moveToNext());
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return list;
+    }
+
+    public List<GNote> loadGNotesByBookId(int id) {
+        List<GNote> list = new ArrayList<GNote>();
+        Cursor cursor = db.query(TABLE_NAME, null, GNOTEBOOK_ID + " = ?", new String[]{"" + id},
+                null, null, "time desc");
+        if (cursor.moveToFirst()) {
+            do {
+                GNote gNote = new GNote();
+                gNote.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+                gNote.setTime(cursor.getString(cursor.getColumnIndex(TIME)));
+                gNote.setAlertTime(cursor.getString(cursor.getColumnIndex(ALERT_TIME)));
+                gNote.setPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
+                gNote.setNote(cursor.getString(cursor.getColumnIndex(CONTENT)));
+                gNote.setDone(cursor.getInt(cursor.getColumnIndex(IS_DONE)));
+                gNote.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
+                gNote.setEditTime(cursor.getLong(cursor.getColumnIndex(EDIT_TIME)));
+                gNote.setCreatedTime(cursor.getLong(cursor.getColumnIndex(CREATED_TIME)));
+                gNote.setSynStatus(cursor.getInt(cursor.getColumnIndex(SYN_STATUS)));
+                gNote.setGuid(cursor.getString(cursor.getColumnIndex(GUID)));
+                gNote.setBookGuid(cursor.getString(cursor.getColumnIndex(BOOK_GUID)));
+                gNote.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
+                gNote.setGNotebookId(cursor.getInt(cursor.getColumnIndex(GNOTEBOOK_ID)));
 
                 //if the note isn't deleted
                 if (!gNote.isDeleted()) {
@@ -131,6 +182,7 @@ public class GNoteDB {
                 gNote.setGuid(cursor.getString(cursor.getColumnIndex(GUID)));
                 gNote.setBookGuid(cursor.getString(cursor.getColumnIndex(BOOK_GUID)));
                 gNote.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
+                gNote.setGNotebookId(cursor.getInt(cursor.getColumnIndex(GNOTEBOOK_ID)));
 
                 list.add(gNote);
             } while (cursor.moveToNext());
@@ -180,6 +232,7 @@ public class GNoteDB {
             gNote.setGuid(cursor.getString(cursor.getColumnIndex(GUID)));
             gNote.setBookGuid(cursor.getString(cursor.getColumnIndex(BOOK_GUID)));
             gNote.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
+            gNote.setGNotebookId(cursor.getInt(cursor.getColumnIndex(GNOTEBOOK_ID)));
 
             cursor.close();
             return gNote;
@@ -205,6 +258,7 @@ public class GNoteDB {
             gNote.setGuid(cursor.getString(cursor.getColumnIndex(GUID)));
             gNote.setBookGuid(cursor.getString(cursor.getColumnIndex(BOOK_GUID)));
             gNote.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
+            gNote.setGNotebookId(cursor.getInt(cursor.getColumnIndex(GNOTEBOOK_ID)));
 
             cursor.close();
             return gNote;
@@ -239,10 +293,68 @@ public class GNoteDB {
         values.put(GUID, gNote.getGuid());
         values.put(BOOK_GUID, gNote.getBookGuid());
         values.put(DELETED, gNote.getDeleted());
+        values.put(GNOTEBOOK_ID, gNote.getGNotebookId());
 
         if (db.update(TABLE_NAME, values, "id = ?", new String[]{"" + gNote.getId()}) == 1) {
             return true;
         }
         return false;
+    }
+
+    //    以下为数据表table_gnotebook相关
+    public void saveGNotebook(GNotebook gNotebook) {
+        if (gNotebook != null) {
+            ContentValues values = new ContentValues();
+            values.put(NAME, gNotebook.getName());
+            values.put(SYN_STATUS, gNotebook.getSynStatus());
+            values.put(NOTEBOOK_GUID, gNotebook.getNotebookGuid());
+            values.put(DELETED, gNotebook.getDeleted());
+            values.put(NUM, gNotebook.getNum());
+            values.put(SELECTED, gNotebook.getSelected());
+
+            db.insert(TABLE_NOTEBOOK, null, values);
+        }
+    }
+
+    public boolean updateGNotebook(GNotebook gNotebook) {
+        ContentValues values = new ContentValues();
+        values.put(NAME, gNotebook.getName());
+        values.put(SYN_STATUS, gNotebook.getSynStatus());
+        values.put(NOTEBOOK_GUID, gNotebook.getNotebookGuid());
+        values.put(DELETED, gNotebook.getDeleted());
+        values.put(NUM, gNotebook.getNum());
+        values.put(SELECTED, gNotebook.getSelected());
+
+        return db.update(TABLE_NOTEBOOK, values, "id = ?", new String[]{"" + gNotebook.getId()}) == 1;
+    }
+
+    public boolean deleteGNotebook(GNotebook gNotebook) {
+        return db.delete(TABLE_NOTEBOOK, "id = ?", new String[]{"" + gNotebook.getId()}) == 1;
+    }
+
+    public List<GNotebook> loadGNotebooks() {
+        List<GNotebook> list = new ArrayList<GNotebook>();
+        Cursor cursor = db.query(TABLE_NOTEBOOK, null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                GNotebook gNotebook = new GNotebook();
+                gNotebook.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+                gNotebook.setName(cursor.getString(cursor.getColumnIndex(NAME)));
+                gNotebook.setSynStatus(cursor.getInt(cursor.getColumnIndex(SYN_STATUS)));
+                gNotebook.setNotebookGuid(cursor.getString(cursor.getColumnIndex(NOTEBOOK_GUID)));
+                gNotebook.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
+                gNotebook.setNum(cursor.getInt(cursor.getColumnIndex(NUM)));
+                gNotebook.setSelected(cursor.getInt(cursor.getColumnIndex(SELECTED)));
+
+                //if the note isn't deleted
+                if (!gNotebook.isDeleted()) {
+                    list.add(gNotebook);
+                }
+            } while (cursor.moveToNext());
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return list;
     }
 }

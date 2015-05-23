@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="initial">Initializing…</string>
+
     <!--date-->
     <string name="month1">JANUARY.</string>
     <string name="month2">FEBRUARY.</string>
@@ -71,10 +73,12 @@
     <string name="action_remind">Reminder</string>
     <string name="action_cancel_remind">Cancel reminder</string>
     <string name="action_share">Share…</string>
+    <string name="action_move">Move…</string>
     <string name="action_weather">Weather</string>
     <string name="action_setting">Settings</string>
     <string name="action_feedback">Feedback</string>
     <string name="action_evaluate">Evaluate</string>
+    <string name="action_folder">Folder</string>
     <string name="action_about">About</string>
     <string name="bind_evernote">Bind EverNote</string>
     <string name="syn_evernote">Synchronize data</string>
@@ -89,6 +93,20 @@
     <string name="cancel">No</string>
 
     <string name="logout_text">Confirm logout EverNote?</string>
+
+    <!--activity Folder-->
+    <string name="purenote">PureNote</string>
+    <string name="folder_cancel">Cancel</string>
+    <string name="folder_delete_num">Delete(%1$s)</string>
+    <string name="folder_delete">Delete</string>
+    <string name="folder_new">New</string>
+    <string name="folder_note_num">%1$d note(s)</string>
+
+    <!--create folder dialog-->
+    <string name="create_folder_title">New Folder</string>
+    <string name="create_folder">Create</string>
+    <string name="create_folder_err">Folder couldn\'t be created.</string>
+
     <!--setting-->
     <string name="login_evernote">Login EverNote</string>
     <string name="logout_evernote">%1$s Logout</string>
@@ -124,4 +142,10 @@
 
     <string name="done">DONE</string>
     <string name="undone">UNDONE</string>
+
+    <!--rate for purenote-->
+    <string name="rate_for_purenote">Do you like PureNote？</string>
+    <string name="rate_rate">To Rate</string>
+    <string name="rate_feedback">Feedback</string>
+
 </resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/edit_date"
+        android:icon="@drawable/actionbar_add_icon"
+        android:showAsAction="ifRoom"
+        android:title="@string/edit_date"/>
+
+    <item
+        android:id="@+id/action_remind"
+        android:icon="@drawable/remind"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_remind"/>
+    <item
+        android:id="@+id/action_cancel_remind"
+        android:icon="@drawable/cancel_remind"
+        android:title="@string/action_cancel_remind"/>
+    <item
+        android:id="@+id/action_move"
+        android:icon="@drawable/folder"
+        android:title="@string/action_move"/>
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/share"
+        android:title="@string/action_share"/>
+    <item
+        android:id="@+id/action_trash"
+        android:icon="@drawable/trash"
+        android:title="@string/action_trash"/>
+</menu>

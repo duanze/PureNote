@@ -147,7 +147,8 @@ public class ColorGrid extends Fragment {
     }
 
     public void refreshUI() {
-        List<GNote> gNoteList = db.loadGNotes();
+//        List<GNote> gNoteList = db.loadGNotes();
+        List<GNote> gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getgNotebookId());
         int index = gNoteList.size() - 1;
         tmpCal = (Calendar) today.clone();
         tmpCal.add(Calendar.DAY_OF_MONTH, -7);
@@ -182,7 +183,7 @@ public class ColorGrid extends Fragment {
                     }
                     if (gNoteList.get(index).compareToCalendar(tmpCal) == 0) {
                         final GNote note = gNoteList.get(index);
-                        gridUnit.setViewNote(note.getNoteFromHtml());
+                        gridUnit.setViewNote(note.getNoteFromHtml().toString().trim());
 
                         //判断格子色彩
                         if (randomColor()) {
@@ -442,7 +443,9 @@ public class ColorGrid extends Fragment {
 
         nextWeekNo = curWeekNo + 1;
         previousWeekNo = curWeekNo - 1;
+
         myViewFlipper.setDisplayedChild(curWeekNo);
+        myViewFlipper.setClickable(true);
     }
 
     private boolean wantToShowNext() {
@@ -506,6 +509,9 @@ public class ColorGrid extends Fragment {
         @Override
         protected Integer doInBackground(Integer... speed) {
             int curLocation = xDistance;
+//暂时去除点击效果
+            myViewFlipper.setClickable(false);
+
             // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
             while (true) {
                 curLocation = curLocation + speed[0];

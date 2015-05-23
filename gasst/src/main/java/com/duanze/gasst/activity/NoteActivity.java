@@ -28,6 +28,7 @@ import com.duanze.gasst.MyPickerListener;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.CallBackListener;
 import com.duanze.gasst.util.LogUtil;
@@ -38,9 +39,12 @@ import com.fourmob.datetimepicker.date.DatePickerDialog;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Calendar;
+import java.util.List;
 
 public class NoteActivity extends FragmentActivity {
     public static final String TAG = "NoteActivity";
+
+    public static final String EditCount = "edit_count";
 
     public static final int MODE_NEW = 0;
     public static final int MODE_SHOW = 1;
@@ -85,6 +89,10 @@ public class NoteActivity extends FragmentActivity {
      * 原本是否有定时提醒
      */
     private int isPassed;
+
+    //    是否成功发动了activity Folder ，及是否将笔记移动至其他文件夹中
+    private boolean launchFolder = false;
+    private int bookId;
 
     /**
      * 启动NoteActivity活动的静态方法，
@@ -326,9 +334,11 @@ public class NoteActivity extends FragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         if (mode == MODE_SHOW) {
-            getMenuInflater().inflate(R.menu.note_menu, menu);
-        } else {//if (mode == MODE_NEW || mode == MODE_EDIT)
+            getMenuInflater().inflate(R.menu.show_note_menu, menu);
+        } else if (mode == MODE_NEW) {
             getMenuInflater().inflate(R.menu.new_note_menu, menu);
+        } else if (mode == MODE_EDIT) {
+            getMenuInflater().inflate(R.menu.edit_note_menu, menu);
         }
         return true;
     }
@@ -362,8 +372,35 @@ public class NoteActivity extends FragmentActivity {
             case R.id.edit_date:
                 datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
                 return true;
+            case R.id.action_move:
+                launchFolderForResult();
+                return true;
             default:
                 return true;
+        }
+    }
+
+    private void launchFolderForResult() {
+        Intent intent = new Intent(this, Folder.class);
+        intent.putExtra("mode", Folder.MODE_MOVE);
+        startActivityForResult(intent, 0);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULT_OK:
+                bookId = data.getExtras().getInt(Folder.BOOK_ID_FOR_NOTE, -1);
+                LogUtil.i(TAG, "get gNotebook id:" + bookId);
+                if (bookId != -1) {
+                    launchFolder = true;
+                    checkDbFlag();
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -426,6 +463,8 @@ public class NoteActivity extends FragmentActivity {
         if (!gNote.isPassed()) {
             AlarmService.cancelTask(NoteActivity.this, gNote);
         }
+//        更新笔记本状态
+        updateGNotebook(preferences.getInt(Folder.GNOTEBOOK_ID, 0), -1);
     }
 
     private void createNote() {
@@ -434,7 +473,12 @@ public class NoteActivity extends FragmentActivity {
         //needCreate
         gNote.setSynStatus(GNote.NEW);
 
+//        设置笔记本id
+        gNote.setGNotebookId(preferences.getInt(Folder.GNOTEBOOK_ID, 0));
+
         db.saveGNote(gNote);
+//        更新笔记本
+        updateGNotebook(preferences.getInt(Folder.GNOTEBOOK_ID, 0), +1);
         //当有定时提醒
         if (!gNote.isPassed()) {
             //新建记事尚无id，需存储后从数据库中提取
@@ -443,11 +487,36 @@ public class NoteActivity extends FragmentActivity {
         }
     }
 
+    private void updateGNotebook(int id, int value) {
+        if (id == 0) {
+            int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
+            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+        } else {
+            List<GNotebook> gNotebooks = db.loadGNotebooks();
+            for (GNotebook gNotebook : gNotebooks) {
+                if (gNotebook.getId() == id) {
+                    int cnt = gNotebook.getNum();
+                    gNotebook.setNum(cnt + value);
+
+                    db.updateGNotebook(gNotebook);
+                    break;
+                }
+            }
+        }
+    }
+
     private void updateNote() {
         gNote.setNoteToHtml(editText.getText());
         if (gNote.getSynStatus() == GNote.NOTHING) {
             //needUpdate
             gNote.setSynStatus(GNote.UPDATE);
+        }
+
+        if (launchFolder) {
+            LogUtil.i(TAG, "bookid" + bookId);
+            updateGNotebook(gNote.getGNotebookId(), -1);
+            gNote.setGNotebookId(bookId);
+            updateGNotebook(gNote.getGNotebookId(), +1);
         }
 
         db.updateGNote(gNote);
@@ -505,15 +574,29 @@ public class NoteActivity extends FragmentActivity {
         if (dbFlag == DB_SAVE) {
             createNote();
             uiShouldUpdate();
+
+            addEditCount();
         } else if (dbFlag == DB_UPDATE) {
             updateNote();
             uiShouldUpdate();
+
+            addEditCount();
         } else if (dbFlag == DB_DELETE) {
             deleteNote();
             uiShouldUpdate();
+
+            addEditCount();
         }
 
         finish();
         overridePendingTransition(R.anim.out_push_up, R.anim.out_push_down);
+    }
+
+    private void addEditCount() {
+        int count = preferences.getInt(EditCount, 0);
+        if (count < 5) {
+            count++;
+            preferences.edit().putInt(EditCount, count).apply();
+        }
     }
 }
