@@ -12,11 +12,12 @@
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/PureNoteTheme">
         <activity
             android:name="com.duanze.gasst.MainActivity"
             android:logo="@drawable/notebook"
             android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,13 +32,41 @@
         </activity>
         <activity
             android:name="com.duanze.gasst.activity.Settings"
-            android:logo="@drawable/tea_cup"
+            android:logo="@drawable/sliders_up_2"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.duanze.gasst.activity.Folder"
             android:logo="@drawable/folder"
-            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.duanze.gasst.activity.Password"
+            android:logo="@drawable/archery_target"
+            android:label="@string/password_guard"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.duanze.gasst.activity.Donate"
+            android:logo="@drawable/coin_dollar"
+            android:label="@string/donate_developer"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.duanze.gasst.activity.About"
+            android:logo="@drawable/tea_cup"
+            android:label="@string/action_about"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.SettingsPreference"
+            android:logo="@drawable/tea_cup"
+            android:label="@string/action_about"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait">
         </activity>
 
@@ -49,6 +78,9 @@
         <meta-data
             android:value="MiMarket"
             android:name="UMENG_CHANNEL"/>
+        <!--<meta-data-->
+        <!--android:value="wandoujia"-->
+        <!--android:name="UMENG_CHANNEL"/>-->
 
         <!--evernote-->
         <activity

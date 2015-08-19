@@ -2,6 +2,7 @@ package com.duanze.gasst.activity;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,11 +17,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.duanze.gasst.MainActivity;
@@ -35,6 +40,8 @@ import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -49,6 +56,9 @@ public class NoteActivity extends FragmentActivity {
     public static final int MODE_NEW = 0;
     public static final int MODE_SHOW = 1;
     public static final int MODE_EDIT = 2;
+    public static final int MODE_TODAY = 3;
+
+    public static final int EDIT_COUNT = 20;
 
     private int mode;
     private GNote gNote;
@@ -57,6 +67,20 @@ public class NoteActivity extends FragmentActivity {
     private GNoteDB db;
     private ActionBar actionBar;
     private Calendar today;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //        umeng
+        MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //        umeng
+        MobclickAgent.onResume(this);
+    }
 
     private DatePickerDialog pickerDialog;
     private DatePickerDialog datePickerDialog;
@@ -83,7 +107,7 @@ public class NoteActivity extends FragmentActivity {
 
     private SharedPreferences preferences;
 
-    private boolean customizeColor;
+//    private boolean customizeColor;
 
     /**
      * 原本是否有定时提醒
@@ -93,6 +117,8 @@ public class NoteActivity extends FragmentActivity {
     //    是否成功发动了activity Folder ，及是否将笔记移动至其他文件夹中
     private boolean launchFolder = false;
     private int bookId;
+
+    private Context mContext;
 
     /**
      * 启动NoteActivity活动的静态方法，
@@ -117,6 +143,11 @@ public class NoteActivity extends FragmentActivity {
         GNote note = new GNote();
         note.setCalToTime(cal);
         NoteActivity.activityStart(mContext, note, NoteActivity.MODE_NEW);
+    }
+
+    public static void todayNewNote(Context mContext) {
+        GNote note = new GNote();
+        NoteActivity.activityStart(mContext, note, NoteActivity.MODE_TODAY);
     }
 
     /**
@@ -153,14 +184,25 @@ public class NoteActivity extends FragmentActivity {
         overridePendingTransition(R.anim.quick_load, R.anim.quick_load);
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
-        boolean fullScreen = preferences.getBoolean(Settings.FULL_SCREEN, false);
-        //如果设置了全屏
-        if (fullScreen) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
+//        boolean fullScreen = preferences.getBoolean(Settings.FULL_SCREEN, false);
+//        //如果设置了全屏
+//        if (fullScreen) {
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        }
 
-        setContentView(R.layout.note);
+        setContentView(R.layout.note_activity);
+        //沉浸式时，对状态栏染色
+        // create our manager instance after the content view is set
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+
+        tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+//        // enable navigation bar tint
+//        tintManager.setNavigationBarTintEnabled(true);
+
         setOverflowShowingAlways();
 
         initValues();
@@ -170,6 +212,8 @@ public class NoteActivity extends FragmentActivity {
     }
 
     private void initValues() {
+        mContext = this;
+
         today = Calendar.getInstance();
         pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(this, today, listener),
                 today.get(Calendar.YEAR), today.get(Calendar.MONTH),
@@ -187,6 +231,7 @@ public class NoteActivity extends FragmentActivity {
 
         gNote = getIntent().getParcelableExtra("gAsstNote_data");
         isPassed = gNote.getPassed();
+        bookId = gNote.getGNotebookId();
 
         db = GNoteDB.getInstance(this);
 
@@ -194,8 +239,15 @@ public class NoteActivity extends FragmentActivity {
         editText = (EditText) findViewById(R.id.et_note_edit);
         initMode();
 
-        customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
-        if ((mode == MODE_NEW || mode == MODE_EDIT) && customizeColor) {
+//        customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
+        if (mode == MODE_NEW || mode == MODE_EDIT) {
+            HorizontalScrollView view = (HorizontalScrollView) findViewById(R.id.hsv_btns);
+            view.setVisibility(View.VISIBLE);
+            initBtns();
+        } else if (MODE_TODAY == mode) {
+            gNote.setCalToTime(today);
+            gNote.setGNotebookId(preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0));
+
             HorizontalScrollView view = (HorizontalScrollView) findViewById(R.id.hsv_btns);
             view.setVisibility(View.VISIBLE);
             initBtns();
@@ -209,18 +261,18 @@ public class NoteActivity extends FragmentActivity {
 
     private void checkColorRead() {
         boolean colorRead = preferences.getBoolean(Settings.COLOR_READ, true);
-        if (colorRead && customizeColor) {
-            if (mode == MODE_SHOW) {
-                textView.setBackgroundColor(gNote.getColor());
-            } else {
-                editText.setBackgroundColor(gNote.getColor());
-            }
+//        if (colorRead && customizeColor) {
+        if (mode == MODE_SHOW) {
+            textView.setBackgroundColor(gNote.getColor());
+        } else {
+            editText.setBackgroundColor(gNote.getColor());
         }
+//        }
     }
 
     private void initMode() {
         mode = getIntent().getIntExtra("mode", 0);
-        if (mode == MODE_NEW || mode == MODE_EDIT) {
+        if (mode == MODE_NEW || mode == MODE_EDIT || MODE_TODAY == mode) {
             textView.setVisibility(View.GONE);
             editText.setVisibility(View.VISIBLE);
             editText.setText(gNote.getNoteFromHtml());
@@ -285,12 +337,12 @@ public class NoteActivity extends FragmentActivity {
     private void chosenBtn(int i) {
         gNote.setColor(GridUnit.colorArr[i]);
         chooseColorBtnStates[i] = true;
-        chooseColorBtns[i].setBackground(chooseColorBtnDrawables[i]); // 设置背景（效果就是有边框及底色）
+        chooseColorBtns[i].setBackgroundDrawable(chooseColorBtnDrawables[i]); // 设置背景（效果就是有边框及底色）
 
     }
 
     private void checkDbFlag() {
-        if (mode == MODE_EDIT || mode == MODE_SHOW) {
+        if (mode == MODE_EDIT || mode == MODE_SHOW || MODE_TODAY == mode) {
             dbFlag = DB_UPDATE;
         }
     }
@@ -335,7 +387,7 @@ public class NoteActivity extends FragmentActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         if (mode == MODE_SHOW) {
             getMenuInflater().inflate(R.menu.show_note_menu, menu);
-        } else if (mode == MODE_NEW) {
+        } else if (mode == MODE_NEW || MODE_TODAY == mode) {
             getMenuInflater().inflate(R.menu.new_note_menu, menu);
         } else if (mode == MODE_EDIT) {
             getMenuInflater().inflate(R.menu.edit_note_menu, menu);
@@ -372,12 +424,79 @@ public class NoteActivity extends FragmentActivity {
             case R.id.edit_date:
                 datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
                 return true;
+//            case R.id.action_move_ac:
+//                launchFolderForResult();
+//                return true;
             case R.id.action_move:
-                launchFolderForResult();
+                showSelectFolderDialog();
                 return true;
             default:
                 return true;
         }
+    }
+
+    private boolean changedFolder = false;
+    private int tmpGnoteBookId = -1;
+
+    private void showSelectFolderDialog() {
+        View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow().getDecorView
+                (), false);
+        final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.rg_dialog);
+        RadioButton purenote = (RadioButton) view.findViewById(R.id.rb_purenote);
+        boolean radioChecked = false;
+        List<GNotebook> list = db.loadGNotebooks();
+        for (final GNotebook gNotebook : list) {
+            RadioButton tempButton = new RadioButton(mContext);
+            tempButton.setText(gNotebook.getName());
+            radioGroup.addView(tempButton, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            if (gNotebook.getId() == gNote.getGNotebookId()) {
+                tempButton.setChecked(true);
+                radioChecked = true;
+            }
+
+            tempButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        tmpGnoteBookId = gNotebook.getId();
+                    }
+                }
+            });
+        }
+
+        if (!radioChecked) {
+            purenote.setChecked(true);
+        }
+        purenote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    tmpGnoteBookId = 0;
+                }
+            }
+        });
+
+        final Dialog dialog = new AlertDialog.Builder(mContext)
+                .setTitle(R.string.action_move)
+                .setView(view)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (tmpGnoteBookId != -1) {
+                            dbFlag = DB_UPDATE;
+                            changedFolder = true;
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        changedFolder = false;
+                    }
+                })
+                .create();
+        dialog.show();
     }
 
     private void launchFolderForResult() {
@@ -387,22 +506,22 @@ public class NoteActivity extends FragmentActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case RESULT_OK:
-                bookId = data.getExtras().getInt(Folder.BOOK_ID_FOR_NOTE, -1);
-                LogUtil.i(TAG, "get gNotebook id:" + bookId);
-                if (bookId != -1) {
-                    launchFolder = true;
-                    checkDbFlag();
-                }
-                break;
-            default:
-                break;
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        switch (resultCode) {
+//            case RESULT_OK:
+//                bookId = data.getExtras().getInt(Folder.BOOK_ID_FOR_NOTE, -1);
+//                LogUtil.i(TAG, "get gNotebook id:" + bookId);
+//                if (bookId != -1) {
+//                    launchFolder = true;
+//                    checkDbFlag();
+//                }
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     /**
      * 分享按钮
@@ -412,7 +531,7 @@ public class NoteActivity extends FragmentActivity {
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, R.string.action_share);
         String text;
-        if (mode == MODE_NEW || mode == MODE_EDIT) {
+        if (mode == MODE_NEW || mode == MODE_EDIT || MODE_TODAY == mode) {
             text = editText.getText().toString();
         } else {//mode == MODE_SHOW
             text = textView.getText().toString();
@@ -440,7 +559,7 @@ public class NoteActivity extends FragmentActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO Auto-generated method stub
                         //需不是新建记事，方可从数据库中删除数据
-                        if (mode != MODE_NEW) {
+                        if (mode != MODE_NEW && MODE_TODAY != mode) {
                             deleteNote();
                             uiShouldUpdate();
                         }
@@ -464,7 +583,11 @@ public class NoteActivity extends FragmentActivity {
             AlarmService.cancelTask(NoteActivity.this, gNote);
         }
 //        更新笔记本状态
-        updateGNotebook(preferences.getInt(Folder.GNOTEBOOK_ID, 0), -1);
+        int notebookId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
+        updateGNotebook(notebookId, -1, false);
+        if (notebookId != 0) {
+            updateGNotebook(0, -1, false);
+        }
     }
 
     private void createNote() {
@@ -474,11 +597,21 @@ public class NoteActivity extends FragmentActivity {
         gNote.setSynStatus(GNote.NEW);
 
 //        设置笔记本id
-        gNote.setGNotebookId(preferences.getInt(Folder.GNOTEBOOK_ID, 0));
+        int groupId;
+        if (MODE_TODAY != mode) {
+            groupId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
+            gNote.setGNotebookId(groupId);
+        } else {
+            //快写模式将存储至特定目录下
+            groupId = gNote.getGNotebookId();
+        }
 
         db.saveGNote(gNote);
 //        更新笔记本
-        updateGNotebook(preferences.getInt(Folder.GNOTEBOOK_ID, 0), +1);
+        updateGNotebook(groupId, +1, false);
+        if (groupId != 0) {
+            updateGNotebook(0, +1, false);
+        }
         //当有定时提醒
         if (!gNote.isPassed()) {
             //新建记事尚无id，需存储后从数据库中提取
@@ -487,8 +620,10 @@ public class NoteActivity extends FragmentActivity {
         }
     }
 
-    private void updateGNotebook(int id, int value) {
+    private void updateGNotebook(int id, int value, boolean isMove) {
         if (id == 0) {
+            //如果是移动文件，不加不减
+            if (isMove) return;
             int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
             preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
         } else {
@@ -512,11 +647,11 @@ public class NoteActivity extends FragmentActivity {
             gNote.setSynStatus(GNote.UPDATE);
         }
 
-        if (launchFolder) {
-            LogUtil.i(TAG, "bookid" + bookId);
-            updateGNotebook(gNote.getGNotebookId(), -1);
-            gNote.setGNotebookId(bookId);
-            updateGNotebook(gNote.getGNotebookId(), +1);
+        if (changedFolder) {
+            LogUtil.i(TAG, "original bookid" + bookId);
+            gNote.setGNotebookId(tmpGnoteBookId);
+            updateGNotebook(bookId, -1, true);
+            updateGNotebook(tmpGnoteBookId, +1, true);
         }
 
         db.updateGNote(gNote);
@@ -557,7 +692,7 @@ public class NoteActivity extends FragmentActivity {
     private void exitOperation() {
         String tmp = editText.getText().toString().trim();
 
-        if (mode == MODE_NEW) {
+        if (mode == MODE_NEW || MODE_TODAY == mode) {
             if (tmp.length() > 0) {
                 dbFlag = DB_SAVE;
             }
@@ -594,7 +729,7 @@ public class NoteActivity extends FragmentActivity {
 
     private void addEditCount() {
         int count = preferences.getInt(EditCount, 0);
-        if (count < 5) {
+        if (count < EDIT_COUNT) {
             count++;
             preferences.edit().putInt(EditCount, count).apply();
         }

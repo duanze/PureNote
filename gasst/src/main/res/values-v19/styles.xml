@@ -1,0 +1,32 @@
+<resources>
+
+    <!--
+        Base application theme for API 19+. This theme completely replaces
+        AppBaseTheme from BOTH res/values/styles.xml and
+        res/values-v11/styles.xml on API 19+ devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/WeChatActionBar</item>
+        <item name="android:itemTextAppearance">@style/WeChatActionBarOverflow</item>
+        <item name="android:actionOverflowButtonStyle">@style/WeChatActionButtonOverflow</item>
+        <item name="android:actionModeBackground">@color/background_color</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="WeChatActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@color/background_color</item>
+        <item name="android:titleTextStyle">@style/WeChatActionBarTitleText</item>
+    </style>
+
+    <style name="WeChatActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="WeChatActionBarOverflow" parent="@android:style/Widget.ActionButton.Overflow">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="WeChatActionButtonOverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/actionbar_more_icon</item>
+    </style>
+</resources>

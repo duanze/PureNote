@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Random;
 
 public class GridUnit extends RelativeLayout {
-    public static final int THRANSPARENT = Color.parseColor("#00000000");
+    public static final int TRANSPARENT = Color.parseColor("#00000000");
     public static final int LIGHT_GREY = Color.parseColor("#6AC0C0C0");
 
     public static final int YELLOW = Color.parseColor("#52FFFF00");
@@ -28,7 +28,7 @@ public class GridUnit extends RelativeLayout {
     public static final int GOLD = Color.parseColor("#6AFFD700");
 
     public static final int[] colorArr = {
-            THRANSPARENT, LIGHT_GREY, BLUE,
+            TRANSPARENT, LIGHT_GREY, BLUE,
             GREEN, YELLOW, GOLD,
             PINK, RED, PURPLE
     };
@@ -81,8 +81,9 @@ public class GridUnit extends RelativeLayout {
         drawable.setStroke(1, GridUnit.LIGHT_GREY); // 边框粗细及颜色
         drawable.setColor(color); // 边框内部颜色
 
-        this.setBackground(drawable);
+        this.setBackgroundDrawable(drawable);
     }
+
 
     /**
      * 随机设置背景色（七种预定义透明度90颜色）
@@ -132,6 +133,7 @@ public class GridUnit extends RelativeLayout {
     public void setViewNote(Spanned text) {
         note.setText("        " + text);
     }
+
     public void setViewNote(String text) {
         note.setText("        " + text);
     }

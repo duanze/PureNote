@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.Folder;
 
 /**
  * Created by Duanze on 2015/5/22.
@@ -37,11 +36,16 @@ public class FolderFooter extends Fragment {
         folderDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((Folder)mContext).changeContent();
+                ((FooterInterface)mContext).changeFooter();
             }
         });
 
-        folderNew.setOnClickListener((Folder)mContext);
+        folderNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((FooterInterface)mContext).actionClick();
+            }
+        });
         return view;
     }
 }

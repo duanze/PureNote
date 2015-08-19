@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="initial">Initializing…</string>
+
+    <!--date-->
+    <string name="month1">JANUARY.</string>
+    <string name="month2">FEBRUARY.</string>
+    <string name="month3">MARCH.</string>
+    <string name="month4">APRIL.</string>
+    <string name="month5">MAY.</string>
+    <string name="month6">JUNE.</string>
+    <string name="month7">JULY.</string>
+    <string name="month8">AUGUST.</string>
+    <string name="month9">SEPTEMBER.</string>
+    <string name="month10">OCTOBER.</string>
+    <string name="month11">NOVEMBER.</string>
+    <string name="month12">DECEMBER.</string>
+
+    <string name="day1">1</string>
+    <string name="day2">2</string>
+    <string name="day3">3</string>
+    <string name="day4">4</string>
+    <string name="day5">5</string>
+    <string name="day6">6</string>
+    <string name="day7">7</string>
+    <string name="day8">8</string>
+    <string name="day9">9</string>
+    <string name="day10">10</string>
+    <string name="day11">11</string>
+    <string name="day12">12</string>
+    <string name="day13">13</string>
+    <string name="day14">14</string>
+    <string name="day15">15</string>
+    <string name="day16">16</string>
+    <string name="day17">17</string>
+    <string name="day18">18</string>
+    <string name="day19">19</string>
+    <string name="day20">20</string>
+    <string name="day21">21</string>
+    <string name="day22">22</string>
+    <string name="day23">23</string>
+    <string name="day24">24</string>
+    <string name="day25">25</string>
+    <string name="day26">26</string>
+    <string name="day27">27</string>
+    <string name="day28">28</string>
+    <string name="day29">29</string>
+    <string name="day30">30</string>
+    <string name="day31">31</string>
+
+    <!--tips-->
+    <string name="tip1">Tip1:Life is but a span,something you wanna do if you don\'t
+        act right now,99% will never get off the ground.</string>
+    <string name="tip2">Tip2:ClassicList mode,swipe left this note to show menu,click note to set
+        its color.</string>
+    <string name="tip3">Tip3:Try to change to ColorGrid mode,attention,
+        the default setting \"Color note grid randomly\" will override the color you set.</string>
+
+    <string name="date_error">Date error</string>
+
+    <!--foreground service-->
+    <string name="one_reminder"> reminder is counting down.</string>
+    <string name="more_reminder"> reminders are counting down.</string>
+
+    <!--new password dialog-->
+    <string name="password_title">Start Password guard</string>
+    <string name="stop_password_title">Stop Password guard</string>
+    <string name="new_password">Password:</string>
+    <string name="confirm_password">Confirm:</string>
+    <string name="hint_password">Hint:</string>
+
+    <string name="forgot_password"><u>Forgot</u></string>
+
+    <!--menu-->
+    <string name="app_name">PureNote</string>
+    <string name="action_search">Search</string>
+    <string name="action_plus">Plus</string>
+    <string name="edit_date">Edit date</string>
+    <string name="action_change_mode">Change…</string>
+    <string name="action_trash">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_remind">Reminder</string>
+    <string name="action_cancel_remind">Cancel reminder</string>
+    <string name="action_share">Share…</string>
+    <string name="action_move">Move…</string>
+    <string name="action_weather">Weather</string>
+    <string name="action_setting">Settings</string>
+    <string name="action_feedback">Feedback</string>
+    <string name="action_evaluate">Evaluate</string>
+    <string name="action_folder">Folder</string>
+    <string name="action_about">About</string>
+    <string name="bind_evernote">Bind EverNote</string>
+    <string name="syn_evernote">Synchronize data</string>
+
+    <string name="m_color_grid">Color Grid</string>
+    <string name="m_classic_list">Classic List</string>
+
+    <!--delete dialog-->
+    <string name="alert">Alert</string>
+    <string name="delete_text">Confirm delete？</string>
+    <string name="confirm">Yes</string>
+    <string name="cancel">No</string>
+
+    <string name="logout_text">Confirm logout EverNote?</string>
+
+    <!--activity Folder-->
+    <string name="all_notes">AllNotes</string>
+    <string name="folder_cancel">Cancel</string>
+    <string name="folder_delete_num">Delete(%1$s)</string>
+    <string name="folder_delete">Delete</string>
+    <string name="folder_new">New</string>
+    <string name="folder_note_num">%1$d note(s)</string>
+
+    <!--create folder dialog-->
+    <string name="create_folder_title">New Folder</string>
+    <string name="create_folder">Create</string>
+    <string name="create_folder_err">Folder couldn\'t be created.</string>
+
+    <!--setting-->
+    <string name="login_evernote">Login EverNote</string>
+    <string name="logout_evernote">%1$s Logout</string>
+    <string name="logout_evernote_username_null">Logout</string>
+    <string name="gift_for_purenote">Rate for PureNote</string>
+    <string name="situation">【Global】</string>
+    <string name="color_grid">【Color Grid】</string>
+    <string name="classic_list">【Classic List】</string>
+    <string name="new_note">New note when start-up</string>
+    <string name="customize_color">Customize note color</string>
+    <string name="color_read">Color when read note</string>
+    <string name="random_color">Color note grid randomly</string>
+    <string name="fold">Fold overdue note</string>
+    <string name="max_lines">Max lines</string>
+    <string name="no_weather">Ban weather</string>
+    <string name="full_screen">Fullscreen</string>
+    <string name="password_guard">Password guard</string>
+    <string name="password_guard_on">On</string>
+    <string name="password_guard_off">Off</string>
+
+    <string name="proudly">Made with love by Duanze 2015.Feb-Aug\nCopyright©All Rights
+        Reserved.</string>
+
+    <!--color grid-->
+    <!--week array-->
+    <string name="monday">MON</string>
+    <string name="tuesday">TUE</string>
+    <string name="wednesday">WED</string>
+    <string name="thursday">THU</string>
+    <string name="friday">FRI</string>
+    <string name="saturday">SAT</string>
+    <string name="sunday">SUN</string>
+
+    <!--swipe menu-->
+    <string name="remind">Remind</string>
+    <string name="delete">Delete</string>
+
+    <string name="done">DONE</string>
+    <string name="undone">UNDONE</string>
+
+    <!--rate for purenote-->
+    <string name="rate_for_purenote">Do you like PureNote？</string>
+    <string name="rate_rate">To Rate</string>
+    <string name="rate_feedback">Feedback</string>
+
+</resources>

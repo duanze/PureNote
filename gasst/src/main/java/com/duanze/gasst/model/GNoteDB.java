@@ -131,6 +131,12 @@ public class GNoteDB {
 
     public List<GNote> loadGNotesByBookId(int id) {
         List<GNote> list = new ArrayList<GNote>();
+
+        //当载入全部笔记时
+        if (id == 0) {
+            return loadGNotes();
+        }
+
         Cursor cursor = db.query(TABLE_NAME, null, GNOTEBOOK_ID + " = ?", new String[]{"" + id},
                 null, null, "time desc");
         if (cursor.moveToFirst()) {
@@ -237,6 +243,9 @@ public class GNoteDB {
             cursor.close();
             return gNote;
         }
+        if (cursor != null) {
+            cursor.close();
+        }
         return null;
     }
 
@@ -262,6 +271,9 @@ public class GNoteDB {
 
             cursor.close();
             return gNote;
+        }
+        if (cursor != null) {
+            cursor.close();
         }
         return null;
     }
@@ -356,5 +368,28 @@ public class GNoteDB {
             cursor.close();
         }
         return list;
+    }
+
+    public GNotebook getGNotebookById(int id) {
+        Cursor cursor = db.query(TABLE_NOTEBOOK, null, "id = ?", new String[]{"" + id}, null, null, null);
+        if (cursor.moveToFirst()) {
+            GNotebook gNotebook = new GNotebook();
+            gNotebook.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+            gNotebook.setName(cursor.getString(cursor.getColumnIndex(NAME)));
+            gNotebook.setSynStatus(cursor.getInt(cursor.getColumnIndex(SYN_STATUS)));
+            gNotebook.setNotebookGuid(cursor.getString(cursor.getColumnIndex(NOTEBOOK_GUID)));
+            gNotebook.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
+            gNotebook.setNum(cursor.getInt(cursor.getColumnIndex(NUM)));
+            gNotebook.setSelected(cursor.getInt(cursor.getColumnIndex(SELECTED)));
+
+            cursor.close();
+            return gNotebook;
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return null;
     }
 }

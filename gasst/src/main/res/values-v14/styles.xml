@@ -9,10 +9,11 @@
         <item name="android:actionBarStyle">@style/WeChatActionBar</item>
         <item name="android:itemTextAppearance">@style/WeChatActionBarOverflow</item>
         <item name="android:actionOverflowButtonStyle">@style/WeChatActionButtonOverflow</item>
+        <item name="android:actionModeBackground">@color/background_color</item>
     </style>
 
     <style name="WeChatActionBar" parent="@android:style/Widget.Holo.ActionBar">
-        <item name="android:background">#e8e8e7</item>
+        <item name="android:background">@color/background_color</item>
         <item name="android:titleTextStyle">@style/WeChatActionBarTitleText</item>
     </style>
 

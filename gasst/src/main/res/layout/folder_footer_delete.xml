@@ -3,24 +3,41 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <Button
-        android:id="@+id/btn_folder_cancel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:background="@null"
-        android:text="@string/folder_cancel"
-        />
 
-    <Button
-        android:id="@+id/btn_folder_num"
+    <com.balysv.materialripple.MaterialRippleLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:background="@null"
-        android:text="@string/folder_delete_num"
-        android:textColor="@color/red"
-        />
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:mrl_rippleOverlay="true"
+        >
+
+        <Button
+            android:id="@+id/btn_folder_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="@string/folder_cancel"
+            />
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:mrl_rippleOverlay="true"
+        >
+
+        <Button
+            android:id="@+id/btn_folder_num"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="@string/folder_delete_num"
+            android:textColor="@color/red"
+            />
+    </com.balysv.materialripple.MaterialRippleLayout>
 </LinearLayout>

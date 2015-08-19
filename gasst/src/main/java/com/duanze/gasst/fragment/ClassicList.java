@@ -110,9 +110,9 @@ public class ClassicList extends Fragment {
                              Bundle savedInstanceState) {
 //        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
 
-        View view = inflater.inflate(R.layout.classic_list, container, false);
+        View view = inflater.inflate(R.layout.classic_list_fragment, container, false);
         noteTitleListView = (SwipeMenuListView) view.findViewById(R.id.swipe_lv);
-        adapter = new NoteAdapter(mContext, R.layout.list_item, gNoteList, noteTitleListView);
+        adapter = new NoteAdapter(mContext, R.layout.classic_list_item, gNoteList, noteTitleListView);
         adapter.setValues((MainActivity) mContext);
         noteTitleListView.setAdapter(adapter);
         noteTitleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -144,9 +144,6 @@ public class ClassicList extends Fragment {
 //                        db.deleteGNote(gNoteList.get(position).getId());
                         deleteNote();
                         refreshUI();
-                        if (!gNote.isPassed()) {
-                            AlarmService.cancelTask(mContext, gNote);
-                        }
                         break;
                 }
                 // false : close the menu; true : not close the menu
@@ -180,7 +177,13 @@ public class ClassicList extends Fragment {
         if (!gNote.isPassed()) {
             AlarmService.cancelTask(mContext, gNote);
         }
-        updateGNotebook(((MainActivity) getActivity()).getPreferences().getInt(Folder.GNOTEBOOK_ID, 0), -1);
+
+        int noteBookId = gNote.getGNotebookId();
+        if (noteBookId < 0) noteBookId = 0;
+        updateGNotebook(noteBookId, -1);
+        if (noteBookId != 0) {
+            updateGNotebook(0, -1);
+        }
     }
 
     private void updateGNotebook(int id, int value) {
@@ -243,4 +246,5 @@ public class ClassicList extends Fragment {
     public void randomfabButtonColor() {
         Util.randomBackground(fabButton);
     }
+
 }

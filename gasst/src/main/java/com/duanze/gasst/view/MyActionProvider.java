@@ -38,7 +38,7 @@ public class MyActionProvider extends ActionProvider {
                 if (activity.getMode() != MainActivity.MODE_GRID) {
                     preferences.edit().putInt("mode", MainActivity.MODE_GRID).apply();
                     activity.setMode(MainActivity.MODE_GRID);
-                    activity.setContent();
+                    activity.changeContent();
 //                    activity.gridRefresh();
                 }
                 return true;
@@ -50,7 +50,7 @@ public class MyActionProvider extends ActionProvider {
                 if (activity.getMode() != MainActivity.MODE_LIST) {
                     preferences.edit().putInt("mode", MainActivity.MODE_LIST).apply();
                     activity.setMode(MainActivity.MODE_LIST);
-                    activity.setContent();
+                    activity.changeContent();
 //                    activity.listRefresh();
                 }
                 return true;

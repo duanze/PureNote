@@ -395,7 +395,7 @@ public class Evernote {
         }
     }
 
-    private void updateLocalNote(String guid, int _id) {
+    private void updateLocalNote(String guid, GNote gNote) {
         LogUtil.e(TAG, "准备更新:" + guid);
         try {
             Note note = mEvernoteSession
@@ -404,9 +404,13 @@ public class Evernote {
                     .getNote(mEvernoteSession.getAuthToken(), guid, true,
                             false, false, false);
 
-            GNote gNote = GNote.parseGNote(note);
-            gNote.setId(_id);
-            updateGNote(gNote, note);
+            if (gNote != null) {
+                gNote.setNote(note.getContent());
+                gNote.setEditTime(note.getUpdated());
+
+                db.updateGNote(gNote);
+            }
+
         } catch (TTransportException e) {
             e.printStackTrace();
         } catch (EDAMUserException e) {
@@ -456,7 +460,7 @@ public class Evernote {
                     if (gNote.getEditTime() != note.getUpdated()) {
 
                         // 更新数据
-                        updateLocalNote(note.getGuid(), gNote.getId());
+                        updateLocalNote(note.getGuid(), gNote);
 
                     }
                 } else {
@@ -562,6 +566,7 @@ public class Evernote {
                 makeSureNotebookExsits(NOTEBOOK_NAME);
                 if (mSyncUp)
                     syncUp(db.loadRawGNotes());
+//                    syncUp(db.loadGNotesByBookId(0));
                 if (mSyncDown)
                     syncDown();
                 publishProgress(new Integer[]{SYNC_SUCCESS});

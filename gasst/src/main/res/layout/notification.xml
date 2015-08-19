@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="64dp">
+
+    <ImageView
+        android:id="@+id/iv_title_logo"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/notebook"/>
+
+    <ImageView
+        android:id="@+id/iv_bolt"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:layout_height="36dp"
+        android:layout_width="36dp"
+        android:background="@drawable/bolt_off_big"
+        />
+    <ImageView
+        android:id="@+id/iv_new_note"
+        android:layout_toLeftOf="@id/iv_bolt"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:layout_height="36dp"
+        android:layout_width="36dp"
+        android:background="@drawable/actionbar_add_note"
+        />
+
+    <TextView
+        android:id="@+id/tv_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1111111111111111111"
+        android:textSize="14sp"
+        android:layout_toRightOf="@id/iv_title_logo"
+        android:layout_toLeftOf="@id/iv_bolt"
+        android:layout_alignTop="@id/iv_title_logo"
+        android:paddingLeft="3dp"
+        android:paddingTop="4dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_down"
+        android:text="222222222222222222222"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:textColor="@color/dimgrey"
+        android:layout_toLeftOf="@id/iv_bolt"
+        android:layout_toRightOf="@id/iv_title_logo"
+        android:layout_alignBottom="@id/iv_title_logo"
+        android:paddingLeft="3dp"
+        android:paddingBottom="4dp"/>
+
+</RelativeLayout>

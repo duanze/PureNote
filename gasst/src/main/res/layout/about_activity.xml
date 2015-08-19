@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:textColor="@color/dimgrey"
+        android:textSize="34sp"
+        android:text="@string/app_name"/>
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/dimgrey"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:mrl_rippleOverlay="true"
+        >
+
+        <Button
+            android:background="@drawable/white_button_background"
+            android:id="@+id/btn_feedback"
+            android:textColor="@color/grey"
+            android:text="@string/action_feedback"
+            android:textSize="@dimen/category_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:mrl_rippleOverlay="true"
+        >
+
+        <Button
+            android:background="@drawable/white_button_background"
+            android:id="@+id/btn_comment"
+            android:textColor="@color/grey"
+            android:text="@string/comment_purenote"
+            android:textSize="@dimen/category_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:mrl_rippleOverlay="true"
+        >
+
+        <Button
+            android:background="@drawable/white_button_background"
+            android:id="@+id/btn_donate"
+            android:textColor="@color/grey"
+            android:text="@string/donate_developer"
+            android:textSize="@dimen/category_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+    <TextView
+        android:textSize="12sp"
+        android:textColor="@color/grey"
+        android:layout_gravity="center"
+        android:paddingBottom="20dp"
+        android:gravity="center|bottom"
+        android:text="@string/proudly"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+</LinearLayout>

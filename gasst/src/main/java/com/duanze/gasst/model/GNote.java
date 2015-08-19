@@ -31,10 +31,10 @@ public class GNote implements Parcelable {
     private String note = "";
     private int done = FALSE;
     private int color = GridUnit.colorArr[0];//初始透明
-    private long editTime;//最后编辑时间
-    private long createdTime;//创建时间
+    private long editTime = 0;//最后编辑时间
+    private long createdTime = 0;//创建时间
     private int synStatus = NOTHING;//同步状态，仅登录EverNote后有效
-    private String guid;//evernote 标志符，惟一确定一条note
+    private String guid = "";//evernote 标志符，惟一确定一条note
     private String bookGuid = "";
 
     public int getGNotebookId() {
@@ -139,6 +139,10 @@ public class GNote implements Parcelable {
     }
 
     public Spanned getNoteFromHtml() {
+        //莫名错误预防
+        if (note == null) {
+            note = "";
+        }
         return Html.fromHtml(note);
     }
 
@@ -220,14 +224,14 @@ public class GNote implements Parcelable {
         String[] tmp = title.split(" ");
         if (tmp.length == 2) {
             String[] allInfo = tmp[1].split("\\.");
-            if (allInfo.length == 3){
+            if (allInfo.length == 3) {
                 gNote.setTime(Util.parseTimeStamp(allInfo));
                 setTime = true;
             }
         }
         if (!setTime) {
             Calendar today = Calendar.getInstance();
-            gNote.setTimeFromDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
+            gNote.setCalToTime(today);
         }
         return gNote;
     }

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/rl_list_item">
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rl_list_item">
+
     <TextView
         android:id="@+id/tv_note_color"
         android:layout_marginLeft="10dp"
@@ -20,8 +23,8 @@
         android:maxLines="5"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="12dp"
         android:textColor="@color/dimgrey"
         android:textSize="17sp"/>
 
@@ -31,8 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:paddingRight="10dp"
+        android:paddingRight="20dp"
         android:textColor="@color/darkgrey"
         android:textSize="12sp"/>
-
 </RelativeLayout>
+

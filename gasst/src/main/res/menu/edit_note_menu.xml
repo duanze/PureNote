@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:purenote="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/edit_date"
-        android:icon="@drawable/actionbar_add_icon"
+        android:icon="@drawable/actionbar_add_note"
         android:showAsAction="ifRoom"
         android:title="@string/edit_date"/>
 
@@ -15,9 +16,13 @@
         android:id="@+id/action_cancel_remind"
         android:icon="@drawable/cancel_remind"
         android:title="@string/action_cancel_remind"/>
+    <!--<item-->
+        <!--android:id="@+id/action_move_ac"-->
+        <!--android:icon="@drawable/folder"-->
+        <!--android:title="@string/action_move"/>-->
     <item
         android:id="@+id/action_move"
-        android:icon="@drawable/folder"
+        android:icon="@drawable/map_pin_angle_3"
         android:title="@string/action_move"/>
     <item
         android:id="@+id/action_share"

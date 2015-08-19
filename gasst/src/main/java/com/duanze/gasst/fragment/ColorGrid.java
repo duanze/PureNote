@@ -84,7 +84,7 @@ public class ColorGrid extends Fragment {
         LogUtil.i(TAG, "width: " + screenWidth);
         leftEdge = -screenWidth;
         rightEdge = screenWidth;
-        defaultSpeed = screenWidth / 10;
+        defaultSpeed = screenWidth / 11;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ColorGrid extends Fragment {
                 ActionBar.LayoutParams.MATCH_PARENT);
         myViewFlipper.setLayoutParams(params);
 
-        curWeekNo = 1;
+        curWeekNo = 0;
         nextWeekNo = curWeekNo + 1;
         previousWeekNo = curWeekNo - 1;
 
@@ -151,7 +151,9 @@ public class ColorGrid extends Fragment {
         List<GNote> gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getgNotebookId());
         int index = gNoteList.size() - 1;
         tmpCal = (Calendar) today.clone();
-        tmpCal.add(Calendar.DAY_OF_MONTH, -7);
+
+//        tmpCal.add(Calendar.DAY_OF_MONTH, -7);
+
         if (model == MODEL_ONE) {
             // 先得到星期日
             tmpCal.add(Calendar.DAY_OF_MONTH, -type);
@@ -167,7 +169,7 @@ public class ColorGrid extends Fragment {
                 } else {
                     gridUnits[i][j].setViewUnit(tmpCal, false);
                 }
-                gridUnits[i][j].setBackgroundColor(GridUnit.THRANSPARENT);
+                gridUnits[i][j].setBackgroundColor(GridUnit.TRANSPARENT);
 
                 final TextView button = gridUnits[i][j].getDoneButton();
                 final GridUnit gridUnit = gridUnits[i][j];
@@ -189,11 +191,11 @@ public class ColorGrid extends Fragment {
                         if (randomColor()) {
                             gridUnit.randomSetBackground();
                         } else {
-                            if (customizeColor()) {
-                                gridUnit.setBackgroundColor(note.getColor());
-                            } else {
-                                gridUnits[i][j].setBackgroundColor(GridUnit.THRANSPARENT);
-                            }
+//                            if (customizeColor()) {
+                            gridUnit.setBackgroundColor(note.getColor());
+//                            } else {
+//                                gridUnits[i][j].setBackgroundColor(GridUnit.TRANSPARENT);
+//                            }
                         }
 
                         button.setVisibility(View.VISIBLE);
@@ -201,7 +203,7 @@ public class ColorGrid extends Fragment {
                             gridUnit.removeStrike();
                             button.setText(R.string.done);
 
-                            gridUnitEdit(gridUnit,note);
+                            gridUnitEdit(gridUnit, note);
                         } else if (note.isDone()) {
                             gridUnit.addStrike();
                             button.setText(R.string.undone);
@@ -226,7 +228,7 @@ public class ColorGrid extends Fragment {
                                     note.setDone(GNote.FALSE);
                                     db.updateGNote(note);
 
-                                    gridUnitEdit(gridUnit,note);
+                                    gridUnitEdit(gridUnit, note);
                                 }
                             }
                         });
@@ -246,15 +248,15 @@ public class ColorGrid extends Fragment {
         }
     }
 
-    private boolean randomColor(){
-        return ((MainActivity)mContext).isRandomColor();
+    private boolean randomColor() {
+        return ((MainActivity) mContext).isRandomColor();
     }
 
-    private boolean customizeColor(){
-        return ((MainActivity)mContext).isCustomizeColor();
-    }
+//    private boolean customizeColor(){
+//        return ((MainActivity)mContext).isCustomizeColor();
+//    }
 
-    private void gridUnitOpenNew(GridUnit gridUnit,final Calendar cal) {
+    private void gridUnitOpenNew(GridUnit gridUnit, final Calendar cal) {
         gridUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -263,7 +265,7 @@ public class ColorGrid extends Fragment {
         });
     }
 
-    private void gridUnitEdit(GridUnit gridUnit,final GNote note) {
+    private void gridUnitEdit(GridUnit gridUnit, final GNote note) {
         //设置可点击
         gridUnit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -431,7 +433,7 @@ public class ColorGrid extends Fragment {
     static final int PREVIOUS = 1;
 
 
-    private void complete(int flag) {
+    private synchronized void complete(int flag) {
         weekViews[curWeekNo].setVisibility(View.GONE);
         //将当前（移动发生之前）的ImageView移动到（0，0）位置因为在滑动时它的位置被改变
         weekViews[curWeekNo].scrollTo(0, 0);
@@ -445,7 +447,7 @@ public class ColorGrid extends Fragment {
         previousWeekNo = curWeekNo - 1;
 
         myViewFlipper.setDisplayedChild(curWeekNo);
-        myViewFlipper.setClickable(true);
+
     }
 
     private boolean wantToShowNext() {
@@ -509,8 +511,10 @@ public class ColorGrid extends Fragment {
         @Override
         protected Integer doInBackground(Integer... speed) {
             int curLocation = xDistance;
-//暂时去除点击效果
-            myViewFlipper.setClickable(false);
+
+            //暂时去除点击效果
+//            myViewFlipper.setClickable(false);
+            myViewFlipper.setEnabled(false);
 
             // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
             while (true) {
@@ -544,6 +548,8 @@ public class ColorGrid extends Fragment {
             } else if (curLocation < 0) {
                 complete(PREVIOUS);
             }
+            //        myViewFlipper.setClickable(true);
+            myViewFlipper.setEnabled(true);
         }
     }
 

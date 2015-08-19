@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +27,7 @@ import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.NotebookAdapter;
 import com.duanze.gasst.fragment.FolderFooter;
 import com.duanze.gasst.fragment.FolderFooterDelete;
+import com.duanze.gasst.fragment.FooterInterface;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * Created by Duanze on 2015/5/22.
  */
-public class Folder extends Activity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class Folder extends Activity implements FooterInterface, CompoundButton.OnCheckedChangeListener {
     public static final String TAG = "Folder";
 
     public static final String GNOTEBOOK_ID = "gnotebook_id";
@@ -57,13 +57,13 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
     private SharedPreferences preferences;
     private boolean settingChanged;
 
+    @Override
     public int getDeleteNum() {
         return deleteNum;
     }
 
     private int deleteNum;
 
-    private Fragment curFragment;
     private FolderFooter footer;
     private FolderFooterDelete footerDelete;
     private FolderUnit purenote;
@@ -74,10 +74,6 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
     private NotebookAdapter notebookAdapter;
     private GNoteDB db;
     private Context mContext;
-
-    public void setFolderId(int folderId) {
-        this.folderId = folderId;
-    }
 
     private int folderId;
     private int originalFolderId;
@@ -90,23 +86,23 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        overridePendingTransition(R.anim.in_push_left_to_right,
+        overridePendingTransition(R.anim.in_push_right_to_left,
                 R.anim.in_stable);
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
-        boolean fScreen = preferences.getBoolean(Settings.FULL_SCREEN, false);
-        //如果设置了全屏
-        if (fScreen) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
+//        boolean fScreen = preferences.getBoolean(Settings.FULL_SCREEN, false);
+//        //如果设置了全屏
+//        if (fScreen) {
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        }
 
         init();
 
     }
 
     private void init() {
-        setContentView(R.layout.activity_folder);
+        setContentView(R.layout.folder_activity);
         purenote = (FolderUnit) findViewById(R.id.fu_purenote);
         purenoteFlag = (ImageView) purenote.findViewById(R.id.iv_folder_unit_flag);
         TextView purenoteNum = (TextView) purenote.findViewById(R.id.tv_folder_unit_num);
@@ -127,7 +123,7 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
 
         modeFooter = MODE_FOOTER;
         readFolderId();
-        setContent();
+        setFooter();
 
         mContext = this;
         db = GNoteDB.getInstance(mContext);
@@ -206,33 +202,20 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
         }
     }
 
-    public void setContent() {
+    public void setFooter() {
         if (modeFooter == MODE_FOOTER) {
             if (footer == null) {
                 footer = new FolderFooter();
             }
             getFragmentManager().beginTransaction().replace(R.id.fl_folder_footer, footer)
                     .commit();
-            curFragment = footer;
         } else if (modeFooter == MODE_FOOTER_DELETE) {
             if (footerDelete == null) {
                 footerDelete = new FolderFooterDelete();
             }
             getFragmentManager().beginTransaction().replace(R.id.fl_folder_footer, footerDelete)
                     .commit();
-            curFragment = footerDelete;
         }
-    }
-
-    public void changeContent() {
-        if (modeFooter == MODE_FOOTER) {
-            modeFooter = MODE_FOOTER_DELETE;
-            showCheckBox();
-        } else {
-            modeFooter = MODE_FOOTER;
-            hideCheckBox();
-        }
-        setContent();
     }
 
     /**
@@ -260,7 +243,6 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
     private void exitOperation() {
         if (originalFolderId != folderId) {
 
-
             if (mode == MODE_FOLDER) {
                 settingChanged = true;
                 SharedPreferences.Editor editor = preferences.edit();
@@ -279,7 +261,7 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
         }
         finish();
         overridePendingTransition(R.anim.in_stable,
-                R.anim.out_push_right_to_left);
+                R.anim.out_push_left_to_right);
     }
 
     private void selectFolder(int id) {
@@ -310,18 +292,6 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        if (curFragment == footer) {
-            showCreateFolderDialog();
-        } else if (curFragment == footerDelete) {
-            if (deleteNum <= 0) {
-                return;
-            } else {
-                trash();
-            }
-        }
-    }
 
     /**
      * 删除按钮的方法
@@ -356,7 +326,7 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
                             }
                         }
                         refreshFolderList();
-                        changeContent();
+                        changeFooter();
                     }
                 }).show();
     }
@@ -415,13 +385,13 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
                             createFolder(editText.getText().toString());
                             refreshFolderList();
                         }
-                        closeKeyboard();
+//                        closeKeyboard();
                     }
                 })
                 .setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        closeKeyboard();
+//                        closeKeyboard();
                     }
                 })
                 .create();
@@ -467,5 +437,30 @@ public class Folder extends Activity implements View.OnClickListener, CompoundBu
             deleteNum--;
         }
         footerDelete.deleteNum(deleteNum);
+    }
+
+    @Override
+    public void changeFooter() {
+        if (modeFooter == MODE_FOOTER) {
+            modeFooter = MODE_FOOTER_DELETE;
+            showCheckBox();
+        } else {
+            modeFooter = MODE_FOOTER;
+            hideCheckBox();
+        }
+        setFooter();
+    }
+
+    @Override
+    public void actionClick() {
+        if (MODE_FOOTER == modeFooter) {
+            showCreateFolderDialog();
+        } else if (MODE_FOOTER_DELETE == modeFooter) {
+            if (deleteNum <= 0) {
+                return;
+            } else {
+                trash();
+            }
+        }
     }
 }

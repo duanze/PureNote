@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:fitsSystemWindows="true">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/category_height"
+                android:text="@string/general_settings"
+                android:gravity="center_vertical"
+                android:textColor="@color/dimgrey"
+                android:textSize="@dimen/category_text_size"
+                android:layout_marginLeft="@dimen/material_margin"
+                android:layout_marginRight="@dimen/material_margin"
+                android:layout_marginTop="@dimen/category_margin_top"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/login_evernote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/material_padding"
+                    android:orientation="horizontal"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:id="@+id/login_img"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@null"
+                        android:src="@drawable/evernote"/>
+
+                    <TextView
+                        android:id="@+id/login_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/title_text_size"
+                        android:text="@string/login_evernote"/>
+
+                    <ImageView
+                        android:id="@+id/bind_arrow"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@null"
+                        android:src="@drawable/next"/>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                android:layout_height="@dimen/divider_line_height"
+                android:background="@color/divider_line_color"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_password_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginRight="@dimen/content_margin_right"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/password_guard"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/password_guard_summary"
+                            android:textSize="@dimen/category_text_size"
+                            android:textColor="@color/dimgrey"
+                            />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_password_guard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/password_guard_off"
+                        android:textSize="@dimen/category_text_size"
+                        android:layout_gravity="center"
+                        android:textColor="@color/darkgrey"/>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:id="@+id/v_universal"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                android:layout_height="@dimen/divider_line_height"
+                android:background="@color/divider_line_color"
+                android:visibility="gone"/>
+
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                android:id="@+id/mr_universal_container"
+                android:visibility="gone"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_universal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginRight="@dimen/content_margin_right"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/universal_password"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/universal_password_summary"
+                            android:textSize="@dimen/category_text_size"
+                            android:textColor="@color/dimgrey"
+                            />
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:layout_gravity="center"
+                        android:id="@+id/cb_universal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/category_height"
+                android:text="@string/notification_tools"
+                android:gravity="center_vertical"
+                android:textColor="@color/dimgrey"
+                android:textSize="@dimen/category_text_size"
+                android:layout_marginLeft="@dimen/material_margin"
+                android:layout_marginRight="@dimen/material_margin"
+                android:layout_marginTop="@dimen/category_margin_top"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_notification_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/notification_always_show"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                    </LinearLayout>
+
+                    <Switch
+                        android:id="@+id/s_notification_always_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                android:layout_height="@dimen/divider_line_height"
+                android:background="@color/divider_line_color"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_quick_write"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/quick_write"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/quick_write_summary"
+                            android:textSize="@dimen/category_text_size"
+                            android:textColor="@color/dimgrey"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                android:layout_height="@dimen/divider_line_height"
+                android:background="@color/divider_line_color"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_quick_write_location_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/quick_write_location"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_quick_location_summary"
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/quick_write_summary"
+                            android:textSize="@dimen/category_text_size"
+                            android:textColor="@color/dimgrey"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                android:layout_height="@dimen/divider_line_height"
+                android:background="@color/divider_line_color"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_lightning_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginRight="@dimen/content_margin_right">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lightning_extract"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lightning_extract_summary"
+                            android:textSize="@dimen/category_text_size"
+                            android:textColor="@color/dimgrey"
+                            />
+                    </LinearLayout>
+
+                    <Switch
+                        android:id="@+id/s_lightning_extract"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                android:layout_height="@dimen/divider_line_height"
+                android:background="@color/divider_line_color"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_extract_location_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/extract_location"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_extract_location_summary"
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/quick_write_summary"
+                            android:textSize="@dimen/category_text_size"
+                            android:textColor="@color/dimgrey"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/category_height"
+                android:gravity="center_vertical"
+                android:text="@string/list_settings"
+                android:textColor="@color/dimgrey"
+                android:textSize="@dimen/category_text_size"
+                android:layout_marginTop="@dimen/category_margin_top"
+                android:layout_marginLeft="@dimen/material_margin"
+                android:layout_marginRight="@dimen/material_margin"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_fold_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginRight="@dimen/content_margin_right">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fold"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fold_summary"
+                            android:textSize="@dimen/category_text_size"
+                            android:textColor="@color/dimgrey"
+                            />
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/fold"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                android:layout_height="@dimen/divider_line_height"
+                android:background="@color/divider_line_color"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:mrl_rippleOverlay="true"
+                >
+
+                <LinearLayout
+                    android:id="@+id/ll_maxlines_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginRight="@dimen/content_margin_right">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/max_lines"
+                            android:textSize="@dimen/title_text_size"
+                            />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/max_lines_summary"
+                            android:textSize="@dimen/category_text_size"
+                            android:textColor="@color/dimgrey"
+                            />
+                    </LinearLayout>
+
+                    <Spinner
+                        android:id="@+id/m_spinner"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

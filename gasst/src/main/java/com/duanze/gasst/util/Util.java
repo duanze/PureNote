@@ -1,15 +1,25 @@
 package com.duanze.gasst.util;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.widget.Toast;
 
+import com.duanze.gasst.R;
+import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.model.GNote;
+import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.model.GNotebook;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
+import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 public class Util {
     public static final String[] MONTH_ARR = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-            "Aug", "Sep", "Oct", "Nov", "Dev"};
+            "Aug", "Sep", "Oct", "Nov", "Dec"};
     public static final String[] DATE_ARR = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th",
             "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th", "16th", "17th", "18th",
             "19th", "20th", "21th", "22th", "23th", "24th", "25th", "26th", "27th", "28th", "29th",
@@ -70,7 +80,9 @@ public class Util {
         String tmp = "";
         String[] allInfo;
         allInfo = gNote.getTime().split(",");
-        if (allInfo.length == 3) {
+        //不知原因的数组越界，故暂时在此进行检测
+        if (allInfo.length == 3 && (Integer.parseInt(allInfo[2]) >= 1 && Integer.parseInt
+                (allInfo[2]) <= 31)) {
             tmp = MONTH_ARR[Integer.parseInt(allInfo[1])]
                     + "."
                     + DATE_ARR[Integer.parseInt(allInfo[2]) - 1]
@@ -80,7 +92,7 @@ public class Util {
         return tmp;
     }
 
-    public static String parseTimeStamp (String[] info) {
+    public static String parseTimeStamp(String[] info) {
         String year = info[2];
         int month = 0;
         int day = 1;
@@ -109,7 +121,7 @@ public class Util {
     }
 
     /**
-     * 随机设置背景色
+     * 随机设置fab背景色
      */
     public static void randomBackground(FloatingActionButton b) {
         int color = GREY;
@@ -128,4 +140,110 @@ public class Util {
         b.setColor(color);
     }
 
+    /**
+     * 判断某个服务是否正在运行的方法
+     *
+     * @param mContext
+     * @param serviceName 是包名+服务的类名（例如：net.loonggg.testbackstage.TestService）
+     * @return true代表正在运行，false代表服务没有正在运行
+     */
+    public static boolean isServiceWork(Context mContext, String serviceName) {
+        ActivityManager myAM = (ActivityManager) mContext
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> myList = myAM.getRunningServices(40);
+        if (myList.size() <= 0) {
+            return false;
+        }
+        for (int i = 0; i < myList.size(); i++) {
+            String mName = myList.get(i).service.getClassName();
+            if (mName.equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String extractNote(SharedPreferences preferences, GNoteDB db, String str,
+                                     int groupId, Context context) {
+        boolean find = false;
+        String groupName = null;
+        if (groupId != 0) {
+            GNotebook gNotebook = db.getGNotebookById(groupId);
+            if (gNotebook != null) {
+                groupName = gNotebook.getName();
+                find = true;
+            }
+        } else {
+            find = true;
+            groupName = context.getResources().getString(R.string.all_notes);
+        }
+        if (find) {
+            extractNoteToDB(preferences, db, str, groupId);
+        }
+        return groupName;
+    }
+
+    public static void extractNoteToDB(SharedPreferences preferences, GNoteDB db, String str, int groupId) {
+        Calendar cal = Calendar.getInstance();
+        GNote gNote = new GNote();
+        gNote.setCalToTime(cal);
+        gNote.setNote(str);
+        //needCreate
+        gNote.setSynStatus(GNote.NEW);
+//        设置笔记本id
+        gNote.setGNotebookId(groupId);
+        db.saveGNote(gNote);
+
+//        更新笔记本
+        updateGNotebook(preferences, db, groupId, +1, false);
+        if (groupId != 0) {
+            updateGNotebook(preferences, db, 0, +1, false);
+        }
+    }
+
+    private static void updateGNotebook(SharedPreferences preferences, GNoteDB db, int id, int value,
+                                        boolean isMove) {
+        if (id == 0) {
+            //如果是移动文件，不加不减
+            if (isMove) return;
+            int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
+            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+        } else {
+            List<GNotebook> gNotebooks = db.loadGNotebooks();
+            for (GNotebook gNotebook : gNotebooks) {
+                if (gNotebook.getId() == id) {
+                    int cnt = gNotebook.getNum();
+                    gNotebook.setNum(cnt + value);
+
+                    db.updateGNotebook(gNotebook);
+                    break;
+                }
+            }
+        }
+    }
+
+    public static String readSaveLocation(String lo,SharedPreferences preferences, GNoteDB db,
+                                          Context mContext) {
+        int extractLocation = preferences.getInt(lo, 0);
+        List<GNotebook> list = db.loadGNotebooks();
+        String extractGroup = "";
+
+        if (0 != extractLocation) {
+            boolean find = false;
+            for (GNotebook gNotebook : list) {
+                if (extractLocation == gNotebook.getId()) {
+                    extractGroup = gNotebook.getName();
+                    find = true;
+                    break;
+                }
+            }
+            if (!find) {
+                Toast.makeText(mContext, R.string.read_save_location_error, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            extractGroup = mContext.getResources().getString(R.string.all_notes);
+        }
+
+        return extractGroup;
+    }
 }

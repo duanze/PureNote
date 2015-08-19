@@ -27,7 +27,7 @@
         android:layout_weight="1"
         android:textColor="@color/dimgrey"
         android:textSize="18sp"
-        android:text="@string/purenote"/>
+        android:text="@string/all_notes"/>
 
     <TextView
         android:id="@+id/tv_folder_unit_num"

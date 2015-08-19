@@ -6,7 +6,6 @@
     android:layout_height="50dp"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
-    android:background="@drawable/setting_item"
     android:orientation="horizontal"
     android:descendantFocusability="blocksDescendants">
 
@@ -16,18 +15,18 @@
         android:layout_height="35dp"
         android:layout_gravity="center"
         android:contentDescription="@null"
-        android:src="@drawable/flags"/>
+        android:src="@drawable/icon_selected"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/tv_folder_unit_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:textColor="@color/dimgrey"
-        android:textSize="18sp"
-        android:text="@string/purenote"/>
+        android:textSize="17sp"
+        android:text="@string/all_notes"/>
 
     <TextView
         android:id="@+id/tv_folder_unit_num"
@@ -35,7 +34,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/darkgrey"
         android:layout_gravity="center"
-        android:textSize="15sp"
+        android:textSize="17sp"
         android:text="0"/>
     <CheckBox
         android:id="@+id/cb_folder_unit"

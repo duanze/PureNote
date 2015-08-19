@@ -13,7 +13,6 @@ import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.util.Util;
-import com.duanze.gasst.view.GridUnit;
 
 import java.util.Calendar;
 import java.util.List;
@@ -23,7 +22,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
     private boolean isFold;
     private int maxLines;
     private Calendar today;
-    private boolean customizeColor;
+//    private boolean customizeColor;
     private AbsListView mListView;
 
     public NoteAdapter(Context context, int textViewResourceId, List<GNote> objects) {
@@ -32,8 +31,8 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
     }
 
     public NoteAdapter(Context context, int textViewResourceId, List<GNote> objects,
-                       AbsListView listView){
-        this(context,textViewResourceId,objects);
+                       AbsListView listView) {
+        this(context, textViewResourceId, objects);
         mListView = listView;
     }
 
@@ -41,7 +40,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
         isFold = activity.getIsFold();
         today = activity.getToday();
         maxLines = activity.getMaxLines();
-        customizeColor = activity.isCustomizeColor();
+//        customizeColor = activity.isCustomizeColor();
     }
 
     @Override
@@ -77,15 +76,17 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
             holder.title.setMaxLines(maxLines);
         }
         holder.time.setText(Util.timeString(gNote));
-        if (customizeColor) {
-            measureView(holder.listItem);
+//        if (customizeColor) {
+        measureView(holder.listItem);
 
-            int height = holder.listItem.getMeasuredHeight();
-            holder.noteColor.setHeight(height * 11 / 20);
-            holder.noteColor.setBackgroundColor(gNote.getColor());
-        } else {
-            holder.noteColor.setBackgroundColor(GridUnit.THRANSPARENT);
-        }
+        int height = holder.listItem.getMeasuredHeight();
+//            holder.noteColor.setVisibility(View.VISIBLE);
+        holder.noteColor.setHeight(height * 11 / 20);
+        holder.noteColor.setBackgroundColor(gNote.getColor());
+//        } else {
+//            holder.noteColor.setBackgroundColor(GridUnit.TRANSPARENT);
+//            holder.noteColor.setVisibility(View.GONE);
+//        }
         return view;
     }
 

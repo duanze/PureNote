@@ -71,6 +71,7 @@ public class NotebookAdapter extends ArrayAdapter<GNotebook> {
         }else {
             holder.flag.setVisibility(View.VISIBLE);
         }
+
         holder.name.setText(gNotebook.getName());
 //        下面这句注意，num为Int类型，运行时被当作resourceId报错
         holder.num.setText(mContext.getString(R.string.folder_note_num,

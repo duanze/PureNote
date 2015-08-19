@@ -3,11 +3,11 @@ package com.duanze.gasst.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.duanze.gasst.R;
 
-public class FolderUnit extends RelativeLayout {
+public class FolderUnit extends LinearLayout {
 
 
 
