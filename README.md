@@ -8,13 +8,18 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 ·随机彩格视图，任务计划、灵感足迹一目了然<br>
 ·高度自适应列表，灵活显示，彩色标签清新标注重点<br>
 ·绑定EverNote，同步笔记至云端，精彩文字永不遗失<br>
-·定时提醒、全屏模式、彩色Note、快速分享保存……<br>
+·定时提醒、笔记分组、全屏模式、彩色Note、快速分享保存……更多精彩等你发现<br>
 I am trying to make it better through the nice OpenSource projects help.<br>
 
 #Lastest Action近期动作
 Record voice,picture and so on.<br>
 录音及图片的记录功能开发中<br>
 <br>
+
+~~笔记分组，实用的小功能~~<br>
+![](https://github.com/duanze/PureNote/raw/master/Screenshot_2015-05-23-23-12-52.jpeg)
+<br>
+
 <br>
 ~~ClassicList mode,the new colorful mark.~~<br>
 ~~为经典列表模式增加新的彩色标签。~~<br>
@@ -25,6 +30,12 @@ Record voice,picture and so on.<br>
 ~~尝试支持EverNote服务，但新版sdk给的全是无返回值的异步函数，使用起来如此困难。~~<br>
 ![](https://github.com/duanze/PureNote/raw/master/evernote.jpeg) 
 #更新历史
+
+v2.0.4<br>
+1.新功能，笔记分组，让一切井井有条！<br>
+2.解决了一个彩格视图模式下的严重bug<br>
+3.多处细节优化<br>
+
 v2.0.3<br>
 1.全新彩色标签功能<br>
 2.优化代码提升性能<br>
