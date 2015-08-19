@@ -225,3 +225,15 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+
+settings.gradle
+gradle/
+build.gradle
+gradlew.bat
+gradlew
+gradle.properties
+gasst/build.gradle
+gasst/proguard-rules.pro
+EverNoteEx/build.gradle
+FloatingActionButton/build.gradle
