@@ -206,8 +206,11 @@ public class NoteActivity extends FragmentActivity {
         setOverflowShowingAlways();
 
         initValues();
+
         actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (null != actionBar)
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
         updateActionBarTitle();
     }
 

@@ -386,10 +386,7 @@ public class GNoteDB {
             return gNotebook;
         }
 
-        if (cursor != null) {
-            cursor.close();
-        }
-
+        cursor.close();
         return null;
     }
 }
