@@ -1,5 +1,6 @@
 package com.duanze.gasst;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -129,10 +130,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private MenuItem bindItem;
 
-    public Evernote getmEvernote() {
-        return mEvernote;
-    }
-
     private Evernote mEvernote;
 
     private Timer syncTimer;
@@ -210,9 +207,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         if (Folder.MODE_FOOTER == modeFooter) {
             showCreateFolderDialog();
         } else if (Folder.MODE_FOOTER_DELETE == modeFooter) {
-            if (deleteNum <= 0) {
-                return;
-            } else {
+            if (deleteNum > 0) {
                 trash();
             }
         }
@@ -241,16 +236,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
-        readSetting();
-
-//        boolean fullScreen = preferences.getBoolean(Settings.FULL_SCREEN, false);
-//        //如果设置了全屏
-//        if (fullScreen) {
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        }
 
         init();
 
@@ -317,6 +302,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 
     private void init() {
+        preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
+        readSetting();
+
         setContentView(R.layout.main_activity);
 
         //沉浸式时，对状态栏染色
@@ -380,7 +368,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         } else {
             bookName = db.getGNotebookById(bookId).getName();
         }
-        getActionBar().setTitle(bookName);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(bookName);
+        }
     }
 
 
@@ -389,7 +381,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         preferences.edit()
                 .putInt(Folder.PURENOTE_NOTE_NUM, n)
                 .putInt("mode", MODE_LIST)
-                .commit();
+                .apply();
 
         readSetting();
     }
@@ -415,17 +407,18 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //        hideFlag(originalFolderId);
 //        showFlag(folderId);
 //        listview更新后似乎其数据源list与listview.getChildAt() 方法不再一一对应
-        setPureNote();
+
+//        setPureNote();
     }
 
-    private void setPureNote() {
-        setPureNoteFlag();
-        setPureNoteNum();
-    }
-
-    private void setPureNoteNum() {
-        purenoteNum.setText("" + preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3));
-    }
+//    private void setPureNote() {
+//        setPureNoteFlag();
+//        setPureNoteNum();
+//    }
+//
+//    private void setPureNoteNum() {
+//        purenoteNum.setText("" + preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3));
+//    }
 
     /**
      * 删除按钮的方法
@@ -450,7 +443,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                         //快写存储位置
                         int quickId = preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0);
 
-                        for (int i = 0; i < folderListView.getCount() && deleteNum > 0; i++) {
+//                        从 ListView 中的各项开始遍历故起点需进行处理
+                        for (int i = 1; i < folderListView.getCount() && deleteNum > 0; i++) {
                             CheckBox checkBox = (CheckBox) folderListView.getChildAt(i).findViewById(R.id
                                     .cb_folder_unit);
                             if (checkBox.isChecked()) {
@@ -461,7 +455,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 //                                如果selected笔记本在被删除之列，将笔记本还原为默认值
                                 if (gNotebookList.get(i).getSelected() == GNotebook.TRUE) {
-                                    restoreDefault();
+//                                    restoreDefault();
+                                    preferences.edit().putInt(Settings.GNOTEBOOK_ID, 0).apply();
                                 }
 
                                 if (gNotebookList.get(i).getId() == extractId) {
@@ -506,7 +501,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
                     //在AllNotes中进行删除
                     int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
-                    preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt - 1).commit();
+                    preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt - 1).apply();
                 }
             }
         }.run();
@@ -514,19 +509,19 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     }
 
     private void restoreDefault() {
-        showFlag(0);
-        changeBook(0, 0);
+//        showFlag(0);
+//        changeBookInDB(0, 0);
     }
 
 
     public void showCheckBox() {
-        for (int i = 0; i < folderListView.getCount(); i++) {
+        for (int i = 1; i < folderListView.getCount(); i++) {
             folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View.VISIBLE);
         }
     }
 
     public void hideCheckBox() {
-        for (int i = 0; i < folderListView.getCount(); i++) {
+        for (int i = 1; i < folderListView.getCount(); i++) {
             folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View.INVISIBLE);
         }
     }
@@ -591,9 +586,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
-
-                setPureNote();
+                ActionBar actionBar = getActionBar();
+                if (null != actionBar) {
+                    actionBar.setTitle(mDrawerTitle);
+                }
+//                setPureNote();
 
                 refreshFolderList();
                 modeFooter = Folder.MODE_FOOTER;
@@ -604,18 +601,20 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
 
 
-        purenote = (FolderUnit) findViewById(R.id.fu_purenote);
-        purenoteFlag = (ImageView) purenote.findViewById(R.id.iv_folder_unit_flag);
-        purenoteNum = (TextView) purenote.findViewById(R.id.tv_folder_unit_num);
+//        purenote = (FolderUnit) findViewById(R.id.fu_purenote);
+//        purenoteFlag = (ImageView) purenote.findViewById(R.id.iv_folder_unit_flag);
+//        purenoteNum = (TextView) purenote.findViewById(R.id.tv_folder_unit_num);
         folderListView = (ListView) findViewById(R.id.lv_folder);
 
-
         gNotebookList = db.loadGNotebooks();
-        drawerNotebookAdapter = new DrawerNotebookAdapter(mContext, R.layout.folder_unit, gNotebookList, folderListView);
+        drawerNotebookAdapter = new DrawerNotebookAdapter(mContext, R.layout.folder_unit, gNotebookList, folderListView, preferences);
         folderListView.setAdapter(drawerNotebookAdapter);
 
         folderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -624,118 +623,282 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 //进行删除操作时无视之
                 if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
 
-                int folderId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
-                if (folderId != gNotebookList.get(i).getId()) {
-                    hideFlag(folderId);
+                int folderId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+//                先处理特殊值,点击“所有笔记”
+//                if (0 == i) {
+//
+//                } else if (folderId != gNotebookList.get(i).getId()) {
+//                    hideFlag(folderId);
+//
+//                    ImageView flag = (ImageView) view.findViewById(R.id.iv_folder_unit_flag);
+//                    flag.setVisibility(View.VISIBLE);
+//
+//                    changeBookInDB(folderId, gNotebookList.get(i).getId());
+//                    readSetting();
+//                    refreshUI();
+//                    mDrawerLayout.closeDrawers();
+//                }
 
-                    ImageView flag = (ImageView) view.findViewById(R.id.iv_folder_unit_flag);
-                    flag.setVisibility(View.VISIBLE);
+                //由 id 解析一个 listview pos 出来
+                int from = parseBookIdToPos(folderId);
+                changeFlag(from, i, view);
+                changeBookInDB(from, i);
 
-                    changeBook(folderId, gNotebookList.get(i).getId());
-                    readSetting();
-                    refreshUI();
-                    mDrawerLayout.closeDrawers();
-                }
+                //刷新界面
+                readSetting();
+                refreshUI();
+                mDrawerLayout.closeDrawers();
             }
         });
 
-        purenote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //进行删除操作时无视之
-                if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
-
-                int folderId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
-                if (folderId != 0) {
-                    hideFlag(folderId);
-                    purenoteFlag.setVisibility(View.VISIBLE);
-
-                    changeBook(folderId, 0);
-                    readSetting();
-                    refreshUI();
-                    mDrawerLayout.closeDrawers();
-                }
-            }
-        });
+//        purenote.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //进行删除操作时无视之
+//                if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
+//
+//                int folderId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
+//                if (folderId != 0) {
+//                    hideFlag(folderId);
+//                    purenoteFlag.setVisibility(View.VISIBLE);
+//
+//                    changeBookInDB(folderId, 0);
+//                    readSetting();
+//                    refreshUI();
+//                    mDrawerLayout.closeDrawers();
+//                }
+//            }
+//        });
     }
 
-    private void setPureNoteFlag() {
-        if (preferences.getInt(Folder.GNOTEBOOK_ID, 0) != 0) {
-            purenoteFlag.setVisibility(View.INVISIBLE);
-        } else {
-            purenoteFlag.setVisibility(View.VISIBLE);
+    /**
+     * 类型转换方法
+     *
+     * @param id
+     * @return
+     */
+    private int parseBookIdToPos(int id) {
+        if (0 == id) return 0;
+        //空指针保护-_-||
+        if (null == gNotebookList) return 0;
+        for (int j = 0; j < gNotebookList.size(); j++) {
+            if (id == gNotebookList.get(j).getId()) {
+                //因为有一项特殊值，所以在列表中的位置位+1
+                return j + 1;
+            }
         }
+        return 0;
     }
 
-    private void changeBook(int from, int to) {
-        cancelFolder(from);
-        selectFolder(to);
+    /**
+     * 类型转换方法
+     *
+     * @param pos
+     * @return
+     */
+    private int parsePosToBookId(int pos) {
+        if (0 == pos) return 0;
+
+        //空指针保护-_-||
+        if (null == gNotebookList || pos - 1 >= gNotebookList.size()) return 0;
+
+        return gNotebookList.get(pos - 1).getId();
+    }
+
+//    private void setPureNoteFlag() {
+//        if (preferences.getInt(Folder.GNOTEBOOK_ID, 0) != 0) {
+//            purenoteFlag.setVisibility(View.INVISIBLE);
+//        } else {
+//            purenoteFlag.setVisibility(View.VISIBLE);
+//        }
+//    }
+
+    private void changeBookInDB(int from, int to) {
+//        当两者相同时，说明无需改变
+        if (from == to) {
+            return;
+        }
+
+        int oldId = cancelFolder(from);
+        int newId = selectFolder(to);
 
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(Folder.GNOTEBOOK_ID, to).apply();
-        LogUtil.i(TAG, "gNotebook id from:" + from + " to:" + to);
-
+        editor.putInt(Settings.GNOTEBOOK_ID, newId).apply();
+        LogUtil.i(TAG, "gNotebook id fromId:" + oldId + " toId:" + newId);
     }
 
-    private void selectFolder(int id) {
-        if (id == 0) {
-            return;
-        } else {
-            for (GNotebook gNotebook : gNotebookList) {
-                if (id == gNotebook.getId()) {
-                    gNotebook.setSelected(GNotebook.TRUE);
-                    db.updateGNotebook(gNotebook);
-                    break;
-                }
-            }
+    private int selectFolder(int pos) {
+        if (pos != 0) {
+//            for (GNotebook gNotebook : gNotebookList) {
+//                if (pos == gNotebook.getId()) {
+//                    gNotebook.setSelected(GNotebook.TRUE);
+//                    db.updateGNotebook(gNotebook);
+//                    break;
+//                }
+//            }
+            if (gNotebookList == null || pos - 1 >= gNotebookList.size()) return 0;
+            GNotebook gNotebook = gNotebookList.get(pos - 1);
+            gNotebook.setSelected(GNotebook.TRUE);
+            db.updateGNotebook(gNotebook);
+            return gNotebook.getId();
+        }
+        return 0;
+    }
+
+    private int cancelFolder(int pos) {
+        if (pos != 0) {
+//            for (GNotebook gNotebook : gNotebookList) {
+//                if (pos == gNotebook.getId()) {
+//                    gNotebook.setSelected(GNotebook.FALSE);
+//                    db.updateGNotebook(gNotebook);
+//                    return gNotebook.getId();
+//                }
+//            }
+            if (gNotebookList == null || pos - 1 >= gNotebookList.size()) return 0;
+            GNotebook gNotebook = gNotebookList.get(pos - 1);
+            gNotebook.setSelected(GNotebook.FALSE);
+            db.updateGNotebook(gNotebook);
+            return gNotebook.getId();
+        }
+        return 0;
+    }
+
+    private void cancelFolder(int id, int from) {
+        if (id != 0) {
+//            for (GNotebook gNotebook : gNotebookList) {
+//                if (id == gNotebook.getId()) {
+//                    gNotebook.setSelected(GNotebook.FALSE);
+//                    db.updateGNotebook(gNotebook);
+//                    break;
+//                }
+//            }
+            //位置 －1 注意
+            if (null == gNotebookList || from - 1 >= gNotebookList.size()) return;
+            GNotebook gNotebook = gNotebookList.get(from - 1);
+            gNotebook.setSelected(GNotebook.FALSE);
+            db.updateGNotebook(gNotebook);
         }
     }
 
-    private void cancelFolder(int id) {
-        if (id == 0) {
+    private void changeFlag(int from, int to, View v) {
+        if (from == to) {
             return;
-        } else {
-            for (GNotebook gNotebook : gNotebookList) {
-                if (id == gNotebook.getId()) {
-                    gNotebook.setSelected(GNotebook.FALSE);
-                    db.updateGNotebook(gNotebook);
-                    break;
-                }
-            }
         }
+
+        //注意这里的处理差异性，两者的数据类型不同导致
+        setVisibleByListPos(View.INVISIBLE, from);
+        setVisibleByView(View.VISIBLE, v);
     }
 
-    private void hideFlag(int id) {
-        //空指针保护-_-||
-        if (id == 0) {
-            if (null == purenoteFlag) return;
-            purenoteFlag.setVisibility(View.INVISIBLE);
+//    private void hideFlag(int id) {
+//        //空指针保护-_-||
+//        if (id == 0) {
+//            if (null == purenoteFlag) return;
+//            purenoteFlag.setVisibility(View.INVISIBLE);
+//        } else {
+//            if (null == gNotebookList) return;
+//            for (int j = 0; j < gNotebookList.size(); j++) {
+//                if (id == gNotebookList.get(j).getId()) {
+//                    ImageView flag = (ImageView) folderListView.getChildAt(j)
+//                            .findViewById(R.id.iv_folder_unit_flag);
+//                    flag.setVisibility(View.INVISIBLE);
+//                    break;
+//                }
+//            }
+//        }
+//    }
+
+    private void setFlagVisible(int id, int visible) {
+        if (0 == id) {
+            setVisibleByListPos(visible, 0);
         } else {
+            //空指针保护-_-||
             if (null == gNotebookList) return;
             for (int j = 0; j < gNotebookList.size(); j++) {
                 if (id == gNotebookList.get(j).getId()) {
-                    ImageView flag = (ImageView) folderListView.getChildAt(j)
-                            .findViewById(R.id.iv_folder_unit_flag);
-                    flag.setVisibility(View.INVISIBLE);
+                    setVisibleByListPos(visible, j + 1);
                     break;
                 }
             }
         }
     }
 
-    private void showFlag(int id) {
-        if (id == 0) {
-            purenoteFlag.setVisibility(View.VISIBLE);
+    private void setVisibleByListPos(int visible, int pos) {
+        if (null == folderListView) return;
+
+        ImageView flag = (ImageView) folderListView.getChildAt(pos)
+                .findViewById(R.id.iv_folder_unit_flag);
+        flag.setVisibility(visible);
+    }
+
+    private void setVisibleByView(int visible, View v) {
+        if (null == v) return;
+
+        ImageView flag = (ImageView) v.findViewById(R.id.iv_folder_unit_flag);
+        if (null != flag) {
+            flag.setVisibility(visible);
+        }
+    }
+
+
+    private void hideFlag(int id) {
+        if (0 == id) {
+            hideFlagByListPos(0);
         } else {
+            //空指针保护-_-||
+            if (null == gNotebookList) return;
             for (int j = 0; j < gNotebookList.size(); j++) {
                 if (id == gNotebookList.get(j).getId()) {
-                    ImageView flag = (ImageView) folderListView.getChildAt(j)
-                            .findViewById(R.id.iv_folder_unit_flag);
-                    flag.setVisibility(View.VISIBLE);
+                    hideFlagByListPos(j + 1);
                     break;
                 }
             }
         }
+    }
+
+    private void hideFlagByListPos(int pos) {
+        if (null == folderListView) return;
+
+        ImageView flag = (ImageView) folderListView.getChildAt(pos)
+                .findViewById(R.id.iv_folder_unit_flag);
+        flag.setVisibility(View.INVISIBLE);
+    }
+
+
+    //    private void showFlag(int id) {
+//        if (id == 0) {
+//            purenoteFlag.setVisibility(View.VISIBLE);
+//        } else {
+//            for (int j = 0; j < gNotebookList.size(); j++) {
+//                if (id == gNotebookList.get(j).getId()) {
+//                    ImageView flag = (ImageView) folderListView.getChildAt(j)
+//                            .findViewById(R.id.iv_folder_unit_flag);
+//                    flag.setVisibility(View.VISIBLE);
+//                    break;
+//                }
+//            }
+//        }
+//    }
+    private void showFlag(int id) {
+        if (id == 0) {
+            showFlagByListPos(0);
+        } else {
+            //空指针保护-_-||
+            if (null == gNotebookList) return;
+            for (int j = 0; j < gNotebookList.size(); j++) {
+                if (id == gNotebookList.get(j).getId()) {
+                    showFlagByListPos(j + 1);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void showFlagByListPos(int pos) {
+        if (null == folderListView) return;
+        ImageView flag = (ImageView) folderListView.getChildAt(pos)
+                .findViewById(R.id.iv_folder_unit_flag);
+        flag.setVisibility(View.VISIBLE);
     }
 
     public void setFooter() {
@@ -948,7 +1111,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     //    一次性评分弹窗
     private void rateForPureNote() {
         if (preferences.getInt(NoteActivity.EditCount, 0) >= NoteActivity.EDIT_COUNT
-                && preferences.getBoolean(ShownRate, false) == false) {
+                && !preferences.getBoolean(ShownRate, false)) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setMessage(R.string.rate_for_purenote)
@@ -982,7 +1145,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                                 }
                             }).create().show();
 
-            preferences.edit().putBoolean(ShownRate, true).commit();
+            preferences.edit().putBoolean(ShownRate, true).apply();
         }
     }
 

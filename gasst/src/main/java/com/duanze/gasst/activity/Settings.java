@@ -48,6 +48,8 @@ import java.util.List;
 public class Settings extends Activity implements View.OnClickListener, Evernote.EvernoteLoginCallback {
     public static final String TAG = "Settings";
 
+    public static final String GNOTEBOOK_ID = "gnotebook_id";
+    public static final String PURENOTE_NOTE_NUM = "purenote_note_num";
 
     public static final String DATA = "gasst_pref";
     public static final String NEW_NOTE = "is_open_new_note";

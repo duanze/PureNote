@@ -1,6 +1,7 @@
 package com.duanze.gasst.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
+import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNotebook;
 
 import java.util.Calendar;
@@ -26,11 +28,14 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
     private boolean customizeColor;
     private AbsListView mListView;
     private Context mContext;
+    private List<GNotebook> mList;
+    private SharedPreferences preferences;
 
     public DrawerNotebookAdapter(Context context, int textViewResourceId, List<GNotebook> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
         mContext = context;
+        mList = objects;
     }
 
     public DrawerNotebookAdapter(Context context, int textViewResourceId, List<GNotebook> objects,
@@ -39,9 +44,24 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
         mListView = listView;
     }
 
+    public DrawerNotebookAdapter(Context context, int textViewResourceId, List<GNotebook> objects,
+                                 AbsListView listView, SharedPreferences pref) {
+        this(context, textViewResourceId, objects, listView);
+        preferences = pref;
+    }
+
+    @Override
+    public int getCount() {
+//如果不为0，其数量在基础上加入预置的“所有笔记”
+        if (mList == null || mList.size() == 0) {
+            return 1;
+        }
+        return mList.size() + 1;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        GNotebook gNotebook = getItem(position);
+
         View view;
         Holder holder;
         if (convertView == null) {
@@ -59,23 +79,46 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
             holder.name = (TextView) view.findViewById(R.id.tv_folder_unit_name);
             holder.num = (TextView) view.findViewById(R.id.tv_folder_unit_num);
             holder.chk = (CheckBox) view.findViewById(R.id.cb_folder_unit);
+            holder.divider = view.findViewById(R.id.v_divider);
             view.setTag(holder);
         } else {
             view = convertView;
             holder = (Holder) view.getTag();
         }
 
-//不是被选中的文件夹
-        if (gNotebook.getSelected() == GNotebook.FALSE) {
-            holder.flag.setVisibility(View.INVISIBLE);
-        } else {
-            holder.flag.setVisibility(View.VISIBLE);
-        }
-        holder.name.setText(gNotebook.getName());
+        if (position == 0) {
+            int selectedBook = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+            String bookName = mContext.getResources().getString(R.string.all_notes);
+            int noteNums = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
+
+            //不是被选中的文件夹
+            if (selectedBook != 0) {
+                holder.flag.setVisibility(View.INVISIBLE);
+            } else {
+                holder.flag.setVisibility(View.VISIBLE);
+            }
+            holder.name.setText(bookName);
 //        下面这句注意，num为Int类型，运行时被当作resourceId报错
-        holder.num.setText("" + gNotebook.getNum());
-        holder.chk.setVisibility(View.INVISIBLE);
-        holder.chk.setOnCheckedChangeListener((MainActivity) mContext);
+            holder.num.setText("" + noteNums);
+            holder.chk.setVisibility(View.INVISIBLE);
+            holder.divider.setVisibility(View.VISIBLE);
+        } else {
+            final int posInList = position - 1;
+            GNotebook gNotebook = getItem(posInList);
+
+            //不是被选中的文件夹
+            if (gNotebook.getSelected() == GNotebook.FALSE) {
+                holder.flag.setVisibility(View.INVISIBLE);
+            } else {
+                holder.flag.setVisibility(View.VISIBLE);
+            }
+            holder.name.setText(gNotebook.getName());
+//        下面这句注意，num为Int类型，运行时被当作resourceId报错
+            holder.num.setText("" + gNotebook.getNum());
+            holder.chk.setVisibility(View.INVISIBLE);
+            holder.chk.setOnCheckedChangeListener((MainActivity) mContext);
+        }
+
         return view;
     }
 
@@ -106,5 +149,6 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
         TextView name;
         TextView num;
         CheckBox chk;
+        View divider;
     }
 }
