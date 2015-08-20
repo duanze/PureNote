@@ -7,7 +7,7 @@
               tools:context=".Donate"
               android:fitsSystemWindows="true">
     <ImageView
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/alipay_img"

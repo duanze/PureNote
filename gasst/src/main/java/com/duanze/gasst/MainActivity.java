@@ -31,7 +31,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duanze.gasst.activity.About;
@@ -51,7 +50,6 @@ import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.syn.Evernote;
 import com.duanze.gasst.util.LogUtil;
-import com.duanze.gasst.view.FolderUnit;
 import com.duanze.gasst.view.GridUnit;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
@@ -408,17 +406,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //        showFlag(folderId);
 //        listview更新后似乎其数据源list与listview.getChildAt() 方法不再一一对应
 
-//        setPureNote();
     }
-
-//    private void setPureNote() {
-//        setPureNoteFlag();
-//        setPureNoteNum();
-//    }
-//
-//    private void setPureNoteNum() {
-//        purenoteNum.setText("" + preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3));
-//    }
 
     /**
      * 删除按钮的方法
@@ -459,7 +447,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 //                                如果selected笔记本在被删除之列，将笔记本还原为默认值
                                 if (gNotebookList.get(pos).getSelected() == GNotebook.TRUE) {
-//                                    restoreDefault();
                                     preferences.edit().putInt(Settings.GNOTEBOOK_ID, 0).apply();
                                 }
 
@@ -512,11 +499,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     }
 
-    private void restoreDefault() {
-//        showFlag(0);
-//        changeBookInDB(0, 0);
-    }
-
 
     public void showCheckBox() {
         for (int i = 1; i < folderListView.getCount(); i++) {
@@ -567,9 +549,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         return deleteNum;
     }
 
-    private FolderUnit purenote;
-    private ImageView purenoteFlag;
-    private TextView purenoteNum;
     private FolderFooter footer;
     private FolderFooterDelete footerDelete;
 
@@ -594,7 +573,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 if (null != actionBar) {
                     actionBar.setTitle(mDrawerTitle);
                 }
-//                setPureNote();
 
                 refreshFolderList();
                 modeFooter = Folder.MODE_FOOTER;
@@ -612,9 +590,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         }
 
 
-//        purenote = (FolderUnit) findViewById(R.id.fu_purenote);
-//        purenoteFlag = (ImageView) purenote.findViewById(R.id.iv_folder_unit_flag);
-//        purenoteNum = (TextView) purenote.findViewById(R.id.tv_folder_unit_num);
         folderListView = (ListView) findViewById(R.id.lv_folder);
 
         gNotebookList = db.loadGNotebooks();
@@ -628,20 +603,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
 
                 int folderId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
-//                先处理特殊值,点击“所有笔记”
-//                if (0 == i) {
-//
-//                } else if (folderId != gNotebookList.get(i).getId()) {
-//                    hideFlag(folderId);
-//
-//                    ImageView flag = (ImageView) view.findViewById(R.id.iv_folder_unit_flag);
-//                    flag.setVisibility(View.VISIBLE);
-//
-//                    changeBookInDB(folderId, gNotebookList.get(i).getId());
-//                    readSetting();
-//                    refreshUI();
-//                    mDrawerLayout.closeDrawers();
-//                }
 
                 //由 id 解析一个 listview pos 出来
                 int from = parseBookIdToPos(folderId);
@@ -655,24 +616,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             }
         });
 
-//        purenote.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //进行删除操作时无视之
-//                if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
-//
-//                int folderId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
-//                if (folderId != 0) {
-//                    hideFlag(folderId);
-//                    purenoteFlag.setVisibility(View.VISIBLE);
-//
-//                    changeBookInDB(folderId, 0);
-//                    readSetting();
-//                    refreshUI();
-//                    mDrawerLayout.closeDrawers();
-//                }
-//            }
-//        });
     }
 
     /**
@@ -709,13 +652,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         return gNotebookList.get(pos - 1).getId();
     }
 
-//    private void setPureNoteFlag() {
-//        if (preferences.getInt(Folder.GNOTEBOOK_ID, 0) != 0) {
-//            purenoteFlag.setVisibility(View.INVISIBLE);
-//        } else {
-//            purenoteFlag.setVisibility(View.VISIBLE);
-//        }
-//    }
 
     private void changeBookInDB(int from, int to) {
 //        当两者相同时，说明无需改变
@@ -733,13 +669,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private int selectFolder(int pos) {
         if (pos != 0) {
-//            for (GNotebook gNotebook : gNotebookList) {
-//                if (pos == gNotebook.getId()) {
-//                    gNotebook.setSelected(GNotebook.TRUE);
-//                    db.updateGNotebook(gNotebook);
-//                    break;
-//                }
-//            }
             if (gNotebookList == null || pos - 1 >= gNotebookList.size()) return 0;
             GNotebook gNotebook = gNotebookList.get(pos - 1);
             gNotebook.setSelected(GNotebook.TRUE);
@@ -751,13 +680,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private int cancelFolder(int pos) {
         if (pos != 0) {
-//            for (GNotebook gNotebook : gNotebookList) {
-//                if (pos == gNotebook.getId()) {
-//                    gNotebook.setSelected(GNotebook.FALSE);
-//                    db.updateGNotebook(gNotebook);
-//                    return gNotebook.getId();
-//                }
-//            }
             if (gNotebookList == null || pos - 1 >= gNotebookList.size()) return 0;
             GNotebook gNotebook = gNotebookList.get(pos - 1);
             gNotebook.setSelected(GNotebook.FALSE);
@@ -765,23 +687,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             return gNotebook.getId();
         }
         return 0;
-    }
-
-    private void cancelFolder(int id, int from) {
-        if (id != 0) {
-//            for (GNotebook gNotebook : gNotebookList) {
-//                if (id == gNotebook.getId()) {
-//                    gNotebook.setSelected(GNotebook.FALSE);
-//                    db.updateGNotebook(gNotebook);
-//                    break;
-//                }
-//            }
-            //位置 －1 注意
-            if (null == gNotebookList || from - 1 >= gNotebookList.size()) return;
-            GNotebook gNotebook = gNotebookList.get(from - 1);
-            gNotebook.setSelected(GNotebook.FALSE);
-            db.updateGNotebook(gNotebook);
-        }
     }
 
     private void changeFlag(int from, int to, View v) {
@@ -792,39 +697,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         //注意这里的处理差异性，两者的数据类型不同导致
         setVisibleByListPos(View.INVISIBLE, from);
         setVisibleByView(View.VISIBLE, v);
-    }
-
-//    private void hideFlag(int id) {
-//        //空指针保护-_-||
-//        if (id == 0) {
-//            if (null == purenoteFlag) return;
-//            purenoteFlag.setVisibility(View.INVISIBLE);
-//        } else {
-//            if (null == gNotebookList) return;
-//            for (int j = 0; j < gNotebookList.size(); j++) {
-//                if (id == gNotebookList.get(j).getId()) {
-//                    ImageView flag = (ImageView) folderListView.getChildAt(j)
-//                            .findViewById(R.id.iv_folder_unit_flag);
-//                    flag.setVisibility(View.INVISIBLE);
-//                    break;
-//                }
-//            }
-//        }
-//    }
-
-    private void setFlagVisible(int id, int visible) {
-        if (0 == id) {
-            setVisibleByListPos(visible, 0);
-        } else {
-            //空指针保护-_-||
-            if (null == gNotebookList) return;
-            for (int j = 0; j < gNotebookList.size(); j++) {
-                if (id == gNotebookList.get(j).getId()) {
-                    setVisibleByListPos(visible, j + 1);
-                    break;
-                }
-            }
-        }
     }
 
     private void setVisibleByListPos(int visible, int pos) {
@@ -844,66 +716,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         }
     }
 
-
-    private void hideFlag(int id) {
-        if (0 == id) {
-            hideFlagByListPos(0);
-        } else {
-            //空指针保护-_-||
-            if (null == gNotebookList) return;
-            for (int j = 0; j < gNotebookList.size(); j++) {
-                if (id == gNotebookList.get(j).getId()) {
-                    hideFlagByListPos(j + 1);
-                    break;
-                }
-            }
-        }
-    }
-
-    private void hideFlagByListPos(int pos) {
-        if (null == folderListView) return;
-
-        ImageView flag = (ImageView) folderListView.getChildAt(pos)
-                .findViewById(R.id.iv_folder_unit_flag);
-        flag.setVisibility(View.INVISIBLE);
-    }
-
-
-    //    private void showFlag(int id) {
-//        if (id == 0) {
-//            purenoteFlag.setVisibility(View.VISIBLE);
-//        } else {
-//            for (int j = 0; j < gNotebookList.size(); j++) {
-//                if (id == gNotebookList.get(j).getId()) {
-//                    ImageView flag = (ImageView) folderListView.getChildAt(j)
-//                            .findViewById(R.id.iv_folder_unit_flag);
-//                    flag.setVisibility(View.VISIBLE);
-//                    break;
-//                }
-//            }
-//        }
-//    }
-    private void showFlag(int id) {
-        if (id == 0) {
-            showFlagByListPos(0);
-        } else {
-            //空指针保护-_-||
-            if (null == gNotebookList) return;
-            for (int j = 0; j < gNotebookList.size(); j++) {
-                if (id == gNotebookList.get(j).getId()) {
-                    showFlagByListPos(j + 1);
-                    break;
-                }
-            }
-        }
-    }
-
-    private void showFlagByListPos(int pos) {
-        if (null == folderListView) return;
-        ImageView flag = (ImageView) folderListView.getChildAt(pos)
-                .findViewById(R.id.iv_folder_unit_flag);
-        flag.setVisibility(View.VISIBLE);
-    }
 
     public void setFooter() {
         if (modeFooter == Folder.MODE_FOOTER) {
@@ -1271,12 +1083,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             case R.id.about:
                 About.activityStart(mContext);
                 break;
-//            case R.id.evaluate:
-//                evaluate(MainActivity.this);
-//                break;
-//            case R.id.folder:
-//                Folder.activityStart(mContext, Folder.MODE_FOLDER);
-//                break;
             case R.id.setting:
                 Settings.activityStart(this);
                 break;
@@ -1365,17 +1171,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         intent.putExtra(Intent.EXTRA_SUBJECT, "PureNote用户反馈" + " Version code:" + VERSION_CODE); // 主题
         intent.putExtra(Intent.EXTRA_TEXT, ""); // 正文
         startActivity(Intent.createChooser(intent, "Select email client"));
-    }
-
-    private void evaluate(Context context) {
-        Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        try {
-            startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(context, "Couldn't launch the market!",
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
 }

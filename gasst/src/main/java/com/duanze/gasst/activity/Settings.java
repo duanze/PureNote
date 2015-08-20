@@ -107,7 +107,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 
         mContext = this;
         db = GNoteDB.getInstance(mContext);
-        setContentView(R.layout.settings_activity);
+        setContentView(R.layout.activity_settings);
 //沉浸式时，对状态栏染色
 // create our manager instance after the content view is set
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
