@@ -191,7 +191,7 @@ public class NoteActivity extends FragmentActivity {
 //                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        }
 
-        setContentView(R.layout.note_activity);
+        setContentView(R.layout.activity_note);
         //沉浸式时，对状态栏染色
         // create our manager instance after the content view is set
         SystemBarTintManager tintManager = new SystemBarTintManager(this);

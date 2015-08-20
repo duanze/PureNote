@@ -303,7 +303,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         readSetting();
 
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.activity_main);
 
         //沉浸式时，对状态栏染色
         // create our manager instance after the content view is set

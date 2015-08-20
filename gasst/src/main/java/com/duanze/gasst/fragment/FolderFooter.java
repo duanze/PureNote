@@ -30,7 +30,7 @@ public class FolderFooter extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.folder_footer, container, false);
+        View view = inflater.inflate(R.layout.footer_folder, container, false);
         folderDelete = (Button) view.findViewById(R.id.btn_folder_delete);
         folderNew = (Button) view.findViewById(R.id.btn_folder_new);
         folderDelete.setOnClickListener(new View.OnClickListener() {

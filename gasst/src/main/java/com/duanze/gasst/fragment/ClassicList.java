@@ -110,7 +110,7 @@ public class ClassicList extends Fragment {
                              Bundle savedInstanceState) {
 //        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
 
-        View view = inflater.inflate(R.layout.classic_list_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_classic_list, container, false);
         noteTitleListView = (SwipeMenuListView) view.findViewById(R.id.swipe_lv);
         adapter = new NoteAdapter(mContext, R.layout.classic_list_item, gNoteList, noteTitleListView);
         adapter.setValues((MainActivity) mContext);
