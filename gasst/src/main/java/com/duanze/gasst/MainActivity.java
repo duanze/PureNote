@@ -423,6 +423,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     /**
      * 删除按钮的方法
      */
+    // TODO 待优化～～～～～
     private void trash() {
         new AlertDialog.Builder(this).
                 setTitle(R.string.alert).
@@ -448,23 +449,26 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                             CheckBox checkBox = (CheckBox) folderListView.getChildAt(i).findViewById(R.id
                                     .cb_folder_unit);
                             if (checkBox.isChecked()) {
-                                db.deleteGNotebook(gNotebookList.get(i));
-                                deleteNoteInBook(gNotebookList.get(i).getId());
+//                              注意-1 转换
+                                int pos = i - 1;
+
+                                db.deleteGNotebook(gNotebookList.get(pos));
+                                deleteNoteInBook(gNotebookList.get(pos).getId());
 //                        清除所有checkBox状态防错位,此时会触发监听器
                                 checkBox.setChecked(false);
 
 //                                如果selected笔记本在被删除之列，将笔记本还原为默认值
-                                if (gNotebookList.get(i).getSelected() == GNotebook.TRUE) {
+                                if (gNotebookList.get(pos).getSelected() == GNotebook.TRUE) {
 //                                    restoreDefault();
                                     preferences.edit().putInt(Settings.GNOTEBOOK_ID, 0).apply();
                                 }
 
-                                if (gNotebookList.get(i).getId() == extractId) {
+                                if (gNotebookList.get(pos).getId() == extractId) {
                                     preferences.edit().putInt(Settings
                                             .LIGHTNING_EXTRACT_SAVE_LOCATION, 0).apply();
                                 }
 
-                                if (gNotebookList.get(i).getId() == quickId) {
+                                if (gNotebookList.get(pos).getId() == quickId) {
                                     preferences.edit().putInt(Settings.QUICK_WRITE_SAVE_LOCATION,
                                             0).apply();
                                 }
