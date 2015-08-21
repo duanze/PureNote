@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="primary_color">@color/background_color</color>
     <!--<color name="background_color">#fff3f3f3</color>-->
     <color name="background_color">#E7E7E7</color>
     <color name="divider_line_color">#CFCFCF</color>

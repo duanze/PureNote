@@ -27,6 +27,7 @@ dependencies {
     compile project(':EverNoteEx')
     compile files('src/main/libs/umeng-analytics-v5.5.2.jar')
     compile files('src/main/libs/systembartint-1.0.4.jar')
+    compile 'com.android.support:appcompat-v7:22.2.1'
 }
 
 repositories {

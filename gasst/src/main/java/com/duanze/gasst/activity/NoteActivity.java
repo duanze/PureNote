@@ -666,6 +666,11 @@ public class NoteActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
+
     /**
      * 修改参数，表明返回MainActivity时需要更新UI
      */
