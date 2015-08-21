@@ -232,4 +232,8 @@ Reserved.</string>
     <!--errors alert-->
     <string name="extract_error">出现错误，未能成功摘录，请重新设置功能！</string>
     <string name="read_save_location_error">读取保存位置出错！</string>
+    <string name="already_extract_to">"文本摘录至 "</string>
+    <string name="extract_stop">停用闪电摘录</string>
+    <string name="extract_start">启动闪电摘录</string>
+    <string name="no_reminder">没有倒计时中的定时提醒</string>
 </resources>

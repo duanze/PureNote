@@ -159,7 +159,7 @@ public class AlarmService extends Service {
                             item.coerceToHtmlText(mContext),
                             extractLocation, mContext);
                     if (extractGroup != null) {
-                        Toast.makeText(mContext, "文本摘录至 " + extractGroup, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, getString(R.string.already_extract_to) + extractGroup, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(mContext, R.string.extract_error, Toast.LENGTH_SHORT).show();
                     }
@@ -231,7 +231,7 @@ public class AlarmService extends Service {
         remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
         updateBoltOnClick();
         startForeground(-1, notification);
-        Toast.makeText(mContext, "停用闪电摘录", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.extract_stop, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -245,7 +245,7 @@ public class AlarmService extends Service {
 
 
         preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, false).apply();
-        Toast.makeText(mContext, "停用闪电摘录", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.extract_stop, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -257,7 +257,7 @@ public class AlarmService extends Service {
         remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
         updateBoltOnClick();
         startForeground(-1, notification);
-        Toast.makeText(mContext, "启动闪电摘录", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.extract_start, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -270,7 +270,7 @@ public class AlarmService extends Service {
 
 
         preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, true).apply();
-        Toast.makeText(mContext, "启动闪电摘录", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.extract_start, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -287,7 +287,7 @@ public class AlarmService extends Service {
         String str;
         if (cnt <= 0) {
             cnt = 0;
-            str = "没有倒计时中的定时提醒";
+            str = getString(R.string.no_reminder);
         } else if (cnt == 1) {
             str = cnt + getResources().getString(R.string.one_reminder);
         } else {
@@ -317,7 +317,7 @@ public class AlarmService extends Service {
         if (isExtract) {
             remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
 //特殊路径，初始启动
-            Toast.makeText(mContext, "启动闪电摘录", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.extract_start, Toast.LENGTH_SHORT).show();
         } else {
             remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
         }
@@ -377,7 +377,7 @@ public class AlarmService extends Service {
         String str;
         if (cnt <= 0) {
             cnt = 0;
-            str = "没有倒计时中的定时提醒";
+            str = getString(R.string.no_reminder);
         } else if (cnt == 1) {
             str = cnt + getResources().getString(R.string.one_reminder);
         } else {
