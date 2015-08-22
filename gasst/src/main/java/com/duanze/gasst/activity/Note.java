@@ -184,12 +184,6 @@ public class Note extends FragmentActivity {
         overridePendingTransition(R.anim.quick_load, R.anim.quick_load);
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
-//        boolean fullScreen = preferences.getBoolean(Settings.FULL_SCREEN, false);
-//        //如果设置了全屏
-//        if (fullScreen) {
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        }
 
         setContentView(R.layout.activity_note);
         //沉浸式时，对状态栏染色

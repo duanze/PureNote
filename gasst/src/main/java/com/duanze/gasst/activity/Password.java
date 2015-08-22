@@ -35,13 +35,6 @@ public class Password extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
-//        boolean fScreen = preferences.getBoolean(Settings.FULL_SCREEN, false);
-//        //如果设置了全屏
-//        if (fScreen) {
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        }
-
         setContentView(R.layout.activity_password);
         //沉浸式时，对状态栏染色
         // create our manager instance after the content view is set

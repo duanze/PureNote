@@ -63,9 +63,9 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.SettingsPreference"
-            android:logo="@drawable/tea_cup"
-            android:label="@string/action_about"
+            android:name=".activity.RecycleBin"
+            android:logo="@drawable/trash"
+            android:label="@string/recycle_bin"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait">
         </activity>

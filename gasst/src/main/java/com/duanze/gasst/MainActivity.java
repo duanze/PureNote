@@ -37,6 +37,7 @@ import com.duanze.gasst.activity.About;
 import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Password;
+import com.duanze.gasst.activity.RecycleBin;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.DrawerNotebookAdapter;
 import com.duanze.gasst.fragment.ClassicList;
@@ -501,13 +502,13 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 
     public void showCheckBox() {
-        for (int i = 1; i < folderListView.getCount(); i++) {
+        for (int i = 1; i < folderListView.getCount() - 1; i++) {
             folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View.VISIBLE);
         }
     }
 
     public void hideCheckBox() {
-        for (int i = 1; i < folderListView.getCount(); i++) {
+        for (int i = 1; i < folderListView.getCount() - 1; i++) {
             folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View.INVISIBLE);
         }
     }
@@ -601,6 +602,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //进行删除操作时无视之
                 if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
+
+//                特判回收站
+                if (drawerNotebookAdapter.getCount() - 1 == i) {
+                    RecycleBin.actionStart(mContext);
+                    return;
+                }
 
                 int folderId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
 

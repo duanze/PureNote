@@ -53,10 +53,11 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
     @Override
     public int getCount() {
 //如果不为0，其数量在基础上加入预置的“所有笔记”
+//        以及“回收站”
         if (mList == null || mList.size() == 0) {
-            return 1;
+            return 2;
         }
-        return mList.size() + 1;
+        return mList.size() + 2;
     }
 
     @Override
@@ -86,9 +87,8 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
             holder = (Holder) view.getTag();
         }
 
-        if (position == 0) {
+        if (0 == position) {
             int selectedBook = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
-            String bookName = mContext.getResources().getString(R.string.all_notes);
             int noteNums = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
 
             //不是被选中的文件夹
@@ -97,15 +97,26 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
             } else {
                 holder.flag.setVisibility(View.VISIBLE);
             }
-            holder.name.setText(bookName);
+            holder.name.setText(R.string.all_notes);
 //        下面这句注意，num为Int类型，运行时被当作resourceId报错
             holder.num.setText("" + noteNums);
             holder.chk.setVisibility(View.INVISIBLE);
             holder.divider.setVisibility(View.VISIBLE);
+        } else if (getCount() - 1 == position) {
+            int noteNums = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
+
+            //不是被选中的文件夹
+            holder.flag.setVisibility(View.VISIBLE);
+            holder.flag.setImageResource(R.drawable.trash);
+            holder.name.setText(R.string.recycle_bin);
+//        下面这句注意，num为Int类型，运行时被当作resourceId报错
+            holder.num.setText("" + noteNums);
+            holder.chk.setVisibility(View.INVISIBLE);
         } else {
             final int posInList = position - 1;
             GNotebook gNotebook = getItem(posInList);
 
+            holder.flag.setImageResource(R.drawable.icon_selected);
             //不是被选中的文件夹
             if (gNotebook.getSelected() == GNotebook.FALSE) {
                 holder.flag.setVisibility(View.INVISIBLE);

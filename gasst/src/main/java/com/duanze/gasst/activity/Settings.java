@@ -69,7 +69,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     public static final String LIGHTNING_EXTRACT_SAVE_LOCATION = "lightning_extract_save_location";
     public static final String QUICK_WRITE_SAVE_LOCATION = "quick_write_save_location";
 
-
+    public static final String PREF_NOTE_KEY = "pref_note_key";
     public static final String NOTIFICATION_ALWAYS_SHOW = "notification_always_show";
 
 
@@ -100,7 +100,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.in_push_right_to_left,
-                R.anim.in_stable);
+                R.anim.out_stable);
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(DATA, MODE_PRIVATE);
 
@@ -158,6 +158,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             }
         });
         findViewById(R.id.ll_notification_container).setOnClickListener(this);
+        findViewById(R.id.ll_pref_note).setOnClickListener(this);
     }
 
 
@@ -184,6 +185,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     private CheckBox fold;
     private Spinner spinner;
     private CheckBox universal;
+    private CheckBox prefNote;
 
 
     private void initButtons() {
@@ -252,7 +254,17 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 // }else {
 // Toast.makeText(mContext,"关闭万能密码:-_-#",Toast.LENGTH_SHORT).show();
 // }
-                preferences.edit().putBoolean(USE_UNIVERSAL_PASSWORD, b).commit();
+                preferences.edit().putBoolean(USE_UNIVERSAL_PASSWORD, b).apply();
+            }
+        });
+
+        prefNote = (CheckBox) findViewById(R.id.cb_pref_note);
+        boolean usePrefNote = preferences.getBoolean(PREF_NOTE_KEY, false);
+        prefNote.setChecked(usePrefNote);
+        prefNote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                preferences.edit().putBoolean(PREF_NOTE_KEY, b).apply();
             }
         });
 
@@ -273,7 +285,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         lightningExtract.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                preferences.edit().putBoolean(LIGHTNING_EXTRACT, b).commit();
+                preferences.edit().putBoolean(LIGHTNING_EXTRACT, b).apply();
                 if (b) {
                     if (Util.isServiceWork(mContext, "com.duanze.gasst.service.AlarmService")) {
                         LogUtil.i(TAG, "服务已启动");
@@ -609,14 +621,23 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                editor.putBoolean(SETTINGS_CHANGED, settingChanged).apply();
-                finish();
-                overridePendingTransition(R.anim.in_stable,
-                        R.anim.out_push_left_to_right);
+                exitOperation();
                 return true;
             default:
                 return true;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        exitOperation();
+    }
+
+    private void exitOperation() {
+        editor.putBoolean(SETTINGS_CHANGED, settingChanged).apply();
+        finish();
+        overridePendingTransition(R.anim.in_stable,
+                R.anim.out_push_left_to_right);
     }
 
 
@@ -686,7 +707,9 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 alwaysShow.performClick();
                 break;
 
-
+            case R.id.ll_pref_note:
+                prefNote.performClick();
+                break;
             default:
                 break;
         }

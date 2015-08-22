@@ -20,6 +20,7 @@ import com.duanze.gasst.MyPickerListener;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.Note;
+import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.NoteAdapter;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
@@ -118,9 +119,7 @@ public class ClassicList extends Fragment {
         noteTitleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                GNote gNote = gNoteList.get(i);
-                Note.activityStart(
-                        mContext, gNote, Note.MODE_EDIT);
+                operateNote(i);
             }
         });
 
@@ -161,6 +160,18 @@ public class ClassicList extends Fragment {
         fabButton.listenTo(noteTitleListView);
 
         return view;
+    }
+
+    private void operateNote(int i) {
+        GNote gNote = gNoteList.get(i);
+        boolean prefNote = ((MainActivity)mContext).getPreferences().getBoolean(Settings.PREF_NOTE_KEY,false);
+        if (prefNote){
+            Note.activityStart(
+                    mContext, gNote, Note.MODE_SHOW);
+        }else {
+            Note.activityStart(
+                    mContext, gNote, Note.MODE_EDIT);
+        }
     }
 
     private void deleteNote() {

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="recycle_bin">回收站</string>
 
     <string name="initial">初始化…</string>
-
 
     <!-- date -->
     <string name="month1">壹月</string>
@@ -183,7 +182,7 @@ Reserved.</string>
     <string name="logout_evernote">%1$s 退出登录</string>
 
     <string name="pref_note">首选阅读</string>
-    <string name="pref_note_summary">选定后，点击笔记进入阅读模式而非编辑模式</string>
+    <string name="pref_note_summary">勾选后，点击笔记进入阅读模式而非编辑模式</string>
 
     <string name="password_guard">密码保护</string>
     <string name="password_guard_summary">设定应用启动时的密码以保护您的数据安全</string>
@@ -222,7 +221,7 @@ Reserved.</string>
 
 
     <string name="fold">过期折叠</string>
-    <string name="fold_summary">选定后，将自动折叠过期笔记为单行显示</string>
+    <string name="fold_summary">勾选后，将自动折叠过期笔记为单行显示</string>
     <string name="fold_key">is_fold</string>
 
 
