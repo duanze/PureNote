@@ -81,7 +81,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
 
         int height = holder.listItem.getMeasuredHeight();
 //            holder.noteColor.setVisibility(View.VISIBLE);
-        holder.noteColor.setHeight(height * 11 / 20);
+        holder.noteColor.setHeight(height * 12 / 20);
         holder.noteColor.setBackgroundColor(gNote.getColor());
 //        } else {
 //            holder.noteColor.setBackgroundColor(GridUnit.TRANSPARENT);

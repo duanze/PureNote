@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.NoteActivity;
+import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
@@ -307,9 +307,9 @@ public class AlarmService extends Service {
 
 //write a new note when onClicked
         GNote gNote = new GNote();
-        Intent intent = new Intent(this, NoteActivity.class);
+        Intent intent = new Intent(this, Note.class);
         intent.putExtra("gAsstNote_data", gNote);
-        intent.putExtra("mode", NoteActivity.MODE_TODAY);
+        intent.putExtra("mode", Note.MODE_TODAY);
         PendingIntent writeNotePendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_new_note, writeNotePendingIntent);
 
@@ -374,6 +374,8 @@ public class AlarmService extends Service {
 
 
     private void updateNotification() {
+        if (null == notification) return;
+
         String str;
         if (cnt <= 0) {
             cnt = 0;
@@ -383,9 +385,6 @@ public class AlarmService extends Service {
         } else {
             str = cnt + getResources().getString(R.string.more_reminder);
         }
-
-
-
 
         if (null != remoteViews) {
             remoteViews.setTextViewText(R.id.tv_down, str);

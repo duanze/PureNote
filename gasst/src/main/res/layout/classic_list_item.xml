@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/tv_note_color"
         android:layout_marginLeft="10dp"
-        android:layout_width="12dp"
+        android:layout_width="10dp"
         android:background="@null"
         android:layout_height="match_parent"/>
 

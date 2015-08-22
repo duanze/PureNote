@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 import com.duanze.gasst.activity.About;
 import com.duanze.gasst.activity.Folder;
-import com.duanze.gasst.activity.NoteActivity;
+import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Password;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.DrawerNotebookAdapter;
@@ -68,7 +68,7 @@ import java.util.TimerTask;
 public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback, FooterInterface, CompoundButton.OnCheckedChangeListener {
     public static final String TAG = "MainActivity";
     // version code
-    public static final int VERSION_CODE = 26;
+    public static final int VERSION_CODE = 27;
 
     public static final String ShownRate = "shown_rate";
     public static final String UPDATE_UI = "update_ui";
@@ -226,7 +226,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
             GNote gNote = new GNote();
             gNote.setTimeFromDate(year, month, day);
-            NoteActivity.activityStart(MainActivity.this, gNote, NoteActivity.MODE_NEW);
+            Note.activityStart(MainActivity.this, gNote, Note.MODE_NEW);
         }
     }
 
@@ -863,7 +863,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private void writeNewNote(Calendar cal) {
         GNote note = new GNote();
         note.setCalToTime(cal);
-        NoteActivity.activityStart(this, note, NoteActivity.MODE_NEW);
+        Note.activityStart(this, note, Note.MODE_NEW);
     }
 
     /**
@@ -926,7 +926,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     //    一次性评分弹窗
     private void rateForPureNote() {
-        if (preferences.getInt(NoteActivity.EditCount, 0) >= NoteActivity.EDIT_COUNT
+        if (preferences.getInt(Note.EditCount, 0) >= Note.EDIT_COUNT
                 && !preferences.getBoolean(ShownRate, false)) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

@@ -48,7 +48,7 @@ import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.List;
 
-public class NoteActivity extends FragmentActivity {
+public class Note extends FragmentActivity {
     public static final String TAG = "NoteActivity";
 
     public static final String EditCount = "edit_count";
@@ -58,7 +58,7 @@ public class NoteActivity extends FragmentActivity {
     public static final int MODE_EDIT = 2;
     public static final int MODE_TODAY = 3;
 
-    public static final int EDIT_COUNT = 20;
+    public static final int EDIT_COUNT = 13;
 
     private int mode;
     private GNote gNote;
@@ -130,7 +130,7 @@ public class NoteActivity extends FragmentActivity {
      * @param mode
      */
     public static void activityStart(Context context, GNote gNote, int mode) {
-        Intent intent = new Intent(context, NoteActivity.class);
+        Intent intent = new Intent(context, Note.class);
         intent.putExtra("gAsstNote_data", gNote);
         intent.putExtra("mode", mode);
         context.startActivity(intent);
@@ -142,12 +142,12 @@ public class NoteActivity extends FragmentActivity {
     public static void writeNewNote(Context mContext, Calendar cal) {
         GNote note = new GNote();
         note.setCalToTime(cal);
-        NoteActivity.activityStart(mContext, note, NoteActivity.MODE_NEW);
+        Note.activityStart(mContext, note, Note.MODE_NEW);
     }
 
     public static void todayNewNote(Context mContext) {
         GNote note = new GNote();
-        NoteActivity.activityStart(mContext, note, NoteActivity.MODE_TODAY);
+        Note.activityStart(mContext, note, Note.MODE_TODAY);
     }
 
     /**
@@ -583,7 +583,7 @@ public class NoteActivity extends FragmentActivity {
         }
 
         if (!gNote.isPassed()) {
-            AlarmService.cancelTask(NoteActivity.this, gNote);
+            AlarmService.cancelTask(Note.this, gNote);
         }
 //        更新笔记本状态
         int notebookId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);

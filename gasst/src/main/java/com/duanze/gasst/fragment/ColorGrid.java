@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.NoteActivity;
+import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.util.LogUtil;
@@ -260,7 +260,7 @@ public class ColorGrid extends Fragment {
         gridUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NoteActivity.writeNewNote(mContext, cal);
+                Note.writeNewNote(mContext, cal);
             }
         });
     }
@@ -270,8 +270,8 @@ public class ColorGrid extends Fragment {
         gridUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NoteActivity.activityStart(mContext, note,
-                        NoteActivity.MODE_EDIT);
+                Note.activityStart(mContext, note,
+                        Note.MODE_EDIT);
             }
         });
     }

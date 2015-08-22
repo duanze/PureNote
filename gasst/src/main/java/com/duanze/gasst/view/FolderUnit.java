@@ -12,7 +12,6 @@ public class FolderUnit extends LinearLayout {
     public FolderUnit(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.folder_unit, this);
-
     }
 
 }

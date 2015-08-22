@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.NoteActivity;
+import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.service.AlarmService;
@@ -33,10 +33,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         int no = intent.getIntExtra("no", 0);
         LogUtil.i("receiver", "no:" + no);
 
-        Intent mIntent = new Intent(context, NoteActivity.class);
+        Intent mIntent = new Intent(context, Note.class);
         mIntent.putExtra("gAsstNote_data", gNote);
         mIntent.putExtra("no", no);
-        mIntent.putExtra("mode", NoteActivity.MODE_SHOW);
+        mIntent.putExtra("mode", Note.MODE_SHOW);
         PendingIntent pi = PendingIntent.getActivity(context, no, mIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         Notification notification = new NotificationCompat.Builder(context)
