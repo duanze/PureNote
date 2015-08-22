@@ -80,6 +80,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private Context mContext;
 
     /**
+     * 是否正在显示回收站
+     */
+    private boolean isRecycleShown = false;
+
+    /**
      * 获取当前屏幕密度
      */
     private DisplayMetrics dm;
@@ -557,6 +562,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private List<GNotebook> gNotebookList;
     private DrawerNotebookAdapter drawerNotebookAdapter;
 
+    private boolean isDrawerOpened;
+
     private void initDrawer() {
         mDrawerTitle = getResources().getString(R.string.app_name);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -565,7 +572,17 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
-                setActionBarTitle();
+                if (!isRecycleShown) {
+                    setActionBarTitle();
+                }else {
+                    ActionBar actionBar = getActionBar();
+                    if (null != actionBar) {
+                        actionBar.setTitle(R.string.recycle_bin);
+                    }
+                }
+
+                isDrawerOpened = false;
+                invalidateOptionsMenu();
             }
 
             /** Called when a drawer has settled in a completely open state. */
@@ -578,6 +595,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 refreshFolderList();
                 modeFooter = Folder.MODE_FOOTER;
                 setFooter();
+
+                isDrawerOpened = true;
+                invalidateOptionsMenu();
             }
         };
 
@@ -605,21 +625,26 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 //                特判回收站
                 if (drawerNotebookAdapter.getCount() - 1 == i) {
-                    RecycleBin.actionStart(mContext);
-                    return;
+//                    RecycleBin.actionStart(mContext);
+                    isRecycleShown = true;
+                } else {
+                    int folderId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+
+                    //由 id 解析一个 listview pos 出来
+                    int from = parseBookIdToPos(folderId);
+                    changeFlag(from, i, view);
+                    changeBookInDB(from, i);
+
+                    isRecycleShown = false;
                 }
 
-                int folderId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+                mDrawerLayout.closeDrawers();
 
-                //由 id 解析一个 listview pos 出来
-                int from = parseBookIdToPos(folderId);
-                changeFlag(from, i, view);
-                changeBookInDB(from, i);
-
+//                showDialog(DIALOG_PROGRESS);
                 //刷新界面
                 readSetting();
                 refreshUI();
-                mDrawerLayout.closeDrawers();
+//                dismissDialog(DIALOG_PROGRESS);
             }
         });
 
@@ -1038,12 +1063,15 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
+        if (isRecycleShown || isDrawerOpened) {
+            getMenuInflater().inflate(R.menu.empty_menu, menu);
+        } else {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu, menu);
 //        MenuItem item = menu.getItem(1);
 //        Menu m = item.getSubMenu();
 
-        //just for initialize layout mode submenu
+            //just for initialize layout mode submenu
 //        MenuItem[] items = new MenuItem[2];
 //        items[0] = m.getItem(0);
 //        items[1] = m.getItem(1);
@@ -1053,14 +1081,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //            items[1].setChecked(true);
 //        }
 
-        //bind-evernote item
-        bindItem = menu.getItem(1);
-        //evernote
-        if (mEvernote.isLogin()) {
-            loginNow();
-        } else {
-            logoutNow();
+            //bind-evernote item
+            bindItem = menu.getItem(1);
+            //evernote
+            if (mEvernote.isLogin()) {
+                loginNow();
+            } else {
+                logoutNow();
+            }
         }
+
         return true;
     }
 

@@ -1,7 +1,6 @@
 package com.duanze.gasst.activity;
 
 
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -81,7 +80,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     private boolean settingChanged = false;
 
 
-
     private Evernote mEvernote;
     private LinearLayout loginEvernote;
     private ImageView arrow;
@@ -94,7 +92,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         Intent intent = new Intent(context, Settings.class);
         context.startActivity(intent);
     }
-
 
 
     @Override
@@ -194,11 +191,10 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 
 
         spinner = (Spinner) findViewById(R.id.m_spinner);
-        final String[] maxLinesArr = {"2", "3", "4", "5"};
+        final String[] maxLinesArr = {"2", "3", "4", "5", "6", "7"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, maxLinesArr);
         spinner.setAdapter(adapter);
-
 
 
         spinner.setSelection(preferences.getInt(MAX_LINES, 5) - 2);
