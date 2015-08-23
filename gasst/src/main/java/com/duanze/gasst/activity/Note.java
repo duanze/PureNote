@@ -570,7 +570,7 @@ public class Note extends FragmentActivity {
 
         gNote.setDeleted(GNote.TRUE);
         if ("".equals(gNote.getGuid())) {
-            db.deleteGNote(gNote.getId());
+//            db.deleteGNote(gNote.getId());
         } else {
             gNote.setSynStatus(GNote.DELETE);
             db.updateGNote(gNote);

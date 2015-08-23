@@ -3,7 +3,10 @@ package com.duanze.gasst.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.CallBackListener;
+import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
@@ -41,8 +45,8 @@ public class ClassicList extends Fragment {
     public static final String TAG = "ClassicList";
 
     //MODE_LIST相关
-    private NoteAdapter adapter;
-    private SwipeMenuListView noteTitleListView;
+    private NoteAdapter noteAdapter;
+    private SwipeMenuListView noteListView;
     private SwipeMenuCreator creator;
     private List<GNote> gNoteList;
     private Context mContext;
@@ -71,17 +75,28 @@ public class ClassicList extends Fragment {
         }
     };
 
-    public void refreshUI() {
-        gNoteList.clear();
+    private boolean isRefreshing = false;
+//    同步限定
+    public synchronized void refreshUI() {
+        if (isRefreshing) return;
+        isRefreshing = true;
+
+//      这种后台刷新的方式不够即时，在这里不适用
+//        new RefreshTask(new RefreshHandler()).execute();
+
+        MainActivity activity = (MainActivity) mContext;
+
 //        List<GNote> tmpList = db.loadGNotes();
-        List<GNote> tmpList = db.loadGNotesByBookId(((MainActivity) mContext).getgNotebookId());
+        List<GNote> tmpList = db.loadGNotesByBookId(activity.getgNotebookId());
+        gNoteList.clear();
         for (GNote g : tmpList) {
             gNoteList.add(g);
         }
 
-        adapter.setValues((MainActivity) mContext);
-        adapter.notifyDataSetChanged();
-//        noteTitleListView.setSelection(0);
+        noteAdapter.setValues(activity.getIsFold(), activity.getToday(), activity.getMaxLines());
+        noteAdapter.notifyDataSetChanged();
+
+        isRefreshing = false;
     }
 
     private void initValues() {
@@ -112,11 +127,12 @@ public class ClassicList extends Fragment {
 //        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
 
         View view = inflater.inflate(R.layout.fragment_classic_list, container, false);
-        noteTitleListView = (SwipeMenuListView) view.findViewById(R.id.swipe_lv);
-        adapter = new NoteAdapter(mContext, R.layout.classic_list_item, gNoteList, noteTitleListView);
-        adapter.setValues((MainActivity) mContext);
-        noteTitleListView.setAdapter(adapter);
-        noteTitleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        noteListView = (SwipeMenuListView) view.findViewById(R.id.swipe_lv);
+        noteAdapter = new NoteAdapter(mContext, R.layout.classic_list_item, gNoteList, noteListView);
+        MainActivity activity = (MainActivity) mContext;
+        noteAdapter.setValues(activity.getIsFold(), activity.getToday(), activity.getMaxLines());
+        noteListView.setAdapter(noteAdapter);
+        noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 operateNote(i);
@@ -125,9 +141,9 @@ public class ClassicList extends Fragment {
 
         buildCreator();
         // set creator
-        noteTitleListView.setMenuCreator(creator);
+        noteListView.setMenuCreator(creator);
         //listener item click event
-        noteTitleListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+        noteListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
@@ -157,18 +173,18 @@ public class ClassicList extends Fragment {
                 Note.writeNewNote(mContext, today);
             }
         });
-        fabButton.listenTo(noteTitleListView);
+        fabButton.listenTo(noteListView);
 
         return view;
     }
 
     private void operateNote(int i) {
         GNote gNote = gNoteList.get(i);
-        boolean prefNote = ((MainActivity)mContext).getPreferences().getBoolean(Settings.PREF_NOTE_KEY,false);
-        if (prefNote){
+        boolean prefNote = ((MainActivity) mContext).getPreferences().getBoolean(Settings.PREF_NOTE_KEY, false);
+        if (prefNote) {
             Note.activityStart(
                     mContext, gNote, Note.MODE_SHOW);
-        }else {
+        } else {
             Note.activityStart(
                     mContext, gNote, Note.MODE_EDIT);
         }
@@ -258,4 +274,96 @@ public class ClassicList extends Fragment {
         Util.randomBackground(fabButton);
     }
 
+    public static final int REFRESH_START = 3;
+    public static final int REFRESH_END = 4;
+    public static final int REFRESH_ERROR = 5;
+    public static final int REFRESH_SUCCESS = 6;
+
+    class RefreshHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case REFRESH_START:
+                    LogUtil.i(TAG,"REFRESH_START");
+                    ((MainActivity) mContext).showDialog();
+                    break;
+                case REFRESH_END:
+                    LogUtil.i(TAG,"REFRESH_END");
+                    ((MainActivity) mContext).removeDialog();
+                    break;
+                case REFRESH_SUCCESS:
+                    LogUtil.i(TAG,"REFRESH_SUCCESS");
+                    if (null != noteAdapter) {
+                        noteAdapter.notifyDataSetChanged();
+                    }
+                    isRefreshing = false;
+                    break;
+                case REFRESH_ERROR:
+                    LogUtil.e(TAG,"REFRESH_ERROR");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    class RefreshTask extends AsyncTask<Void, Integer, Void> {
+
+        Handler mHandler;
+
+        public RefreshTask(Handler handler) {
+            mHandler = handler;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            publishProgress(REFRESH_START);
+            try {
+                MainActivity activity = (MainActivity) mContext;
+//        List<GNote> tmpList = db.loadGNotes();
+                List<GNote> tmpList = db.loadGNotesByBookId(activity.getgNotebookId());
+                gNoteList.clear();
+                for (GNote g : tmpList) {
+                    gNoteList.add(g);
+                }
+
+                noteAdapter.setValues(activity.getIsFold(), activity.getToday(), activity.getMaxLines());
+//        noteListView.setSelection(0);
+
+                publishProgress(REFRESH_SUCCESS);
+            } catch (Exception e) {
+                publishProgress(REFRESH_ERROR);
+//                注意下面的语句，能让finally不再执行吗？.....
+                return null;
+            } finally {
+                publishProgress(REFRESH_END);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            if (mHandler == null) {
+                return;
+            }
+            switch (values[0]) {
+                case REFRESH_START:
+                    mHandler.sendEmptyMessage(REFRESH_START);
+                    break;
+                case REFRESH_END:
+                    mHandler.sendEmptyMessage(REFRESH_END);
+                    break;
+                case REFRESH_ERROR:
+                    mHandler.sendEmptyMessage(REFRESH_ERROR);
+                    break;
+                case REFRESH_SUCCESS:
+                    mHandler.sendEmptyMessage(REFRESH_SUCCESS);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

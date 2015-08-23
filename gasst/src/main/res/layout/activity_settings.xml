@@ -71,6 +71,7 @@
                         android:src="@drawable/next"/>
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -79,7 +80,6 @@
                 android:background="@color/divider_line_color"
                 />
 
-
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,6 +87,7 @@
                 android:layout_marginRight="@dimen/material_margin_lower_level"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:mrl_rippleOverlay="true"
+                android:visibility="gone"
                 >
 
                 <LinearLayout

@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duanze.gasst.R;
+import com.duanze.gasst.util.Util;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 /**
@@ -51,7 +50,7 @@ public class About extends Activity implements View.OnClickListener{
 
         mContext = this;
         TextView version = (TextView) findViewById(R.id.tv_version);
-        version.setText(getVersion(mContext));
+        version.setText(Util.getVersion(mContext));
 
         View feedback = findViewById(R.id.btn_feedback);
         feedback.setOnClickListener(this);
@@ -61,17 +60,7 @@ public class About extends Activity implements View.OnClickListener{
         donate.setOnClickListener(this);
     }
 
-    private String getVersion(Context ctx){
-        try {
-            PackageManager pm = ctx.getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_ACTIVITIES);
-            return pi.versionName;
-        }catch (PackageManager.NameNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        return "1.0.0";
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -88,7 +77,7 @@ public class About extends Activity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_feedback:
-                feedback();
+                Util.feedback(mContext);
                 break;
             case R.id.btn_comment:
                 evaluate(mContext);
@@ -99,16 +88,7 @@ public class About extends Activity implements View.OnClickListener{
         }
     }
 
-    private void feedback() {
-        // 必须明确使用mailto前缀来修饰邮件地址
-        Uri uri = Uri.parse("mailto:端泽<blue3434@qq.com>");
-        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-        // intent.putExtra(Intent.EXTRA_CC, email); // 抄送人
-        intent.putExtra(Intent.EXTRA_SUBJECT, "PureNote用户反馈" + " Version:" + getVersion(mContext));
-         // 主题
-        intent.putExtra(Intent.EXTRA_TEXT, ""); // 正文
-        startActivity(Intent.createChooser(intent, "Select email client"));
-    }
+
 
     private void evaluate(Context context) {
         Uri uri = Uri.parse("market://details?id=" + context.getPackageName());

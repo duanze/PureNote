@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/background_color">
-
-    <!--<com.duanze.gasst.view.FolderUnit-->
-        <!--android:id="@+id/fu_purenote"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-
+              android:background="@color/background_color"
+              android:orientation="vertical">
 
     <ListView
         android:id="@+id/lv_folder"
@@ -18,12 +12,11 @@
         android:layout_weight="1"
         android:divider="@null"/>
 
-
     <FrameLayout
-        android:orientation="vertical"
+        android:id="@+id/fl_folder_footer"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/fl_folder_footer">
+        android:orientation="vertical">
     </FrameLayout>
     <!--<include-->
     <!--android:layout_width="match_parent"-->

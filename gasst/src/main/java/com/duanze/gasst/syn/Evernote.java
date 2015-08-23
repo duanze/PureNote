@@ -270,7 +270,7 @@ public class Evernote {
 
         if (note.getGuid() == null) {
             LogUtil.e(TAG, "GUID是空，无需删除");
-            deleteGNote(gNote);
+//            deleteGNote(gNote);
             return true;
         } else {
             try {
@@ -280,15 +280,15 @@ public class Evernote {
                         .deleteNote(mEvernoteSession.getAuthToken(),
                                 note.getGuid());
                 LogUtil.e(TAG, "Note删除成功");
-                deleteGNote(gNote);
+//                deleteGNote(gNote);
                 return true;
             } catch (EDAMUserException e) {
                 LogUtil.e(TAG, "Note早已被删除，说明删除成功");
-                deleteGNote(gNote);
+//                deleteGNote(gNote);
                 return true;
             } catch (EDAMNotFoundException e) {
                 LogUtil.e(TAG, "Note未找到，说明无需删除");
-                deleteGNote(gNote);
+//                deleteGNote(gNote);
                 return true;
             } catch (Exception e) {
                 LogUtil.e(TAG, "传输失败，说明删除失败");

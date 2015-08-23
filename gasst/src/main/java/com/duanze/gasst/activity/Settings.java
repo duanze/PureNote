@@ -56,6 +56,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     public static final String FOLD = "is_fold";
     public static final String RANDOM_COLOR = "is_random_color";
     public static final String MAX_LINES = "max_lines";
+    public static final int DEFAULT_MAX_LINES = 4;
     public static final String CUSTOMIZE_COLOR = "is_customize_color";
     public static final String COLOR_READ = "color_read";
     public static final String PASSWORD_GUARD = "password_guard";
@@ -197,7 +198,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         spinner.setAdapter(adapter);
 
 
-        spinner.setSelection(preferences.getInt(MAX_LINES, 5) - 2);
+        spinner.setSelection(preferences.getInt(MAX_LINES, DEFAULT_MAX_LINES) - 2);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -596,7 +597,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         dialog.show();
     }
 
-
     private void bindSuccess() {
         arrow.setVisibility(View.GONE);
 
@@ -611,7 +611,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

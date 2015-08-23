@@ -2,8 +2,12 @@ package com.duanze.gasst.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.widget.Toast;
 
 import com.duanze.gasst.R;
@@ -207,7 +211,7 @@ public class Util {
             //如果是移动文件，不加不减
             if (isMove) return;
             int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
-            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).apply();
         } else {
             List<GNotebook> gNotebooks = db.loadGNotebooks();
             for (GNotebook gNotebook : gNotebooks) {
@@ -222,7 +226,7 @@ public class Util {
         }
     }
 
-    public static String readSaveLocation(String lo,SharedPreferences preferences, GNoteDB db,
+    public static String readSaveLocation(String lo, SharedPreferences preferences, GNoteDB db,
                                           Context mContext) {
         int extractLocation = preferences.getInt(lo, 0);
         List<GNotebook> list = db.loadGNotebooks();
@@ -245,5 +249,27 @@ public class Util {
         }
 
         return extractGroup;
+    }
+
+    public static void feedback(Context mContext) {
+        // 必须明确使用mailto前缀来修饰邮件地址
+        Uri uri = Uri.parse("mailto:端泽<blue3434@qq.com>");
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+        // intent.putExtra(Intent.EXTRA_CC, email); // 抄送人
+        intent.putExtra(Intent.EXTRA_SUBJECT, "PureNote用户反馈" + " Version:" + getVersion(mContext));
+        // 主题
+        intent.putExtra(Intent.EXTRA_TEXT, ""); // 正文
+        mContext.startActivity(Intent.createChooser(intent, "Select email client"));
+    }
+
+    public static String getVersion(Context ctx) {
+        try {
+            PackageManager pm = ctx.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_ACTIVITIES);
+            return pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "1.0.0";
     }
 }

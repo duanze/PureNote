@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!-- The main content view -->
-
         <FrameLayout
             android:id="@+id/fl_main_content"
             android:layout_width="match_parent"
@@ -19,7 +18,7 @@
         <!-- The navigation drawer -->
         <include
             android:id="@+id/left_drawer"
-            android:layout_width="260dp"
+            android:layout_width="240dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             layout="@layout/drawer_folder"

@@ -21,6 +21,8 @@ import java.util.Calendar;
 import java.util.List;
 
 public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
+    public static final int SPECIAL_ITEM = 1;
+
     private int resourceId;
     private boolean isFold;
     private int maxLines;
@@ -55,9 +57,9 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
 //如果不为0，其数量在基础上加入预置的“所有笔记”
 //        以及“回收站”
         if (mList == null || mList.size() == 0) {
-            return 2;
+            return SPECIAL_ITEM;
         }
-        return mList.size() + 2;
+        return mList.size() + SPECIAL_ITEM;
     }
 
     @Override
@@ -102,16 +104,16 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
             holder.num.setText("" + noteNums);
             holder.chk.setVisibility(View.INVISIBLE);
             holder.divider.setVisibility(View.VISIBLE);
-        } else if (getCount() - 1 == position) {
-            int noteNums = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
-
-            //不是被选中的文件夹
-            holder.flag.setVisibility(View.VISIBLE);
-            holder.flag.setImageResource(R.drawable.trash);
-            holder.name.setText(R.string.recycle_bin);
-//        下面这句注意，num为Int类型，运行时被当作resourceId报错
-            holder.num.setText("" + noteNums);
-            holder.chk.setVisibility(View.INVISIBLE);
+//        } else if (getCount() - 1 == position) {
+//            int noteNums = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
+//
+//            //不是被选中的文件夹
+//            holder.flag.setVisibility(View.VISIBLE);
+//            holder.flag.setImageResource(R.drawable.trash);
+//            holder.name.setText(R.string.recycle_bin);
+////        下面这句注意，num为Int类型，运行时被当作resourceId报错
+//            holder.num.setText("" + noteNums);
+//            holder.chk.setVisibility(View.INVISIBLE);
         } else {
             final int posInList = position - 1;
             GNotebook gNotebook = getItem(posInList);

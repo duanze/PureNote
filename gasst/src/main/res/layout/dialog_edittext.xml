@@ -9,7 +9,7 @@
         android:id="@+id/et_in_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="16"
+        android:maxLength="14"
         android:singleLine="true">
 
         <requestFocus/>

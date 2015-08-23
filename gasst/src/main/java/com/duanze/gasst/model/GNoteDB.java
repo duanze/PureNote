@@ -98,7 +98,11 @@ public class GNoteDB {
      */
     public List<GNote> loadGNotes() {
         List<GNote> list = new ArrayList<GNote>();
-        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, "time desc");
+        Cursor cursor = db.query(TABLE_NAME, null, SYN_STATUS + " != ?", new String[]{"" + GNote.DELETE},
+                null,
+                null,
+                "time " +
+                        "desc");
         if (cursor.moveToFirst()) {
             do {
                 GNote gNote = new GNote();
@@ -117,10 +121,7 @@ public class GNoteDB {
                 gNote.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
                 gNote.setGNotebookId(cursor.getInt(cursor.getColumnIndex(GNOTEBOOK_ID)));
 
-                //if the note isn't deleted
-                if (!gNote.isDeleted()) {
-                    list.add(gNote);
-                }
+                list.add(gNote);
             } while (cursor.moveToNext());
         }
         if (cursor != null) {
@@ -137,7 +138,8 @@ public class GNoteDB {
             return loadGNotes();
         }
 
-        Cursor cursor = db.query(TABLE_NAME, null, GNOTEBOOK_ID + " = ?", new String[]{"" + id},
+        Cursor cursor = db.query(TABLE_NAME, null, GNOTEBOOK_ID + " = ? and " + SYN_STATUS + " != ?",
+                new String[]{"" + id, "" + GNote.DELETE},
                 null, null, "time desc");
         if (cursor.moveToFirst()) {
             do {
@@ -157,10 +159,7 @@ public class GNoteDB {
                 gNote.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
                 gNote.setGNotebookId(cursor.getInt(cursor.getColumnIndex(GNOTEBOOK_ID)));
 
-                //if the note isn't deleted
-                if (!gNote.isDeleted()) {
-                    list.add(gNote);
-                }
+                list.add(gNote);
             } while (cursor.moveToNext());
         }
         if (cursor != null) {
@@ -282,10 +281,7 @@ public class GNoteDB {
      * 根据主键删除GAsstNote数据
      */
     public boolean deleteGNote(int id) {
-        if (db.delete(TABLE_NAME, "id = ?", new String[]{"" + id}) == 1) {
-            return true;
-        }
-        return false;
+        return db.delete(TABLE_NAME, "id = ?", new String[]{"" + id}) == 1;
     }
 
     /**
@@ -307,10 +303,7 @@ public class GNoteDB {
         values.put(DELETED, gNote.getDeleted());
         values.put(GNOTEBOOK_ID, gNote.getGNotebookId());
 
-        if (db.update(TABLE_NAME, values, "id = ?", new String[]{"" + gNote.getId()}) == 1) {
-            return true;
-        }
-        return false;
+        return db.update(TABLE_NAME, values, "id = ?", new String[]{"" + gNote.getId()}) == 1;
     }
 
     //    以下为数据表table_gnotebook相关
@@ -346,7 +339,10 @@ public class GNoteDB {
 
     public List<GNotebook> loadGNotebooks() {
         List<GNotebook> list = new ArrayList<GNotebook>();
-        Cursor cursor = db.query(TABLE_NOTEBOOK, null, null, null, null, null, null);
+        Cursor cursor = db.query(TABLE_NOTEBOOK, null, "syn_status != ?", new String[]{"" + GNotebook
+                        .DELETE}, null,
+                null,
+                null);
         if (cursor.moveToFirst()) {
             do {
                 GNotebook gNotebook = new GNotebook();
@@ -358,10 +354,7 @@ public class GNoteDB {
                 gNotebook.setNum(cursor.getInt(cursor.getColumnIndex(NUM)));
                 gNotebook.setSelected(cursor.getInt(cursor.getColumnIndex(SELECTED)));
 
-                //if the note isn't deleted
-                if (!gNotebook.isDeleted()) {
-                    list.add(gNotebook);
-                }
+                list.add(gNotebook);
             } while (cursor.moveToNext());
         }
         if (cursor != null) {

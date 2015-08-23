@@ -37,7 +37,6 @@ import com.duanze.gasst.activity.About;
 import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Password;
-import com.duanze.gasst.activity.RecycleBin;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.DrawerNotebookAdapter;
 import com.duanze.gasst.fragment.ClassicList;
@@ -51,6 +50,7 @@ import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.syn.Evernote;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
@@ -167,11 +167,13 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     }
 
     private void loginNow() {
+        if (null == bindItem) return;
         bindItem.setTitle(R.string.syn_evernote);
 //        bindItem.setIcon(R.drawable.flags);
     }
 
     private void logoutNow() {
+        if (null == bindItem) return;
         bindItem.setTitle(R.string.bind_evernote);
 //        bindItem.setIcon(R.drawable.evernote);
     }
@@ -453,7 +455,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 //                                如果selected笔记本在被删除之列，将笔记本还原为默认值
                                 if (gNotebookList.get(pos).getSelected() == GNotebook.TRUE) {
-                                    preferences.edit().putInt(Settings.GNOTEBOOK_ID, 0).apply();
+                                    preferences.edit().putInt(Settings.GNOTEBOOK_ID, 0).commit();
                                 }
 
                                 if (gNotebookList.get(pos).getId() == extractId) {
@@ -471,8 +473,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                         changeFooter();
 
                         //情况：在A文件夹中删除文件了B文件夹中的文件，刷新
-                        readSetting();
-                        refreshUI();
+                        changeToBook();
 
                     }
                 }).show();
@@ -507,13 +508,13 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 
     public void showCheckBox() {
-        for (int i = 1; i < folderListView.getCount() - 1; i++) {
+        for (int i = 1; i < folderListView.getCount(); i++) {
             folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View.VISIBLE);
         }
     }
 
     public void hideCheckBox() {
-        for (int i = 1; i < folderListView.getCount() - 1; i++) {
+        for (int i = 1; i < folderListView.getCount(); i++) {
             folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View.INVISIBLE);
         }
     }
@@ -574,7 +575,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             public void onDrawerClosed(View view) {
                 if (!isRecycleShown) {
                     setActionBarTitle();
-                }else {
+                } else {
                     ActionBar actionBar = getActionBar();
                     if (null != actionBar) {
                         actionBar.setTitle(R.string.recycle_bin);
@@ -601,6 +602,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             }
         };
 
+//        mDrawerLayout.setScrimColor(Color.parseColor("#55EEEEEE"));
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
@@ -609,7 +611,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
-
 
         folderListView = (ListView) findViewById(R.id.lv_folder);
 
@@ -624,30 +625,39 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
 
 //                特判回收站
-                if (drawerNotebookAdapter.getCount() - 1 == i) {
-//                    RecycleBin.actionStart(mContext);
-                    isRecycleShown = true;
-                } else {
-                    int folderId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+//                if (drawerNotebookAdapter.getCount() - 1 == i) {
+////                    RecycleBin.actionStart(mContext);
+//                    isRecycleShown = true;
+//                } else {
 
-                    //由 id 解析一个 listview pos 出来
-                    int from = parseBookIdToPos(folderId);
-                    changeFlag(from, i, view);
-                    changeBookInDB(from, i);
+                int folderId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
 
-                    isRecycleShown = false;
-                }
+                //由 id 解析一个 listview pos 出来
+                int from = parseBookIdToPos(folderId);
+                changeFlag(from, i, view);
 
+//                关闭抽屉
                 mDrawerLayout.closeDrawers();
+                showDialog();
 
-//                showDialog(DIALOG_PROGRESS);
-                //刷新界面
-                readSetting();
-                refreshUI();
-//                dismissDialog(DIALOG_PROGRESS);
+                changeBookInDB(from, i);
+
+                isRecycleShown = false;
+
+//                }
+
+                changeToBook();
+                removeDialog();
+
             }
         });
 
+    }
+
+    public void changeToBook() {
+        //刷新界面
+        gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+        refreshUI();
     }
 
     /**
@@ -694,8 +704,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         int oldId = cancelFolder(from);
         int newId = selectFolder(to);
 
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(Settings.GNOTEBOOK_ID, newId).apply();
+        preferences.edit().putInt(Settings.GNOTEBOOK_ID, newId).commit();
         LogUtil.i(TAG, "gNotebook id fromId:" + oldId + " toId:" + newId);
     }
 
@@ -879,7 +888,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         //记事格子随机填色
         randomColor = preferences.getBoolean(Settings.RANDOM_COLOR, true);
         //最大显示行数
-        maxLines = preferences.getInt(Settings.MAX_LINES, 5);
+        maxLines = preferences.getInt(Settings.MAX_LINES, Settings.DEFAULT_MAX_LINES);
 
 //        customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
 
@@ -989,7 +998,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                                 @Override
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
-                                    feedback();
+                                    Util.feedback(mContext);
                                 }
                             }).create().show();
 
@@ -1165,7 +1174,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 case Evernote.SYNC_START:
 //                    findViewById(R.id.sync_progress).setVisibility(View.VISIBLE);
 //                    if (MODE_GRID == mode) {
-                    showDialog(DIALOG_PROGRESS);
+                    showDialog();
 //                    }else if (MODE_LIST == mode){
 //                        classicList.showSwipe();
 //                    }
@@ -1174,7 +1183,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 case Evernote.SYNC_END:
 //                    findViewById(R.id.sync_progress).setVisibility(View.GONE);
 //                    if (MODE_GRID == mode) {
-                    removeDialog(DIALOG_PROGRESS);
+                    removeDialog();
 //                    }else if (MODE_LIST == mode){
 //                        classicList.hideSwipe();
 //                    }
@@ -1184,6 +1193,14 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                     break;
             }
         }
+    }
+
+    public void removeDialog() {
+        removeDialog(DIALOG_PROGRESS);
+    }
+
+    public void showDialog() {
+        showDialog(DIALOG_PROGRESS);
     }
 
     /**
@@ -1198,16 +1215,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 mEvernote.onAuthFinish(resultCode);
                 break;
         }
-    }
-
-    private void feedback() {
-        // 必须明确使用mailto前缀来修饰邮件地址
-        Uri uri = Uri.parse("mailto:端泽<blue3434@qq.com>");
-        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-        // intent.putExtra(Intent.EXTRA_CC, email); // 抄送人
-        intent.putExtra(Intent.EXTRA_SUBJECT, "PureNote用户反馈" + " Version code:" + VERSION_CODE); // 主题
-        intent.putExtra(Intent.EXTRA_TEXT, ""); // 正文
-        startActivity(Intent.createChooser(intent, "Select email client"));
     }
 
 }

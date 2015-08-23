@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.util.Util;
@@ -36,10 +35,10 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
         mListView = listView;
     }
 
-    public void setValues(MainActivity activity) {
-        isFold = activity.getIsFold();
-        today = activity.getToday();
-        maxLines = activity.getMaxLines();
+    public void setValues(boolean fold,Calendar cal,int lines) {
+        isFold = fold;
+        today = cal;
+        maxLines = lines;
 //        customizeColor = activity.isCustomizeColor();
     }
 
