@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -564,10 +565,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private DrawerNotebookAdapter drawerNotebookAdapter;
 
     private boolean isDrawerOpened;
+    private View drawerRoot;
 
     private void initDrawer() {
         mDrawerTitle = getResources().getString(R.string.app_name);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerRoot = findViewById(R.id.left_drawer);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.drawable.ic_drawer, R.string.action_folder, R.string.app_name) {
 
@@ -602,7 +605,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             }
         };
 
-//        mDrawerLayout.setScrimColor(Color.parseColor("#55EEEEEE"));
+        mDrawerLayout.setScrimColor(Color.parseColor("#66EEEEEE"));
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
@@ -637,7 +640,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 changeFlag(from, i, view);
 
 //                关闭抽屉
-                mDrawerLayout.closeDrawers();
+                mDrawerLayout.closeDrawer(drawerRoot);
                 showDialog();
 
                 changeBookInDB(from, i);
