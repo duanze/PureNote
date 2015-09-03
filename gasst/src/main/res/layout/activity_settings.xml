@@ -78,6 +78,7 @@
                 android:layout_marginRight="@dimen/material_margin_lower_level"
                 android:layout_height="@dimen/divider_line_height"
                 android:background="@color/divider_line_color"
+                android:visibility="gone"
                 />
 
             <com.balysv.materialripple.MaterialRippleLayout
@@ -130,6 +131,7 @@
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
