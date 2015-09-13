@@ -167,26 +167,47 @@ public class Util {
         return false;
     }
 
+    /**
+     * 闪电摘录
+     *
+     * @param preferences
+     * @param db
+     * @param str
+     * @param groupId
+     * @param context
+     * @return
+     */
     public static String extractNote(SharedPreferences preferences, GNoteDB db, String str,
                                      int groupId, Context context) {
         boolean find = false;
-        String groupName = null;
+        String groupName;
         if (groupId != 0) {
             GNotebook gNotebook = db.getGNotebookById(groupId);
             if (gNotebook != null) {
                 groupName = gNotebook.getName();
                 find = true;
+            } else {
+                groupName = context.getResources().getString(R.string.all_notes);
             }
         } else {
-            find = true;
             groupName = context.getResources().getString(R.string.all_notes);
         }
         if (find) {
             extractNoteToDB(preferences, db, str, groupId);
+        } else {
+            extractNoteToDB(preferences, db, str, 0);
         }
         return groupName;
     }
 
+    /**
+     * 闪电摘录，真实存入db与更新笔记本数量
+     *
+     * @param preferences
+     * @param db
+     * @param str
+     * @param groupId
+     */
     public static void extractNoteToDB(SharedPreferences preferences, GNoteDB db, String str, int groupId) {
         Calendar cal = Calendar.getInstance();
         GNote gNote = new GNote();
@@ -205,23 +226,33 @@ public class Util {
         }
     }
 
-    private static void updateGNotebook(SharedPreferences preferences, GNoteDB db, int id, int value,
+    private static void updateGNotebook(SharedPreferences preferences, GNoteDB db, int groupId, int value,
                                         boolean isMove) {
-        if (id == 0) {
+        if (groupId == 0) {
             //如果是移动文件，不加不减
             if (isMove) return;
             int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
             preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).apply();
         } else {
-            List<GNotebook> gNotebooks = db.loadGNotebooks();
-            for (GNotebook gNotebook : gNotebooks) {
-                if (gNotebook.getId() == id) {
-                    int cnt = gNotebook.getNum();
-                    gNotebook.setNum(cnt + value);
 
-                    db.updateGNotebook(gNotebook);
-                    break;
-                }
+//            List<GNotebook> gNotebooks = db.loadGNotebooks();
+//            for (GNotebook gNotebook : gNotebooks) {
+//                if (gNotebook.getId() == groupId) {
+//                    int cnt = gNotebook.getNum();
+//                    gNotebook.setNum(cnt + value);
+//
+//                    db.updateGNotebook(gNotebook);
+//                    break;
+//                }
+//            }
+
+            GNotebook gNotebook = db.getGNotebookById(groupId);
+            if (null != gNotebook) {
+                int cnt = gNotebook.getNum();
+                gNotebook.setNum(cnt + value);
+                db.updateGNotebook(gNotebook);
+            } else {
+                throw new IllegalArgumentException("Invalid groupId!");
             }
         }
     }
@@ -256,13 +287,13 @@ public class Util {
         Uri uri = Uri.parse("mailto:端泽<blue3434@qq.com>");
         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
         // intent.putExtra(Intent.EXTRA_CC, email); // 抄送人
-        intent.putExtra(Intent.EXTRA_SUBJECT, "PureNote用户反馈" + " Version:" + getVersion(mContext));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "PureNote用户反馈" + " Version:" + getVersionName(mContext));
         // 主题
         intent.putExtra(Intent.EXTRA_TEXT, ""); // 正文
         mContext.startActivity(Intent.createChooser(intent, "Select email client"));
     }
 
-    public static String getVersion(Context ctx) {
+    public static String getVersionName(Context ctx) {
         try {
             PackageManager pm = ctx.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_ACTIVITIES);
@@ -271,5 +302,16 @@ public class Util {
             e.printStackTrace();
         }
         return "1.0.0";
+    }
+
+    public static int getVersionCode(Context context){
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+            return pi.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 1;
     }
 }

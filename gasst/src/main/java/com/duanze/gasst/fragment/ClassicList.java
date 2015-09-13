@@ -195,11 +195,11 @@ public class ClassicList extends Fragment {
 
         gNote.setDeleted(GNote.TRUE);
         if ("".equals(gNote.getGuid())) {
-            db.deleteGNote(gNote.getId());
+//            db.deleteGNote(gNote.getId());
         } else {
             gNote.setSynStatus(GNote.DELETE);
-            db.updateGNote(gNote);
         }
+        db.updateGNote(gNote);
 
         if (!gNote.isPassed()) {
             AlarmService.cancelTask(mContext, gNote);

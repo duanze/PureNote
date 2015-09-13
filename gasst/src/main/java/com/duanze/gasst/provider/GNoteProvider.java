@@ -5,13 +5,14 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.duanze.gasst.db.GNoteOpenHelper;
+import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 
 public class GNoteProvider extends ContentProvider {
-
     public static final int NOTES_WITH_DELETED = 0;
     public static final int NOTE_DIR = 1;
     public static final int NOTE_ITEM = 2;
@@ -19,8 +20,25 @@ public class GNoteProvider extends ContentProvider {
     public static final String AUTHORITY = "com.duanze.gasst.provider";
     public static final String TABLE_NAME = GNoteDB.TABLE_NAME;
 
-    private static UriMatcher uriMatcher;
+    public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
+    public static final String STANDARD_PROJECTION =
+            GNoteDB.ID + " AS _id"
+                    + "," + GNoteDB.TIME
+                    + "," + GNoteDB.ALERT_TIME
+                    + "," + GNoteDB.IS_PASSED
+                    + "," + GNoteDB.CONTENT
+                    + "," + GNoteDB.IS_DONE
+                    + "," + GNoteDB.COLOR
+                    + "," + GNoteDB.EDIT_TIME
+                    + "," + GNoteDB.CREATED_TIME
+                    + "," + GNoteDB.SYN_STATUS
+                    + "," + GNoteDB.GUID
+                    + "," + GNoteDB.BOOK_GUID
+                    + "," + GNoteDB.DELETED
+                    + "," + GNoteDB.GNOTEBOOK_ID;
+    public static final String STANDARD_SORTORDER = GNoteDB.TIME + " desc";
 
+    private static UriMatcher uriMatcher;
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(AUTHORITY, TABLE_NAME, NOTE_DIR);
@@ -28,9 +46,6 @@ public class GNoteProvider extends ContentProvider {
     }
 
     private GNoteOpenHelper dbHelper;
-
-    public GNoteProvider() {
-    }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -60,6 +75,7 @@ public class GNoteProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+        /*
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = null;
         switch (uriMatcher.match(uri)) {
@@ -73,6 +89,25 @@ public class GNoteProvider extends ContentProvider {
             default:
                 break;
         }
+        */
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(TABLE_NAME);
+        switch (uriMatcher.match(uri)) {
+            case NOTE_DIR:
+                queryBuilder.appendWhere(GNoteDB.SYN_STATUS + "!='" + GNote.DELETE
+                        + "'");
+                break;
+            case NOTE_ITEM:
+                queryBuilder
+                        .appendWhere(GNoteDB.ID + "=" + uri.getLastPathSegment());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI");
+        }
+        Cursor cursor = queryBuilder.query(dbHelper.getReadableDatabase(),
+                projection, selection, selectionArgs, null, null, sortOrder);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 

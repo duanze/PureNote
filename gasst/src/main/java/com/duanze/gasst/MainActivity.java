@@ -70,7 +70,7 @@ import java.util.TimerTask;
 public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback, FooterInterface, CompoundButton.OnCheckedChangeListener {
     public static final String TAG = "MainActivity";
     // version code
-    public static final int VERSION_CODE = 27;
+    private int versionCode;
 
     public static final String ShownRate = "shown_rate";
     public static final String UPDATE_UI = "update_ui";
@@ -309,6 +309,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 
     private void init() {
+
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         readSetting();
 
@@ -337,11 +338,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         mEvernote = new Evernote(this, this);
 
         //如果是第一次启动应用，在数据库中添加note
+        versionCode = Util.getVersionCode(mContext);
         boolean first = preferences.getBoolean("first", true);
         if (first) {
             firstLaunch();
             insertProud();
-            setVersion();
+            setVersionCode();
         } else {
             int v = preferences.getInt("version_code", 0);
 //                below_version_2.0.4
@@ -349,18 +351,18 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 upgradeTo15();
                 upgradeTo21();
                 insertProud();
-                setVersion();
+                setVersionCode();
             }
 
             if (v < 21) {
                 upgradeTo21();
                 insertProud();
-                setVersion();
+                setVersionCode();
             }
 
             if (v < 23) {
                 insertProud();
-                setVersion();
+                setVersionCode();
             }
         }
 
@@ -803,8 +805,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     /*
     标注版本号
      */
-    private void setVersion() {
-        preferences.edit().putInt("version_code", VERSION_CODE).apply();
+    private void setVersionCode() {
+        LogUtil.i(TAG, "setVersionCode():" + versionCode);
+        preferences.edit().putInt("version_code", versionCode).apply();
     }
 
     private void insertProud() {

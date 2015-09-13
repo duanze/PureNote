@@ -98,11 +98,15 @@ public class GNoteDB {
      */
     public List<GNote> loadGNotes() {
         List<GNote> list = new ArrayList<GNote>();
-        Cursor cursor = db.query(TABLE_NAME, null, SYN_STATUS + " != ?", new String[]{"" + GNote.DELETE},
+        Cursor cursor = db.query(
+                TABLE_NAME,
+                null,
+                SYN_STATUS + " != ?" + " and " + DELETED + " != ?",
+                new String[]{"" + GNote.DELETE, "" + GNote.TRUE},
                 null,
                 null,
-                "time " +
-                        "desc");
+                "time desc");
+
         if (cursor.moveToFirst()) {
             do {
                 GNote gNote = new GNote();
@@ -138,9 +142,15 @@ public class GNoteDB {
             return loadGNotes();
         }
 
-        Cursor cursor = db.query(TABLE_NAME, null, GNOTEBOOK_ID + " = ? and " + SYN_STATUS + " != ?",
-                new String[]{"" + id, "" + GNote.DELETE},
-                null, null, "time desc");
+        Cursor cursor = db.query(
+                TABLE_NAME,
+                null,
+                GNOTEBOOK_ID + " = ? and " + SYN_STATUS + " != ?" + " and " + DELETED + " != ?",
+                new String[]{"" + id, "" + GNote.DELETE, "" + GNote.TRUE},
+                null,
+                null,
+                "time desc");
+
         if (cursor.moveToFirst()) {
             do {
                 GNote gNote = new GNote();

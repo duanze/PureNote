@@ -50,7 +50,7 @@ public class About extends Activity implements View.OnClickListener{
 
         mContext = this;
         TextView version = (TextView) findViewById(R.id.tv_version);
-        version.setText(Util.getVersion(mContext));
+        version.setText(Util.getVersionName(mContext));
 
         View feedback = findViewById(R.id.btn_feedback);
         feedback.setOnClickListener(this);
