@@ -1,12 +1,14 @@
 package com.duanze.gasst.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.duanze.gasst.db.GNoteOpenHelper;
 import com.duanze.gasst.model.GNote;
@@ -39,6 +41,7 @@ public class GNoteProvider extends ContentProvider {
     public static final String STANDARD_SORTORDER = GNoteDB.TIME + " desc";
 
     private static UriMatcher uriMatcher;
+
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(AUTHORITY, TABLE_NAME, NOTE_DIR);
@@ -49,21 +52,63 @@ public class GNoteProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int rowAffected = 0;
+
+        switch (uriMatcher.match(uri)) {
+            case NOTE_DIR:
+                rowAffected = db.delete(TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            case NOTE_ITEM:
+//                通过update字段来标志“删除”
+                String id = uri.getLastPathSegment();
+                ContentValues values = new ContentValues();
+                values.put(GNoteDB.DELETED, GNote.TRUE);
+                values.put(GNoteDB.SYN_STATUS, GNote.DELETE);
+                if (TextUtils.isEmpty(selection)) {
+                    rowAffected = db.update(TABLE_NAME, values,
+                            GNoteDB.ID + "=" + id, null);
+                } else {
+                    rowAffected = db.update(TABLE_NAME, values,
+                            selection + " and " + GNoteDB.ID + "=" + id,
+                            selectionArgs);
+                }
+            default:
+                break;
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowAffected;
     }
 
     @Override
     public String getType(Uri uri) {
-        // TODO: Implement this to handle requests for the MIME type of the data
-        // at the given URI.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return null;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        // TODO: Implement this to handle requests to insert a new row.
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (values.containsKey(GNoteDB.ID)) {
+            values.remove(GNoteDB.ID);
+        }
+        String content = values.getAsString(GNoteDB.CONTENT);
+        if (null == content || content.trim().length() == 0) {
+            return null;
+        }
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Uri itemUri = null;
+        switch (uriMatcher.match(uri)) {
+            case NOTE_DIR:
+                long newID = db.insert(TABLE_NAME, null, values);
+                if (newID > 0) {
+                    itemUri = ContentUris.withAppendedId(uri, newID);
+                    getContext().getContentResolver().notifyChange(itemUri, null);
+                }
+            default:
+                break;
+        }
+
+        return itemUri;
     }
 
     @Override
@@ -114,7 +159,30 @@ public class GNoteProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int updateCount = 0;
+        switch (uriMatcher.match(uri)) {
+            case NOTE_DIR:
+                updateCount = db.update(
+                        TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case NOTE_ITEM:
+                String where = "";
+                if (!TextUtils.isEmpty(selection)) {
+                    where += " and " + selection;
+                }
+                updateCount = db.update(
+                        TABLE_NAME, values,
+                        GNoteDB.ID + "=" + uri.getLastPathSegment() + where,
+                        selectionArgs);
+                break;
+
+            default:
+                break;
+        }
+        if (updateCount > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return updateCount;
     }
 }

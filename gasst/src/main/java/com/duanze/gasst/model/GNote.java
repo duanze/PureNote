@@ -1,5 +1,6 @@
 package com.duanze.gasst.model;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Html;
@@ -248,6 +249,27 @@ public class GNote implements Parcelable {
                 + EvernoteUtil.NOTE_SUFFIX;
         LogUtil.i(TAG, "同步文字:" + EvernoteContent);
         return EvernoteContent;
+    }
+
+    public static GNote buildFromContentValues(ContentValues values) {
+        GNote gNote = new GNote();
+        if (values.containsKey(GNoteDB.ID)) {
+            gNote.id = values.getAsInteger(GNoteDB.ID);
+        }
+        gNote.time = values.getAsString(GNoteDB.TIME);
+        gNote.alertTime = values.getAsString(GNoteDB.ALERT_TIME);
+        gNote.passed = values.getAsInteger(GNoteDB.IS_PASSED);
+        gNote.note = values.getAsString(GNoteDB.CONTENT);
+        gNote.done = values.getAsInteger(GNoteDB.IS_DONE);
+        gNote.color = values.getAsInteger(GNoteDB.COLOR);
+        gNote.editTime = values.getAsLong(GNoteDB.EDIT_TIME);
+        gNote.createdTime = values.getAsLong(GNoteDB.CREATED_TIME);
+        gNote.synStatus = values.getAsInteger(GNoteDB.SYN_STATUS);
+        gNote.guid = values.getAsString(GNoteDB.GUID);
+        gNote.bookGuid = values.getAsString(GNoteDB.BOOK_GUID);
+        gNote.deleted = values.getAsInteger(GNoteDB.DELETED);
+        gNote.gnotebookId = values.getAsInteger(GNoteDB.GNOTEBOOK_ID);
+        return gNote;
     }
 
     /**
