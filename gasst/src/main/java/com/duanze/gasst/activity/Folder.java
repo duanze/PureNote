@@ -342,7 +342,7 @@ public class Folder extends Activity implements FooterInterface, CompoundButton.
                 db.updateGNote(gNote);
             }
 
-            if (!gNote.isPassed()) {
+            if (!gNote.getIsPassed()) {
                 AlarmService.cancelTask(mContext, gNote);
             }
         }

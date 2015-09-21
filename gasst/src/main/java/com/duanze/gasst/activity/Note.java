@@ -35,7 +35,7 @@ import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
-import com.duanze.gasst.util.CallBackListener;
+import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
@@ -129,7 +129,7 @@ public class Note extends FragmentActivity {
      * @param gNote
      * @param mode
      */
-    public static void activityStart(Context context, GNote gNote, int mode) {
+    public static void actionStart(Context context, GNote gNote, int mode) {
         Intent intent = new Intent(context, Note.class);
         intent.putExtra("gAsstNote_data", gNote);
         intent.putExtra("mode", mode);
@@ -142,22 +142,22 @@ public class Note extends FragmentActivity {
     public static void writeNewNote(Context mContext, Calendar cal) {
         GNote note = new GNote();
         note.setCalToTime(cal);
-        Note.activityStart(mContext, note, Note.MODE_NEW);
+        Note.actionStart(mContext, note, Note.MODE_NEW);
     }
 
     public static void todayNewNote(Context mContext) {
         GNote note = new GNote();
-        Note.activityStart(mContext, note, Note.MODE_TODAY);
+        Note.actionStart(mContext, note, Note.MODE_TODAY);
     }
 
     /**
      * 内部类，监听时间选择器专用
      */
-    private CallBackListener listener = new CallBackListener() {
+    private DateTimePickerCallback listener = new DateTimePickerCallback() {
         @Override
         public void onFinish(String result) {
             gNote.setAlertTime(result);
-            gNote.setPassed(GNote.FALSE);
+            gNote.setIsPassed(GNote.FALSE);
             checkDbFlag();
 
             updateActionBarTitle();
@@ -408,14 +408,14 @@ public class Note extends FragmentActivity {
                 pickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
                 return true;
             case R.id.action_cancel_remind:
-                if (!gNote.isPassed()) {
-                    gNote.setPassed(GNote.TRUE);
+                if (!gNote.getIsPassed()) {
+                    gNote.setIsPassed(GNote.TRUE);
                     updateActionBarTitle();
                     checkDbFlag();
                 }
                 return true;
             case R.id.action_edit:
-                activityStart(this, gNote, MODE_EDIT);
+                actionStart(this, gNote, MODE_EDIT);
                 finish();
                 return true;
             case R.id.edit_date:
@@ -576,7 +576,7 @@ public class Note extends FragmentActivity {
             db.updateGNote(gNote);
         }
 
-        if (!gNote.isPassed()) {
+        if (!gNote.getIsPassed()) {
             AlarmService.cancelTask(Note.this, gNote);
         }
 //        更新笔记本状态
@@ -610,7 +610,7 @@ public class Note extends FragmentActivity {
             updateGNotebook(0, +1, false);
         }
         //当有定时提醒
-        if (!gNote.isPassed()) {
+        if (!gNote.getIsPassed()) {
             //新建记事尚无id，需存储后从数据库中提取
             gNote.setId(db.getNewestGNoteId());
             AlarmService.alarmTask(this);
@@ -653,7 +653,7 @@ public class Note extends FragmentActivity {
 
         db.updateGNote(gNote);
         //当有定时提醒
-        if (!gNote.isPassed()) {
+        if (!gNote.getIsPassed()) {
             AlarmService.alarmTask(this);
         } else if (isPassed == GNote.FALSE) {//手动取消定时提醒
             AlarmService.cancelTask(this, gNote);

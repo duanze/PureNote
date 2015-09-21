@@ -29,7 +29,7 @@ import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
-import com.duanze.gasst.util.CallBackListener;
+import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
@@ -58,11 +58,11 @@ public class ClassicList extends Fragment {
 
     public static final String DATEPICKER_TAG = "datepicker";
     private DatePickerDialog pickerDialog;
-    private CallBackListener listener = new CallBackListener() {
+    private DateTimePickerCallback listener = new DateTimePickerCallback() {
         @Override
         public void onFinish(String result) {
             gNote.setAlertTime(result);
-            gNote.setPassed(GNote.FALSE);
+            gNote.setIsPassed(GNote.FALSE);
             db.updateGNote(gNote);
             AlarmService.alarmTask(mContext);
 
@@ -182,10 +182,10 @@ public class ClassicList extends Fragment {
         GNote gNote = gNoteList.get(i);
         boolean prefNote = ((MainActivity) mContext).getPreferences().getBoolean(Settings.PREF_NOTE_KEY, false);
         if (prefNote) {
-            Note.activityStart(
+            Note.actionStart(
                     mContext, gNote, Note.MODE_SHOW);
         } else {
-            Note.activityStart(
+            Note.actionStart(
                     mContext, gNote, Note.MODE_EDIT);
         }
     }
@@ -201,7 +201,7 @@ public class ClassicList extends Fragment {
         }
         db.updateGNote(gNote);
 
-        if (!gNote.isPassed()) {
+        if (!gNote.getIsPassed()) {
             AlarmService.cancelTask(mContext, gNote);
         }
 

@@ -405,7 +405,7 @@ public class Evernote {
                             false, false, false);
 
             if (gNote != null) {
-                gNote.setNote(note.getContent());
+                gNote.setContent(note.getContent());
                 gNote.setEditTime(note.getUpdated());
 
                 db.updateGNote(gNote);

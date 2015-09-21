@@ -40,11 +40,11 @@ import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Password;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.DrawerNotebookAdapter;
-import com.duanze.gasst.fragment.ClassicList;
 import com.duanze.gasst.fragment.ColorGrid;
 import com.duanze.gasst.fragment.FolderFooter;
 import com.duanze.gasst.fragment.FolderFooterDelete;
 import com.duanze.gasst.fragment.FooterInterface;
+import com.duanze.gasst.fragment.GNoteList;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
@@ -235,7 +235,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
             GNote gNote = new GNote();
             gNote.setTimeFromDate(year, month, day);
-            Note.activityStart(MainActivity.this, gNote, Note.MODE_NEW);
+            Note.actionStart(MainActivity.this, gNote, Note.MODE_NEW);
         }
     }
 
@@ -496,7 +496,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                         db.updateGNote(gNote);
                     }
 
-                    if (!gNote.isPassed()) {
+                    if (!gNote.getIsPassed()) {
                         AlarmService.cancelTask(mContext, gNote);
                     }
 
@@ -662,7 +662,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     public void changeToBook() {
         //刷新界面
         gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
-        refreshUI();
+//        refreshUI();
     }
 
     /**
@@ -816,7 +816,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         tomorrow.add(Calendar.DAY_OF_MONTH, +1);
 
         zero.setCalToTime(tomorrow);
-        zero.setNote(getResources().getString(R.string.tip0));
+        zero.setContent(getResources().getString(R.string.tip0));
 //            two.setSynStatus(GNote.NEW);
         zero.setColor(GridUnit.GOLD);
         db.saveGNote(zero);
@@ -833,7 +833,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
         GNote one = new GNote();
         one.setCalToTime(today);
-        one.setNote(getResources().getString(R.string.tip1) + "(・8・)");
+        one.setContent(getResources().getString(R.string.tip1) + "(・8・)");
 //            one.setSynStatus(GNote.NEW);
         one.setColor(GridUnit.PURPLE);
         db.saveGNote(one);
@@ -843,14 +843,14 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
         GNote two = new GNote();
         two.setCalToTime(tmpCal);
-        two.setNote(getResources().getString(R.string.tip2));
+        two.setContent(getResources().getString(R.string.tip2));
 //            two.setSynStatus(GNote.NEW);
         db.saveGNote(two);
 
         tmpCal.add(Calendar.DAY_OF_MONTH, -1);
         GNote three = new GNote();
         three.setCalToTime(tmpCal);
-        three.setNote(getResources().getString(R.string.tip3));
+        three.setContent(getResources().getString(R.string.tip3));
 //            three.setSynStatus(GNote.NEW);
         db.saveGNote(three);
 
@@ -860,17 +860,17 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //            db.saveGNotebook(test);
     }
 
-    private ClassicList classicList;
+    private GNoteList gNoteList;
     private ColorGrid colorGrid;
 
     public void changeContent() {
 
         if (mode == MODE_LIST) {
-            if (classicList == null) {
-                classicList = new ClassicList();
+            if (null == gNoteList) {
+                gNoteList = new GNoteList();
             }
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);//打开手势滑动
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content, classicList)
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content, gNoteList)
                     .commit();
         } else if (mode == MODE_GRID) {
             if (colorGrid == null) {
@@ -910,7 +910,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private void writeNewNote(Calendar cal) {
         GNote note = new GNote();
         note.setCalToTime(cal);
-        Note.activityStart(this, note, Note.MODE_NEW);
+        Note.actionStart(this, note, Note.MODE_NEW);
     }
 
     /**
@@ -953,11 +953,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             refreshUI();
 
             LogUtil.i(TAG, "readingSetting & updateUI in onResume.");
-        }
-
-//        列表模式fabButton随机填色
-        if (mode == MODE_LIST) {
-            classicList.randomfabButtonColor();
         }
 
 
@@ -1026,11 +1021,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void refreshUI() {
         if (mode == MODE_LIST) {
-            if (classicList != null) {
-                classicList.refreshUI();
+            if (null != gNoteList) {
+                gNoteList.refreshUI();
             }
         } else if (mode == MODE_GRID) {
-            if (colorGrid != null) {
+            if (null != colorGrid) {
                 colorGrid.refreshUI();
             }
         }

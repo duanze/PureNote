@@ -23,22 +23,23 @@ public class GNoteProvider extends ContentProvider {
     public static final String TABLE_NAME = GNoteDB.TABLE_NAME;
 
     public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
-    public static final String STANDARD_PROJECTION =
+    public static final String[] STANDARD_PROJECTION = {
             GNoteDB.ID + " AS _id"
-                    + "," + GNoteDB.TIME
-                    + "," + GNoteDB.ALERT_TIME
-                    + "," + GNoteDB.IS_PASSED
-                    + "," + GNoteDB.CONTENT
-                    + "," + GNoteDB.IS_DONE
-                    + "," + GNoteDB.COLOR
-                    + "," + GNoteDB.EDIT_TIME
-                    + "," + GNoteDB.CREATED_TIME
-                    + "," + GNoteDB.SYN_STATUS
-                    + "," + GNoteDB.GUID
-                    + "," + GNoteDB.BOOK_GUID
-                    + "," + GNoteDB.DELETED
-                    + "," + GNoteDB.GNOTEBOOK_ID;
-    public static final String STANDARD_SORTORDER = GNoteDB.TIME + " desc";
+            , GNoteDB.TIME
+            , GNoteDB.ALERT_TIME
+            , GNoteDB.IS_PASSED
+            , GNoteDB.CONTENT
+            , GNoteDB.IS_DONE
+            , GNoteDB.COLOR
+            , GNoteDB.EDIT_TIME
+            , GNoteDB.CREATED_TIME
+            , GNoteDB.SYN_STATUS
+            , GNoteDB.GUID
+            , GNoteDB.BOOK_GUID
+            , GNoteDB.DELETED
+            , GNoteDB.GNOTEBOOK_ID
+    };
+    public static final String STANDARD_SORT_ORDER = GNoteDB.TIME + " desc";
 
     private static UriMatcher uriMatcher;
 
@@ -140,7 +141,7 @@ public class GNoteProvider extends ContentProvider {
         queryBuilder.setTables(TABLE_NAME);
         switch (uriMatcher.match(uri)) {
             case NOTE_DIR:
-                queryBuilder.appendWhere(GNoteDB.SYN_STATUS + "!='" + GNote.DELETE
+                queryBuilder.appendWhere(GNoteDB.DELETED + "!='" + GNote.TRUE
                         + "'");
                 break;
             case NOTE_ITEM:

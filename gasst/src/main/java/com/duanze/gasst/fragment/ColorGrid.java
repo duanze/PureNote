@@ -270,7 +270,7 @@ public class ColorGrid extends Fragment {
         gridUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Note.activityStart(mContext, note,
+                Note.actionStart(mContext, note,
                         Note.MODE_EDIT);
             }
         });

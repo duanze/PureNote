@@ -1,6 +1,7 @@
 package com.duanze.gasst.model;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Html;
@@ -28,8 +29,8 @@ public class GNote implements Parcelable {
     private int id = -1;
     private String time = "";
     private String alertTime = "";
-    private int passed = TRUE;
-    private String note = "";
+    private int isPassed = TRUE;
+    private String content = "";
     private int done = FALSE;
     private int color = GridUnit.colorArr[0];//初始透明
     private long editTime = 0;//最后编辑时间
@@ -38,16 +39,38 @@ public class GNote implements Parcelable {
     private String guid = "";//evernote 标志符，惟一确定一条note
     private String bookGuid = "";
 
+    //数据表中笔记本的id号，为0时使用默认笔记本PureNote
+    private int gNoteBookId = 0;
+    private int deleted = FALSE;
+
+    public GNote() {
+
+    }
+
+    public GNote(Cursor cursor) {
+        id = cursor.getInt(cursor.getColumnIndex("_id"));
+        time = cursor.getString(cursor.getColumnIndex(GNoteDB.TIME));
+        alertTime = cursor.getString(cursor.getColumnIndex(GNoteDB.ALERT_TIME));
+        isPassed = cursor.getInt(cursor.getColumnIndex(GNoteDB.IS_PASSED));
+        content = cursor.getString(cursor.getColumnIndex(GNoteDB.CONTENT));
+        done = cursor.getInt(cursor.getColumnIndex(GNoteDB.IS_DONE));
+        color = cursor.getInt(cursor.getColumnIndex(GNoteDB.COLOR));
+        editTime = cursor.getLong(cursor.getColumnIndex(GNoteDB.EDIT_TIME));
+        createdTime = cursor.getLong(cursor.getColumnIndex(GNoteDB.CREATED_TIME));
+        synStatus = cursor.getInt(cursor.getColumnIndex(GNoteDB.SYN_STATUS));
+        guid = cursor.getString(cursor.getColumnIndex(GNoteDB.GUID));
+        bookGuid = cursor.getString(cursor.getColumnIndex(GNoteDB.BOOK_GUID));
+        deleted = cursor.getInt(cursor.getColumnIndex(GNoteDB.DELETED));
+        gNoteBookId = cursor.getInt(cursor.getColumnIndex(GNoteDB.GNOTEBOOK_ID));
+    }
+
     public int getGNotebookId() {
-        return gnotebookId;
+        return gNoteBookId;
     }
 
     public void setGNotebookId(int gnotebookId) {
-        this.gnotebookId = gnotebookId;
+        this.gNoteBookId = gnotebookId;
     }
-
-    //数据表中笔记本的id号，为0时使用默认笔记本PureNote
-    private int gnotebookId = 0;
 
     public int getDeleted() {
         return deleted;
@@ -56,8 +79,6 @@ public class GNote implements Parcelable {
     public void setDeleted(int deleted) {
         this.deleted = deleted;
     }
-
-    private int deleted = FALSE;
 
     public String getBookGuid() {
         return bookGuid;
@@ -83,8 +104,8 @@ public class GNote implements Parcelable {
         this.createdTime = createdTime;
     }
 
-    public boolean isPassed() {
-        return passed == TRUE;
+    public boolean getIsPassed() {
+        return isPassed == TRUE;
     }
 
     public boolean isDone() {
@@ -136,15 +157,15 @@ public class GNote implements Parcelable {
     }
 
     public int getPassed() {
-        return passed;
+        return isPassed;
     }
 
     public Spanned getNoteFromHtml() {
         //莫名错误预防
-        if (note == null) {
-            note = "";
+        if (content == null) {
+            content = "";
         }
-        return Html.fromHtml(note);
+        return Html.fromHtml(content);
     }
 
     public void setId(int id) {
@@ -155,8 +176,8 @@ public class GNote implements Parcelable {
         this.time = time;
     }
 
-    public void setPassed(int passed) {
-        this.passed = passed;
+    public void setIsPassed(int isPassed) {
+        this.isPassed = isPassed;
     }
 
     public void setAlertTime(String alertTime) {
@@ -164,15 +185,15 @@ public class GNote implements Parcelable {
     }
 
     public void setNoteToHtml(Spanned note) {
-        this.note = Html.toHtml(note);
+        this.content = Html.toHtml(note);
     }
 
-    public void setNote(String tmp) {
-        note = tmp;
+    public void setContent(String tmp) {
+        content = tmp;
     }
 
-    public String getNote() {
-        return note;
+    public String getContent() {
+        return content;
     }
 
     public boolean needUpdate() {
@@ -214,7 +235,7 @@ public class GNote implements Parcelable {
 
     public static GNote parseGNote(Note n) {
         GNote gNote = new GNote();
-        gNote.note = n.getContent();
+        gNote.content = n.getContent();
         gNote.guid = n.getGuid();
         gNote.bookGuid = n.getNotebookGuid();
         gNote.createdTime = n.getCreated();
@@ -245,7 +266,7 @@ public class GNote implements Parcelable {
 
     private String convertContentToEvernote() {
         String EvernoteContent = EvernoteUtil.NOTE_PREFIX
-                + note.replace("<br>", "<br/>")
+                + content.replace("<br>", "<br/>")
                 + EvernoteUtil.NOTE_SUFFIX;
         LogUtil.i(TAG, "同步文字:" + EvernoteContent);
         return EvernoteContent;
@@ -258,8 +279,8 @@ public class GNote implements Parcelable {
         }
         gNote.time = values.getAsString(GNoteDB.TIME);
         gNote.alertTime = values.getAsString(GNoteDB.ALERT_TIME);
-        gNote.passed = values.getAsInteger(GNoteDB.IS_PASSED);
-        gNote.note = values.getAsString(GNoteDB.CONTENT);
+        gNote.isPassed = values.getAsInteger(GNoteDB.IS_PASSED);
+        gNote.content = values.getAsString(GNoteDB.CONTENT);
         gNote.done = values.getAsInteger(GNoteDB.IS_DONE);
         gNote.color = values.getAsInteger(GNoteDB.COLOR);
         gNote.editTime = values.getAsLong(GNoteDB.EDIT_TIME);
@@ -268,7 +289,7 @@ public class GNote implements Parcelable {
         gNote.guid = values.getAsString(GNoteDB.GUID);
         gNote.bookGuid = values.getAsString(GNoteDB.BOOK_GUID);
         gNote.deleted = values.getAsInteger(GNoteDB.DELETED);
-        gNote.gnotebookId = values.getAsInteger(GNoteDB.GNOTEBOOK_ID);
+        gNote.gNoteBookId = values.getAsInteger(GNoteDB.GNOTEBOOK_ID);
         return gNote;
     }
 
@@ -319,8 +340,8 @@ public class GNote implements Parcelable {
         parcel.writeInt(id);
         parcel.writeString(time);
         parcel.writeString(alertTime);
-        parcel.writeInt(passed);
-        parcel.writeString(note);
+        parcel.writeInt(isPassed);
+        parcel.writeString(content);
         parcel.writeInt(done);
         parcel.writeInt(color);
         parcel.writeLong(editTime);
@@ -329,7 +350,7 @@ public class GNote implements Parcelable {
         parcel.writeString(guid);
         parcel.writeString(bookGuid);
         parcel.writeInt(deleted);
-        parcel.writeInt(gnotebookId);
+        parcel.writeInt(gNoteBookId);
     }
 
     public static final Creator<GNote> CREATOR = new Creator<GNote>() {
@@ -339,8 +360,8 @@ public class GNote implements Parcelable {
             gNote.id = parcel.readInt();
             gNote.time = parcel.readString();
             gNote.alertTime = parcel.readString();
-            gNote.passed = parcel.readInt();
-            gNote.note = parcel.readString();
+            gNote.isPassed = parcel.readInt();
+            gNote.content = parcel.readString();
             gNote.done = parcel.readInt();
             gNote.color = parcel.readInt();
             gNote.editTime = parcel.readLong();
@@ -349,7 +370,7 @@ public class GNote implements Parcelable {
             gNote.guid = parcel.readString();
             gNote.bookGuid = parcel.readString();
             gNote.deleted = parcel.readInt();
-            gNote.gnotebookId = parcel.readInt();
+            gNote.gNoteBookId = parcel.readInt();
             return gNote;
         }
 

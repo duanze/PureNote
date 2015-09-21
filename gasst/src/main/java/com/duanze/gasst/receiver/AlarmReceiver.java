@@ -26,7 +26,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .NOTIFICATION_SERVICE);
         GNote gNote = intent.getParcelableExtra("gAsstNote_data");
         //更新状态并存入数据库
-        gNote.setPassed(GNote.TRUE);
+        gNote.setIsPassed(GNote.TRUE);
         GNoteDB db = GNoteDB.getInstance(context);
         db.updateGNote(gNote);
 
@@ -42,11 +42,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification notification = new NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setContentTitle(Util.timeString(gNote))
-                .setContentText(Html.fromHtml(gNote.getNote()))
+                .setContentText(Html.fromHtml(gNote.getContent()))
                 .setSmallIcon(R.drawable.small_logo)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                         R.drawable.logo))
-                .setTicker(Html.fromHtml(gNote.getNote()))
+                .setTicker(Html.fromHtml(gNote.getContent()))
                 .setContentIntent(pi)
                 .build();
         notification.flags |= Notification.FLAG_INSISTENT; // 声音一直响到用户相应，就是通知会一直响起，直到你触碰通知栏的时间就会停止

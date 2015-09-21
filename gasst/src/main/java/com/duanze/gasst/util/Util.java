@@ -212,7 +212,7 @@ public class Util {
         Calendar cal = Calendar.getInstance();
         GNote gNote = new GNote();
         gNote.setCalToTime(cal);
-        gNote.setNote(str);
+        gNote.setContent(str);
         //needCreate
         gNote.setSynStatus(GNote.NEW);
 //        设置笔记本id

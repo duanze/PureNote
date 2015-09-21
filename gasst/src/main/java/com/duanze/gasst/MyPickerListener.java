@@ -8,7 +8,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
-import com.duanze.gasst.util.CallBackListener;
+import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.Util;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
@@ -28,13 +28,13 @@ public class MyPickerListener implements DatePickerDialog.OnDateSetListener,
     private int day;
 
     private Calendar today;
-    private CallBackListener callBackListener;
+    private DateTimePickerCallback dateTimePickerCallback;
     private Context context;
 
-    public MyPickerListener(Context context, Calendar today, CallBackListener callBackListener) {
+    public MyPickerListener(Context context, Calendar today, DateTimePickerCallback dateTimePickerCallback) {
         this.context = context;
         this.today = today;
-        this.callBackListener = callBackListener;
+        this.dateTimePickerCallback = dateTimePickerCallback;
     }
 
     @Override
@@ -71,8 +71,8 @@ public class MyPickerListener implements DatePickerDialog.OnDateSetListener,
                 + Util.twoDigit(minute);
 
         //定时完成执行回调
-        if (callBackListener != null) {
-            callBackListener.onFinish(result);
+        if (dateTimePickerCallback != null) {
+            dateTimePickerCallback.onFinish(result);
         }
 
     }

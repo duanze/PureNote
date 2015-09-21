@@ -78,7 +78,7 @@ public class GNoteDB {
             values.put(TIME, gNote.getTime());
             values.put(ALERT_TIME, gNote.getAlertTime());
             values.put(IS_PASSED, gNote.getPassed());
-            values.put(CONTENT, gNote.getNote());
+            values.put(CONTENT, gNote.getContent());
             values.put(IS_DONE, gNote.getDone());
             values.put(COLOR, gNote.getColor());
             values.put(EDIT_TIME, gNote.getEditTime());
@@ -113,8 +113,8 @@ public class GNoteDB {
                 gNote.setId(cursor.getInt(cursor.getColumnIndex(ID)));
                 gNote.setTime(cursor.getString(cursor.getColumnIndex(TIME)));
                 gNote.setAlertTime(cursor.getString(cursor.getColumnIndex(ALERT_TIME)));
-                gNote.setPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
-                gNote.setNote(cursor.getString(cursor.getColumnIndex(CONTENT)));
+                gNote.setIsPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
+                gNote.setContent(cursor.getString(cursor.getColumnIndex(CONTENT)));
                 gNote.setDone(cursor.getInt(cursor.getColumnIndex(IS_DONE)));
                 gNote.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
                 gNote.setEditTime(cursor.getLong(cursor.getColumnIndex(EDIT_TIME)));
@@ -157,8 +157,8 @@ public class GNoteDB {
                 gNote.setId(cursor.getInt(cursor.getColumnIndex(ID)));
                 gNote.setTime(cursor.getString(cursor.getColumnIndex(TIME)));
                 gNote.setAlertTime(cursor.getString(cursor.getColumnIndex(ALERT_TIME)));
-                gNote.setPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
-                gNote.setNote(cursor.getString(cursor.getColumnIndex(CONTENT)));
+                gNote.setIsPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
+                gNote.setContent(cursor.getString(cursor.getColumnIndex(CONTENT)));
                 gNote.setDone(cursor.getInt(cursor.getColumnIndex(IS_DONE)));
                 gNote.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
                 gNote.setEditTime(cursor.getLong(cursor.getColumnIndex(EDIT_TIME)));
@@ -187,8 +187,8 @@ public class GNoteDB {
                 gNote.setId(cursor.getInt(cursor.getColumnIndex(ID)));
                 gNote.setTime(cursor.getString(cursor.getColumnIndex(TIME)));
                 gNote.setAlertTime(cursor.getString(cursor.getColumnIndex(ALERT_TIME)));
-                gNote.setPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
-                gNote.setNote(cursor.getString(cursor.getColumnIndex(CONTENT)));
+                gNote.setIsPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
+                gNote.setContent(cursor.getString(cursor.getColumnIndex(CONTENT)));
                 gNote.setDone(cursor.getInt(cursor.getColumnIndex(IS_DONE)));
                 gNote.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
                 gNote.setEditTime(cursor.getLong(cursor.getColumnIndex(EDIT_TIME)));
@@ -237,8 +237,8 @@ public class GNoteDB {
             gNote.setId(cursor.getInt(cursor.getColumnIndex(ID)));
             gNote.setTime(cursor.getString(cursor.getColumnIndex(TIME)));
             gNote.setAlertTime(cursor.getString(cursor.getColumnIndex(ALERT_TIME)));
-            gNote.setPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
-            gNote.setNote(cursor.getString(cursor.getColumnIndex(CONTENT)));
+            gNote.setIsPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
+            gNote.setContent(cursor.getString(cursor.getColumnIndex(CONTENT)));
             gNote.setDone(cursor.getInt(cursor.getColumnIndex(IS_DONE)));
             gNote.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
             gNote.setEditTime(cursor.getLong(cursor.getColumnIndex(EDIT_TIME)));
@@ -266,8 +266,8 @@ public class GNoteDB {
             gNote.setId(cursor.getInt(cursor.getColumnIndex(ID)));
             gNote.setTime(cursor.getString(cursor.getColumnIndex(TIME)));
             gNote.setAlertTime(cursor.getString(cursor.getColumnIndex(ALERT_TIME)));
-            gNote.setPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
-            gNote.setNote(cursor.getString(cursor.getColumnIndex(CONTENT)));
+            gNote.setIsPassed(cursor.getInt(cursor.getColumnIndex(IS_PASSED)));
+            gNote.setContent(cursor.getString(cursor.getColumnIndex(CONTENT)));
             gNote.setDone(cursor.getInt(cursor.getColumnIndex(IS_DONE)));
             gNote.setColor(cursor.getInt(cursor.getColumnIndex(COLOR)));
             gNote.setEditTime(cursor.getLong(cursor.getColumnIndex(EDIT_TIME)));
@@ -302,7 +302,7 @@ public class GNoteDB {
         values.put(TIME, gNote.getTime());
         values.put(ALERT_TIME, gNote.getAlertTime());
         values.put(IS_PASSED, gNote.getPassed());
-        values.put(CONTENT, gNote.getNote());
+        values.put(CONTENT, gNote.getContent());
         values.put(IS_DONE, gNote.getDone());
         values.put(COLOR, gNote.getColor());
         values.put(EDIT_TIME, gNote.getEditTime());
