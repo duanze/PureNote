@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.duanze.gasst.R;
+import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.util.Util;
 
@@ -98,6 +99,8 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener 
 //        假如色彩为 “透明” 的话，就不需要设定可见性了
         mHolder.noteColor.setHeight(height * 12 / 20);
         mHolder.noteColor.setBackgroundColor(gNote.getColor());
+
+        mHolder.listItem.setTag(R.string.gnote_data, gNote);
     }
 
     private void measureView(View view) {
@@ -123,7 +126,9 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-
+        if (R.id.rl_list_item == v.getId()) {
+            Note.actionStart(mContext, (GNote) v.getTag(R.string.gnote_data),Note.MODE_EDIT);
+        }
     }
 
     class Holder {

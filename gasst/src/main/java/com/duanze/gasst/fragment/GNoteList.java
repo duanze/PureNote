@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.adapter.GNoteAdapter;
@@ -75,8 +76,13 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gnote_list, container, false);
         ListView gNoteList = (ListView) view.findViewById(R.id.lv_gnotes);
-        mAdapter = new GNoteAdapter(mContext,null,);
+        mAdapter = new GNoteAdapter(mContext, null, 0);
+        MainActivity mainActivity = ((MainActivity)mContext);
+        mAdapter.setValues(mainActivity.getIsFold(), mainActivity.getToday(), mainActivity.getMaxLines());
         gNoteList.setAdapter(mAdapter);
+
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(1,null,this);
 
         fabButton = (FloatingActionButton) view.findViewById(R.id.fabbutton);
         fabButton.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +129,7 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         mAdapter.swapCursor(null);
     }
 
-    public void refreshUI(){
+    public void refreshUI() {
 
     }
 }

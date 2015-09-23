@@ -23,6 +23,7 @@ public class GNoteProvider extends ContentProvider {
     public static final String TABLE_NAME = GNoteDB.TABLE_NAME;
 
     public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
+
     public static final String[] STANDARD_PROJECTION = {
             GNoteDB.ID + " AS _id"
             , GNoteDB.TIME

@@ -49,7 +49,6 @@
     <string name="day30">叁拾</string>
     <string name="day31">叁拾壹</string>
 
-
     <!-- tips -->
     <string name="tip0">强烈推荐您于设置中开启本应用独有的王牌功能：闪电摘录。仅需复制，就能快速保存一条新笔记。回想起来，我开发这款应用的初衷就是要实现这个功能吧:)</string>
     <string name="tip1">Tip1:人生苦短，想做的事如果不迅速付诸行动，99% 都会无疾而终哦</string>
@@ -57,11 +56,9 @@
     <string name="tip3">Tip3:设置中可以绑定EverNote帐户，启动密码保护等，有任何意见和建议欢迎反馈</string>
     <string name="date_error">无效日期</string>
 
-
     <!-- foreground service -->
     <string name="one_reminder"> 条定时提醒正在倒计时</string>
     <string name="more_reminder"> 条定时提醒正在倒计时</string>
-
 
     <!-- new password dialog -->
     <string name="password_title">开启密码保护</string>
@@ -70,7 +67,6 @@
     <string name="confirm_password">确认密码：</string>
     <string name="hint_password">密码提示：</string>
     <string name="forgot_password"><u>忘记密码</u></string>
-
 
     <!-- menu -->
     <string name="app_name">极简笔记</string>
@@ -95,14 +91,12 @@
     <string name="m_color_grid">彩格视图</string>
     <string name="m_classic_list">经典列表</string>
 
-
     <!-- delete dialog -->
     <string name="alert">提示</string>
     <string name="delete_text">确认删除？</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
     <string name="logout_text">确认登出EverNote?</string>
-
 
     <!-- activity Folder -->
     <string name="all_notes">所有笔记</string>
@@ -118,10 +112,7 @@
     <string name="create_folder">创建</string>
     <string name="create_folder_err">笔记分组创建失败！</string>
 
-
     <!-- setting -->
-
-
     <string name="logout_evernote_username_null">退出登录</string>
     <string name="gift_for_purenote">给极简笔记好评</string>
     <string name="comment_purenote">评价应用</string>
@@ -135,7 +126,6 @@
     <string name="color_read">查看笔记时填充背景</string>
     <string name="random_color">笔记格子随机填色</string>
 
-
     <string name="no_weather">禁用天气同步</string>
     <string name="full_screen">全屏模式</string>
     <string name="password_guard_on">已启用</string>
@@ -147,9 +137,7 @@
     <string name="lightning_extract_save_location">选择存储位置</string>
     <string name="alert_stop_lightning_extract">确认停用服务？</string>
     <string name="alert_restart_lightning_extract">启动闪电摘录</string>
-<string name="proudly">Made with love by Duanze 2015.Feb-Aug\nCopyright©All Rights
-Reserved.</string>
-
+    <string name="proudly">Made with love by Duanze 2015.Feb-Aug\nCopyright©All Rights Reserved.</string>
 
     <!-- week array -->
     <string name="monday">周一</string>
@@ -160,23 +148,19 @@ Reserved.</string>
     <string name="saturday">周六</string>
     <string name="sunday">周日</string>
 
-
     <!-- swipe menu -->
     <string name="remind">提醒</string>
     <string name="delete">删除</string>
     <string name="done">DONE</string>
     <string name="undone">UNDONE</string>
 
-
     <!-- rate for purenote -->
     <string name="rate_for_purenote">喜欢PureNote？</string>
     <string name="rate_rate">去评价</string>
     <string name="rate_feedback">我要吐槽!</string>
 
-
     <!--settings fragment-->
     <string name="general_settings">常规</string>
-
 
     <string name="login_evernote">同步至EverNote</string>
     <string name="logout_evernote">%1$s 退出登录</string>
@@ -188,47 +172,36 @@ Reserved.</string>
     <string name="password_guard_summary">设定应用启动时的密码以保护您的数据安全</string>
     <string name="password_guard_key">password_guard</string>
 
-
     <string name="universal_password">万能密码</string>
     <string name="universal_password_summary">以防不测，免除忘记密码带来的尴尬</string>
     <string name="universal_password_key">use_universal_password</string>
 
-
     <string name="notification_tools">通知栏工具</string>
 
-
     <string name="notification_always_show">常驻通知栏</string>
-
 
     <string name="lightning_extract">闪电摘录</string>
     <string name="lightning_extract_summary">开启后监视剪切板，只需复制即可摘录文字至特定位置</string>
     <string name="lightning_extract_key">lightning_extract</string>
 
-
     <string name="extract_location">闪电摘录 - 保存位置</string>
     <string name="extract_location_key">lightning_extract_save_location</string>
-
 
     <string name="quick_write">快写工具</string>
     <string name="quick_write_summary">随前台服务启动后出现，点击图标即可快速写一条新笔记</string>
 
-
     <string name="quick_write_location">通知栏快写 - 保存位置</string>
     <string name="quick_write_location_key">quick_write_location_key</string>
 
-
     <string name="list_settings">经典列表</string>
-
 
     <string name="fold">过期折叠</string>
     <string name="fold_summary">勾选后，将自动折叠过期笔记为单行显示</string>
     <string name="fold_key">is_fold</string>
 
-
     <string name="max_lines">最大行数</string>
     <string name="max_lines_summary">设定单条笔记的最大显示高度</string>
     <string name="max_lines_key">max_lines</string>
-
 
     <!--errors alert-->
     <string name="extract_error">出现错误，未能成功摘录，请重新设置功能！</string>
@@ -237,4 +210,5 @@ Reserved.</string>
     <string name="extract_stop">停用闪电摘录</string>
     <string name="extract_start">启动闪电摘录</string>
     <string name="no_reminder">没有倒计时中的定时提醒</string>
+
 </resources>
