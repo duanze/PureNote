@@ -48,6 +48,7 @@ public class GNote implements Parcelable {
     }
 
     public GNote(Cursor cursor) {
+//        因为不知道主键规定而产生的悲剧-_-||
         id = cursor.getInt(cursor.getColumnIndex("_id"));
         time = cursor.getString(cursor.getColumnIndex(GNoteDB.TIME));
         alertTime = cursor.getString(cursor.getColumnIndex(GNoteDB.ALERT_TIME));
@@ -63,6 +64,31 @@ public class GNote implements Parcelable {
         deleted = cursor.getInt(cursor.getColumnIndex(GNoteDB.DELETED));
         gNoteBookId = cursor.getInt(cursor.getColumnIndex(GNoteDB.GNOTEBOOK_ID));
     }
+
+    public ContentValues toContentValues() {
+        ContentValues values = toInsertContentValues();
+        values.put(GNoteDB.ID, id);
+        return values;
+    }
+
+    public ContentValues toInsertContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(GNoteDB.TIME, time);
+        values.put(GNoteDB.ALERT_TIME, alertTime);
+        values.put(GNoteDB.IS_PASSED, isPassed);
+        values.put(GNoteDB.CONTENT, content);
+        values.put(GNoteDB.IS_DONE, done);
+        values.put(GNoteDB.COLOR, color);
+        values.put(GNoteDB.EDIT_TIME, editTime);
+        values.put(GNoteDB.CREATED_TIME, createdTime);
+        values.put(GNoteDB.SYN_STATUS, synStatus);
+        values.put(GNoteDB.GUID, guid);
+        values.put(GNoteDB.BOOK_GUID, bookGuid);
+        values.put(GNoteDB.DELETED, deleted);
+        values.put(GNoteDB.GNOTEBOOK_ID, gNoteBookId);
+        return values;
+    }
+
 
     public int getGNotebookId() {
         return gNoteBookId;

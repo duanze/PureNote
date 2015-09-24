@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +36,7 @@ import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.LogUtil;
@@ -569,12 +572,16 @@ public class Note extends FragmentActivity {
 //        db.deleteGNote(gNote.getId());
 
         gNote.setDeleted(GNote.TRUE);
-        if ("".equals(gNote.getGuid())) {
-//            db.deleteGNote(gNote.getId());
-        } else {
-            gNote.setSynStatus(GNote.DELETE);
-            db.updateGNote(gNote);
-        }
+//        if ("".equals(gNote.getGuid())) {
+////            db.deleteGNote(gNote.getId());
+//        } else {
+//            gNote.setSynStatus(GNote.DELETE);
+//            db.updateGNote(gNote);
+//        }
+
+        //        物理数据存储，以改代删
+        ContentValues contentValues = gNote.toContentValues();
+        getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
 
         if (!gNote.getIsPassed()) {
             AlarmService.cancelTask(Note.this, gNote);
@@ -603,7 +610,11 @@ public class Note extends FragmentActivity {
             groupId = gNote.getGNotebookId();
         }
 
-        db.saveGNote(gNote);
+//        物理数据存储
+        ContentValues contentValues = gNote.toContentValues();
+        getContentResolver().insert(GNoteProvider.BASE_URI, contentValues);
+//        db.saveGNote(gNote);
+
 //        更新笔记本
         updateGNotebook(groupId, +1, false);
         if (groupId != 0) {
@@ -651,7 +662,11 @@ public class Note extends FragmentActivity {
             updateGNotebook(tmpGnoteBookId, +1, true);
         }
 
-        db.updateGNote(gNote);
+        //        物理数据存储
+        ContentValues contentValues = gNote.toContentValues();
+        getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
+//        db.updateGNote(gNote);
+
         //当有定时提醒
         if (!gNote.getIsPassed()) {
             AlarmService.alarmTask(this);
