@@ -1,9 +1,12 @@
 package com.duanze.gasst.syn;
 
 import android.app.Activity;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.ConditionVariable;
 import android.os.Handler;
 
 import com.duanze.gasst.activity.Folder;
@@ -11,6 +14,7 @@ import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.util.LogUtil;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.InvalidAuthenticationException;
@@ -236,11 +240,14 @@ public class Evernote {
         gNote.setCreatedTime(note.getCreated());
         gNote.setBookGuid(note.getNotebookGuid());
 
-        db.updateGNote(gNote);
+//        db.updateGNote(gNote);
+        ContentValues contentValues = gNote.toContentValues();
+        mContext.getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
     }
 
     private void deleteGNote(GNote gNote) {
-        db.deleteGNote(gNote.getId());
+//        db.deleteGNote(gNote.getId());
+
     }
 
     private Note createNote(GNote gNote) throws Exception {
@@ -353,7 +360,11 @@ public class Evernote {
 
     private void saveNote(Note note) {
         GNote gNote = GNote.parseGNote(note);
-        db.saveGNote(gNote);
+
+//        db.saveGNote(gNote);
+        ContentValues contentValues = gNote.toContentValues();
+        mContext.getContentResolver().insert(GNoteProvider.BASE_URI, contentValues);
+
         updateGNotebook(0, +1);
     }
 
@@ -408,7 +419,9 @@ public class Evernote {
                 gNote.setContent(note.getContent());
                 gNote.setEditTime(note.getUpdated());
 
-                db.updateGNote(gNote);
+//                db.updateGNote(gNote);
+                ContentValues contentValues = gNote.toContentValues();
+                mContext.getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
             }
 
         } catch (TTransportException e) {

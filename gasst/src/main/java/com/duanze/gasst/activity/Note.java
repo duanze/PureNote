@@ -280,12 +280,12 @@ public class Note extends FragmentActivity {
         } else if (mode == MODE_SHOW) {
             int no = getIntent().getIntExtra("no", -1);
             LogUtil.i(TAG, "no:" + no);
-            //传入了no表明是从定时任务传来，先取消通知栏显示，再表明需更新UI
+            //传入了no表明是从定时任务传来，先取消通知栏显示，再表明需更新UI(使用Loader后，这一步不需要了:) )
             if (no != -1) {
                 NotificationManager manager =
                         (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 manager.cancel(no);
-                uiShouldUpdate();
+//                uiShouldUpdate();
             }
             textView.setText(gNote.getNoteFromHtml());
             textView.setMovementMethod(ScrollingMovementMethod.getInstance());
@@ -561,7 +561,7 @@ public class Note extends FragmentActivity {
                         //需不是新建记事，方可从数据库中删除数据
                         if (mode != MODE_NEW && MODE_TODAY != mode) {
                             deleteNote();
-                            uiShouldUpdate();
+//                            uiShouldUpdate();
                         }
                         finish();
                     }
@@ -725,17 +725,17 @@ public class Note extends FragmentActivity {
 
         if (dbFlag == DB_SAVE) {
             createNote();
-            uiShouldUpdate();
+//            uiShouldUpdate();
 
             addEditCount();
         } else if (dbFlag == DB_UPDATE) {
             updateNote();
-            uiShouldUpdate();
+//            uiShouldUpdate();
 
             addEditCount();
         } else if (dbFlag == DB_DELETE) {
             deleteNote();
-            uiShouldUpdate();
+//            uiShouldUpdate();
 
             addEditCount();
         }

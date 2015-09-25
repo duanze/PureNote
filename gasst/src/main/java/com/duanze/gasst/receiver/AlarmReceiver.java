@@ -4,6 +4,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -14,6 +16,7 @@ import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
@@ -27,8 +30,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         GNote gNote = intent.getParcelableExtra("gAsstNote_data");
         //更新状态并存入数据库
         gNote.setIsPassed(GNote.TRUE);
-        GNoteDB db = GNoteDB.getInstance(context);
-        db.updateGNote(gNote);
+//        GNoteDB db = GNoteDB.getInstance(context);
+//        db.updateGNote(gNote);
+        ContentValues contentValues = gNote.toContentValues();
+        context.getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
 
         int no = intent.getIntExtra("no", 0);
         LogUtil.i("receiver", "no:" + no);

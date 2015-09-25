@@ -643,7 +643,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 //                关闭抽屉
                 mDrawerLayout.closeDrawer(drawerRoot);
-                showDialog();
+//                showDialog();
 
                 changeBookInDB(from, i);
 
@@ -652,7 +652,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //                }
 
                 changeToBook();
-                removeDialog();
+//                removeDialog();
 
             }
         });
@@ -662,7 +662,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     public void changeToBook() {
         //刷新界面
         gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
-//        refreshUI();
+        refreshUI();
     }
 
     /**
@@ -941,9 +941,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void uiOperation() {
         boolean settingsChanged = preferences.getBoolean(Settings.SETTINGS_CHANGED, false);
-        boolean updateUI = preferences.getBoolean(UPDATE_UI, false);
+//        boolean updateUI = preferences.getBoolean(UPDATE_UI, false);
+
         //是否因各种改变而需要进行UI刷新
-        if (updateUI || settingsChanged) {
+//        if (updateUI || settingsChanged) {
+        if (settingsChanged) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(UPDATE_UI, false);
             editor.putBoolean(Settings.SETTINGS_CHANGED, false);
@@ -1173,22 +1175,22 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             super.handleMessage(msg);
             switch (msg.what) {
                 case Evernote.SYNC_START:
-//                    findViewById(R.id.sync_progress).setVisibility(View.VISIBLE);
+                    findViewById(R.id.pb_blue).setVisibility(View.VISIBLE);
 //                    if (MODE_GRID == mode) {
-                    showDialog();
+//                    showDialog();
 //                    }else if (MODE_LIST == mode){
 //                        classicList.showSwipe();
 //                    }
 
                     break;
                 case Evernote.SYNC_END:
-//                    findViewById(R.id.sync_progress).setVisibility(View.GONE);
+                    findViewById(R.id.pb_blue).setVisibility(View.GONE);
 //                    if (MODE_GRID == mode) {
-                    removeDialog();
+//                    removeDialog();
 //                    }else if (MODE_LIST == mode){
 //                        classicList.hideSwipe();
 //                    }
-                    refreshUI();
+//                    refreshUI();
                     break;
                 default:
                     break;
