@@ -18,11 +18,15 @@ public class GNoteProvider extends ContentProvider {
     public static final int NOTES_WITH_DELETED = 0;
     public static final int NOTE_DIR = 1;
     public static final int NOTE_ITEM = 2;
+    public static final int NOTEBOOK_DIR = 3;
+    public static final int NOTEBOOK_ITEM = 4;
 
     public static final String AUTHORITY = "com.duanze.gasst.provider";
-    public static final String TABLE_NAME = GNoteDB.TABLE_NAME;
+    public static final String TABLE_NOTE = GNoteDB.TABLE_NAME;
+    public static final String TABLE_NOTEBOOK = GNoteDB.TABLE_NOTEBOOK;
 
-    public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
+    public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NOTE);
+    public static final Uri NOTEBOOK_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NOTEBOOK);
 
     public static final String[] STANDARD_PROJECTION = {
             GNoteDB.ID + " AS _id"
@@ -42,12 +46,24 @@ public class GNoteProvider extends ContentProvider {
     };
     public static final String STANDARD_SORT_ORDER = GNoteDB.TIME + " desc";
 
+    public static final String[] NOTEBOOK_PROJECTION = {
+            GNoteDB.ID + " AS _id"
+            , GNoteDB.NAME
+            , GNoteDB.SYN_STATUS
+            , GNoteDB.NOTEBOOK_GUID
+            , GNoteDB.DELETED
+            , GNoteDB.NOTES_NUM
+            , GNoteDB.SELECTED
+    };
+
     private static UriMatcher uriMatcher;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, TABLE_NAME, NOTE_DIR);
-        uriMatcher.addURI(AUTHORITY, TABLE_NAME + "/#", NOTE_ITEM);
+        uriMatcher.addURI(AUTHORITY, TABLE_NOTE, NOTE_DIR);
+        uriMatcher.addURI(AUTHORITY, TABLE_NOTE + "/#", NOTE_ITEM);
+        uriMatcher.addURI(AUTHORITY, TABLE_NOTEBOOK, NOTEBOOK_DIR);
+        uriMatcher.addURI(AUTHORITY, TABLE_NOTEBOOK + "/#", NOTEBOOK_ITEM);
     }
 
     private GNoteOpenHelper dbHelper;
@@ -59,23 +75,35 @@ public class GNoteProvider extends ContentProvider {
 
         switch (uriMatcher.match(uri)) {
             case NOTE_DIR:
-                rowAffected = db.delete(TABLE_NAME, selection,
+                rowAffected = db.delete(TABLE_NOTE, selection,
                         selectionArgs);
                 break;
             case NOTE_ITEM:
-//                通过update字段来标志“删除”
                 String id = uri.getLastPathSegment();
-                ContentValues values = new ContentValues();
-                values.put(GNoteDB.DELETED, GNote.TRUE);
-                values.put(GNoteDB.SYN_STATUS, GNote.DELETE);
                 if (TextUtils.isEmpty(selection)) {
-                    rowAffected = db.update(TABLE_NAME, values,
-                            GNoteDB.ID + "=" + id, null);
+                    rowAffected = db.delete(TABLE_NOTE,
+                            GNoteDB.ID + " = ?", new String[]{"" + id});
                 } else {
-                    rowAffected = db.update(TABLE_NAME, values,
+                    rowAffected = db.delete(TABLE_NOTE,
                             selection + " and " + GNoteDB.ID + "=" + id,
                             selectionArgs);
                 }
+                break;
+            case NOTEBOOK_DIR:
+                rowAffected = db.delete(TABLE_NOTEBOOK, selection,
+                        selectionArgs);
+                break;
+            case NOTEBOOK_ITEM:
+                String bookId = uri.getLastPathSegment();
+                if (TextUtils.isEmpty(selection)) {
+                    rowAffected = db.delete(TABLE_NOTEBOOK,
+                            GNoteDB.ID + " = ?", new String[]{"" + bookId});
+                } else {
+                    rowAffected = db.delete(TABLE_NOTEBOOK,
+                            selection + " and " + GNoteDB.ID + "=" + bookId,
+                            selectionArgs);
+                }
+                break;
             default:
                 break;
         }
@@ -101,11 +129,19 @@ public class GNoteProvider extends ContentProvider {
         Uri itemUri = null;
         switch (uriMatcher.match(uri)) {
             case NOTE_DIR:
-                long newID = db.insert(TABLE_NAME, null, values);
+                long newID = db.insert(TABLE_NOTE, null, values);
                 if (newID > 0) {
                     itemUri = ContentUris.withAppendedId(uri, newID);
                     getContext().getContentResolver().notifyChange(itemUri, null);
                 }
+                break;
+            case NOTEBOOK_DIR:
+                long newBookID = db.insert(TABLE_NOTEBOOK, null, values);
+                if (newBookID > 0) {
+                    itemUri = ContentUris.withAppendedId(uri, newBookID);
+                    getContext().getContentResolver().notifyChange(itemUri, null);
+                }
+                break;
             default:
                 break;
         }
@@ -122,16 +158,17 @@ public class GNoteProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+//        这种格式似乎可读性更好
         /*
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = null;
         switch (uriMatcher.match(uri)) {
             case NOTE_DIR:
-                cursor = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = db.query(TABLE_NOTE, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case NOTE_ITEM:
                 String id = uri.getPathSegments().get(1);
-                cursor = db.query(TABLE_NAME, projection, "id = ?", new String[]{id}, null, null, sortOrder);
+                cursor = db.query(TABLE_NOTE, projection, "id = ?", new String[]{id}, null, null, sortOrder);
                 break;
             default:
                 break;
@@ -139,13 +176,24 @@ public class GNoteProvider extends ContentProvider {
         */
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(TABLE_NAME);
         switch (uriMatcher.match(uri)) {
             case NOTE_DIR:
+                queryBuilder.setTables(TABLE_NOTE);
                 queryBuilder.appendWhere(GNoteDB.DELETED + "!='" + GNote.TRUE
                         + "'");
                 break;
             case NOTE_ITEM:
+                queryBuilder.setTables(TABLE_NOTE);
+                queryBuilder
+                        .appendWhere(GNoteDB.ID + "=" + uri.getLastPathSegment());
+                break;
+            case NOTEBOOK_DIR:
+                queryBuilder.setTables(TABLE_NOTEBOOK);
+                queryBuilder.appendWhere(GNoteDB.DELETED + "!='" + GNote.TRUE
+                        + "'");
+                break;
+            case NOTEBOOK_ITEM:
+                queryBuilder.setTables(TABLE_NOTEBOOK);
                 queryBuilder
                         .appendWhere(GNoteDB.ID + "=" + uri.getLastPathSegment());
                 break;
@@ -163,18 +211,32 @@ public class GNoteProvider extends ContentProvider {
                       String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int updateCount = 0;
+        String where = "";
+
         switch (uriMatcher.match(uri)) {
             case NOTE_DIR:
                 updateCount = db.update(
-                        TABLE_NAME, values, selection, selectionArgs);
+                        TABLE_NOTE, values, selection, selectionArgs);
                 break;
             case NOTE_ITEM:
-                String where = "";
                 if (!TextUtils.isEmpty(selection)) {
                     where += " and " + selection;
                 }
                 updateCount = db.update(
-                        TABLE_NAME, values,
+                        TABLE_NOTE, values,
+                        GNoteDB.ID + "=" + uri.getLastPathSegment() + where,
+                        selectionArgs);
+                break;
+            case NOTEBOOK_DIR:
+                updateCount = db.update(
+                        TABLE_NOTEBOOK, values, selection, selectionArgs);
+                break;
+            case NOTEBOOK_ITEM:
+                if (!TextUtils.isEmpty(selection)) {
+                    where += " and " + selection;
+                }
+                updateCount = db.update(
+                        TABLE_NOTEBOOK, values,
                         GNoteDB.ID + "=" + uri.getLastPathSegment() + where,
                         selectionArgs);
                 break;

@@ -52,7 +52,7 @@
     <!-- tips -->
     <string name="tip0">强烈推荐您于设置中开启本应用独有的王牌功能：闪电摘录。仅需复制，就能快速保存一条新笔记。回想起来，我开发这款应用的初衷就是要实现这个功能吧:)</string>
     <string name="tip1">Tip1:人生苦短，想做的事如果不迅速付诸行动，99% 都会无疾而终哦</string>
-    <string name="tip2">Tip2:列表模式左滑呼出菜单，点击Note可以设置色彩，善用分享功能可令文本保存至其他应用</string>
+    <string name="tip2">Tip2:长按进行批量操作，点击Note可以设置色彩，善用分享功能可令文本保存至其他应用</string>
     <string name="tip3">Tip3:设置中可以绑定EverNote帐户，启动密码保护等，有任何意见和建议欢迎反馈</string>
     <string name="date_error">无效日期</string>
 
@@ -190,7 +190,7 @@
     <string name="quick_write">快写工具</string>
     <string name="quick_write_summary">随前台服务启动后出现，点击图标即可快速写一条新笔记</string>
 
-    <string name="quick_write_location">通知栏快写 - 保存位置</string>
+    <string name="quick_write_location">快写工具 - 保存位置</string>
     <string name="quick_write_location_key">quick_write_location_key</string>
 
     <string name="list_settings">经典列表</string>
@@ -211,4 +211,15 @@
     <string name="extract_start">启动闪电摘录</string>
     <string name="no_reminder">没有倒计时中的定时提醒</string>
 
+    <!-- actionMode -->
+    <string name="delete_confirm">确认删除？</string>
+    <string name="delete_all_confirm">全部删除？</string>
+    <string name="delete_select_nothing">没有选择需要删除的笔记</string>
+    <string name="delete_sure">确认</string>
+    <string name="delete_cancel">取消</string>
+    <string name="delete_title">提示</string>
+    <!-- Context Menu -->
+    <string name="selected_one_count">选择了%1$d个</string>
+    <string name="selected_more_count">选择了%1$d个</string>
+    <!-- Context Menu -->
 </resources>

@@ -1,12 +1,9 @@
 package com.duanze.gasst.syn;
 
 import android.app.Activity;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.ConditionVariable;
 import android.os.Handler;
 
 import com.duanze.gasst.activity.Folder;
@@ -14,8 +11,8 @@ import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.ProviderUtil;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.InvalidAuthenticationException;
 import com.evernote.client.android.OnClientCallback;
@@ -234,15 +231,13 @@ public class Evernote {
 
     private void updateGNote(GNote gNote, Note note) {
         gNote.setSynStatus(GNote.NOTHING);
-
         gNote.setGuid(note.getGuid());
         gNote.setEditTime(note.getUpdated());
         gNote.setCreatedTime(note.getCreated());
         gNote.setBookGuid(note.getNotebookGuid());
 
 //        db.updateGNote(gNote);
-        ContentValues contentValues = gNote.toContentValues();
-        mContext.getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
+        ProviderUtil.updateGNote(mContext,gNote);
     }
 
     private void deleteGNote(GNote gNote) {
@@ -362,8 +357,7 @@ public class Evernote {
         GNote gNote = GNote.parseGNote(note);
 
 //        db.saveGNote(gNote);
-        ContentValues contentValues = gNote.toContentValues();
-        mContext.getContentResolver().insert(GNoteProvider.BASE_URI, contentValues);
+        ProviderUtil.insertGNote(mContext,gNote);
 
         updateGNotebook(0, +1);
     }
@@ -376,8 +370,8 @@ public class Evernote {
             List<GNotebook> gNotebooks = db.loadGNotebooks();
             for (GNotebook gNotebook : gNotebooks) {
                 if (gNotebook.getId() == id) {
-                    int cnt = gNotebook.getNum();
-                    gNotebook.setNum(cnt + value);
+                    int cnt = gNotebook.getNotesNum();
+                    gNotebook.setNotesNum(cnt + value);
 
                     db.updateGNotebook(gNotebook);
                     break;
@@ -420,8 +414,7 @@ public class Evernote {
                 gNote.setEditTime(note.getUpdated());
 
 //                db.updateGNote(gNote);
-                ContentValues contentValues = gNote.toContentValues();
-                mContext.getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
+                ProviderUtil.updateGNote(mContext,gNote);
             }
 
         } catch (TTransportException e) {
@@ -474,7 +467,6 @@ public class Evernote {
 
                         // 更新数据
                         updateLocalNote(note.getGuid(), gNote);
-
                     }
                 } else {
                     // 添加数据

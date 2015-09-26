@@ -222,8 +222,8 @@ public class ClassicList extends Fragment {
             List<GNotebook> gNotebooks = db.loadGNotebooks();
             for (GNotebook gNotebook : gNotebooks) {
                 if (gNotebook.getId() == id) {
-                    int cnt = gNotebook.getNum();
-                    gNotebook.setNum(cnt + value);
+                    int cnt = gNotebook.getNotesNum();
+                    gNotebook.setNotesNum(cnt + value);
 
                     db.updateGNotebook(gNotebook);
                     break;

@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:purenote="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/selected_counts"
+        android:title="@string/selected_one_count"
+        android:showAsAction="always"/>
+    <item
+        android:id="@+id/i_move"
+        android:icon="@drawable/map_pin_angle_3"
+        android:title="@string/action_move"
+        android:showAsAction="always">
+    </item>
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/trash"
+        android:title="@string/action_trash"
+        android:showAsAction="always">
+    </item>
+
+</menu>

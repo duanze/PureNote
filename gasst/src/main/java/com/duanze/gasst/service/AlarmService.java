@@ -283,7 +283,6 @@ public class AlarmService extends Service {
 
     private void refreshNotification() {
 
-
         String str;
         if (cnt <= 0) {
             cnt = 0;
@@ -294,18 +293,13 @@ public class AlarmService extends Service {
             str = cnt + getResources().getString(R.string.more_reminder);
         }
 
-
-
         maybeStop();
-
-
 
         remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
         remoteViews.setTextViewText(R.id.tv_up, getResources().getString(R.string.app_name));
         remoteViews.setTextViewText(R.id.tv_down, str);
 
-
-//write a new note when onClicked
+//write a new note when "quickWrite" is clicked
         GNote gNote = new GNote();
         Intent intent = new Intent(this, Note.class);
         intent.putExtra("gAsstNote_data", gNote);

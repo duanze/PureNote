@@ -19,6 +19,7 @@ import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.Util;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -32,8 +33,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         gNote.setIsPassed(GNote.TRUE);
 //        GNoteDB db = GNoteDB.getInstance(context);
 //        db.updateGNote(gNote);
-        ContentValues contentValues = gNote.toContentValues();
-        context.getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
+        ProviderUtil.updateGNote(context,gNote);
 
         int no = intent.getIntExtra("no", 0);
         LogUtil.i("receiver", "no:" + no);

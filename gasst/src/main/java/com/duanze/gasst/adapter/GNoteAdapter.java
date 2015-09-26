@@ -1,9 +1,12 @@
 package com.duanze.gasst.adapter;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +18,16 @@ import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.syn.Evernote;
+import com.duanze.gasst.util.GNotebookUtil;
+import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.Util;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
 
-public class GNoteAdapter extends CursorAdapter implements View.OnClickListener, View.OnLongClickListener {
+public class GNoteAdapter extends CursorAdapter implements View.OnClickListener, View
+        .OnLongClickListener {
     private boolean isFold;
     private int maxLines;
     private Calendar today;
@@ -31,6 +37,7 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
     private ItemLongPressedListener mItemLongPressedListener;
     private OnItemSelectListener mOnItemSelectListener;
 
+    private SharedPreferences preferences;
 
     public interface ItemLongPressedListener {
         void startActionMode();
@@ -40,6 +47,10 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
         void onSelect();
 
         void onCancelSelect();
+    }
+
+    public void setPreferences(SharedPreferences preferences) {
+        this.preferences = preferences;
     }
 
     public void setmItemLongPressedListener(ItemLongPressedListener mItemLongPressedListener) {
@@ -52,11 +63,12 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
 
     public GNoteAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        mLayoutInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context
+                .LAYOUT_INFLATER_SERVICE);
     }
 
-    public GNoteAdapter(Context context, Cursor c, int flags, ItemLongPressedListener itemLongPressedListener, OnItemSelectListener onItemSelectListener) {
+    public GNoteAdapter(Context context, Cursor c, int flags, ItemLongPressedListener
+            itemLongPressedListener, OnItemSelectListener onItemSelectListener) {
         this(context, c, flags);
         mItemLongPressedListener = itemLongPressedListener;
         mOnItemSelectListener = onItemSelectListener;
@@ -77,12 +89,10 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
     public View getView(int position, View convertView, ViewGroup parent) {
 //        mDataValid 等疑似 父类 域,仅 v4 包中有效
         if (!mDataValid) {
-            throw new IllegalStateException(
-                    "this should only be called when the cursor is valid");
+            throw new IllegalStateException("this should only be called when the cursor is valid");
         }
         if (!mCursor.moveToPosition(position)) {
-            throw new IllegalStateException("couldn't move cursor to position "
-                    + position);
+            throw new IllegalStateException("couldn't move cursor to position " + position);
         }
 
         if (convertView == null) {
@@ -105,8 +115,7 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View commonView = mLayoutInflater.inflate(R.layout.gnote_list_item,
-                parent, false);
+        View commonView = mLayoutInflater.inflate(R.layout.gnote_list_item, parent, false);
         final View hover = commonView.findViewById(R.id.rl_list_item);
         hover.setOnClickListener(this);
         hover.setOnLongClickListener(this);
@@ -142,15 +151,15 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
                 mHolder.itemLayout.setBackgroundResource(R.color.transparent);
             }
         } else {
-            mHolder.itemLayout.setBackgroundResource(R.color.transparent);
+            mHolder.itemLayout.setBackgroundResource(R.drawable.setting_item);
         }
     }
 
     private void measureView(View view) {
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp == null) {
-            lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
+                    .LayoutParams.WRAP_CONTENT);
         }
         //headerView的宽度信息
         int width = ViewGroup.getChildMeasureSpec(0, 0, lp.width);
@@ -189,7 +198,9 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
     @Override
     public boolean onLongClick(View v) {
         if (!mCheckMode) {
-            mItemLongPressedListener.startActionMode();
+            if (null != mItemLongPressedListener) {
+                mItemLongPressedListener.startActionMode();
+            }
             setCheckMode(true);
         }
         GNote gNote = (GNote) v.getTag(R.string.gnote_data);
@@ -242,22 +253,80 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
         notifyDataSetChanged();
     }
 
-    public void deleteSelectedMemos() {
+    public void deleteSelectedNotes() {
         if (mCheckedItems == null || mCheckedItems.size() == 0) {
             return;
         } else {
             Set<Integer> keys = mCheckedItems.keySet();
+            SparseIntArray affectedNotebooks = new SparseIntArray(mCheckedItems.size());
             for (Integer key : keys) {
-                mContext.getContentResolver().delete(
-                        ContentUris.withAppendedId(GNoteProvider.BASE_URI,
-                                key), null, null);
+                GNote gNote = mCheckedItems.get(key);
+                gNote.setSynStatus(GNote.DELETE);
+                gNote.setDeleted(GNote.TRUE);
+                ProviderUtil.updateGNote(mContext, gNote);
+
+//                更新受到影响的笔记本的应删除数值
+                if (0 != gNote.getGNotebookId()) {
+                    int num = affectedNotebooks.get(gNote.getGNotebookId());
+                    affectedNotebooks.put(gNote.getGNotebookId(), num + 1);
+                }
             }
+            if (null != preferences) {
+                GNotebookUtil.updateGNotebook(mContext, preferences, 0, -mCheckedItems.size());
+                for (int i = 0; i < affectedNotebooks.size(); i++) {
+                    int key = affectedNotebooks.keyAt(i);
+                    int value = affectedNotebooks.valueAt(i);
+                    GNotebookUtil.updateGNotebook(mContext, preferences, key, -value);
+                }
+            }
+
             mCheckedItems.clear();
 
             if (null != mOnItemSelectListener) {
                 mOnItemSelectListener.onCancelSelect();
             }
+
             new Evernote(mContext).sync(true, false, null);
+        }
+    }
+
+    public void moveSelectedNotes(int toNotebookId) {
+        if (mCheckedItems == null || mCheckedItems.size() == 0) {
+            return;
+        } else {
+            Set<Integer> keys = mCheckedItems.keySet();
+            SparseIntArray affectedNotebooks = new SparseIntArray(mCheckedItems.size());
+            for (Integer key : keys) {
+                GNote gNote = mCheckedItems.get(key);
+
+                //                更新受到影响的笔记本中的数值
+                if (0 != gNote.getGNotebookId()) {
+                    int num = affectedNotebooks.get(gNote.getGNotebookId());
+                    affectedNotebooks.put(gNote.getGNotebookId(), num + 1);
+                }
+
+                gNote.setGNotebookId(toNotebookId);
+                ProviderUtil.updateGNote(mContext, gNote);
+
+            }
+            if (null != preferences) {
+                if (0 != toNotebookId) {
+                    GNotebookUtil.updateGNotebook(mContext, preferences, toNotebookId,
+                            +mCheckedItems.size());
+                }
+                for (int i = 0; i < affectedNotebooks.size(); i++) {
+                    int key = affectedNotebooks.keyAt(i);
+                    int value = affectedNotebooks.valueAt(i);
+                    GNotebookUtil.updateGNotebook(mContext, preferences, key, -value);
+                }
+            }
+
+            mCheckedItems.clear();
+
+            if (null != mOnItemSelectListener) {
+                mOnItemSelectListener.onCancelSelect();
+            }
+
         }
     }
 }

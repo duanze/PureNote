@@ -1,6 +1,7 @@
 package com.duanze.gasst.util;
 
 import android.app.ActivityManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.provider.GNoteProvider;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
@@ -193,9 +195,9 @@ public class Util {
             groupName = context.getResources().getString(R.string.all_notes);
         }
         if (find) {
-            extractNoteToDB(preferences, db, str, groupId);
+            extractNoteToDB(context,preferences, db, str, groupId);
         } else {
-            extractNoteToDB(preferences, db, str, 0);
+            extractNoteToDB(context,preferences, db, str, 0);
         }
         return groupName;
     }
@@ -208,7 +210,7 @@ public class Util {
      * @param str
      * @param groupId
      */
-    public static void extractNoteToDB(SharedPreferences preferences, GNoteDB db, String str, int groupId) {
+    public static void extractNoteToDB(Context context,SharedPreferences preferences, GNoteDB db, String str, int groupId) {
         Calendar cal = Calendar.getInstance();
         GNote gNote = new GNote();
         gNote.setCalToTime(cal);
@@ -217,7 +219,10 @@ public class Util {
         gNote.setSynStatus(GNote.NEW);
 //        设置笔记本id
         gNote.setGNotebookId(groupId);
-        db.saveGNote(gNote);
+
+//        db.saveGNote(gNote);
+        ContentValues contentValues=gNote.toContentValues();
+        context.getContentResolver().insert(GNoteProvider.BASE_URI,contentValues);
 
 //        更新笔记本
         updateGNotebook(preferences, db, groupId, +1, false);
@@ -238,8 +243,8 @@ public class Util {
 //            List<GNotebook> gNotebooks = db.loadGNotebooks();
 //            for (GNotebook gNotebook : gNotebooks) {
 //                if (gNotebook.getId() == groupId) {
-//                    int cnt = gNotebook.getNum();
-//                    gNotebook.setNum(cnt + value);
+//                    int cnt = gNotebook.getNotesNum();
+//                    gNotebook.setNotesNum(cnt + value);
 //
 //                    db.updateGNotebook(gNotebook);
 //                    break;
@@ -248,8 +253,8 @@ public class Util {
 
             GNotebook gNotebook = db.getGNotebookById(groupId);
             if (null != gNotebook) {
-                int cnt = gNotebook.getNum();
-                gNotebook.setNum(cnt + value);
+                int cnt = gNotebook.getNotesNum();
+                gNotebook.setNotesNum(cnt + value);
                 db.updateGNotebook(gNotebook);
             } else {
                 throw new IllegalArgumentException("Invalid groupId!");

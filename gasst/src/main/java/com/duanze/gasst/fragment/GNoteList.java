@@ -1,6 +1,10 @@
 package com.duanze.gasst.fragment;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,10 +12,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
@@ -19,14 +32,18 @@ import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.GNoteAdapter;
 import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.util.Util;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 /**
  * Created by duanze on 2015/9/19.
  */
-public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        GNoteAdapter.ItemLongPressedListener, GNoteAdapter.OnItemSelectListener {
     public static final String TAG = GNoteList.class.getSimpleName();
 
     private static final int LOADER_ID = 113;
@@ -60,7 +77,8 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
     private void initValues() {
         mContext = getActivity();
         preferences = ((MainActivity) mContext).getPreferences();
-//        pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(mContext, today, listener),
+//        pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(mContext, today,
+// listener),
 //                today.get(Calendar.YEAR), today.get(Calendar.MONTH),
 //                today.get(Calendar.DAY_OF_MONTH), false);
 //        pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10,
@@ -76,13 +94,15 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gnote_list, container, false);
         ListView gNoteList = (ListView) view.findViewById(R.id.lv_gnotes);
-        mAdapter = new GNoteAdapter(mContext, null, 0);
+        mAdapter = new GNoteAdapter(mContext, null, 0, this, this);
         MainActivity mainActivity = ((MainActivity) mContext);
-        mAdapter.setValues(mainActivity.getIsFold(), mainActivity.getToday(), mainActivity.getMaxLines());
+        mAdapter.setValues(mainActivity.getIsFold(), mainActivity.getToday(), mainActivity
+                .getMaxLines());
+        mAdapter.setPreferences(preferences);
         gNoteList.setAdapter(mAdapter);
 
         loaderManager = getLoaderManager();
@@ -92,7 +112,7 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Note.todayNewNote(mContext);
+                Note.writeTodayNewNote(mContext);
             }
         });
         fabButton.listenTo(gNoteList);
@@ -120,14 +140,9 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
             selectionArgs = null;
         }
 
-        CursorLoader cursorLoader = new CursorLoader(
-                mContext
-                , GNoteProvider.BASE_URI
-                , GNoteProvider.STANDARD_PROJECTION
-                , selection
-                , selectionArgs
-                , GNoteProvider.STANDARD_SORT_ORDER
-        );
+        CursorLoader cursorLoader = new CursorLoader(mContext, GNoteProvider.BASE_URI,
+                GNoteProvider.STANDARD_PROJECTION, selection, selectionArgs, GNoteProvider
+                .STANDARD_SORT_ORDER);
         return cursorLoader;
     }
 
@@ -143,7 +158,157 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
 
     public void refreshUI() {
         MainActivity mainActivity = ((MainActivity) mContext);
-        mAdapter.setValues(mainActivity.getIsFold(), mainActivity.getToday(), mainActivity.getMaxLines());
+        mAdapter.setValues(mainActivity.getIsFold(), mainActivity.getToday(), mainActivity
+                .getMaxLines());
         loaderManager.restartLoader(LOADER_ID, null, this);
+    }
+
+    //    The followings are about ActionMode
+    private Menu mContextMenu;
+    private int tmpGNoteBookId;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        @Override
+        public boolean onActionItemClicked(ActionMode arg0, MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.delete:
+                    if (mAdapter.getSelectedCount() == 0) {
+                        Toast.makeText(mContext, R.string.delete_select_nothing, Toast
+                                .LENGTH_SHORT).show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setMessage(R.string.delete_all_confirm).setTitle(R.string
+                                .delete_title).setPositiveButton(R.string.delete_sure, new
+                                DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mAdapter.deleteSelectedNotes();
+                                if (mActionMode != null) {
+                                    mActionMode.finish();
+                                }
+                            }
+                        }).setNegativeButton(R.string.delete_cancel, null).create().show();
+                    }
+                    break;
+                case R.id.i_move:
+                    if (mAdapter.getSelectedCount() == 0) {
+                        Toast.makeText(mContext, R.string.delete_select_nothing, Toast
+                                .LENGTH_SHORT).show();
+                    } else {
+                        View view = ((Activity) mContext).getLayoutInflater().inflate(R.layout
+                                .dialog_radiogroup, (ViewGroup) ((Activity) mContext).getWindow()
+                                .getDecorView(), false);
+
+                        final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id
+                                .rg_dialog);
+                        RadioButton purenote = (RadioButton) view.findViewById(R.id.rb_purenote);
+                        GNoteDB db = GNoteDB.getInstance(mContext);
+                        List<GNotebook> list = db.loadGNotebooks();
+                        for (final GNotebook gNotebook : list) {
+                            RadioButton tempButton = new RadioButton(mContext);
+                            tempButton.setText(gNotebook.getName());
+                            radioGroup.addView(tempButton, LinearLayout.LayoutParams
+                                    .MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                            tempButton.setOnCheckedChangeListener(new CompoundButton
+                                    .OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton compoundButton,
+                                                             boolean b) {
+                                    if (b) {
+                                        tmpGNoteBookId = gNotebook.getId();
+                                    }
+                                }
+                            });
+                        }
+
+                        purenote.setChecked(true);
+                        tmpGNoteBookId = 0;
+                        purenote.setOnCheckedChangeListener(new CompoundButton
+                                .OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    tmpGNoteBookId = 0;
+                                }
+                            }
+                        });
+
+                        final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
+                                .action_move).setView(view).setPositiveButton(R.string.confirm,
+                                new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mAdapter.moveSelectedNotes(tmpGNoteBookId);
+                                if (mActionMode != null) {
+                                    mActionMode.finish();
+                                }
+                            }
+                        }).setNegativeButton(R.string.cancel, null).create();
+                        dialog.show();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.context_menu, menu);
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode arg0) {
+            ((MainActivity) mContext).unlockDrawerLock();
+            fabButton.hide(false);
+            mActionMode = null;
+            mContextMenu = null;
+            mAdapter.setCheckMode(false);
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode arg0, Menu menu) {
+            ((MainActivity) mContext).lockDrawerLock();
+            fabButton.hide(true);
+            mContextMenu = menu;
+            updateActionMode();
+            return false;
+        }
+
+    };
+
+    private ActionMode mActionMode;
+
+    @Override
+    public void startActionMode() {
+        if (mActionMode != null) {
+            return;
+        }
+        mActionMode = ((MainActivity) mContext).startActionMode(mActionModeCallback);
+    }
+
+    public void updateActionMode() {
+        if (mAdapter.getSelectedCount() <= 1) {
+            mContextMenu.findItem(R.id.selected_counts).setTitle(mContext.getString(R.string
+                    .selected_one_count, mAdapter.getSelectedCount()));
+        } else {
+            mContextMenu.findItem(R.id.selected_counts).setTitle(mContext.getString(R.string
+                    .selected_more_count, mAdapter.getSelectedCount()));
+        }
+    }
+
+    @Override
+    public void onSelect() {
+        updateActionMode();
+    }
+
+    @Override
+    public void onCancelSelect() {
+        updateActionMode();
     }
 }

@@ -1,5 +1,6 @@
 package com.duanze.gasst.model;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -19,7 +20,7 @@ public class GNotebook implements Parcelable {
     private int synStatus = NOTHING;//同步状态，仅登录EverNote后有效
     private String notebookGuid = "";
     private int deleted = FALSE;
-    private int num = 0;
+    private int notesNum = 0;
 
     public int getSelected() {
         return selected;
@@ -31,12 +32,12 @@ public class GNotebook implements Parcelable {
 
     private int selected = FALSE;
 
-    public int getNum() {
-        return num;
+    public int getNotesNum() {
+        return notesNum;
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public void setNotesNum(int notesNum) {
+        this.notesNum = notesNum;
     }
 
     public int getId() {
@@ -97,6 +98,22 @@ public class GNotebook implements Parcelable {
         return deleted == TRUE;
     }
 
+    public ContentValues toContentValues() {
+        ContentValues values = toInsertContentValues();
+        values.put(GNoteDB.ID, id);
+        return values;
+    }
+
+    public ContentValues toInsertContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(GNoteDB.NAME, name);
+        values.put(GNoteDB.SYN_STATUS, synStatus);
+        values.put(GNoteDB.NOTEBOOK_GUID, notebookGuid);
+        values.put(GNoteDB.DELETED, deleted);
+        values.put(GNoteDB.NOTES_NUM, notesNum);
+        values.put(GNoteDB.SELECTED, selected);
+        return values;
+    }
 
     @Override
     public int describeContents() {
@@ -110,7 +127,7 @@ public class GNotebook implements Parcelable {
         parcel.writeInt(synStatus);
         parcel.writeString(notebookGuid);
         parcel.writeInt(deleted);
-        parcel.writeInt(num);
+        parcel.writeInt(notesNum);
         parcel.writeInt(selected);
     }
 
@@ -123,7 +140,7 @@ public class GNotebook implements Parcelable {
             gNotebook.synStatus = parcel.readInt();
             gNotebook.notebookGuid = parcel.readString();
             gNotebook.deleted = parcel.readInt();
-            gNotebook.num = parcel.readInt();
+            gNotebook.notesNum = parcel.readInt();
             gNotebook.selected = parcel.readInt();
             return gNotebook;
         }

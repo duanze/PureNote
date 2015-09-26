@@ -4,8 +4,6 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,10 +34,10 @@ import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
@@ -102,11 +100,9 @@ public class Note extends FragmentActivity {
     private Button[] chooseColorBtns = new Button[9];
     private boolean[] chooseColorBtnStates = new boolean[9];
     private GradientDrawable[] chooseColorBtnDrawables = new GradientDrawable[9];
-    public static final int[] BTN_ARR = {
-            R.id.transparent_btn, R.id.light_grey_btn, R.id.blue_btn,
-            R.id.green_btn, R.id.yellow_btn, R.id.gold_btn,
-            R.id.pink_btn, R.id.red_btn, R.id.purple_btn
-    };
+    public static final int[] BTN_ARR = {R.id.transparent_btn, R.id.light_grey_btn, R.id
+            .blue_btn, R.id.green_btn, R.id.yellow_btn, R.id.gold_btn, R.id.pink_btn, R.id
+            .red_btn, R.id.purple_btn};
 
     private SharedPreferences preferences;
 
@@ -148,7 +144,14 @@ public class Note extends FragmentActivity {
         Note.actionStart(mContext, note, Note.MODE_NEW);
     }
 
-    public static void todayNewNote(Context mContext) {
+    public static void writeTodayNewNote(Context mContext) {
+        GNote note = new GNote();
+        Calendar cal = Calendar.getInstance();
+        note.setCalToTime(cal);
+        Note.actionStart(mContext, note, Note.MODE_NEW);
+    }
+
+    public static void quickWriteNewNote(Context mContext) {
         GNote note = new GNote();
         Note.actionStart(mContext, note, Note.MODE_TODAY);
     }
@@ -205,8 +208,7 @@ public class Note extends FragmentActivity {
         initValues();
 
         actionBar = getActionBar();
-        if (null != actionBar)
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        if (null != actionBar) actionBar.setDisplayHomeAsUpEnabled(true);
 
         updateActionBarTitle();
     }
@@ -216,17 +218,15 @@ public class Note extends FragmentActivity {
 
         today = Calendar.getInstance();
         pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(this, today, listener),
-                today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                today.get(Calendar.DAY_OF_MONTH), false);
-        pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10,
-                today.get(Calendar.YEAR) + 10);
+                today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
+                        .DAY_OF_MONTH), false);
+        pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         pickerDialog.setCloseOnSingleTapDay(true);
 
-        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(),
-                today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                today.get(Calendar.DAY_OF_MONTH), false);
-        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10,
-                today.get(Calendar.YEAR) + 10);
+        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
+                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                false);
+        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);
 
         gNote = getIntent().getParcelableExtra("gAsstNote_data");
@@ -282,8 +282,8 @@ public class Note extends FragmentActivity {
             LogUtil.i(TAG, "no:" + no);
             //传入了no表明是从定时任务传来，先取消通知栏显示，再表明需更新UI(使用Loader后，这一步不需要了:) )
             if (no != -1) {
-                NotificationManager manager =
-                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                NotificationManager manager = (NotificationManager) getSystemService
+                        (NOTIFICATION_SERVICE);
                 manager.cancel(no);
 //                uiShouldUpdate();
             }
@@ -355,8 +355,8 @@ public class Note extends FragmentActivity {
         if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
             if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
                 try {
-                    Method m = menu.getClass().getDeclaredMethod(
-                            "setOptionalIconsVisible", Boolean.TYPE);
+                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible",
+                            Boolean.TYPE);
                     m.setAccessible(true);
                     m.invoke(menu, true);
                 } catch (Exception e) {
@@ -373,8 +373,7 @@ public class Note extends FragmentActivity {
     private void setOverflowShowingAlways() {
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
-            Field menuKeyField = ViewConfiguration.class
-                    .getDeclaredField("sHasPermanentMenuKey");
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
             menuKeyField.setAccessible(true);
             menuKeyField.setBoolean(config, false);
         } catch (Exception e) {
@@ -439,8 +438,8 @@ public class Note extends FragmentActivity {
     private int tmpGnoteBookId = -1;
 
     private void showSelectFolderDialog() {
-        View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow().getDecorView
-                (), false);
+        View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow
+                ().getDecorView(), false);
         final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.rg_dialog);
         RadioButton purenote = (RadioButton) view.findViewById(R.id.rb_purenote);
         boolean radioChecked = false;
@@ -448,8 +447,8 @@ public class Note extends FragmentActivity {
         for (final GNotebook gNotebook : list) {
             RadioButton tempButton = new RadioButton(mContext);
             tempButton.setText(gNotebook.getName());
-            radioGroup.addView(tempButton, LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            radioGroup.addView(tempButton, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout
+                    .LayoutParams.WRAP_CONTENT);
             if (gNotebook.getId() == gNote.getGNotebookId()) {
                 tempButton.setChecked(true);
                 radioChecked = true;
@@ -477,25 +476,22 @@ public class Note extends FragmentActivity {
             }
         });
 
-        final Dialog dialog = new AlertDialog.Builder(mContext)
-                .setTitle(R.string.action_move)
-                .setView(view)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (tmpGnoteBookId != -1) {
-                            dbFlag = DB_UPDATE;
-                            changedFolder = true;
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        changedFolder = false;
-                    }
-                })
-                .create();
+        final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.action_move)
+                .setView(view).setPositiveButton(R.string.confirm, new DialogInterface
+                        .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (tmpGnoteBookId != -1) {
+                    dbFlag = DB_UPDATE;
+                    changedFolder = true;
+                }
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                changedFolder = false;
+            }
+        }).create();
         dialog.show();
     }
 
@@ -571,23 +567,19 @@ public class Note extends FragmentActivity {
     private void deleteNote() {
 //        db.deleteGNote(gNote.getId());
 
-        gNote.setDeleted(GNote.TRUE);
-//        if ("".equals(gNote.getGuid())) {
-////            db.deleteGNote(gNote.getId());
-//        } else {
-//            gNote.setSynStatus(GNote.DELETE);
-//            db.updateGNote(gNote);
-//        }
-
         //        物理数据存储，以改代删
-        ContentValues contentValues = gNote.toContentValues();
-        getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
+        gNote.setDeleted(GNote.TRUE);
+        if (!"".equals(gNote.getGuid())) {
+            gNote.setSynStatus(GNote.DELETE);
+        }
+        ProviderUtil.updateGNote(mContext, gNote);
 
         if (!gNote.getIsPassed()) {
             AlarmService.cancelTask(Note.this, gNote);
         }
 //        更新笔记本状态
-        int notebookId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
+//        int notebookId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);   this is a bug;(
+        int notebookId = gNote.getGNotebookId();
         updateGNotebook(notebookId, -1, false);
         if (notebookId != 0) {
             updateGNotebook(0, -1, false);
@@ -596,7 +588,6 @@ public class Note extends FragmentActivity {
 
     private void createNote() {
         gNote.setNoteToHtml(editText.getText());
-
         //needCreate
         gNote.setSynStatus(GNote.NEW);
 
@@ -611,8 +602,7 @@ public class Note extends FragmentActivity {
         }
 
 //        物理数据存储
-        ContentValues contentValues = gNote.toContentValues();
-        getContentResolver().insert(GNoteProvider.BASE_URI, contentValues);
+        ProviderUtil.insertGNote(mContext, gNote);
 //        db.saveGNote(gNote);
 
 //        更新笔记本
@@ -628,23 +618,17 @@ public class Note extends FragmentActivity {
         }
     }
 
-    private void updateGNotebook(int id, int value, boolean isMove) {
+    private void updateGNotebook(int id, int diff, boolean isMove) {
         if (id == 0) {
             //如果是移动文件，不加不减
             if (isMove) return;
             int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
-            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + diff).apply();
         } else {
-            List<GNotebook> gNotebooks = db.loadGNotebooks();
-            for (GNotebook gNotebook : gNotebooks) {
-                if (gNotebook.getId() == id) {
-                    int cnt = gNotebook.getNum();
-                    gNotebook.setNum(cnt + value);
-
-                    db.updateGNotebook(gNotebook);
-                    break;
-                }
-            }
+            GNotebook gNotebook = db.getGNotebookById(id);
+            int num = gNotebook.getNotesNum();
+            gNotebook.setNotesNum(num + diff);
+            ProviderUtil.updateGNotebook(mContext, gNotebook);
         }
     }
 
@@ -663,8 +647,7 @@ public class Note extends FragmentActivity {
         }
 
         //        物理数据存储
-        ContentValues contentValues = gNote.toContentValues();
-        getContentResolver().update(ContentUris.withAppendedId(GNoteProvider.BASE_URI, gNote.getId()), contentValues, null, null);
+        ProviderUtil.updateGNote(mContext, gNote);
 //        db.updateGNote(gNote);
 
         //当有定时提醒

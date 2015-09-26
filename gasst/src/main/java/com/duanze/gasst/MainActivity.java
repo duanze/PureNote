@@ -51,6 +51,7 @@ import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.syn.Evernote;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
 import com.evernote.client.android.EvernoteSession;
@@ -67,7 +68,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback, FooterInterface, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback,
+        FooterInterface, CompoundButton.OnCheckedChangeListener {
     public static final String TAG = "MainActivity";
     // version code
     private int versionCode;
@@ -297,7 +299,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             case DIALOG_PROGRESS:
                 ((ProgressDialog) dialog).setIndeterminate(true);
                 dialog.setCancelable(false);
-                ((ProgressDialog) dialog).setMessage(getString(com.evernote.androidsdk.R.string.esdk__loading));
+                ((ProgressDialog) dialog).setMessage(getString(com.evernote.androidsdk.R.string
+                        .esdk__loading));
                 break;
             case INITIAL:
                 ((ProgressDialog) dialog).setIndeterminate(true);
@@ -387,10 +390,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void upgradeTo21() {
         int n = db.loadGNotes().size();
-        preferences.edit()
-                .putInt(Folder.PURENOTE_NOTE_NUM, n)
-                .putInt("mode", MODE_LIST)
-                .apply();
+        preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, n).putInt("mode", MODE_LIST).apply();
 
         readSetting();
     }
@@ -445,8 +445,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 //                        从 ListView 中的各项开始遍历故起点需进行处理
                         for (int i = 1; i < folderListView.getCount() && deleteNum > 0; i++) {
-                            CheckBox checkBox = (CheckBox) folderListView.getChildAt(i).findViewById(R.id
-                                    .cb_folder_unit);
+                            CheckBox checkBox = (CheckBox) folderListView.getChildAt(i)
+                                    .findViewById(R.id.cb_folder_unit);
                             if (checkBox.isChecked()) {
 //                              注意-1 转换
                                 int pos = i - 1;
@@ -489,12 +489,10 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 List<GNote> list = db.loadGNotesByBookId(id);
                 for (GNote gNote : list) {
                     gNote.setDeleted(GNote.TRUE);
-                    if ("".equals(gNote.getGuid())) {
-                        db.deleteGNote(gNote.getId());
-                    } else {
+                    if (!"".equals(gNote.getGuid())) {
                         gNote.setSynStatus(GNote.DELETE);
-                        db.updateGNote(gNote);
                     }
+                    ProviderUtil.updateGNote(mContext, gNote);
 
                     if (!gNote.getIsPassed()) {
                         AlarmService.cancelTask(mContext, gNote);
@@ -512,43 +510,44 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     public void showCheckBox() {
         for (int i = 1; i < folderListView.getCount(); i++) {
-            folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View.VISIBLE);
+            folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View
+                    .VISIBLE);
         }
     }
 
     public void hideCheckBox() {
         for (int i = 1; i < folderListView.getCount(); i++) {
-            folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View.INVISIBLE);
+            folderListView.getChildAt(i).findViewById(R.id.cb_folder_unit).setVisibility(View
+                    .INVISIBLE);
         }
     }
 
     private void showCreateFolderDialog() {
-        View view = getLayoutInflater().inflate(R.layout.dialog_edittext, (ViewGroup) getWindow().getDecorView(), false);
+        View view = getLayoutInflater().inflate(R.layout.dialog_edittext, (ViewGroup) getWindow()
+                .getDecorView(), false);
         final EditText editText = (EditText) view.findViewById(R.id.et_in_dialog);
 
-        final Dialog dialog = new AlertDialog.Builder(mContext)
-                .setTitle(R.string.create_folder_title)
-                .setView(view)
-                .setPositiveButton(R.string.create_folder, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (editText.getText().length() == 0) {
-                            Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
-                        } else {
-                            createFolder(editText.getText().toString());
-                            refreshFolderList();
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
-                .create();
+        final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
+                .create_folder_title).setView(view).setPositiveButton(R.string.create_folder, new
+                DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (editText.getText().length() == 0) {
+                    Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
+                } else {
+                    createFolder(editText.getText().toString());
+                    refreshFolderList();
+                }
+            }
+        }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        }).create();
 
         dialog.show();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
+                .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     private int modeFooter;
@@ -573,8 +572,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         mDrawerTitle = getResources().getString(R.string.app_name);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerRoot = findViewById(R.id.left_drawer);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, R.string.action_folder, R.string.app_name) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R
+                .string.action_folder, R.string.app_name) {
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
@@ -620,7 +619,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         folderListView = (ListView) findViewById(R.id.lv_folder);
 
         gNotebookList = db.loadGNotebooks();
-        drawerNotebookAdapter = new DrawerNotebookAdapter(mContext, R.layout.folder_unit, gNotebookList, folderListView, preferences);
+        drawerNotebookAdapter = new DrawerNotebookAdapter(mContext, R.layout.folder_unit,
+                gNotebookList, folderListView, preferences);
         folderListView.setAdapter(drawerNotebookAdapter);
 
         folderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -661,8 +661,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     public void changeToBook() {
         //刷新界面
-        gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
-        refreshUI();
+        int tmp = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+        if (gNotebookId != tmp) {
+            gNotebookId = tmp;
+            refreshUI();
+        }
     }
 
     /**
@@ -748,8 +751,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private void setVisibleByListPos(int visible, int pos) {
         if (null == folderListView) return;
 
-        ImageView flag = (ImageView) folderListView.getChildAt(pos)
-                .findViewById(R.id.iv_folder_unit_flag);
+        ImageView flag = (ImageView) folderListView.getChildAt(pos).findViewById(R.id
+                .iv_folder_unit_flag);
         flag.setVisibility(visible);
     }
 
@@ -768,8 +771,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             if (footer == null) {
                 footer = new FolderFooter();
             }
-            getFragmentManager().beginTransaction().replace(R.id.fl_folder_footer, footer)
-                    .commit();
+            getFragmentManager().beginTransaction().replace(R.id.fl_folder_footer, footer).commit();
         } else if (modeFooter == Folder.MODE_FOOTER_DELETE) {
             if (footerDelete == null) {
                 footerDelete = new FolderFooterDelete();
@@ -782,11 +784,10 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //    滑动抽屉至此结束
 
     private void initDatePicker() {
-        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(),
-                today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                today.get(Calendar.DAY_OF_MONTH), false);
-        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10,
-                today.get(Calendar.YEAR) + 10);
+        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
+                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                false);
+        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);
     }
 
@@ -869,17 +870,25 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             if (null == gNoteList) {
                 gNoteList = new GNoteList();
             }
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);//打开手势滑动
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content, gNoteList)
-                    .commit();
+            unlockDrawerLock();//打开手势滑动
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content,
+                    gNoteList).commit();
         } else if (mode == MODE_GRID) {
             if (colorGrid == null) {
                 colorGrid = new ColorGrid();
             }
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);//关闭手势滑动
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content, colorGrid)
-                    .commit();
+            lockDrawerLock();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content,
+                    colorGrid).commit();
         }
+    }
+
+    public void lockDrawerLock() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);//关闭手势滑动
+    }
+
+    public void unlockDrawerLock() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);//关闭手势滑动
     }
 
 
@@ -970,40 +979,30 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     //    一次性评分弹窗
     private void rateForPureNote() {
-        if (preferences.getInt(Note.EditCount, 0) >= Note.EDIT_COUNT
-                && !preferences.getBoolean(ShownRate, false)) {
+        if (preferences.getInt(Note.EditCount, 0) >= Note.EDIT_COUNT && !preferences.getBoolean
+                (ShownRate, false)) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage(R.string.rate_for_purenote)
-                    .setPositiveButton(R.string.rate_rate,
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    Uri uri = Uri.parse("market://details?id="
-                                            + mContext.getPackageName());
-                                    Intent goToMarket = new Intent(
-                                            Intent.ACTION_VIEW, uri);
-                                    try {
-                                        startActivity(goToMarket);
-                                    } catch (ActivityNotFoundException e) {
-                                        Toast.makeText(mContext,
-                                                "Couldn't launch the market!",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            })
-                    .setNegativeButton(R.string.rate_feedback,
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    Util.feedback(mContext);
-                                }
-                            }).create().show();
+            builder.setMessage(R.string.rate_for_purenote).setPositiveButton(R.string.rate_rate,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Uri uri = Uri.parse("market://details?id=" + mContext.getPackageName());
+                            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                            try {
+                                startActivity(goToMarket);
+                            } catch (ActivityNotFoundException e) {
+                                Toast.makeText(mContext, "Couldn't launch the market!", Toast
+                                        .LENGTH_SHORT).show();
+                            }
+                        }
+                    }).setNegativeButton(R.string.rate_feedback, new DialogInterface
+                    .OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Util.feedback(mContext);
+                }
+            }).create().show();
 
             preferences.edit().putBoolean(ShownRate, true).apply();
         }
@@ -1041,8 +1040,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
             if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
                 try {
-                    Method m = menu.getClass().getDeclaredMethod(
-                            "setOptionalIconsVisible", Boolean.TYPE);
+                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible",
+                            Boolean.TYPE);
                     m.setAccessible(true);
                     m.invoke(menu, true);
                 } catch (Exception e) {
@@ -1059,8 +1058,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private void setOverflowShowingAlways() {
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
-            Field menuKeyField = ViewConfiguration.class
-                    .getDeclaredField("sHasPermanentMenuKey");
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
             menuKeyField.setAccessible(true);
             menuKeyField.setBoolean(config, false);
         } catch (Exception e) {
@@ -1176,21 +1174,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             switch (msg.what) {
                 case Evernote.SYNC_START:
                     findViewById(R.id.pb_blue).setVisibility(View.VISIBLE);
-//                    if (MODE_GRID == mode) {
-//                    showDialog();
-//                    }else if (MODE_LIST == mode){
-//                        classicList.showSwipe();
-//                    }
-
                     break;
                 case Evernote.SYNC_END:
                     findViewById(R.id.pb_blue).setVisibility(View.GONE);
-//                    if (MODE_GRID == mode) {
-//                    removeDialog();
-//                    }else if (MODE_LIST == mode){
-//                        classicList.hideSwipe();
-//                    }
-//                    refreshUI();
                     break;
                 default:
                     break;

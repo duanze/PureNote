@@ -42,7 +42,7 @@ public class GNoteDB {
     //    table_gnotebook
     public static final String NAME = "name";
     public static final String NOTEBOOK_GUID = "notebook_guid";
-    public static final String NUM = "num";
+    public static final String NOTES_NUM = "num";
     public static final String SELECTED = "selected";
 
 
@@ -324,7 +324,7 @@ public class GNoteDB {
             values.put(SYN_STATUS, gNotebook.getSynStatus());
             values.put(NOTEBOOK_GUID, gNotebook.getNotebookGuid());
             values.put(DELETED, gNotebook.getDeleted());
-            values.put(NUM, gNotebook.getNum());
+            values.put(NOTES_NUM, gNotebook.getNotesNum());
             values.put(SELECTED, gNotebook.getSelected());
 
             db.insert(TABLE_NOTEBOOK, null, values);
@@ -337,7 +337,7 @@ public class GNoteDB {
         values.put(SYN_STATUS, gNotebook.getSynStatus());
         values.put(NOTEBOOK_GUID, gNotebook.getNotebookGuid());
         values.put(DELETED, gNotebook.getDeleted());
-        values.put(NUM, gNotebook.getNum());
+        values.put(NOTES_NUM, gNotebook.getNotesNum());
         values.put(SELECTED, gNotebook.getSelected());
 
         return db.update(TABLE_NOTEBOOK, values, "id = ?", new String[]{"" + gNotebook.getId()}) == 1;
@@ -361,7 +361,7 @@ public class GNoteDB {
                 gNotebook.setSynStatus(cursor.getInt(cursor.getColumnIndex(SYN_STATUS)));
                 gNotebook.setNotebookGuid(cursor.getString(cursor.getColumnIndex(NOTEBOOK_GUID)));
                 gNotebook.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
-                gNotebook.setNum(cursor.getInt(cursor.getColumnIndex(NUM)));
+                gNotebook.setNotesNum(cursor.getInt(cursor.getColumnIndex(NOTES_NUM)));
                 gNotebook.setSelected(cursor.getInt(cursor.getColumnIndex(SELECTED)));
 
                 list.add(gNotebook);
@@ -382,7 +382,7 @@ public class GNoteDB {
             gNotebook.setSynStatus(cursor.getInt(cursor.getColumnIndex(SYN_STATUS)));
             gNotebook.setNotebookGuid(cursor.getString(cursor.getColumnIndex(NOTEBOOK_GUID)));
             gNotebook.setDeleted(cursor.getInt(cursor.getColumnIndex(DELETED)));
-            gNotebook.setNum(cursor.getInt(cursor.getColumnIndex(NUM)));
+            gNotebook.setNotesNum(cursor.getInt(cursor.getColumnIndex(NOTES_NUM)));
             gNotebook.setSelected(cursor.getInt(cursor.getColumnIndex(SELECTED)));
 
             cursor.close();
