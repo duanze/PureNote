@@ -35,7 +35,8 @@ class DirectionScrollListener implements AbsListView.OnScrollListener {
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int
+            totalItemCount) {
         final View topChild = view.getChildAt(0);
         int firstViewTop = 0;
         if (topChild != null) {

@@ -265,7 +265,10 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         @Override
         public void onDestroyActionMode(ActionMode arg0) {
             ((MainActivity) mContext).unlockDrawerLock();
+
+            fabButton.setLock(false);
             fabButton.hide(false);
+
             mActionMode = null;
             mContextMenu = null;
             mAdapter.setCheckMode(false);
@@ -274,7 +277,10 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         @Override
         public boolean onPrepareActionMode(ActionMode arg0, Menu menu) {
             ((MainActivity) mContext).lockDrawerLock();
+
             fabButton.hide(true);
+            fabButton.setLock(true);
+
             mContextMenu = menu;
             updateActionMode();
             return false;

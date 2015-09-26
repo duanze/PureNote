@@ -73,8 +73,8 @@ public class Evernote {
     public Evernote(Context context) {
         mContext = context;
         mSharedPreferences = context.getSharedPreferences(Settings.DATA, Activity.MODE_PRIVATE);
-        mEvernoteSession = EvernoteSession.getInstance(mContext, CONSUMER_KEY,
-                CONSUMER_SECRET, EVERNOTE_SERVICE);
+        mEvernoteSession = EvernoteSession.getInstance(mContext, CONSUMER_KEY, CONSUMER_SECRET,
+                EVERNOTE_SERVICE);
         db = GNoteDB.getInstance(mContext);
     }
 
@@ -93,10 +93,8 @@ public class Evernote {
 
     public void onAuthFinish(int resultCode) {
         if (resultCode == Activity.RESULT_OK) {
-            mSharedPreferences.edit()
-                    .putString(EVERNOTE_TOKEN, mEvernoteSession.getAuthToken())
-                    .putLong(EVERNOTE_TOKEN_TIME, System.currentTimeMillis())
-                    .apply();
+            mSharedPreferences.edit().putString(EVERNOTE_TOKEN, mEvernoteSession.getAuthToken())
+                    .putLong(EVERNOTE_TOKEN_TIME, System.currentTimeMillis()).apply();
             getUserInfo();
             if (mEvernoteLoginCallback != null) {
                 mEvernoteLoginCallback.onLoginResult(true);
@@ -112,31 +110,24 @@ public class Evernote {
     public void getUserInfo() {
         if (mEvernoteSession.isLoggedIn()) {
             try {
-                mEvernoteSession.getClientFactory().createUserStoreClient()
-                        .getUser(new OnClientCallback<User>() {
+                mEvernoteSession.getClientFactory().createUserStoreClient().getUser(new OnClientCallback<User>() {
 
-                            @Override
-                            public void onSuccess(User user) {
-                                mSharedPreferences
-                                        .edit()
-                                        .putString(EVERNOTE_USER_NAME,
-                                                user.getUsername())
-                                        .putString(EVERNOTE_USER_EMAIL,
-                                                user.getEmail()).apply();
-                                if (mEvernoteLoginCallback != null) {
-                                    mEvernoteLoginCallback.onUserinfo(true,
-                                            user);
-                                }
-                            }
+                    @Override
+                    public void onSuccess(User user) {
+                        mSharedPreferences.edit().putString(EVERNOTE_USER_NAME, user.getUsername
+                                ()).putString(EVERNOTE_USER_EMAIL, user.getEmail()).apply();
+                        if (mEvernoteLoginCallback != null) {
+                            mEvernoteLoginCallback.onUserinfo(true, user);
+                        }
+                    }
 
-                            @Override
-                            public void onException(Exception exception) {
-                                if (mEvernoteLoginCallback != null) {
-                                    mEvernoteLoginCallback.onUserinfo(false,
-                                            null);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onException(Exception exception) {
+                        if (mEvernoteLoginCallback != null) {
+                            mEvernoteLoginCallback.onUserinfo(false, null);
+                        }
+                    }
+                });
             } catch (IllegalStateException e) {
                 e.printStackTrace();
                 if (mEvernoteLoginCallback != null) {
@@ -158,9 +149,8 @@ public class Evernote {
     public void Logout() {
         try {
             mEvernoteSession.logOut(mContext);
-            mSharedPreferences.edit().remove(EVERNOTE_USER_NAME)
-                    .remove(EVERNOTE_NOTEBOOK_GUID).remove(EVERNOTE_USER_EMAIL)
-                    .apply();
+            mSharedPreferences.edit().remove(EVERNOTE_USER_NAME).remove(EVERNOTE_NOTEBOOK_GUID)
+                    .remove(EVERNOTE_USER_EMAIL).apply();
             if (mEvernoteLoginCallback != null) {
                 mEvernoteLoginCallback.onLogout(true);
             }
@@ -175,14 +165,12 @@ public class Evernote {
     public boolean isNotebookExsist(String guid, String name) throws Exception {
         boolean result = false;
         try {
-            Notebook notebook = mEvernoteSession.getClientFactory()
-                    .createNoteStore()
-                    .getNotebook(mEvernoteSession.getAuthToken(), guid);
+            Notebook notebook = mEvernoteSession.getClientFactory().createNoteStore().getNotebook
+                    (mEvernoteSession.getAuthToken(), guid);
             if (notebook.getName().equals(name)) {
                 result = true;
                 LogUtil.e(TAG, guid + "笔记本存在");
-                mSharedPreferences.edit()
-                        .putString(EVERNOTE_NOTEBOOK_GUID, notebook.getGuid())
+                mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, notebook.getGuid())
                         .commit();
             }
         } catch (EDAMNotFoundException e) {
@@ -208,14 +196,11 @@ public class Evernote {
         notebook.setName(bookname);
         boolean result = false;
         try {
-            Notebook resultNotebook = mEvernoteSession.getClientFactory()
-                    .createNoteStore()
+            Notebook resultNotebook = mEvernoteSession.getClientFactory().createNoteStore()
                     .createNotebook(mEvernoteSession.getAuthToken(), notebook);
             result = true;
             LogUtil.e(TAG, "Notebook" + bookname + "不存在，创建成功");
-            mSharedPreferences
-                    .edit()
-                    .putString(EVERNOTE_NOTEBOOK_GUID, resultNotebook.getGuid())
+            mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, resultNotebook.getGuid())
                     .commit();
         } catch (EDAMUserException e) {
             if (e.getErrorCode() == EDAMErrorCode.DATA_CONFLICT) {
@@ -237,24 +222,23 @@ public class Evernote {
         gNote.setBookGuid(note.getNotebookGuid());
 
 //        db.updateGNote(gNote);
-        ProviderUtil.updateGNote(mContext,gNote);
+        ProviderUtil.updateGNote(mContext, gNote);
     }
 
     private void deleteGNote(GNote gNote) {
 //        db.deleteGNote(gNote.getId());
-
+        gNote.setSynStatus(GNote.NOTHING);
+        ProviderUtil.updateGNote(mContext,gNote);
     }
 
     private Note createNote(GNote gNote) throws Exception {
         try {
             Note note = gNote.toNote();
             if ("".equals(gNote.getBookGuid())) {
-                note.setNotebookGuid(mSharedPreferences.getString(
-                        EVERNOTE_NOTEBOOK_GUID, null));
+                note.setNotebookGuid(mSharedPreferences.getString(EVERNOTE_NOTEBOOK_GUID, null));
             }
-            Note responseNote = mEvernoteSession.getClientFactory()
-                    .createNoteStore()
-                    .createNote(mEvernoteSession.getAuthToken(), note);
+            Note responseNote = mEvernoteSession.getClientFactory().createNoteStore().createNote
+                    (mEvernoteSession.getAuthToken(), note);
             LogUtil.i(TAG, "Note创建成功");
             updateGNote(gNote, responseNote);
             return responseNote;
@@ -276,21 +260,18 @@ public class Evernote {
             return true;
         } else {
             try {
-                mEvernoteSession
-                        .getClientFactory()
-                        .createNoteStore()
-                        .deleteNote(mEvernoteSession.getAuthToken(),
-                                note.getGuid());
+                mEvernoteSession.getClientFactory().createNoteStore().deleteNote(mEvernoteSession
+                        .getAuthToken(), note.getGuid());
                 LogUtil.e(TAG, "Note删除成功");
-//                deleteGNote(gNote);
+                deleteGNote(gNote);
                 return true;
             } catch (EDAMUserException e) {
                 LogUtil.e(TAG, "Note早已被删除，说明删除成功");
-//                deleteGNote(gNote);
+                deleteGNote(gNote);
                 return true;
             } catch (EDAMNotFoundException e) {
                 LogUtil.e(TAG, "Note未找到，说明无需删除");
-//                deleteGNote(gNote);
+                deleteGNote(gNote);
                 return true;
             } catch (Exception e) {
                 LogUtil.e(TAG, "传输失败，说明删除失败");
@@ -301,11 +282,8 @@ public class Evernote {
 
     private Note updateNote(GNote gNote) throws Exception {
         try {
-            Note responseNote = mEvernoteSession
-                    .getClientFactory()
-                    .createNoteStore()
-                    .updateNote(mEvernoteSession.getAuthToken(),
-                            gNote.toNote());
+            Note responseNote = mEvernoteSession.getClientFactory().createNoteStore().updateNote
+                    (mEvernoteSession.getAuthToken(), gNote.toNote());
 
             updateGNote(gNote, responseNote);
             LogUtil.i(TAG, "Note更新成功");
@@ -325,22 +303,19 @@ public class Evernote {
     private void makeSureNotebookExsits(String NotebookName) throws Exception {
         try {
             if (mSharedPreferences.contains(EVERNOTE_NOTEBOOK_GUID)) {
-                if (!isNotebookExsist(mSharedPreferences.getString(
-                        EVERNOTE_NOTEBOOK_GUID, ""), NOTEBOOK_NAME)) {
+                if (!isNotebookExsist(mSharedPreferences.getString(EVERNOTE_NOTEBOOK_GUID, ""),
+                        NOTEBOOK_NAME)) {
                     createNotebook(NOTEBOOK_NAME);
                 }
             } else {
-                List<Notebook> books = mEvernoteSession.getClientFactory()
-                        .createNoteStore()
+                List<Notebook> books = mEvernoteSession.getClientFactory().createNoteStore()
                         .listNotebooks(mEvernoteSession.getAuthToken());
                 int count = books.size();
                 for (int i = 0; i < count; i++) {
                     Notebook book = books.get(i);
                     if (book.getName().equals(NotebookName)) {
-                        mSharedPreferences
-                                .edit()
-                                .putString(EVERNOTE_NOTEBOOK_GUID,
-                                        book.getGuid()).commit();
+                        mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, book.getGuid
+                                ()).commit();
                         return;
                     }
                 }
@@ -357,7 +332,7 @@ public class Evernote {
         GNote gNote = GNote.parseGNote(note);
 
 //        db.saveGNote(gNote);
-        ProviderUtil.insertGNote(mContext,gNote);
+        ProviderUtil.insertGNote(mContext, gNote);
 
         updateGNotebook(0, +1);
     }
@@ -383,11 +358,8 @@ public class Evernote {
     private void downloadNote(String guid) {
         LogUtil.e(TAG, "准备添加:" + guid);
         try {
-            Note note = mEvernoteSession
-                    .getClientFactory()
-                    .createNoteStore()
-                    .getNote(mEvernoteSession.getAuthToken(), guid, true,
-                            false, false, false);
+            Note note = mEvernoteSession.getClientFactory().createNoteStore().getNote
+                    (mEvernoteSession.getAuthToken(), guid, true, false, false, false);
             LogUtil.e(TAG, "获取到的文本：" + note.getContent());
 
             saveNote(note);
@@ -403,18 +375,15 @@ public class Evernote {
     private void updateLocalNote(String guid, GNote gNote) {
         LogUtil.e(TAG, "准备更新:" + guid);
         try {
-            Note note = mEvernoteSession
-                    .getClientFactory()
-                    .createNoteStore()
-                    .getNote(mEvernoteSession.getAuthToken(), guid, true,
-                            false, false, false);
+            Note note = mEvernoteSession.getClientFactory().createNoteStore().getNote
+                    (mEvernoteSession.getAuthToken(), guid, true, false, false, false);
 
             if (gNote != null) {
                 gNote.setContent(note.getContent());
                 gNote.setEditTime(note.getUpdated());
 
 //                db.updateGNote(gNote);
-                ProviderUtil.updateGNote(mContext,gNote);
+                ProviderUtil.updateGNote(mContext, gNote);
             }
 
         } catch (TTransportException e) {
@@ -442,21 +411,16 @@ public class Evernote {
         NotesMetadataResultSpec notesMetadataResultSpec = new NotesMetadataResultSpec();
         notesMetadataResultSpec.setIncludeUpdated(true);
         try {
-            NoteCollectionCounts noteCollectionCounts = mEvernoteSession
-                    .getClientFactory()
-                    .createNoteStore()
-                    .findNoteCounts(mEvernoteSession.getAuthToken(),
+            NoteCollectionCounts noteCollectionCounts = mEvernoteSession.getClientFactory()
+                    .createNoteStore().findNoteCounts(mEvernoteSession.getAuthToken(),
                             noteFilter, false);
-            Map<String, Integer> maps = noteCollectionCounts
-                    .getNotebookCounts();
-            if (maps == null || maps.size() == 0)
-                return;
-            int maxcount = maps.get(guid);
-            NotesMetadataList list = mEvernoteSession
-                    .getClientFactory()
-                    .createNoteStore()
-                    .findNotesMetadata(mEvernoteSession.getAuthToken(),
-                            noteFilter, 0, maxcount, notesMetadataResultSpec);
+            Map<String, Integer> maps = noteCollectionCounts.getNotebookCounts();
+            if (maps == null || maps.size() == 0) return;
+            int maxCount = maps.get(guid);
+            LogUtil.i(TAG, "-------------服务器端笔记数量：" + maxCount);
+            NotesMetadataList list = mEvernoteSession.getClientFactory().createNoteStore()
+                    .findNotesMetadata(mEvernoteSession.getAuthToken(), noteFilter, 0, maxCount,
+                            notesMetadataResultSpec);
 
             for (int i = 0; i < list.getNotes().size(); i++) {
                 NoteMetadata note = list.getNotes().get(i);
@@ -499,8 +463,7 @@ public class Evernote {
                     try {
                         createNote(gNote);
                     } catch (Exception e) {
-                        LogUtil.e(TAG,
-                                "尝试创建新的Note的时候出现错误:" + e.getCause());
+                        LogUtil.e(TAG, "尝试创建新的Note的时候出现错误:" + e.getCause());
                         continue;
                     }
                     break;
@@ -522,16 +485,15 @@ public class Evernote {
         uploading = false;
     }
 
-    public synchronized void sync(final boolean syncUp, final boolean syncDown,
-                                  Handler hanler) {
+    public synchronized void sync(final boolean syncUp, final boolean syncDown, Handler hanler) {
         if (hanler != null) {
             hanler.sendEmptyMessage(SYNC_START);
         }
         toSync(syncUp, syncDown, hanler);
     }
 
-    private synchronized void toSync(final boolean syncUp,
-                                     final boolean syncDown, Handler handler) {
+    private synchronized void toSync(final boolean syncUp, final boolean syncDown, Handler
+            handler) {
         new SyncTask(syncUp, syncDown, handler).execute();
     }
 
@@ -569,11 +531,9 @@ public class Evernote {
             publishProgress(new Integer[]{SYNC_START});
             try {
                 makeSureNotebookExsits(NOTEBOOK_NAME);
-                if (mSyncUp)
-                    syncUp(db.loadRawGNotes());
+                if (mSyncUp) syncUp(db.loadRawGNotes());
 //                    syncUp(db.loadGNotesByBookId(0));
-                if (mSyncDown)
-                    syncDown();
+                if (mSyncDown) syncDown();
                 publishProgress(new Integer[]{SYNC_SUCCESS});
             } catch (Exception e) {
                 publishProgress(new Integer[]{SYNC_ERROR});
