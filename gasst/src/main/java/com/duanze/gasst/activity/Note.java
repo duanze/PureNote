@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -118,6 +119,10 @@ public class Note extends FragmentActivity {
     private int bookId;
 
     private Context mContext;
+    /**
+     * 设定颜色值的一堆按钮
+     */
+    private HorizontalScrollView hsvColorBtns;
 
     /**
      * 启动NoteActivity活动的静态方法，
@@ -187,7 +192,7 @@ public class Note extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        overridePendingTransition(R.anim.quick_load, R.anim.quick_load);
+        overridePendingTransition(R.anim.in_push_up, R.anim.out_stable);
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
 
@@ -234,33 +239,52 @@ public class Note extends FragmentActivity {
         bookId = gNote.getGNotebookId();
 
         db = GNoteDB.getInstance(this);
+        hsvColorBtns = (HorizontalScrollView) findViewById(R.id.hsv_btns);
 
         textView = (TextView) findViewById(R.id.tv_note_show);
         editText = (EditText) findViewById(R.id.et_note_edit);
         initMode();
 
 //        customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
-        if (mode == MODE_NEW || mode == MODE_EDIT) {
-            HorizontalScrollView view = (HorizontalScrollView) findViewById(R.id.hsv_btns);
-            view.setVisibility(View.VISIBLE);
+        if (mode == MODE_NEW) {
+            getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            editText.requestFocus();
+
+            hsvColorBtns.setVisibility(View.VISIBLE);
             initBtns();
+        } else if (mode == MODE_EDIT) {
+            hsvColorBtns.setVisibility(View.VISIBLE);
+            initBtns();
+
+//            editText.setCursorVisible(false);
+            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        editText.setCursorVisible(true);
+                    }
+                }
+            });
         } else if (MODE_TODAY == mode) {
+            getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            editText.requestFocus();
+
             gNote.setCalToTime(today);
             gNote.setGNotebookId(preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0));
 
-            HorizontalScrollView view = (HorizontalScrollView) findViewById(R.id.hsv_btns);
-            view.setVisibility(View.VISIBLE);
+            hsvColorBtns.setVisibility(View.VISIBLE);
             initBtns();
         } else {
-            HorizontalScrollView view = (HorizontalScrollView) findViewById(R.id.hsv_btns);
-            view.setVisibility(View.GONE);
+            hsvColorBtns.setVisibility(View.GONE);
         }
 
         checkColorRead();
     }
 
     private void checkColorRead() {
-        boolean colorRead = preferences.getBoolean(Settings.COLOR_READ, true);
+//        boolean colorRead = preferences.getBoolean(Settings.COLOR_READ, true);
 //        if (colorRead && customizeColor) {
         if (mode == MODE_SHOW) {
             textView.setBackgroundColor(gNote.getColor());
@@ -288,7 +312,7 @@ public class Note extends FragmentActivity {
 //                uiShouldUpdate();
             }
             textView.setText(gNote.getNoteFromHtml());
-            textView.setMovementMethod(ScrollingMovementMethod.getInstance());
+//            textView.setMovementMethod(ScrollingMovementMethod.getInstance());
         }
     }
 

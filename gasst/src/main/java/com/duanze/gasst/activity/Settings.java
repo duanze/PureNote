@@ -722,6 +722,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 
     @Override
     public void onUserinfo(Boolean result, User user) {
+        if (null == user) return;
         loginText.setText(getString(R.string.logout_evernote,
                 user.getUsername()));
     }

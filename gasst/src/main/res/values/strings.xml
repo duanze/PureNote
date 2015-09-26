@@ -214,7 +214,7 @@
     <!-- actionMode -->
     <string name="delete_confirm">确认删除？</string>
     <string name="delete_all_confirm">全部删除？</string>
-    <string name="delete_select_nothing">没有选择需要删除的笔记</string>
+    <string name="delete_select_nothing">没有选择任何笔记</string>
     <string name="delete_sure">确认</string>
     <string name="delete_cancel">取消</string>
     <string name="delete_title">提示</string>

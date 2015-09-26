@@ -8,7 +8,7 @@
         android:toYDelta="100%p" />
 
     <alpha
-        android:duration="500"
+        android:duration="400"
         android:fromAlpha="1.0"
         android:toAlpha="0.8" />
 

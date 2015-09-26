@@ -300,7 +300,7 @@ public class Evernote {
         }
     }
 
-    private void makeSureNotebookExsits(String NotebookName) throws Exception {
+    private void makeSureNotebookExists(String NotebookName) throws Exception {
         try {
             if (mSharedPreferences.contains(EVERNOTE_NOTEBOOK_GUID)) {
                 if (!isNotebookExsist(mSharedPreferences.getString(EVERNOTE_NOTEBOOK_GUID, ""),
@@ -530,7 +530,7 @@ public class Evernote {
             }
             publishProgress(new Integer[]{SYNC_START});
             try {
-                makeSureNotebookExsits(NOTEBOOK_NAME);
+                makeSureNotebookExists(NOTEBOOK_NAME);
                 if (mSyncUp) syncUp(db.loadRawGNotes());
 //                    syncUp(db.loadGNotesByBookId(0));
                 if (mSyncDown) syncDown();
