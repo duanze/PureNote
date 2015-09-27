@@ -172,96 +172,13 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         public boolean onActionItemClicked(ActionMode arg0, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.delete:
-                    if (mAdapter.getSelectedCount() == 0) {
-                        Toast.makeText(mContext, R.string.delete_select_nothing, Toast
-                                .LENGTH_SHORT).show();
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                        builder.setMessage(R.string.delete_all_confirm).setTitle(R.string
-                                .delete_title).setPositiveButton(R.string.delete_sure, new
-                                DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();
-
-//                                        ((MainActivity) mContext).showDialog(MainActivity.OPERATE);
-//                                        ((MainActivity) mContext).showProgressBar();
-                                        mAdapter.deleteSelectedNotes();
-//                                        ((MainActivity) mContext).hideProgressBar();
-//                                        ((MainActivity) mContext).dismissDialog(MainActivity.OPERATE);
-                                        if (mActionMode != null) {
-                                            mActionMode.finish();
-                                        }
-
-                                    }
-                                }).setNegativeButton(R.string.delete_cancel, null).create().show();
-                    }
+                    deleteNotes();
                     break;
                 case R.id.i_move:
-                    if (mAdapter.getSelectedCount() == 0) {
-                        Toast.makeText(mContext, R.string.delete_select_nothing, Toast
-                                .LENGTH_SHORT).show();
-                    } else {
-                        View view = ((Activity) mContext).getLayoutInflater().inflate(R.layout
-                                .dialog_radiogroup, (ViewGroup) ((Activity) mContext).getWindow()
-                                .getDecorView(), false);
-
-                        final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id
-                                .rg_dialog);
-                        RadioButton purenote = (RadioButton) view.findViewById(R.id.rb_purenote);
-                        GNoteDB db = GNoteDB.getInstance(mContext);
-                        List<GNotebook> list = db.loadGNotebooks();
-                        for (final GNotebook gNotebook : list) {
-                            RadioButton tempButton = new RadioButton(mContext);
-                            tempButton.setText(gNotebook.getName());
-                            radioGroup.addView(tempButton, LinearLayout.LayoutParams
-                                    .MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                            tempButton.setOnCheckedChangeListener(new CompoundButton
-                                    .OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(CompoundButton compoundButton,
-                                                             boolean b) {
-                                    if (b) {
-                                        tmpGNoteBookId = gNotebook.getId();
-                                    }
-                                }
-                            });
-                        }
-
-                        purenote.setChecked(true);
-                        tmpGNoteBookId = 0;
-                        purenote.setOnCheckedChangeListener(new CompoundButton
-                                .OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    tmpGNoteBookId = 0;
-                                }
-                            }
-                        });
-
-                        final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
-                                .action_move).setView(view).setPositiveButton(R.string.confirm,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();
-
-//                                        ((MainActivity) mContext).showDialog(MainActivity.OPERATE);
-//                                        ((MainActivity) mContext).showProgressBar();
-                                        mAdapter.moveSelectedNotes(tmpGNoteBookId);
-//                                        ((MainActivity) mContext).hideProgressBar();
-//                                        ((MainActivity) mContext).dismissDialog(MainActivity.OPERATE);
-                                        if (mActionMode != null) {
-                                            mActionMode.finish();
-                                        }
-
-                                    }
-                                }).setNegativeButton(R.string.cancel, null).create();
-                        dialog.show();
-                    }
+                    moveNotes();
+                    break;
+                case R.id.i_select_all:
+                    selectAll();
                     break;
                 default:
                     break;
@@ -301,6 +218,104 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         }
 
     };
+
+    private void selectAll() {
+        mAdapter.selectAllNotes();
+    }
+
+    private void moveNotes() {
+        if (mAdapter.getSelectedCount() == 0) {
+            Toast.makeText(mContext, R.string.delete_select_nothing, Toast
+                    .LENGTH_SHORT).show();
+        } else {
+            View view = ((Activity) mContext).getLayoutInflater().inflate(R.layout
+                    .dialog_radiogroup, (ViewGroup) ((Activity) mContext).getWindow()
+                    .getDecorView(), false);
+
+            final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id
+                    .rg_dialog);
+            RadioButton purenote = (RadioButton) view.findViewById(R.id.rb_purenote);
+            GNoteDB db = GNoteDB.getInstance(mContext);
+            List<GNotebook> list = db.loadGNotebooks();
+            for (final GNotebook gNotebook : list) {
+                RadioButton tempButton = new RadioButton(mContext);
+                tempButton.setText(gNotebook.getName());
+                radioGroup.addView(tempButton, LinearLayout.LayoutParams
+                        .MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                tempButton.setOnCheckedChangeListener(new CompoundButton
+                        .OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton,
+                                                 boolean b) {
+                        if (b) {
+                            tmpGNoteBookId = gNotebook.getId();
+                        }
+                    }
+                });
+            }
+
+            purenote.setChecked(true);
+            tmpGNoteBookId = 0;
+            purenote.setOnCheckedChangeListener(new CompoundButton
+                    .OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        tmpGNoteBookId = 0;
+                    }
+                }
+            });
+
+            final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
+                    .action_move).setView(view).setPositiveButton(R.string.confirm,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.dismiss();
+
+//                                        ((MainActivity) mContext).showDialog(MainActivity.OPERATE);
+//                                        ((MainActivity) mContext).showProgressBar();
+                            mAdapter.moveSelectedNotes(tmpGNoteBookId);
+//                                        ((MainActivity) mContext).hideProgressBar();
+//                                        ((MainActivity) mContext).dismissDialog(MainActivity.OPERATE);
+                            if (mActionMode != null) {
+                                mActionMode.finish();
+                            }
+
+                        }
+                    }).setNegativeButton(R.string.cancel, null).create();
+            dialog.show();
+        }
+    }
+
+    private void deleteNotes() {
+        if (mAdapter.getSelectedCount() == 0) {
+            Toast.makeText(mContext, R.string.delete_select_nothing, Toast
+                    .LENGTH_SHORT).show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setMessage(R.string.delete_all_confirm).setTitle(R.string
+                    .delete_title).setPositiveButton(R.string.delete_sure, new
+                    DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.dismiss();
+
+//                                        ((MainActivity) mContext).showDialog(MainActivity.OPERATE);
+//                                        ((MainActivity) mContext).showProgressBar();
+                            mAdapter.deleteSelectedNotes();
+//                                        ((MainActivity) mContext).hideProgressBar();
+//                                        ((MainActivity) mContext).dismissDialog(MainActivity.OPERATE);
+                            if (mActionMode != null) {
+                                mActionMode.finish();
+                            }
+
+                        }
+                    }).setNegativeButton(R.string.delete_cancel, null).create().show();
+        }
+    }
 
     private ActionMode mActionMode;
 

@@ -291,7 +291,7 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
                 mOnItemSelectListener.onCancelSelect();
             }
 
-            new Evernote(mContext).sync(true, false, null);
+//            new Evernote(mContext).sync(true, false, null);
         }
     }
 
@@ -333,5 +333,27 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
             }
 
         }
+    }
+
+    public void selectAllNotes() {
+        for (int i = 0; i < mCursor.getCount(); i++) {
+            mCursor.moveToPosition(i);
+            GNote gNote = new GNote(mCursor);
+
+            if (mCheckedItems == null) {
+                mCheckedItems = new HashMap<Integer, GNote>();
+            }
+            int _id = gNote.getId();
+            if (!mCheckedItems.containsKey(_id)) {
+                mCheckedItems.put(_id, gNote);
+            }
+
+        }
+
+        if (null != mOnItemSelectListener) {
+            mOnItemSelectListener.onSelect();
+        }
+
+        notifyDataSetChanged();
     }
 }
