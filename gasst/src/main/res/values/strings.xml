@@ -226,4 +226,6 @@
 
     <string name="select_all">选择全部</string>
     <!-- Context Menu -->
+
+    <string name="title_activity_license">代码许可</string>
 </resources>

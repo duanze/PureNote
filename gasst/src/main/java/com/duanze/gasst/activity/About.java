@@ -62,6 +62,8 @@ public class About extends Activity implements View.OnClickListener {
         comment.setOnClickListener(this);
         View donate = findViewById(R.id.btn_donate);
         donate.setOnClickListener(this);
+
+        findViewById(R.id.btn_licenses).setOnClickListener(this);
     }
 
 
@@ -86,7 +88,10 @@ public class About extends Activity implements View.OnClickListener {
                 evaluate(mContext);
                 break;
             case R.id.btn_donate:
-                Donate.activityStart(mContext);
+                Donate.actionStart(mContext);
+                break;
+            case R.id.btn_licenses:
+                Licenses.actionStart(mContext);
                 break;
         }
     }

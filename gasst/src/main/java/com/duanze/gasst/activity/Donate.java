@@ -17,7 +17,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 public class Donate extends Activity {
 
 
-    public static void activityStart(Context context) {
+    public static void actionStart(Context context) {
         Intent intent = new Intent(context, Donate.class);
 
         context.startActivity(intent);
