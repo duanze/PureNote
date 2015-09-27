@@ -3,6 +3,7 @@
     <string name="recycle_bin">回收站</string>
 
     <string name="initial">初始化…</string>
+    <string name="operate">请等待…</string>
 
     <!-- date -->
     <string name="month1">壹月</string>

@@ -284,12 +284,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //        LogUtil.i(TAG, "onCreate before ... end.");
     }
 
+    public static final int OPERATE = 103;
+
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DIALOG_PROGRESS:
                 return new ProgressDialog(MainActivity.this);
             case INITIAL:
+                return new ProgressDialog(MainActivity.this);
+            case OPERATE:
                 return new ProgressDialog(MainActivity.this);
         }
         // TODO onCreateDialog(int) is deprecated
@@ -309,6 +313,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 ((ProgressDialog) dialog).setIndeterminate(true);
                 dialog.setCancelable(false);
                 ((ProgressDialog) dialog).setMessage(getString(R.string.initial));
+                break;
+            case OPERATE:
+                ((ProgressDialog) dialog).setIndeterminate(true);
+                dialog.setCancelable(false);
+                ((ProgressDialog) dialog).setMessage(getString(R.string.operate));
                 break;
         }
     }
@@ -624,7 +633,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         folderListView = (ListView) findViewById(R.id.lv_folder);
 
         gNotebookList = db.loadGNotebooks();
-        drawerNotebookAdapter = new DrawerNotebookAdapter(mContext, R.layout.folder_unit,
+        drawerNotebookAdapter = new DrawerNotebookAdapter(mContext, R.layout.drawer_folder_unit,
                 gNotebookList, folderListView, preferences);
         folderListView.setAdapter(drawerNotebookAdapter);
 
@@ -1178,15 +1187,23 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             super.handleMessage(msg);
             switch (msg.what) {
                 case Evernote.SYNC_START:
-                    findViewById(R.id.pb_blue).setVisibility(View.VISIBLE);
+                    showProgressBar();
                     break;
                 case Evernote.SYNC_END:
-                    findViewById(R.id.pb_blue).setVisibility(View.GONE);
+                    hideProgressBar();
                     break;
                 default:
                     break;
             }
         }
+    }
+
+    public void hideProgressBar() {
+        findViewById(R.id.pb_blue).setVisibility(View.GONE);
+    }
+
+    public void showProgressBar() {
+        findViewById(R.id.pb_blue).setVisibility(View.VISIBLE);
     }
 
     public void removeDialog() {

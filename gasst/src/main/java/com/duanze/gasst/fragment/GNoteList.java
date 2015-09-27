@@ -181,14 +181,21 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
                                 .delete_title).setPositiveButton(R.string.delete_sure, new
                                 DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mAdapter.deleteSelectedNotes();
-                                if (mActionMode != null) {
-                                    mActionMode.finish();
-                                }
-                            }
-                        }).setNegativeButton(R.string.delete_cancel, null).create().show();
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.dismiss();
+
+//                                        ((MainActivity) mContext).showDialog(MainActivity.OPERATE);
+//                                        ((MainActivity) mContext).showProgressBar();
+                                        mAdapter.deleteSelectedNotes();
+//                                        ((MainActivity) mContext).hideProgressBar();
+//                                        ((MainActivity) mContext).dismissDialog(MainActivity.OPERATE);
+                                        if (mActionMode != null) {
+                                            mActionMode.finish();
+                                        }
+
+                                    }
+                                }).setNegativeButton(R.string.delete_cancel, null).create().show();
                     }
                     break;
                 case R.id.i_move:
@@ -238,14 +245,21 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
                         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
                                 .action_move).setView(view).setPositiveButton(R.string.confirm,
                                 new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mAdapter.moveSelectedNotes(tmpGNoteBookId);
-                                if (mActionMode != null) {
-                                    mActionMode.finish();
-                                }
-                            }
-                        }).setNegativeButton(R.string.cancel, null).create();
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.dismiss();
+
+//                                        ((MainActivity) mContext).showDialog(MainActivity.OPERATE);
+//                                        ((MainActivity) mContext).showProgressBar();
+                                        mAdapter.moveSelectedNotes(tmpGNoteBookId);
+//                                        ((MainActivity) mContext).hideProgressBar();
+//                                        ((MainActivity) mContext).dismissDialog(MainActivity.OPERATE);
+                                        if (mActionMode != null) {
+                                            mActionMode.finish();
+                                        }
+
+                                    }
+                                }).setNegativeButton(R.string.cancel, null).create();
                         dialog.show();
                     }
                     break;

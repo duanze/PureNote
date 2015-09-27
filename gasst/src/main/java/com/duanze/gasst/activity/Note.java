@@ -192,7 +192,7 @@ public class Note extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        overridePendingTransition(R.anim.in_push_up, R.anim.out_stable);
+//        overrideStartAnim();
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
 
@@ -220,6 +220,10 @@ public class Note extends FragmentActivity {
         if (null != actionBar) actionBar.setDisplayHomeAsUpEnabled(true);
 
         updateActionBarTitle();
+    }
+
+    private void overrideStartAnim() {
+        overridePendingTransition(R.anim.in_fadein, R.anim.out_stable);
     }
 
     private void initValues() {
@@ -757,7 +761,11 @@ public class Note extends FragmentActivity {
         }
 
         finish();
-        overridePendingTransition(R.anim.in_stable, R.anim.out_push_down);
+//        overrideEndAnim();
+    }
+
+    private void overrideEndAnim() {
+        overridePendingTransition(R.anim.in_stable, R.anim.out_fadeout);
     }
 
     private void addEditCount() {
