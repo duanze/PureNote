@@ -369,21 +369,36 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 upgradeTo21();
                 insertProud();
                 setVersionCode();
-            }
-
-            if (v < 21) {
+            } else if (v < 21) {
                 upgradeTo21();
                 insertProud();
                 setVersionCode();
-            }
-
-            if (v < 23) {
+            } else if (v < 23) {
                 insertProud();
                 setVersionCode();
+            } else if (v < 27) {
+                upgradeTo27();
+                setVersionCode();
             }
+
+
         }
 
         setActionBarTitle();
+    }
+
+    private void upgradeTo27() {
+        GNote zero = new GNote();
+        Calendar tomorrow = (Calendar) today.clone();
+        tomorrow.add(Calendar.DAY_OF_MONTH, +1);
+
+        zero.setCalToTime(tomorrow);
+        zero.setContent(getResources().getString(R.string.tip_optional));
+//            two.setSynStatus(GNote.NEW);
+        db.saveGNote(zero);
+
+        int n = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 0);
+        preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, n + 1).apply();
     }
 
     private void setActionBarTitle() {
