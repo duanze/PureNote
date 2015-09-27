@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.util.Util;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -19,7 +20,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 /**
  * Created by duanze on 2015/7/11.
  */
-public class About extends Activity implements View.OnClickListener{
+public class About extends Activity implements View.OnClickListener {
 
     private Context mContext;
 
@@ -34,16 +35,19 @@ public class About extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_about);
-        //沉浸式时，对状态栏染色
-        // create our manager instance after the content view is set
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+        if (MainActivity.TINT_STATUS_BAR) {
+            //沉浸式时，对状态栏染色
+            // create our manager instance after the content view is set
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        // enable status bar tint
-        tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+
+            // enable status bar tint
+            tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
 //        tintManager.setNavigationBarTintEnabled(true);
+        }
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -61,7 +65,6 @@ public class About extends Activity implements View.OnClickListener{
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -75,7 +78,7 @@ public class About extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_feedback:
                 Util.feedback(mContext);
                 break;
@@ -87,7 +90,6 @@ public class About extends Activity implements View.OnClickListener{
                 break;
         }
     }
-
 
 
     private void evaluate(Context context) {

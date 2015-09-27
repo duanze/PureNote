@@ -10,8 +10,10 @@
         <item name="android:itemTextAppearance">@style/WeChatActionBarOverflow</item>
         <item name="android:actionOverflowButtonStyle">@style/WeChatActionButtonOverflow</item>
         <item name="android:actionModeBackground">@color/background_color</item>
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>
+
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <style name="MenuTextStyle">

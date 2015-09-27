@@ -133,13 +133,18 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
             mHolder.title.setMaxLines(maxLines);
         }
         mHolder.time.setText(Util.timeString(gNote));
-        measureView(mHolder.itemLayout);
 
-        int height = mHolder.itemLayout.getMeasuredHeight();
+
+//        TODO 色彩标签考虑重做
+        /*
+                measureView(mHolder.itemLayout);
+                int height = mHolder.itemLayout.getMeasuredHeight();
+
 //            holder.noteColor.setVisibility(View.VISIBLE);
 //        假如色彩为 “透明” 的话，就不需要设定可见性了
         mHolder.noteColor.setHeight(height * 12 / 20);
         mHolder.noteColor.setBackgroundColor(gNote.getColor());
+*/
 
         mHolder.itemLayout.setTag(R.string.gnote_data, gNote);
 

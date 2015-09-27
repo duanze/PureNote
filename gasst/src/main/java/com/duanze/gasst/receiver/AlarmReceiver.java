@@ -41,7 +41,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent mIntent = new Intent(context, Note.class);
         mIntent.putExtra("gAsstNote_data", gNote);
         mIntent.putExtra("no", no);
-        mIntent.putExtra("mode", Note.MODE_SHOW);
+        mIntent.putExtra("mode", Note.MODE_EDIT);
         PendingIntent pi = PendingIntent.getActivity(context, no, mIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         Notification notification = new NotificationCompat.Builder(context)

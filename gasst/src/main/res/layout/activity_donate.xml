@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:tools="http://schemas.android.com/tools"
-              tools:context=".Donate"
-              android:fitsSystemWindows="true">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Donate">
+
     <ImageView
-        android:layout_marginTop="50dp"
+        android:id="@+id/alipay_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/alipay_img"
-        android:src="@drawable/donate_duanze"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/donate_duanze" />
 
     <TextView
-        android:gravity="center"
-        android:layout_marginTop="20dp"
         android:layout_width="200dp"
-        android:lineSpacingExtra="6dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/donate_me_tip"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/dimgrey"/>
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:lineSpacingExtra="6dp"
+        android:text="@string/donate_me_tip"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/dimgrey" />
 </LinearLayout>

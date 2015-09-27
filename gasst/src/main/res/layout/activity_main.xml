@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/pb_blue"
@@ -21,16 +19,14 @@
         <FrameLayout
             android:id="@+id/fl_main_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
         <!-- The navigation drawer -->
         <include
             android:id="@+id/left_drawer"
+            layout="@layout/drawer_folder"
             android:layout_width="240dp"
             android:layout_height="match_parent"
-            android:layout_gravity="left"
-            layout="@layout/drawer_folder"
-            />
+            android:layout_gravity="left" />
     </android.support.v4.widget.DrawerLayout>
 
 </LinearLayout>

@@ -295,7 +295,7 @@ public class AlarmService extends Service {
 
         maybeStop();
 
-        remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
+        remoteViews = new RemoteViews(getPackageName(), R.layout.notification_purenote);
         remoteViews.setTextViewText(R.id.tv_up, getResources().getString(R.string.app_name));
         remoteViews.setTextViewText(R.id.tv_down, str);
 

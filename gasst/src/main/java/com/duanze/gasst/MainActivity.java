@@ -71,6 +71,9 @@ import java.util.TimerTask;
 public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback,
         FooterInterface, CompoundButton.OnCheckedChangeListener {
     public static final String TAG = "MainActivity";
+
+    public static final boolean TINT_STATUS_BAR = false;
+
     // version code
     private int versionCode;
 
@@ -318,16 +321,18 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
         setContentView(R.layout.activity_main);
 
-        //沉浸式时，对状态栏染色
-        // create our manager instance after the content view is set
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        if (TINT_STATUS_BAR) {
+            //沉浸式时，对状态栏染色
+            // create our manager instance after the content view is set
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
 
-        // enable status bar tint
-        tintManager.setStatusBarTintEnabled(true);
+            // enable status bar tint
+            tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
 //        tintManager.setNavigationBarTintEnabled(true);
+        }
 
         mContext = this;
         dm = getResources().getDisplayMetrics();
@@ -530,16 +535,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
                 .create_folder_title).setView(view).setPositiveButton(R.string.create_folder, new
                 DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (editText.getText().length() == 0) {
-                    Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
-                } else {
-                    createFolder(editText.getText().toString());
-                    refreshFolderList();
-                }
-            }
-        }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
+                        } else {
+                            createFolder(editText.getText().toString());
+                            refreshFolderList();
+                        }
+                    }
+                }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
@@ -785,7 +790,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void initDatePicker() {
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);

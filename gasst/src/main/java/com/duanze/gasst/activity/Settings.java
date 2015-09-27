@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
@@ -106,19 +107,21 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         mContext = this;
         db = GNoteDB.getInstance(mContext);
         setContentView(R.layout.activity_settings);
+
+        if (MainActivity.TINT_STATUS_BAR) {
 //沉浸式时，对状态栏染色
 // create our manager instance after the content view is set
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
 
-        tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
 
 
 // enable status bar tint
-        tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintEnabled(true);
 // // enable navigation bar tint
 // tintManager.setNavigationBarTintEnabled(true);
-
+        }
 
         editor = preferences.edit();
         initButtons();

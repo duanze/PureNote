@@ -197,16 +197,20 @@ public class Note extends FragmentActivity {
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
 
         setContentView(R.layout.activity_note);
-        //沉浸式时，对状态栏染色
-        // create our manager instance after the content view is set
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+        if (MainActivity.TINT_STATUS_BAR) {
+            //沉浸式时，对状态栏染色
+            // create our manager instance after the content view is set
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        // enable status bar tint
-        tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+
+            // enable status bar tint
+            tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
 //        tintManager.setNavigationBarTintEnabled(true);
+
+        }
 
         setOverflowShowingAlways();
 
@@ -221,22 +225,7 @@ public class Note extends FragmentActivity {
     private void initValues() {
         mContext = this;
 
-        today = Calendar.getInstance();
-        pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(this, today, listener),
-                today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
-                        .DAY_OF_MONTH), false);
-        pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
-        pickerDialog.setCloseOnSingleTapDay(true);
-
-        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
-                false);
-        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
-        datePickerDialog.setCloseOnSingleTapDay(true);
-
-        gNote = getIntent().getParcelableExtra("gAsstNote_data");
-        isPassed = gNote.getPassed();
-        bookId = gNote.getGNotebookId();
+        initDateTimePicker();
 
         db = GNoteDB.getInstance(this);
         hsvColorBtns = (HorizontalScrollView) findViewById(R.id.hsv_btns);
@@ -251,11 +240,11 @@ public class Note extends FragmentActivity {
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             editText.requestFocus();
 
-            hsvColorBtns.setVisibility(View.VISIBLE);
-            initBtns();
+//            hsvColorBtns.setVisibility(View.VISIBLE);
+//            initBtns();
         } else if (mode == MODE_EDIT) {
-            hsvColorBtns.setVisibility(View.VISIBLE);
-            initBtns();
+//            hsvColorBtns.setVisibility(View.VISIBLE);
+//            initBtns();
 
 //            editText.setCursorVisible(false);
             editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -274,13 +263,32 @@ public class Note extends FragmentActivity {
             gNote.setCalToTime(today);
             gNote.setGNotebookId(preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0));
 
-            hsvColorBtns.setVisibility(View.VISIBLE);
-            initBtns();
+//            hsvColorBtns.setVisibility(View.VISIBLE);
+//            initBtns();
         } else {
-            hsvColorBtns.setVisibility(View.GONE);
+//            hsvColorBtns.setVisibility(View.GONE);
         }
 
-        checkColorRead();
+//        checkColorRead();
+    }
+
+    private void initDateTimePicker() {
+        today = Calendar.getInstance();
+        pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(this, today, listener),
+                today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
+                        .DAY_OF_MONTH), false);
+        pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
+        pickerDialog.setCloseOnSingleTapDay(true);
+
+        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
+                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                false);
+        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
+        datePickerDialog.setCloseOnSingleTapDay(true);
+
+        gNote = getIntent().getParcelableExtra("gAsstNote_data");
+        isPassed = gNote.getPassed();
+        bookId = gNote.getGNotebookId();
     }
 
     private void checkColorRead() {
@@ -302,17 +310,18 @@ public class Note extends FragmentActivity {
             editText.setText(gNote.getNoteFromHtml());
             editText.setSelection(0);
         } else if (mode == MODE_SHOW) {
-            int no = getIntent().getIntExtra("no", -1);
-            LogUtil.i(TAG, "no:" + no);
-            //传入了no表明是从定时任务传来，先取消通知栏显示，再表明需更新UI(使用Loader后，这一步不需要了:) )
-            if (no != -1) {
-                NotificationManager manager = (NotificationManager) getSystemService
-                        (NOTIFICATION_SERVICE);
-                manager.cancel(no);
-//                uiShouldUpdate();
-            }
             textView.setText(gNote.getNoteFromHtml());
 //            textView.setMovementMethod(ScrollingMovementMethod.getInstance());
+        }
+
+        int no = getIntent().getIntExtra("no", -1);
+        LogUtil.i(TAG, "no:" + no);
+        //传入了no表明是从定时任务传来，先取消通知栏显示，[再表明需更新UI(使用Loader后，这一步不需要了:) ])
+        if (no != -1) {
+            NotificationManager manager = (NotificationManager) getSystemService
+                    (NOTIFICATION_SERVICE);
+            manager.cancel(no);
+//                uiShouldUpdate();
         }
     }
 
@@ -503,19 +512,19 @@ public class Note extends FragmentActivity {
         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.action_move)
                 .setView(view).setPositiveButton(R.string.confirm, new DialogInterface
                         .OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (tmpGnoteBookId != -1) {
-                    dbFlag = DB_UPDATE;
-                    changedFolder = true;
-                }
-            }
-        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                changedFolder = false;
-            }
-        }).create();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (tmpGnoteBookId != -1) {
+                            dbFlag = DB_UPDATE;
+                            changedFolder = true;
+                        }
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        changedFolder = false;
+                    }
+                }).create();
         dialog.show();
     }
 
@@ -748,7 +757,7 @@ public class Note extends FragmentActivity {
         }
 
         finish();
-        overridePendingTransition(R.anim.out_push_up, R.anim.out_push_down);
+        overridePendingTransition(R.anim.in_stable, R.anim.out_push_down);
     }
 
     private void addEditCount() {

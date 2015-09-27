@@ -25,5 +25,8 @@
     <dimen name="title_text_size">17sp</dimen>
 
     <dimen name="toolbar_padding_top">25dp</dimen>
+    <dimen name="note_time_padding_right">15dp</dimen>
+    <dimen name="note_title_padding_top_bottom">15dp</dimen>
+    <dimen name="note_title_padding_left_right">17dp</dimen>
 
 </resources>

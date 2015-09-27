@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -27,16 +28,19 @@ public class Donate extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_donate);
-        //沉浸式时，对状态栏染色
-        // create our manager instance after the content view is set
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+        if (MainActivity.TINT_STATUS_BAR) {
+            //沉浸式时，对状态栏染色
+            // create our manager instance after the content view is set
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        // enable status bar tint
-        tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+
+            // enable status bar tint
+            tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
 //        tintManager.setNavigationBarTintEnabled(true);
+        }
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

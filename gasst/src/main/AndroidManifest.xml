@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.duanze.gasst"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.duanze.gasst">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyApplication"
@@ -21,63 +21,67 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.Note"
             android:logo="@drawable/bookmarks"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan">
-        </activity>
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity
             android:name=".activity.Settings"
             android:logo="@drawable/sliders_up_2"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.Folder"
             android:logo="@drawable/folder"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".activity.Password"
             android:label="@string/password_guard"
             android:logo="@drawable/archery_target"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".activity.Donate"
             android:label="@string/donate_developer"
             android:logo="@drawable/coin_dollar"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".activity.About"
             android:label="@string/action_about"
             android:logo="@drawable/tea_cup"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".activity.RecycleBin"
             android:label="@string/recycle_bin"
             android:logo="@drawable/trash"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
+
+        <service android:name=".service.AlarmService"></service>
+
+        <receiver android:name=".receiver.AlarmReceiver"></receiver>
+
+        <provider
+            android:name=".provider.GNoteProvider"
+            android:authorities="com.duanze.gasst.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
+
 
         <!-- umeng -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="555f243b67e58e446f00248a"/>
+            android:value="555f243b67e58e446f00248a" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="MiMarket"/>
+            android:value="MiMarket" />
         <!-- <meta-data -->
         <!-- android:value="wandoujia" -->
         <!-- android:name="UMENG_CHANNEL"/> -->
@@ -86,20 +90,9 @@
         <!-- evernote -->
         <activity
             android:name="com.evernote.client.android.EvernoteOAuthActivity"
-            android:configChanges="orientation|keyboardHidden"/>
+            android:configChanges="orientation|keyboardHidden" />
 
-        <service android:name=".service.AlarmService">
-        </service>
 
-        <receiver android:name=".receiver.AlarmReceiver">
-        </receiver>
-
-        <provider
-            android:name=".provider.GNoteProvider"
-            android:authorities="com.duanze.gasst.provider"
-            android:enabled="true"
-            android:exported="true">
-        </provider>
     </application>
 
 </manifest>

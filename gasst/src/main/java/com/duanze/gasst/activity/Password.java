@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -36,16 +37,20 @@ public class Password extends Activity {
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         setContentView(R.layout.activity_password);
-        //沉浸式时，对状态栏染色
-        // create our manager instance after the content view is set
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+        if (MainActivity.TINT_STATUS_BAR) {
+            //沉浸式时，对状态栏染色
+            // create our manager instance after the content view is set
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
 
-        // enable status bar tint
-        tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
+
+            // enable status bar tint
+            tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
 //        tintManager.setNavigationBarTintEnabled(true);
+        }
+
 
         input = (EditText) findViewById(R.id.et_input);
         hint = (TextView) findViewById(R.id.tv_hint);
