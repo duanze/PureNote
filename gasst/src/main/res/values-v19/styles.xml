@@ -13,7 +13,7 @@
         <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>
 
         <item name="android:windowTranslucentStatus">false</item>
-        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:fitsSystemWindows">false</item>
     </style>
 
     <style name="MenuTextStyle">
