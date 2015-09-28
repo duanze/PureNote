@@ -8,6 +8,7 @@
 
     <ListView
         android:id="@+id/lv_gnotes"
+        android:smoothScrollbar="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
