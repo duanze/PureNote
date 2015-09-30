@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:descendantFocusability="blocksDescendants"
+        android:background="@drawable/setting_item"
         android:orientation="horizontal"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">

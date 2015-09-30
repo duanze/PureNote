@@ -1,6 +1,7 @@
 package com.duanze.gasst.model;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -21,6 +22,7 @@ public class GNotebook implements Parcelable {
     private String notebookGuid = "";
     private int deleted = FALSE;
     private int notesNum = 0;
+    private int selected = FALSE;
 
     public int getSelected() {
         return selected;
@@ -30,7 +32,9 @@ public class GNotebook implements Parcelable {
         this.selected = selected;
     }
 
-    private int selected = FALSE;
+    public boolean isSelected() {
+        return selected == TRUE;
+    }
 
     public int getNotesNum() {
         return notesNum;
@@ -96,6 +100,21 @@ public class GNotebook implements Parcelable {
 
     public boolean isDeleted() {
         return deleted == TRUE;
+    }
+
+    public GNotebook() {
+
+    }
+
+    public GNotebook(Cursor cursor) {
+//        因为不知道主键规定而产生的悲剧-_-||
+        id = cursor.getInt(cursor.getColumnIndex("_id"));
+        name = cursor.getString(cursor.getColumnIndex(GNoteDB.NAME));
+        synStatus = cursor.getInt(cursor.getColumnIndex(GNoteDB.SYN_STATUS));
+        notebookGuid = cursor.getString(cursor.getColumnIndex(GNoteDB.NOTEBOOK_GUID));
+        deleted = cursor.getInt(cursor.getColumnIndex(GNoteDB.DELETED));
+        notesNum = cursor.getInt(cursor.getColumnIndex(GNoteDB.NOTES_NUM));
+        selected = cursor.getInt(cursor.getColumnIndex(GNoteDB.SELECTED));
     }
 
     public ContentValues toContentValues() {

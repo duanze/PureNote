@@ -11,6 +11,7 @@ import com.duanze.gasst.model.GNotebook;
  * Created by Duanze on 2015/9/26.
  */
 public class GNotebookUtil {
+
     public static void updateGNotebook(Context context, SharedPreferences preferences, int id,
                                         int diff) {
         if (id == 0) {

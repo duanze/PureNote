@@ -129,7 +129,7 @@ public class Folder extends Activity implements FooterInterface, CompoundButton.
         db = GNoteDB.getInstance(mContext);
         gNotebookList = db.loadGNotebooks();
         if (MODE_FOLDER == mode) {
-            notebookAdapter = new NotebookAdapter(mContext, R.layout.drawer_folder_unit, gNotebookList, folderListView);
+            notebookAdapter = new NotebookAdapter(mContext, R.layout.drawer_folder_item, gNotebookList, folderListView);
         } else if (MODE_MOVE == mode) {
             notebookAdapter = new NotebookAdapter(mContext, R.layout.folder_unit_move, gNotebookList,
                     folderListView);

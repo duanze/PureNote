@@ -240,8 +240,8 @@ public class Note extends FragmentActivity {
 
 //        customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
         if (mode == MODE_NEW) {
-            getWindow().setSoftInputMode(
-                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams
+                    .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             editText.requestFocus();
 
 //            hsvColorBtns.setVisibility(View.VISIBLE);
@@ -260,8 +260,8 @@ public class Note extends FragmentActivity {
                 }
             });
         } else if (MODE_TODAY == mode) {
-            getWindow().setSoftInputMode(
-                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams
+                    .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             editText.requestFocus();
 
             gNote.setCalToTime(today);
@@ -285,7 +285,7 @@ public class Note extends FragmentActivity {
         pickerDialog.setCloseOnSingleTapDay(true);
 
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);
@@ -516,19 +516,19 @@ public class Note extends FragmentActivity {
         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.action_move)
                 .setView(view).setPositiveButton(R.string.confirm, new DialogInterface
                         .OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (tmpGnoteBookId != -1) {
-                            dbFlag = DB_UPDATE;
-                            changedFolder = true;
-                        }
-                    }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        changedFolder = false;
-                    }
-                }).create();
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (tmpGnoteBookId != -1) {
+                    dbFlag = DB_UPDATE;
+                    changedFolder = true;
+                }
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                changedFolder = false;
+            }
+        }).create();
         dialog.show();
     }
 
@@ -603,7 +603,6 @@ public class Note extends FragmentActivity {
 
     private void deleteNote() {
 //        db.deleteGNote(gNote.getId());
-
         //        物理数据存储，以改代删
         gNote.setDeleted(GNote.TRUE);
         if (!"".equals(gNote.getGuid())) {
@@ -637,7 +636,6 @@ public class Note extends FragmentActivity {
             //快写模式将存储至特定目录下
             groupId = gNote.getGNotebookId();
         }
-
 //        物理数据存储
         ProviderUtil.insertGNote(mContext, gNote);
 //        db.saveGNote(gNote);

@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -40,6 +44,7 @@ import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Password;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.DrawerNotebookAdapter;
+import com.duanze.gasst.adapter.GNotebookAdapter;
 import com.duanze.gasst.fragment.ColorGrid;
 import com.duanze.gasst.fragment.FolderFooter;
 import com.duanze.gasst.fragment.FolderFooterDelete;
@@ -48,6 +53,7 @@ import com.duanze.gasst.fragment.GNoteList;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.syn.Evernote;
 import com.duanze.gasst.util.LogUtil;
@@ -69,7 +75,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback,
-        FooterInterface, CompoundButton.OnCheckedChangeListener {
+        FooterInterface, CompoundButton.OnCheckedChangeListener, LoaderManager
+                .LoaderCallbacks<Cursor>, GNotebookAdapter.ItemLongPressedListener,
+        GNotebookAdapter.OnItemSelectListener, GNotebookAdapter.OnItemClickListener {
     public static final String TAG = "MainActivity";
 
     public static final boolean TINT_STATUS_BAR = false;
@@ -146,6 +154,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private final int DIALOG_PROGRESS = 101;
     private final int INITIAL = 102;
+
+    //    loader化
+    private final int NOTEBOOK_LOADER_ID = 112;
+    private GNotebookAdapter mAdapter;
+    private LoaderManager loaderManager;
 
     private CharSequence mDrawerTitle;
     private DrawerLayout mDrawerLayout;
@@ -235,6 +248,70 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         footerDelete.deleteNum(deleteNum);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader cursorLoader = new CursorLoader(mContext, GNoteProvider.NOTEBOOK_URI,
+                GNoteProvider.NOTEBOOK_PROJECTION, null, null, null);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void startActionMode() {
+
+    }
+
+    @Override
+    public void onItemClick(View view) {
+//进行删除操作时无视之
+        if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
+
+//                特判回收站
+//                if (drawerNotebookAdapter.getCount() - 1 == i) {
+////                    RecycleBin.actionStart(mContext);
+//                    isRecycleShown = true;
+//                } else {
+
+        int oldId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+        int newId = 0;
+        GNotebook gNotebook = (GNotebook) view.getTag(R.string.gnotebook_data);
+        if (null != gNotebook) {
+            newId = gNotebook.getId();
+        }
+//                //由 id 解析一个 listview pos 出来
+//                int from = parseBookIdToPos(folderId);
+//                changeFlag(from, i, view);
+        changeBookInDB(oldId, newId);
+
+//                关闭抽屉
+        mDrawerLayout.closeDrawer(drawerRoot);
+//                showDialog();
+
+        isRecycleShown = false;
+//                }
+
+        changeToBook(oldId, newId);
+    }
+
+    @Override
+    public void onSelect() {
+
+    }
+
+    @Override
+    public void onCancelSelect() {
+
+    }
+
     private class MyDatePickerListener implements OnDateSetListener {
         @Override
         public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
@@ -248,19 +325,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         init();
-
         if (passwordGuard) {
             Password.activityStart(mContext, preferences.getString(Settings.PASSWORD_HINT, ""),
                     preferences.getString(Settings.PASSWORD, ""));
         }
-
-        //如果设置了启动时进入新记事
-//        if (isOpenNewNote) {
-//            writeNewNote(today);
-//        }
-
         //判断所需使用的布局
         mode = preferences.getInt("mode", MODE_LIST);
         changeContent();
@@ -324,26 +393,22 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
 
     private void init() {
-
+        mContext = this;
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         readSetting();
-
         setContentView(R.layout.activity_main);
 
         if (TINT_STATUS_BAR) {
             //沉浸式时，对状态栏染色
             // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
-
             tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-
             // enable status bar tint
             tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
 //        tintManager.setNavigationBarTintEnabled(true);
         }
 
-        mContext = this;
         dm = getResources().getDisplayMetrics();
         today = Calendar.getInstance();
         db = GNoteDB.getInstance(this);
@@ -380,8 +445,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 upgradeTo27();
                 setVersionCode();
             }
-
-
         }
 
         setActionBarTitle();
@@ -430,7 +493,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     private void createFolder(String name) {
         GNotebook gNotebook = new GNotebook();
         gNotebook.setName(name);
-        db.saveGNotebook(gNotebook);
+//        db.saveGNotebook(gNotebook);
+        ProviderUtil.insertGNotebook(mContext, gNotebook);
     }
 
     private void refreshFolderList() {
@@ -505,7 +569,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                         changeFooter();
 
                         //情况：在A文件夹中删除文件了B文件夹中的文件，刷新
-                        changeToBook();
+//                        changeToBook();
 
                     }
                 }).show();
@@ -559,16 +623,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
                 .create_folder_title).setView(view).setPositiveButton(R.string.create_folder, new
                 DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (editText.getText().length() == 0) {
-                            Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
-                        } else {
-                            createFolder(editText.getText().toString());
-                            refreshFolderList();
-                        }
-                    }
-                }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (editText.getText().toString().trim().length() == 0) {
+                    Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
+                } else {
+                    createFolder(editText.getText().toString().trim());
+//                    refreshFolderList();
+                }
+            }
+        }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
@@ -626,7 +690,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                     actionBar.setTitle(mDrawerTitle);
                 }
 
-                refreshFolderList();
+                loaderManager.restartLoader(NOTEBOOK_LOADER_ID, null, MainActivity.this);
+//                refreshFolderList();
                 modeFooter = Folder.MODE_FOOTER;
                 setFooter();
 
@@ -646,55 +711,54 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         }
 
         folderListView = (ListView) findViewById(R.id.lv_folder);
+        mAdapter = new GNotebookAdapter(mContext, null, 0, this, this, this);
+        mAdapter.setPreferences(preferences);
+        folderListView.setAdapter(mAdapter);
 
-        gNotebookList = db.loadGNotebooks();
-        drawerNotebookAdapter = new DrawerNotebookAdapter(mContext, R.layout.drawer_folder_unit,
-                gNotebookList, folderListView, preferences);
-        folderListView.setAdapter(drawerNotebookAdapter);
+        loaderManager = getSupportLoaderManager();
+        loaderManager.initLoader(NOTEBOOK_LOADER_ID, null, this);
 
-        folderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //进行删除操作时无视之
-                if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
-
-//                特判回收站
-//                if (drawerNotebookAdapter.getCount() - 1 == i) {
-////                    RecycleBin.actionStart(mContext);
-//                    isRecycleShown = true;
-//                } else {
-
-                int folderId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
-
-                //由 id 解析一个 listview pos 出来
-                int from = parseBookIdToPos(folderId);
-                changeFlag(from, i, view);
-
-//                关闭抽屉
-                mDrawerLayout.closeDrawer(drawerRoot);
-//                showDialog();
-
-                changeBookInDB(from, i);
-
-                isRecycleShown = false;
-
+//        folderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                //进行删除操作时无视之
+//                if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
+//
+////                特判回收站
+////                if (drawerNotebookAdapter.getCount() - 1 == i) {
+//////                    RecycleBin.actionStart(mContext);
+////                    isRecycleShown = true;
+////                } else {
+//
+//                int oldId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+//                int newId = 0;
+//                if (0 != i) {
+//                    GNotebook gNotebook = (GNotebook) view.getTag(R.string.gnotebook_data);
+//                    newId = gNotebook.getId();
 //                }
-
-                changeToBook();
-//                removeDialog();
-
-            }
-        });
-
+////                //由 id 解析一个 listview pos 出来
+////                int from = parseBookIdToPos(folderId);
+////                changeFlag(from, i, view);
+//                changeBookInDB(oldId, newId);
+//
+////                关闭抽屉
+//                mDrawerLayout.closeDrawer(drawerRoot);
+////                showDialog();
+//
+//                isRecycleShown = false;
+////                }
+//
+//                changeToBook(oldId, newId);
+//            }
+//        });
     }
 
-    public void changeToBook() {
+    public void changeToBook(int oldId, int newId) {
+        if (oldId == newId) return;
         //刷新界面
-        int tmp = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
-        if (gNotebookId != tmp) {
-            gNotebookId = tmp;
-            refreshUI();
-        }
+        LogUtil.i(TAG, "gNotebook id oldId:" + oldId + " newId:" + newId);
+        preferences.edit().putInt(Settings.GNOTEBOOK_ID, newId).commit();
+        refreshUI();
     }
 
     /**
@@ -732,39 +796,63 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     }
 
 
-    private void changeBookInDB(int from, int to) {
+    private void changeBookInDB(int fromId, int toId) {
 //        当两者相同时，说明无需改变
-        if (from == to) {
+        if (fromId == toId) {
             return;
         }
+        cancelFolder(fromId);
+        selectFolder(toId);
 
-        int oldId = cancelFolder(from);
-        int newId = selectFolder(to);
-
-        preferences.edit().putInt(Settings.GNOTEBOOK_ID, newId).commit();
-        LogUtil.i(TAG, "gNotebook id fromId:" + oldId + " toId:" + newId);
     }
 
-    private int selectFolder(int pos) {
-        if (pos != 0) {
-            if (gNotebookList == null || pos - 1 >= gNotebookList.size()) return 0;
-            GNotebook gNotebook = gNotebookList.get(pos - 1);
-            gNotebook.setSelected(GNotebook.TRUE);
-            db.updateGNotebook(gNotebook);
-            return gNotebook.getId();
+    private void selectFolder(int bookId) {
+//        if (bookId != 0) {
+//            if (gNotebookList == null || bookId - 1 >= gNotebookList.size()) return 0;
+//            GNotebook gNotebook = gNotebookList.get(bookId - 1);
+//            gNotebook.setSelected(GNotebook.TRUE);
+//            db.updateGNotebook(gNotebook);
+//            return gNotebook.getId();
+//        }
+//        return 0;
+
+        // / 此步需要使用 provider 来配合观察者模式
+        if (0 != bookId && null != db) {
+            try {
+                GNotebook gNotebook = db.getGNotebookById(bookId);
+                gNotebook.setSelected(GNotebook.TRUE);
+//                ProviderUtil.updateGNotebook(mContext, gNotebook);
+                db.updateGNotebook(gNotebook);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
-        return 0;
     }
 
-    private int cancelFolder(int pos) {
-        if (pos != 0) {
-            if (gNotebookList == null || pos - 1 >= gNotebookList.size()) return 0;
-            GNotebook gNotebook = gNotebookList.get(pos - 1);
-            gNotebook.setSelected(GNotebook.FALSE);
-            db.updateGNotebook(gNotebook);
-            return gNotebook.getId();
+    private void cancelFolder(int bookId) {
+//        if (bookId != 0) {
+//            if (gNotebookList == null || bookId - 1 >= gNotebookList.size()) return 0;
+//            GNotebook gNotebook = gNotebookList.get(bookId - 1);
+//            gNotebook.setSelected(GNotebook.FALSE);
+//            db.updateGNotebook(gNotebook);
+//            return gNotebook.getId();
+//        }
+//        return 0;
+
+        // / 仅当非 purenote 时需要更新GNotebook
+        // 此步 不 需要使用 provider 来配合观察者模式
+        // 但如果后一步 bookId 为0，那也会悲剧
+        // 所以还是进行两次更新吧，汗- -||
+        if (0 != bookId && null != db) {
+            try {
+                GNotebook gNotebook = db.getGNotebookById(bookId);
+                gNotebook.setSelected(GNotebook.FALSE);
+//                ProviderUtil.updateGNotebook(mContext, gNotebook);
+                db.updateGNotebook(gNotebook);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
-        return 0;
     }
 
     private void changeFlag(int from, int to, View v) {
@@ -814,7 +902,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void initDatePicker() {
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);
@@ -933,11 +1021,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         randomColor = preferences.getBoolean(Settings.RANDOM_COLOR, true);
         //最大显示行数
         maxLines = preferences.getInt(Settings.MAX_LINES, Settings.DEFAULT_MAX_LINES);
-
 //        customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
-
         gNotebookId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
-
         passwordGuard = preferences.getBoolean(Settings.PASSWORD_GUARD, false);
     }
 
@@ -957,7 +1042,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     @Override
     protected void onResume() {
         super.onResume();
-
         uiOperation();
 
         if (mEvernote.isLogin()) {
@@ -969,7 +1053,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 public void run() {
                     mEvernote.sync(true, true, null);
                 }
-            }, 30000, 50000);
+            }, 30 * 1000, 60 * 1000);
         }
 
         rateForPureNote();

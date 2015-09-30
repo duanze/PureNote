@@ -90,12 +90,12 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        initValues();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initValues();
     }
 
     @Override

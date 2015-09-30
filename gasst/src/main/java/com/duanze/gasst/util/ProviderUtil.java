@@ -30,7 +30,7 @@ public class ProviderUtil {
                 .NOTEBOOK_URI, gNotebook.getId()), values, null, null);
     }
 
-    public static Uri insertGNote(Context context, GNotebook gNotebook) {
+    public static Uri insertGNotebook(Context context, GNotebook gNotebook) {
         ContentValues values = gNotebook.toContentValues();
         return context.getContentResolver().insert(GNoteProvider.NOTEBOOK_URI, values);
     }
