@@ -436,7 +436,7 @@ public class Folder extends Activity implements FooterInterface, CompoundButton.
         } else {
             deleteNum--;
         }
-        footerDelete.deleteNum(deleteNum);
+        footerDelete.updateDeleteNum(deleteNum);
     }
 
     @Override

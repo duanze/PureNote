@@ -39,7 +39,7 @@ public class FolderFooterDelete extends Fragment{
                 ((FooterInterface) mContext).changeFooter();
             }
         });
-        deleteNum(((FooterInterface) mContext).getDeleteNum());
+        updateDeleteNum(((FooterInterface) mContext).getDeleteNum());
         folderNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,7 +49,7 @@ public class FolderFooterDelete extends Fragment{
         return view;
     }
 
-    public void deleteNum(int n){
+    public void updateDeleteNum(int n){
         folderNum.setText(getString(R.string.folder_delete_num,n));
         if (n == 0) {
             folderNum.setTextColor(getResources().getColor(R.color.grey));

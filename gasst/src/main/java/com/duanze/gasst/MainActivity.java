@@ -30,7 +30,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -219,10 +218,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     public void changeFooter() {
         if (Folder.MODE_FOOTER == modeFooter) {
             modeFooter = Folder.MODE_FOOTER_DELETE;
-            showCheckBox();
+//            showCheckBox();
+            if (null != mAdapter) {
+                mAdapter.setCheckMode(true);
+            }
         } else if (Folder.MODE_FOOTER_DELETE == modeFooter) {
             modeFooter = Folder.MODE_FOOTER;
-            hideCheckBox();
+//            hideCheckBox();
+            if (null != mAdapter) {
+                mAdapter.setCheckMode(false);
+            }
         }
         setFooter();
     }
@@ -245,7 +250,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         } else {
             deleteNum--;
         }
-        footerDelete.deleteNum(deleteNum);
+        footerDelete.updateDeleteNum(deleteNum);
     }
 
     @Override
@@ -304,12 +309,14 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     @Override
     public void onSelect() {
-
+//        意义并不是很明确的复用
+        onCheckedChanged(null, true);
     }
 
     @Override
     public void onCancelSelect() {
-
+//        意义并不是很明确的复用
+        onCheckedChanged(null, false);
     }
 
     private class MyDatePickerListener implements OnDateSetListener {
@@ -623,16 +630,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
                 .create_folder_title).setView(view).setPositiveButton(R.string.create_folder, new
                 DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (editText.getText().toString().trim().length() == 0) {
-                    Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
-                } else {
-                    createFolder(editText.getText().toString().trim());
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (editText.getText().toString().trim().length() == 0) {
+                            Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
+                        } else {
+                            createFolder(editText.getText().toString().trim());
 //                    refreshFolderList();
-                }
-            }
-        }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
+                        }
+                    }
+                }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
@@ -693,6 +700,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 loaderManager.restartLoader(NOTEBOOK_LOADER_ID, null, MainActivity.this);
 //                refreshFolderList();
                 modeFooter = Folder.MODE_FOOTER;
+                if (null != mAdapter) {
+                    mAdapter.setCheckMode(false);
+                }
                 setFooter();
 
                 isDrawerOpened = true;
@@ -902,7 +912,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void initDatePicker() {
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);

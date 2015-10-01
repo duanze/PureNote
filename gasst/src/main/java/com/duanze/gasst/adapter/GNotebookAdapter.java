@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,7 +27,7 @@ import com.duanze.gasst.util.Util;
 import java.util.HashMap;
 
 public class GNotebookAdapter extends CursorAdapter implements View.OnClickListener, View
-        .OnLongClickListener {
+        .OnLongClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = GNotebookAdapter.class.getSimpleName();
 
     public static final int SPECIAL_ITEM_NUM = 1;
@@ -36,6 +39,42 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
     private OnItemClickListener mOnItemClickListener;
 
     private SharedPreferences preferences;
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//        if (isChecked && null != mOnItemSelectListener) {
+//            mOnItemSelectListener.onSelect();
+//        } else if (!isChecked && null != mOnItemSelectListener) {
+//            mOnItemSelectListener.onCancelSelect();
+//        }
+
+        View view = (View) buttonView.getParent();
+        GNotebook gNotebook = (GNotebook) view.getTag(R.string.gnotebook_data);
+        if (null != gNotebook) {
+            checkBoxChanged(gNotebook.getId(), gNotebook, isChecked);
+        } else {
+            Log.e(TAG, "Error in onCheckedChanged(CompoundButton buttonView, boolean isChecked),null==gNotebook");
+        }
+    }
+
+    public void checkBoxChanged(int _id, GNotebook gNotebook, boolean isChecked) {
+        if (mCheckedItems == null) {
+            mCheckedItems = new HashMap<Integer, GNotebook>();
+        }
+        if (isChecked) {
+            mCheckedItems.put(_id, gNotebook);
+
+            if (null != mOnItemSelectListener) {
+                mOnItemSelectListener.onSelect();
+            }
+        } else {
+            mCheckedItems.remove(_id);
+
+            if (null != mOnItemSelectListener) {
+                mOnItemSelectListener.onCancelSelect();
+            }
+        }
+    }
 
     public interface ItemLongPressedListener {
         void startActionMode();
@@ -175,6 +214,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
         if (mCheckMode) {
             mHolder.checkBox.setVisibility(View.VISIBLE);
+            mHolder.checkBox.setOnCheckedChangeListener(this);
         } else {
             mHolder.checkBox.setVisibility(View.INVISIBLE);
         }
@@ -197,7 +237,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
                     mOnItemClickListener.onItemClick(v);
                 }
             } else {
-
+                v.findViewById(R.id.cb_folder_unit).performClick();
             }
         }
     }
@@ -228,7 +268,8 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
     public void setCheckMode(boolean check) {
         if (!check) {
-            mCheckedItems = null;
+//            由于牵连甚广，这里我们让它维持原状态
+//            mCheckedItems = null;
         }
         if (check != mCheckMode) {
             mCheckMode = check;
