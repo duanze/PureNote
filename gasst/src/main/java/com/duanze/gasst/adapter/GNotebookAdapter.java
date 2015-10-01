@@ -1,5 +1,6 @@
 package com.duanze.gasst.adapter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -20,11 +21,16 @@ import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
+import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.provider.GNoteProvider;
+import com.duanze.gasst.util.GNotebookUtil;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.Util;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class GNotebookAdapter extends CursorAdapter implements View.OnClickListener, View
         .OnLongClickListener, CompoundButton.OnCheckedChangeListener {
@@ -53,14 +59,13 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         if (null != gNotebook) {
             checkBoxChanged(gNotebook.getId(), gNotebook, isChecked);
         } else {
-            Log.e(TAG, "Error in onCheckedChanged(CompoundButton buttonView, boolean isChecked),null==gNotebook");
+            Log.e(TAG, "Error in onCheckedChanged(CompoundButton buttonView, boolean isChecked),"
+                    + "null==gNotebook");
         }
     }
 
     public void checkBoxChanged(int _id, GNotebook gNotebook, boolean isChecked) {
-        if (mCheckedItems == null) {
-            mCheckedItems = new HashMap<Integer, GNotebook>();
-        }
+
         if (isChecked) {
             mCheckedItems.put(_id, gNotebook);
 
@@ -124,6 +129,11 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
                             OnItemClickListener onItemClickListener) {
         this(context, c, flags, itemLongPressedListener, onItemSelectListener);
         mOnItemClickListener = onItemClickListener;
+    }
+
+
+    public HashMap<Integer, GNotebook> getCheckedItems() {
+        return mCheckedItems;
     }
 
     @Override
@@ -212,7 +222,13 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         mHolder.divider.setVisibility(View.INVISIBLE);
         mHolder.itemLayout.setTag(R.string.gnotebook_data, gNotebook);
 
+        mHolder.checkBox.setOnCheckedChangeListener(null);
         if (mCheckMode) {
+            if (null != mCheckedItems && mCheckedItems.containsKey(gNotebook.getId())) {
+                mHolder.checkBox.setChecked(true);
+            } else {
+                mHolder.checkBox.setChecked(false);
+            }
             mHolder.checkBox.setVisibility(View.VISIBLE);
             mHolder.checkBox.setOnCheckedChangeListener(this);
         } else {
@@ -268,13 +284,63 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
     public void setCheckMode(boolean check) {
         if (!check) {
-//            由于牵连甚广，这里我们让它维持原状态
+//            由于牵连甚广，退出删除模式后，这里我们让它维持原状态
 //            mCheckedItems = null;
+        } else {
+            if (mCheckedItems == null) {
+                mCheckedItems = new HashMap<Integer, GNotebook>();
+            }
         }
         if (check != mCheckMode) {
             mCheckMode = check;
             notifyDataSetChanged();
         }
+    }
+
+    public void deleteItems() {
+        if (null == mCheckedItems || 0 == mCheckedItems.size()) {
+            return;
+        } else {
+            Set<Integer> keys = mCheckedItems.keySet();
+            for (Integer key : keys) {
+                GNotebook gNotebook = mCheckedItems.get(key);
+                deleteGNotebook(gNotebook);
+            }
+
+            mCheckedItems = null;
+        }
+    }
+
+    public void deleteGNotebook(GNotebook gNotebook) {
+//        仍旧以改代删
+        deleteGNotesByBookId(gNotebook.getId());
+        gNotebook.setNotesNum(0);
+        gNotebook.setDeleted(GNotebook.TRUE);
+        ProviderUtil.updateGNotebook(mContext, gNotebook);
+    }
+
+    private void deleteGNotesByBookId(int bookId) {
+        Cursor cursor = mContext.getContentResolver().query(GNoteProvider.BASE_URI, GNoteProvider
+                .STANDARD_PROJECTION, GNoteDB.GNOTEBOOK_ID + " = ?", new String[]{"" + bookId},
+                null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                GNote gNote = new GNote(cursor);
+                gNote.setDeleted(GNote.TRUE);
+                ProviderUtil.updateGNote(mContext, gNote);
+            } while (cursor.moveToNext());
+
+//        针对 所有笔记 减少数目
+            if (null != preferences) {
+                GNotebookUtil.updateGNotebook(mContext, preferences, 0, -cursor.getCount());
+            }
+        }
+
+        if (null != cursor) {
+            cursor.close();
+        }
+
     }
 
 }

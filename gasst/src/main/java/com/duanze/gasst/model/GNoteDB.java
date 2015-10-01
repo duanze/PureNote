@@ -98,14 +98,8 @@ public class GNoteDB {
      */
     public List<GNote> loadGNotes() {
         List<GNote> list = new ArrayList<GNote>();
-        Cursor cursor = db.query(
-                TABLE_NAME,
-                null,
-                SYN_STATUS + " != ?" + " and " + DELETED + " != ?",
-                new String[]{"" + GNote.DELETE, "" + GNote.TRUE},
-                null,
-                null,
-                "time desc");
+        Cursor cursor = db.query(TABLE_NAME, null, SYN_STATUS + " != ?" + " and " + DELETED + " " +
+                "!= ?", new String[]{"" + GNote.DELETE, "" + GNote.TRUE}, null, null, "time desc");
 
         if (cursor.moveToFirst()) {
             do {
@@ -142,14 +136,9 @@ public class GNoteDB {
             return loadGNotes();
         }
 
-        Cursor cursor = db.query(
-                TABLE_NAME,
-                null,
-                GNOTEBOOK_ID + " = ? and " + SYN_STATUS + " != ?" + " and " + DELETED + " != ?",
-                new String[]{"" + id, "" + GNote.DELETE, "" + GNote.TRUE},
-                null,
-                null,
-                "time desc");
+        Cursor cursor = db.query(TABLE_NAME, null, GNOTEBOOK_ID + " = ? and " + SYN_STATUS + " !=" +
+                " ?" + " and " + DELETED + " != ?", new String[]{"" + id, "" + GNote.DELETE, "" +
+                GNote.TRUE}, null, null, "time desc");
 
         if (cursor.moveToFirst()) {
             do {
@@ -231,7 +220,8 @@ public class GNoteDB {
      * @return
      */
     public GNote getGNoteById(int id) {
-        Cursor cursor = db.query(TABLE_NAME, null, "id = ?", new String[]{"" + id}, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, null, "id = ?", new String[]{"" + id}, null, null,
+                null);
         if (cursor.moveToFirst()) {
             GNote gNote = new GNote();
             gNote.setId(cursor.getInt(cursor.getColumnIndex(ID)));
@@ -340,7 +330,8 @@ public class GNoteDB {
         values.put(NOTES_NUM, gNotebook.getNotesNum());
         values.put(SELECTED, gNotebook.getSelected());
 
-        return db.update(TABLE_NOTEBOOK, values, "id = ?", new String[]{"" + gNotebook.getId()}) == 1;
+        return db.update(TABLE_NOTEBOOK, values, "id = ?", new String[]{"" + gNotebook.getId()})
+                == 1;
     }
 
     public boolean deleteGNotebook(GNotebook gNotebook) {
@@ -349,10 +340,8 @@ public class GNoteDB {
 
     public List<GNotebook> loadGNotebooks() {
         List<GNotebook> list = new ArrayList<GNotebook>();
-        Cursor cursor = db.query(TABLE_NOTEBOOK, null, "syn_status != ?", new String[]{"" + GNotebook
-                        .DELETE}, null,
-                null,
-                null);
+        Cursor cursor = db.query(TABLE_NOTEBOOK, null, DELETED + " != ?", new
+                String[]{"" + GNotebook.TRUE}, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 GNotebook gNotebook = new GNotebook();
@@ -374,7 +363,8 @@ public class GNoteDB {
     }
 
     public GNotebook getGNotebookById(int id) {
-        Cursor cursor = db.query(TABLE_NOTEBOOK, null, "id = ?", new String[]{"" + id}, null, null, null);
+        Cursor cursor = db.query(TABLE_NOTEBOOK, null, "id = ?", new String[]{"" + id}, null,
+                null, null);
         if (cursor.moveToFirst()) {
             GNotebook gNotebook = new GNotebook();
             gNotebook.setId(cursor.getInt(cursor.getColumnIndex(ID)));

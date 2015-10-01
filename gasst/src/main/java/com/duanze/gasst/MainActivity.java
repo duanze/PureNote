@@ -69,7 +69,9 @@ import com.umeng.analytics.MobclickAgent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -237,8 +239,10 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         if (Folder.MODE_FOOTER == modeFooter) {
             showCreateFolderDialog();
         } else if (Folder.MODE_FOOTER_DELETE == modeFooter) {
-            if (deleteNum > 0) {
+            if (mAdapter.getSelectedCount() > 0) {
+//                mAdapter.deleteItems();
                 trash();
+                updateDeleteNum();
             }
         }
     }
@@ -310,13 +314,17 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     @Override
     public void onSelect() {
 //        意义并不是很明确的复用
-        onCheckedChanged(null, true);
+        updateDeleteNum();
+    }
+
+    private void updateDeleteNum() {
+        footerDelete.updateDeleteNum(mAdapter.getSelectedCount());
     }
 
     @Override
     public void onCancelSelect() {
 //        意义并不是很明确的复用
-        onCheckedChanged(null, false);
+        updateDeleteNum();
     }
 
     private class MyDatePickerListener implements OnDateSetListener {
@@ -539,45 +547,72 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                         // TODO Auto-generated method stub
                         int extractId = preferences.getInt(Settings
                                 .LIGHTNING_EXTRACT_SAVE_LOCATION, 0);
-
                         //快写存储位置
                         int quickId = preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0);
 
-//                        从 ListView 中的各项开始遍历故起点需进行处理
-                        for (int i = 1; i < folderListView.getCount() && deleteNum > 0; i++) {
-                            CheckBox checkBox = (CheckBox) folderListView.getChildAt(i)
-                                    .findViewById(R.id.cb_folder_unit);
-                            if (checkBox.isChecked()) {
-//                              注意-1 转换
-                                int pos = i - 1;
+                        HashMap<Integer, GNotebook> map = mAdapter.getCheckedItems();
+                        if (null == map || 0 == map.size()) {
+                            return;
+                        } else {
+                            int oldId = 0;
+                            int newId = 0;
 
-                                db.deleteGNotebook(gNotebookList.get(pos));
-                                deleteNoteInBook(gNotebookList.get(pos).getId());
-//                        清除所有checkBox状态防错位,此时会触发监听器
-                                checkBox.setChecked(false);
-
-//                                如果selected笔记本在被删除之列，将笔记本还原为默认值
-                                if (gNotebookList.get(pos).getSelected() == GNotebook.TRUE) {
-                                    preferences.edit().putInt(Settings.GNOTEBOOK_ID, 0).commit();
-                                }
-
-                                if (gNotebookList.get(pos).getId() == extractId) {
+                            Set<Integer> keys = map.keySet();
+                            for (Integer key : keys) {
+                                if (key == extractId) {
                                     preferences.edit().putInt(Settings
                                             .LIGHTNING_EXTRACT_SAVE_LOCATION, 0).apply();
                                 }
-
-                                if (gNotebookList.get(pos).getId() == quickId) {
+                                if (key == quickId) {
                                     preferences.edit().putInt(Settings.QUICK_WRITE_SAVE_LOCATION,
                                             0).apply();
                                 }
+                                GNotebook gNotebook = map.get(key);
+                                if (gNotebook.isSelected()) {
+                                    oldId = key;
+                                }
+
+                                mAdapter.deleteGNotebook(gNotebook);
                             }
+
+                            map = null;
+                            changeToBook(oldId,newId);
                         }
-                        refreshFolderList();
                         changeFooter();
+
+////                        从 ListView 中的各项开始遍历故起点需进行处理
+//                        for (int i = 1; i < folderListView.getCount() && deleteNum > 0; i++) {
+//                            CheckBox checkBox = (CheckBox) folderListView.getChildAt(i)
+//                                    .findViewById(R.id.cb_folder_unit);
+//                            if (checkBox.isChecked()) {
+////                              注意-1 转换
+//                                int pos = i - 1;
+//
+//                                db.deleteGNotebook(gNotebookList.get(pos));
+//                                deleteNoteInBook(gNotebookList.get(pos).getId());
+////                        清除所有checkBox状态防错位,此时会触发监听器
+//                                checkBox.setChecked(false);
+//
+////                                如果selected笔记本在被删除之列，将笔记本还原为默认值
+//                                if (gNotebookList.get(pos).getSelected() == GNotebook.TRUE) {
+//                                    preferences.edit().putInt(Settings.GNOTEBOOK_ID, 0).commit();
+//                                }
+//
+//                                if (gNotebookList.get(pos).getId() == extractId) {
+//                                    preferences.edit().putInt(Settings
+//                                            .LIGHTNING_EXTRACT_SAVE_LOCATION, 0).apply();
+//                                }
+//
+//                                if (gNotebookList.get(pos).getId() == quickId) {
+//                                    preferences.edit().putInt(Settings.QUICK_WRITE_SAVE_LOCATION,
+//                                            0).apply();
+//                                }
+//                            }
+//                        }
+//                        refreshFolderList();
 
                         //情况：在A文件夹中删除文件了B文件夹中的文件，刷新
 //                        changeToBook();
-
                     }
                 }).show();
     }
@@ -630,16 +665,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
                 .create_folder_title).setView(view).setPositiveButton(R.string.create_folder, new
                 DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (editText.getText().toString().trim().length() == 0) {
-                            Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
-                        } else {
-                            createFolder(editText.getText().toString().trim());
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (editText.getText().toString().trim().length() == 0) {
+                    Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
+                } else {
+                    createFolder(editText.getText().toString().trim());
 //                    refreshFolderList();
-                        }
-                    }
-                }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
+                }
+            }
+        }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
@@ -912,7 +947,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void initDatePicker() {
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);
