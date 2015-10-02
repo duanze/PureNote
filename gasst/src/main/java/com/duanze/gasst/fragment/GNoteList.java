@@ -223,11 +223,13 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
     };
 
     private void dismissFAB() {
+        if (fabButton.isLock()) return;
         fabButton.hide(true);
         fabButton.setLock(true);
     }
 
     private void showFAB() {
+        if (!fabButton.isLock()) return;
         fabButton.setLock(false);
         fabButton.hide(false);
     }

@@ -47,6 +47,7 @@ public class FloatingActionButton extends View {
      */
     private float mYHidden = -1;
 
+    // / Added by duanze
     /**
      * Just for PureNote by Duanze
      */
@@ -59,6 +60,7 @@ public class FloatingActionButton extends View {
     public void setLock(boolean lock) {
         this.lock = lock;
     }
+    // / End
 
     public FloatingActionButton(Context context) {
         this(context, null);
@@ -173,8 +175,9 @@ public class FloatingActionButton extends View {
     }
 
     public void hide(boolean hide) {
-//        Added by Duanze
+        // / Added by Duanze
         if (lock) return;
+        // / End
 
         // If the hidden state is being updated
         if (mHidden != hide) {
