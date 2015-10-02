@@ -87,7 +87,7 @@ public class ClassicList extends Fragment {
         MainActivity activity = (MainActivity) mContext;
 
 //        List<GNote> tmpList = db.loadGNotes();
-        List<GNote> tmpList = db.loadGNotesByBookId(activity.getgNotebookId());
+        List<GNote> tmpList = db.loadGNotesByBookId(activity.getGNotebookId());
         gNoteList.clear();
         for (GNote g : tmpList) {
             gNoteList.add(g);
@@ -104,7 +104,7 @@ public class ClassicList extends Fragment {
         today = Calendar.getInstance();
         db = GNoteDB.getInstance(mContext);
 //        gNoteList = db.loadGNotes();
-        gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getgNotebookId());
+        gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getGNotebookId());
 
         pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(mContext, today, listener),
                 today.get(Calendar.YEAR), today.get(Calendar.MONTH),
@@ -322,7 +322,7 @@ public class ClassicList extends Fragment {
             try {
                 MainActivity activity = (MainActivity) mContext;
 //        List<GNote> tmpList = db.loadGNotes();
-                List<GNote> tmpList = db.loadGNotesByBookId(activity.getgNotebookId());
+                List<GNote> tmpList = db.loadGNotesByBookId(activity.getGNotebookId());
                 gNoteList.clear();
                 for (GNote g : tmpList) {
                     gNoteList.add(g);

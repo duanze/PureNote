@@ -297,6 +297,10 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         }
     }
 
+    public void destroyCheckedItems() {
+        mCheckedItems = null;
+    }
+
     public void deleteItems() {
         if (null == mCheckedItems || 0 == mCheckedItems.size()) {
             return;
@@ -321,7 +325,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
     private void deleteGNotesByBookId(int bookId) {
         Cursor cursor = mContext.getContentResolver().query(GNoteProvider.BASE_URI, GNoteProvider
-                .STANDARD_PROJECTION, GNoteDB.GNOTEBOOK_ID + " = ?", new String[]{"" + bookId},
+                        .STANDARD_PROJECTION, GNoteDB.GNOTEBOOK_ID + " = ?", new String[]{"" + bookId},
                 null);
 
         if (cursor.moveToFirst()) {

@@ -134,7 +134,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private boolean passwordGuard;
 
-    public int getgNotebookId() {
+    public int getGNotebookId() {
         return gNotebookId;
     }
 
@@ -239,7 +239,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         if (Folder.MODE_FOOTER == modeFooter) {
             showCreateFolderDialog();
         } else if (Folder.MODE_FOOTER_DELETE == modeFooter) {
-            if (mAdapter.getSelectedCount() > 0) {
+            if (getDeleteNum() > 0) {
 //                mAdapter.deleteItems();
                 trash();
                 updateDeleteNum();
@@ -318,7 +318,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     }
 
     private void updateDeleteNum() {
-        footerDelete.updateDeleteNum(mAdapter.getSelectedCount());
+        footerDelete.updateDeleteNum(getDeleteNum());
     }
 
     @Override
@@ -570,13 +570,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                                 GNotebook gNotebook = map.get(key);
                                 if (gNotebook.isSelected()) {
                                     oldId = key;
+                                    changeToBook(oldId, newId);
                                 }
 
                                 mAdapter.deleteGNotebook(gNotebook);
                             }
 
-                            map = null;
-                            changeToBook(oldId,newId);
+//这种做法是不对的，因为设计缺陷，处理变得极为复杂，今后还是要统一数据，统一处理
+//                            map = null;
+                            mAdapter.destroyCheckedItems();
+
                         }
                         changeFooter();
 
@@ -665,16 +668,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
                 .create_folder_title).setView(view).setPositiveButton(R.string.create_folder, new
                 DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (editText.getText().toString().trim().length() == 0) {
-                    Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
-                } else {
-                    createFolder(editText.getText().toString().trim());
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (editText.getText().toString().trim().length() == 0) {
+                            Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
+                        } else {
+                            createFolder(editText.getText().toString().trim());
 //                    refreshFolderList();
-                }
-            }
-        }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
+                        }
+                    }
+                }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
@@ -690,7 +693,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     @Override
     public int getDeleteNum() {
-        return deleteNum;
+        if (null == mAdapter) return 0;
+        return mAdapter.getSelectedCount();
     }
 
     private FolderFooter footer;
@@ -947,7 +951,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void initDatePicker() {
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);

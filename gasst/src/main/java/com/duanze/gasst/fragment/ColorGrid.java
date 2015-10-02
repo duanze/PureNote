@@ -148,7 +148,7 @@ public class ColorGrid extends Fragment {
 
     public void refreshUI() {
 //        List<GNote> gNoteList = db.loadGNotes();
-        List<GNote> gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getgNotebookId());
+        List<GNote> gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getGNotebookId());
         int index = gNoteList.size() - 1;
         tmpCal = (Calendar) today.clone();
 
