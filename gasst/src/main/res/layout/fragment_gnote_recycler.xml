@@ -6,8 +6,9 @@
              android:layout_height="match_parent">
 
 
-    <RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_gnotes"
+        android:overScrollMode="never"
         android:scrollbars="none"
         android:layout_margin="@dimen/rv_item_margin"
         android:layout_width="match_parent"
