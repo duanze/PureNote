@@ -160,7 +160,7 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
 
     @Override
     public void onClick(View v) {
-        if (R.id.rl_list_item == v.getId()) {
+        if (R.id.rv_item_container == v.getId()) {
             if (!mCheckMode) {
                 Note.actionStart(mContext, (GNote) v.getTag(R.string.gnote_data), Note.MODE_EDIT);
             } else {
