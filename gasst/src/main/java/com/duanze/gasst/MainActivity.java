@@ -430,7 +430,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         db = GNoteDB.getInstance(this);
 
         initDrawer();
-        initDatePicker();
+//        initDatePicker();
 
         //evernote
         mEvernote = new Evernote(this, this);
@@ -1270,7 +1270,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //        }
 
             //bind-evernote item
-            bindItem = menu.getItem(1);
+            bindItem = menu.getItem(0);
             //evernote
             if (mEvernote.isLogin()) {
                 loginNow();
@@ -1311,9 +1311,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             case R.id.setting:
                 Settings.activityStart(this);
                 break;
-            case R.id.action_plus:
-                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
-                break;
+//            case R.id.action_plus:
+//                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+//                break;
 
 //            case R.id.m_color_grid:
 //                if (!mi.isChecked()) {

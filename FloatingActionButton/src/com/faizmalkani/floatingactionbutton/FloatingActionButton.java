@@ -206,7 +206,7 @@ public class FloatingActionButton extends View {
      */
     public void listenTo(RecyclerView recyclerView) {
         if (null != recyclerView) {
-            recyclerView.addOnScrollListener(null);
+            recyclerView.addOnScrollListener(new DirectionScrollListenerRV(this));
         }
     }
 }

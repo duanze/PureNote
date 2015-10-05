@@ -229,4 +229,8 @@
 
     <string name="title_activity_license">代码许可</string>
     <string name="dont_care">没兴致</string>
+
+    <string name="mode_new">新建笔记</string>
+    <string name="mode_edit">编辑笔记</string>
+    <string name="mode_view">阅读笔记</string>
 </resources>

@@ -92,7 +92,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
                 Note.writeTodayNewNote(mContext);
             }
         });
-//        fabButton.listenTo(recyclerView);
+        fabButton.listenTo(recyclerView);
 
         return view;
     }
@@ -100,12 +100,12 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onResume() {
         super.onResume();
-        randomFABButtonColor();
+//        randomFABButtonColor();
     }
 
-    public void randomFABButtonColor() {
-        Util.randomBackground(fabButton);
-    }
+//    public void randomFABButtonColor() {
+//        Util.randomBackground(fabButton);
+//    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

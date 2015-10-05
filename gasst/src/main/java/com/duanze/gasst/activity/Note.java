@@ -177,7 +177,7 @@ public class Note extends FragmentActivity {
             gNote.setIsPassed(GNote.FALSE);
             checkDbFlag();
 
-            updateActionBarTitle();
+//            updateActionBarTitle();
         }
 
         @Override
@@ -191,8 +191,7 @@ public class Note extends FragmentActivity {
         public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
             gNote.setTimeFromDate(year, month, day);
             checkDbFlag();
-
-            updateActionBarTitle();
+//            updateActionBarTitle();
         }
     }
 
@@ -208,24 +207,25 @@ public class Note extends FragmentActivity {
             //沉浸式时，对状态栏染色
             // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
-
             tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-
             // enable status bar tint
             tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
 //        tintManager.setNavigationBarTintEnabled(true);
-
         }
 
         setOverflowShowingAlways();
-
         initValues();
 
         actionBar = getActionBar();
-        if (null != actionBar) actionBar.setDisplayHomeAsUpEnabled(true);
-
-        updateActionBarTitle();
+        if (null != actionBar) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            if (MODE_NEW == mode) {
+                actionBar.setTitle(R.string.mode_new);
+            } else if (MODE_EDIT == mode) {
+                actionBar.setTitle(R.string.mode_view);
+            }
+        }
     }
 
     private void overrideStartAnim() {
@@ -234,11 +234,14 @@ public class Note extends FragmentActivity {
 
     private void initValues() {
         mContext = this;
-
+        today = Calendar.getInstance();
         initDateTimePicker();
+        gNote = getIntent().getParcelableExtra("gAsstNote_data");
+        isPassed = gNote.getPassed();
+        bookId = gNote.getGNotebookId();
 
         db = GNoteDB.getInstance(this);
-        hsvColorBtns = (HorizontalScrollView) findViewById(R.id.hsv_btns);
+//        hsvColorBtns = (HorizontalScrollView) findViewById(R.id.hsv_btns);
 
         textView = (TextView) findViewById(R.id.tv_note_show);
         editText = (EditText) findViewById(R.id.et_note_edit);
@@ -262,6 +265,7 @@ public class Note extends FragmentActivity {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
                         editText.setCursorVisible(true);
+                        actionBar.setTitle(R.string.mode_edit);
                     }
                 }
             });
@@ -283,7 +287,6 @@ public class Note extends FragmentActivity {
     }
 
     private void initDateTimePicker() {
-        today = Calendar.getInstance();
         pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(this, today, listener),
                 today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
                         .DAY_OF_MONTH), false);
@@ -291,14 +294,11 @@ public class Note extends FragmentActivity {
         pickerDialog.setCloseOnSingleTapDay(true);
 
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
+                        .DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);
-
-        gNote = getIntent().getParcelableExtra("gAsstNote_data");
-        isPassed = gNote.getPassed();
-        bookId = gNote.getGNotebookId();
     }
 
     private void checkColorRead() {
@@ -325,9 +325,9 @@ public class Note extends FragmentActivity {
         }
 
         int no = getIntent().getIntExtra("no", -1);
-        LogUtil.i(TAG, "no:" + no);
         //传入了no表明是从定时任务传来，先取消通知栏显示，[再表明需更新UI(使用Loader后，这一步不需要了:) ])
         if (no != -1) {
+            LogUtil.i(TAG, "no:" + no);
             NotificationManager manager = (NotificationManager) getSystemService
                     (NOTIFICATION_SERVICE);
             manager.cancel(no);
@@ -455,7 +455,7 @@ public class Note extends FragmentActivity {
             case R.id.action_cancel_remind:
                 if (!gNote.getIsPassed()) {
                     gNote.setIsPassed(GNote.TRUE);
-                    updateActionBarTitle();
+//                    updateActionBarTitle();
                     checkDbFlag();
                 }
                 return true;
@@ -463,9 +463,9 @@ public class Note extends FragmentActivity {
                 actionStart(this, gNote, MODE_EDIT);
                 finish();
                 return true;
-            case R.id.edit_date:
-                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
-                return true;
+//            case R.id.edit_date:
+//                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+//                return true;
 //            case R.id.action_move_ac:
 //                launchFolderForResult();
 //                return true;
@@ -715,9 +715,9 @@ public class Note extends FragmentActivity {
     /**
      * 仅用于更新ActionBarTitle文字
      */
-    private void updateActionBarTitle() {
-        actionBar.setTitle(Util.timeString(gNote));
-    }
+//    private void updateActionBarTitle() {
+//        actionBar.setTitle(Util.timeString(gNote));
+//    }
 
     /**
      * 捕获Back按键
@@ -750,20 +750,16 @@ public class Note extends FragmentActivity {
         if (dbFlag == DB_SAVE) {
             createNote();
 //            uiShouldUpdate();
-
             addEditCount();
         } else if (dbFlag == DB_UPDATE) {
             updateNote();
 //            uiShouldUpdate();
-
             addEditCount();
         } else if (dbFlag == DB_DELETE) {
             deleteNote();
 //            uiShouldUpdate();
-
             addEditCount();
         }
-
         finish();
 //        overrideEndAnim();
     }

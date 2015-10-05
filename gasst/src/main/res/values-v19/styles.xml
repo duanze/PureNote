@@ -11,6 +11,8 @@
         <item name="android:actionOverflowButtonStyle">@style/WeChatActionButtonOverflow</item>
         <item name="android:actionModeBackground">@color/background_color</item>
         <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>
+        <item name="android:windowContentOverlay">@drawable/window_overlay_line</item>
+        <item name="android:windowBackground">@color/background_color</item>
 
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:fitsSystemWindows">false</item>

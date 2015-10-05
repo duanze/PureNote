@@ -29,7 +29,9 @@
     <dimen name="note_title_padding_top_bottom">15dp</dimen>
     <dimen name="note_title_padding_left_right">17dp</dimen>
     <dimen name="rv_item_margin">3dp</dimen>
-    <dimen name="rv_item_padding">7dp</dimen>
+    <dimen name="rv_margin">8dp</dimen>
+    <!--<dimen name="rv_item_padding_left_right">9dp</dimen>-->
+    <dimen name="rv_item_padding_left_right">7dp</dimen>
     <dimen name="item_rounded">3dp</dimen>
 
 </resources>

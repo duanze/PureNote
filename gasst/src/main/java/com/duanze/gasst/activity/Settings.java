@@ -45,7 +45,8 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.List;
 
 
-public class Settings extends Activity implements View.OnClickListener, Evernote.EvernoteLoginCallback {
+public class Settings extends Activity implements View.OnClickListener, Evernote
+        .EvernoteLoginCallback {
     public static final String TAG = "Settings";
 
     public static final String GNOTEBOOK_ID = "gnotebook_id";
@@ -73,14 +74,10 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     public static final String PREF_NOTE_KEY = "pref_note_key";
     public static final String NOTIFICATION_ALWAYS_SHOW = "notification_always_show";
 
-
     public static final String SETTINGS_CHANGED = "is_changed";
 
-
     private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
     private boolean settingChanged = false;
-
 
     private Evernote mEvernote;
     private LinearLayout loginEvernote;
@@ -98,12 +95,10 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        overridePendingTransition(R.anim.in_push_right_to_left,
-                R.anim.out_stable);
+//        overridePendingTransition(R.anim.in_push_right_to_left,
+//                R.anim.out_stable);
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(DATA, MODE_PRIVATE);
-
-
         mContext = this;
         db = GNoteDB.getInstance(mContext);
         setContentView(R.layout.activity_settings);
@@ -112,18 +107,13 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 //沉浸式时，对状态栏染色
 // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
-
-
             tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-
-
 // enable status bar tint
             tintManager.setStatusBarTintEnabled(true);
 // // enable navigation bar tint
 // tintManager.setNavigationBarTintEnabled(true);
         }
 
-        editor = preferences.edit();
         initButtons();
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -131,18 +121,15 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
         loginEvernote = (LinearLayout) findViewById(R.id.login_evernote);
         arrow = (ImageView) findViewById(R.id.bind_arrow);
         loginText = (TextView) findViewById(R.id.login_text);
-
 
         mEvernote = new Evernote(this, this);
         if (mEvernote.isLogin()) {
             bindSuccess();
         }
         loginEvernote.setOnClickListener(this);
-
 
 //container perform click
         findViewById(R.id.ll_password_container).setOnClickListener(this);
@@ -177,7 +164,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         }
     }
 
-
     private TextView passwordGurad;
     private Switch lightningExtract;
     private Switch alwaysShow;
@@ -188,11 +174,9 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     private CheckBox universal;
     private CheckBox prefNote;
 
-
     private void initButtons() {
 // CheckBox newNote = (CheckBox) findViewById(R.id.new_note);
         fold = (CheckBox) findViewById(R.id.fold);
-
 
         spinner = (Spinner) findViewById(R.id.m_spinner);
         final String[] maxLinesArr = {"2", "3", "4", "5", "6", "7"};
@@ -200,33 +184,28 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 android.R.layout.simple_spinner_item, maxLinesArr);
         spinner.setAdapter(adapter);
 
-
         spinner.setSelection(preferences.getInt(MAX_LINES, DEFAULT_MAX_LINES) - 2);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                editor.putInt(MAX_LINES, i + 2).apply();
+                preferences.edit().putInt(MAX_LINES, i + 2).apply();
                 settingChanged = true;
             }
-
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
-
             }
         });
-
 
         fold.setChecked(preferences.getBoolean(FOLD, false));
         fold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                editor.putBoolean(FOLD, b).apply();
+                preferences.edit().putBoolean(FOLD, b).apply();
                 settingChanged = true;
             }
         });
-
 
         passwordGurad = (TextView) findViewById(R.id.tv_password_guard);
         boolean b = preferences.getBoolean(PASSWORD_GUARD, false);
@@ -268,7 +247,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             }
         });
 
-
         boolean showUniversalSwitch = preferences.getBoolean(SHOW_UNIVERSAL_SWITCH, false);
         if (showUniversalSwitch) {
 //show the parent layout
@@ -277,7 +255,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             view = findViewById(R.id.v_universal);
             view.setVisibility(View.VISIBLE);
         }
-
 
         lightningExtract = (Switch) findViewById(R.id.s_lightning_extract);
         b = preferences.getBoolean(LIGHTNING_EXTRACT, false);
@@ -307,7 +284,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             }
         });
 
-
         alwaysShow = (Switch) findViewById(R.id.s_notification_always_show);
         b = preferences.getBoolean(NOTIFICATION_ALWAYS_SHOW, false);
         alwaysShow.setChecked(b);
@@ -319,9 +295,9 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             }
         });
 
-
         extractLocationSummary = (TextView) findViewById(R.id.tv_extract_location_summary);
-        extractLocationSummary.setText(Util.readSaveLocation(Settings.LIGHTNING_EXTRACT_SAVE_LOCATION, preferences, db,
+        extractLocationSummary.setText(Util.readSaveLocation(Settings
+                        .LIGHTNING_EXTRACT_SAVE_LOCATION, preferences, db,
                 mContext));
         extractLocationSummary.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,7 +305,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 showSelectExtractLocationDialog(extractLocationSummary);
             }
         });
-
 
         quickLocationSummary = (TextView) findViewById(R.id.tv_quick_location_summary);
         quickLocationSummary.setText(Util.readSaveLocation(Settings.QUICK_WRITE_SAVE_LOCATION,
@@ -342,7 +317,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         });
     }
 
-
     private void setGuardText(boolean b) {
         if (b) {
             passwordGurad.setText(R.string.password_guard_on);
@@ -351,14 +325,11 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         }
     }
 
-
     private void showCancelPasswordDialog() {
         View view = getLayoutInflater().inflate(R.layout.stop_password_dialog,
                 (ViewGroup) getWindow().getDecorView
                         (), false);
         final EditText password = (EditText) view.findViewById(R.id.et_password);
-
-
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.stop_password_title)
                 .setView(view)
@@ -374,38 +345,28 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                             preferences.edit()
                                     .putBoolean(PASSWORD_GUARD, false)
                                     .apply();
-
-
                             setGuardText(false);
                             Toast.makeText(mContext, "密码保护已停用", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(mContext, "密码错误", Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
+                .setNegativeButton(R.string.cancel, null)
                 .create();
 
-
         dialog.show();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
+                .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
-
     private void showCreatePasswordDialog() {
-        View view = getLayoutInflater().inflate(R.layout.password_dialog, (ViewGroup) getWindow().getDecorView
+        View view = getLayoutInflater().inflate(R.layout.password_dialog, (ViewGroup) getWindow()
+                .getDecorView
                 (), false);
         final EditText password = (EditText) view.findViewById(R.id.et_password);
         final EditText confirm = (EditText) view.findViewById(R.id.et_confirm);
         final EditText hint = (EditText) view.findViewById(R.id.et_hint);
-
-
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.password_title)
                 .setView(view)
@@ -415,8 +376,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                         String _password = password.getText().toString();
                         String _confirm = confirm.getText().toString();
                         String _hint = hint.getText().toString().trim();
-
-
                         if (_password.equals(_confirm) && _password.length() > 0) {
                             preferences.edit()
                                     .putString(PASSWORD, _password)
@@ -424,35 +383,27 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                                     .putBoolean(PASSWORD_GUARD, true)
                                     .apply();
 
-
                             setGuardText(true);
                             Toast.makeText(mContext, "密码保护已启用", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(mContext, "两次输入的密码不一致", Toast.LENGTH_SHORT).show();
                         }
 
-
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
+                .setNegativeButton(R.string.cancel, null)
                 .create();
-
-
         dialog.show();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
+                .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
-
 
     private int tmpLocation;
     private String tmpLocationName;
 
-
     private void showSelectExtractLocationDialog(final TextView tv) {
-        View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow().getDecorView
+        View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow
+                ().getDecorView
                 (), false);
         final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.rg_dialog);
         RadioButton purenote = (RadioButton) view.findViewById(R.id.rb_purenote);
@@ -460,8 +411,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         List<GNotebook> list = db.loadGNotebooks();
         tmpLocation = preferences.getInt(LIGHTNING_EXTRACT_SAVE_LOCATION, 0);
         tmpLocationName = mContext.getResources().getString(R.string.all_notes);
-
-
         for (final GNotebook gNotebook : list) {
             RadioButton tempButton = new RadioButton(mContext);
             tempButton.setText(gNotebook.getName());
@@ -472,8 +421,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 radioChecked = true;
                 tmpLocationName = gNotebook.getName();
             }
-
-
             tempButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -484,7 +431,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 }
             });
         }
-
 
         if (!radioChecked) {
             purenote.setChecked(true);
@@ -498,8 +444,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 }
             }
         });
-
-
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.lightning_extract_save_location)
                 .setView(view)
@@ -509,25 +453,17 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                         preferences.edit()
                                 .putInt(LIGHTNING_EXTRACT_SAVE_LOCATION, tmpLocation)
                                 .apply();
-
-
                         tv.setText(tmpLocationName);
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-
-                    }
-                })
+                .setNegativeButton(R.string.cancel, null)
                 .create();
         dialog.show();
     }
 
-
     private void showSelectQuickLocationDialog(final TextView tv) {
-        View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow().getDecorView
+        View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow
+                ().getDecorView
                 (), false);
         final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.rg_dialog);
         RadioButton purenote = (RadioButton) view.findViewById(R.id.rb_purenote);
@@ -535,8 +471,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         List<GNotebook> list = db.loadGNotebooks();
         tmpLocation = preferences.getInt(QUICK_WRITE_SAVE_LOCATION, 0);
         tmpLocationName = mContext.getResources().getString(R.string.all_notes);
-
-
         for (final GNotebook gNotebook : list) {
             RadioButton tempButton = new RadioButton(mContext);
             tempButton.setText(gNotebook.getName());
@@ -547,8 +481,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 radioChecked = true;
                 tmpLocationName = gNotebook.getName();
             }
-
-
             tempButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -559,7 +491,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 }
             });
         }
-
 
         if (!radioChecked) {
             purenote.setChecked(true);
@@ -573,7 +504,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 }
             }
         });
-
 
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.lightning_extract_save_location)
@@ -584,25 +514,16 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                         preferences.edit()
                                 .putInt(QUICK_WRITE_SAVE_LOCATION, tmpLocation)
                                 .apply();
-
-
                         tv.setText(tmpLocationName);
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-
-                    }
-                })
+                .setNegativeButton(R.string.cancel, null)
                 .create();
         dialog.show();
     }
 
     private void bindSuccess() {
         arrow.setVisibility(View.GONE);
-
 
         if (mEvernote.getUsername() == null) {
             loginText.setText(R.string.logout_evernote_username_null);
@@ -611,8 +532,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             loginText.setText(getString(R.string.logout_evernote,
                     mEvernote.getUsername()));
         }
-
-
     }
 
     @Override
@@ -632,12 +551,11 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     }
 
     private void exitOperation() {
-        editor.putBoolean(SETTINGS_CHANGED, settingChanged).apply();
+        preferences.edit().putBoolean(SETTINGS_CHANGED, settingChanged).apply();
         finish();
-        overridePendingTransition(R.anim.in_stable,
-                R.anim.out_push_left_to_right);
+//        overridePendingTransition(R.anim.in_stable,
+//                R.anim.out_push_left_to_right);
     }
-
 
     @Override
     public void onClick(View view) {
@@ -660,16 +578,8 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                                             mEvernote.Logout();
                                         }
                                     })
-                            .setNegativeButton(R.string.cancel,
-                                    new DialogInterface.OnClickListener() {
-
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog,
-                                                            int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }).create().show();
+                            .setNegativeButton(R.string.cancel, null)
+                            .create().show();
                 }
                 break;
             case R.id.ll_password_container:
@@ -690,16 +600,13 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 extractLocationSummary.performClick();
                 break;
 
-
             case R.id.ll_fold_container:
                 fold.performClick();
                 break;
 
-
             case R.id.ll_maxlines_container:
                 spinner.performClick();
                 break;
-
 
             case R.id.ll_notification_container:
                 alwaysShow.performClick();
@@ -713,7 +620,6 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         }
     }
 
-
     @Override
     public void onLoginResult(Boolean result) {
         if (result) {
@@ -722,14 +628,12 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         }
     }
 
-
     @Override
     public void onUserinfo(Boolean result, User user) {
         if (null == user) return;
         loginText.setText(getString(R.string.logout_evernote,
                 user.getUsername()));
     }
-
 
     @Override
     public void onLogout(Boolean reuslt) {

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Donate">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".Donate">
+
+    <View
+        android:id="@+id/divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/divider_line_color"/>
 
     <ImageView
         android:id="@+id/alipay_img"
@@ -12,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:src="@drawable/donate_duanze" />
+        android:src="@drawable/donate_duanze"/>
 
     <TextView
         android:layout_width="200dp"
@@ -23,5 +29,5 @@
         android:lineSpacingExtra="6dp"
         android:text="@string/donate_me_tip"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/dimgrey" />
+        android:textColor="@color/dimgrey"/>
 </LinearLayout>

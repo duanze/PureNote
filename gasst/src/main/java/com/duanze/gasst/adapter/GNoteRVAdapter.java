@@ -128,12 +128,12 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
 //        主要用于批量操作时，notifyDataSetChanged()之后改变背景
         if (mCheckMode) {
             if (isChecked(gNote.getId())) {
-                gNoteItemHolder.itemLayout.setBackgroundResource(R.color.setting_press);
+                gNoteItemHolder.itemLayout.setBackgroundResource(R.drawable.hover_multi_background_normal);
             } else {
-                gNoteItemHolder.itemLayout.setBackgroundResource(R.color.item_background_color);
+                gNoteItemHolder.itemLayout.setBackgroundResource(R.drawable.hover_border_normal);
             }
         } else {
-            gNoteItemHolder.itemLayout.setBackgroundResource(R.drawable.item_selector);
+            gNoteItemHolder.itemLayout.setBackgroundResource(R.drawable.hover_background);
         }
     }
 

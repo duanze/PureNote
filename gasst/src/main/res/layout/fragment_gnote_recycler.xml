@@ -10,7 +10,8 @@
         android:id="@+id/rv_gnotes"
         android:overScrollMode="never"
         android:scrollbars="none"
-        android:layout_margin="@dimen/rv_item_margin"
+        android:layout_marginLeft="@dimen/rv_margin"
+        android:layout_marginRight="@dimen/rv_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
@@ -22,6 +23,6 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="16dp"
         app:drawable="@drawable/ic_content_new"
-        app:fab_color="#33b5e5"/>
+        app:fab_color="@color/message_checked"/>
 
 </FrameLayout>
