@@ -228,4 +228,5 @@
     <!-- Context Menu -->
 
     <string name="title_activity_license">代码许可</string>
+    <string name="dont_care">没兴致</string>
 </resources>

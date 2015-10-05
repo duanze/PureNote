@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -196,6 +197,16 @@ public class FloatingActionButton extends View {
     public void listenTo(AbsListView listView) {
         if (null != listView) {
             listView.setOnScrollListener(new DirectionScrollListener(this));
+        }
+    }
+
+    /**
+     * Created by Duanze
+     * @param recyclerView
+     */
+    public void listenTo(RecyclerView recyclerView) {
+        if (null != recyclerView) {
+            recyclerView.addOnScrollListener(null);
         }
     }
 }

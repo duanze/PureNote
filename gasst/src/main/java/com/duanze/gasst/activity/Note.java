@@ -1,6 +1,7 @@
 package com.duanze.gasst.activity;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -150,10 +151,15 @@ public class Note extends FragmentActivity {
     }
 
     public static void writeTodayNewNote(Context mContext) {
-        GNote note = new GNote();
+        GNote gNote = new GNote();
         Calendar cal = Calendar.getInstance();
-        note.setCalToTime(cal);
-        Note.actionStart(mContext, note, Note.MODE_NEW);
+        gNote.setCalToTime(cal);
+
+        Intent intent = new Intent(mContext, Note.class);
+        intent.putExtra("gAsstNote_data", gNote);
+        intent.putExtra("mode", MODE_NEW);
+        mContext.startActivity(intent);
+        ((Activity) mContext).overridePendingTransition(0, 0);
     }
 
     public static void quickWriteNewNote(Context mContext) {
@@ -285,7 +291,7 @@ public class Note extends FragmentActivity {
         pickerDialog.setCloseOnSingleTapDay(true);
 
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);
@@ -516,19 +522,19 @@ public class Note extends FragmentActivity {
         final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.action_move)
                 .setView(view).setPositiveButton(R.string.confirm, new DialogInterface
                         .OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (tmpGnoteBookId != -1) {
-                    dbFlag = DB_UPDATE;
-                    changedFolder = true;
-                }
-            }
-        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                changedFolder = false;
-            }
-        }).create();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (tmpGnoteBookId != -1) {
+                            dbFlag = DB_UPDATE;
+                            changedFolder = true;
+                        }
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        changedFolder = false;
+                    }
+                }).create();
         dialog.show();
     }
 

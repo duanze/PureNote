@@ -49,6 +49,7 @@ import com.duanze.gasst.fragment.FolderFooter;
 import com.duanze.gasst.fragment.FolderFooterDelete;
 import com.duanze.gasst.fragment.FooterInterface;
 import com.duanze.gasst.fragment.GNoteList;
+import com.duanze.gasst.fragment.GNoteRecyclerView;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
@@ -671,7 +672,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (editText.getText().toString().trim().length() == 0) {
-                            Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.create_folder_err, Toast
+                                    .LENGTH_SHORT).show();
                         } else {
                             createFolder(editText.getText().toString().trim());
 //                    refreshFolderList();
@@ -951,7 +953,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void initDatePicker() {
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
+                        .DAY_OF_MONTH),
                 false);
         datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
         datePickerDialog.setCloseOnSingleTapDay(true);
@@ -1029,16 +1032,24 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private GNoteList gNoteList;
     private ColorGrid colorGrid;
+    private GNoteRecyclerView gNoteRecyclerView;
 
     public void changeContent() {
 
         if (mode == MODE_LIST) {
-            if (null == gNoteList) {
-                gNoteList = new GNoteList();
+//            if (null == gNoteList) {
+//                gNoteList = new GNoteList();
+//            }
+
+            if (null == gNoteRecyclerView) {
+                gNoteRecyclerView = new GNoteRecyclerView();
             }
             unlockDrawerLock();//打开手势滑动
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content,
-                    gNoteList).commit();
+                    gNoteRecyclerView).commit();
+
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content,
+//                    gNoteList).commit();
         } else if (mode == MODE_GRID) {
             if (colorGrid == null) {
                 colorGrid = new ColorGrid();
@@ -1102,7 +1113,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 public void run() {
                     mEvernote.sync(true, true, null);
                 }
-            }, 30 * 1000, 60 * 1000);
+            }, 30 * 1000, 50 * 1000);
         }
 
         rateForPureNote();
@@ -1158,7 +1169,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                                         .LENGTH_SHORT).show();
                             }
                         }
-                    }).setNegativeButton(R.string.rate_feedback, new DialogInterface
+                    }).setNeutralButton(R.string.dont_care, null).setNegativeButton(R.string
+                    .rate_feedback, new DialogInterface
                     .OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -1184,8 +1196,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     private void refreshUI() {
         if (mode == MODE_LIST) {
-            if (null != gNoteList) {
-                gNoteList.refreshUI();
+//            if (null != gNoteList) {
+//                gNoteList.refreshUI();
+//            }
+
+            if (null != gNoteRecyclerView) {
+                gNoteRecyclerView.refreshUI();
             }
         } else if (mode == MODE_GRID) {
             if (null != colorGrid) {

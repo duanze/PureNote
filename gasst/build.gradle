@@ -18,16 +18,17 @@ android {
     }
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':FloatingActionButton')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:+'
     compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.balysv:material-ripple:1.0.2'
     compile project(':EverNoteEx')
+    compile project(':FloatingActionButton')
     compile files('src/main/libs/umeng-analytics-v5.5.2.jar')
     compile files('src/main/libs/systembartint-1.0.4.jar')
     compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
 }
 
 repositories {

@@ -28,5 +28,7 @@
     <dimen name="note_time_padding_right">15dp</dimen>
     <dimen name="note_title_padding_top_bottom">15dp</dimen>
     <dimen name="note_title_padding_left_right">17dp</dimen>
+    <dimen name="rv_item_margin">3dp</dimen>
+    <dimen name="rv_item_padding">4dp</dimen>
 
 </resources>

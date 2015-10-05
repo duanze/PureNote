@@ -36,7 +36,7 @@ public class GNote implements Parcelable {
     private long editTime = 0;//最后编辑时间
     private long createdTime = 0;//创建时间
     private int synStatus = NOTHING;//同步状态，仅登录EverNote后有效
-    private String guid = "";//evernote 标志符，惟一确定一条note
+    private String guid = "";//evernote 服务器创建的标志符，惟一确定一条note
     private String bookGuid = "";
 
     //数据表中笔记本的id号，为0时使用默认笔记本PureNote
