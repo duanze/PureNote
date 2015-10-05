@@ -130,10 +130,10 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
             if (isChecked(gNote.getId())) {
                 gNoteItemHolder.itemLayout.setBackgroundResource(R.color.setting_press);
             } else {
-                gNoteItemHolder.itemLayout.setBackgroundResource(R.color.transparent);
+                gNoteItemHolder.itemLayout.setBackgroundResource(R.color.item_background_color);
             }
         } else {
-            gNoteItemHolder.itemLayout.setBackgroundResource(R.drawable.setting_item);
+            gNoteItemHolder.itemLayout.setBackgroundResource(R.drawable.item_selector);
         }
     }
 
