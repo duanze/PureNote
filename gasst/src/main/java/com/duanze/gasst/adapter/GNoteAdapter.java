@@ -1,7 +1,5 @@
 package com.duanze.gasst.adapter;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -16,8 +14,6 @@ import android.widget.TextView;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
-import com.duanze.gasst.provider.GNoteProvider;
-import com.duanze.gasst.syn.Evernote;
 import com.duanze.gasst.util.GNotebookUtil;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.Util;
@@ -100,8 +96,8 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
             mHolder = new Holder();
             mHolder.itemLayout = (RelativeLayout) mView.findViewById(R.id.rl_list_item);
             mHolder.noteColor = (TextView) mView.findViewById(R.id.tv_note_color);
-            mHolder.title = (TextView) mView.findViewById(R.id.note_title);
-            mHolder.time = (TextView) mView.findViewById(R.id.note_time);
+            mHolder.title = (TextView) mView.findViewById(R.id.note_content);
+            mHolder.time = (TextView) mView.findViewById(R.id.edit_time);
             mView.setTag(mHolder);
         } else {
             mView = convertView;

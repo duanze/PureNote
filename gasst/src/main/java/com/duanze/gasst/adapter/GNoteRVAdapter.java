@@ -15,6 +15,7 @@ import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.util.GNotebookUtil;
 import com.duanze.gasst.util.ProviderUtil;
+import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
 
 import java.util.HashMap;
@@ -123,7 +124,13 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
         gNoteItemHolder.itemLayout.setOnClickListener(this);
         gNoteItemHolder.itemLayout.setOnLongClickListener(this);
         gNoteItemHolder.title.setText(gNote.getNoteFromHtml().toString().trim());
-        gNoteItemHolder.time.setText(Util.timeString(gNote));
+        gNoteItemHolder.editTime.setText(TimeUtils.getConciseTime(gNote.getEditTime(), mContext));
+        if (!gNote.getIsPassed()) {
+            gNoteItemHolder.alertTime.setText(Util.timeString(gNote));
+            gNoteItemHolder.alertTime.setVisibility(View.VISIBLE);
+        }else {
+            gNoteItemHolder.alertTime.setVisibility(View.GONE);
+        }
 
 //        主要用于批量操作时，notifyDataSetChanged()之后改变背景
         if (mCheckMode) {
@@ -148,13 +155,15 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
     class GNoteItemHolder extends RecyclerView.ViewHolder {
         View itemLayout;
         TextView title;
-        TextView time;
+        TextView editTime;
+        TextView alertTime;
 
         public GNoteItemHolder(View itemView) {
             super(itemView);
             itemLayout = itemView.findViewById(R.id.rv_item_container);
-            title = (TextView) itemView.findViewById(R.id.note_title);
-            time = (TextView) itemView.findViewById(R.id.note_time);
+            title = (TextView) itemView.findViewById(R.id.note_content);
+            editTime = (TextView) itemView.findViewById(R.id.edit_time);
+            alertTime = (TextView) itemView.findViewById(R.id.alert_time);
         }
     }
 

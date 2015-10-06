@@ -59,6 +59,7 @@ import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.syn.Evernote;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.ProviderUtil;
+import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
 import com.evernote.client.android.EvernoteSession;
@@ -449,23 +450,41 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //                below_version_2.0.4
             if (v < 15) {
                 upgradeTo15();
-                upgradeTo21();
-                insertProud();
-                setVersionCode();
-            } else if (v < 21) {
-                upgradeTo21();
-                insertProud();
-                setVersionCode();
-            } else if (v < 23) {
-                insertProud();
-                setVersionCode();
-            } else if (v < 27) {
-                upgradeTo27();
-                setVersionCode();
             }
+            if (v < 21) {
+                upgradeTo21();
+            }
+            if (v < 23) {
+                insertProud();
+            }
+            if (v < 27) {
+                upgradeTo27();
+            }
+            if (v < 28) {
+                upgradeTo28();
+            }
+            setVersionCode();
         }
 
         setActionBarTitle();
+    }
+
+    private void upgradeTo28() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SyncHandler syncHandler = new SyncHandler();
+                syncHandler.sendEmptyMessage(UPGRADE_28_START);
+                List<GNote> list = db.loadGNotes();
+                for (GNote gNote : list) {
+                    if (0 == gNote.getEditTime()) {
+                        gNote.setEditTime(TimeUtils.getCurrentTimeInLong());
+                        db.updateGNote(gNote);
+                    }
+                }
+                syncHandler.sendEmptyMessage(UPGRADE_28_END);
+            }
+        }).run();
     }
 
     private void upgradeTo27() {
@@ -476,6 +495,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         zero.setCalToTime(tomorrow);
         zero.setContent(getResources().getString(R.string.tip_optional));
 //            two.setSynStatus(GNote.NEW);
+        zero.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(zero);
 
         int n = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 0);
@@ -990,7 +1010,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         zero.setCalToTime(tomorrow);
         zero.setContent(getResources().getString(R.string.tip0));
 //            two.setSynStatus(GNote.NEW);
-        zero.setColor(GridUnit.GOLD);
+//        zero.setColor(GridUnit.GOLD);
+        zero.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(zero);
 
         int n = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 0);
@@ -1007,7 +1028,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         one.setCalToTime(today);
         one.setContent(getResources().getString(R.string.tip1) + "(・8・)");
 //            one.setSynStatus(GNote.NEW);
-        one.setColor(GridUnit.PURPLE);
+//        one.setColor(GridUnit.PURPLE);
+        one.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(one);
 
         Calendar tmpCal = (Calendar) today.clone();
@@ -1017,6 +1039,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         two.setCalToTime(tmpCal);
         two.setContent(getResources().getString(R.string.tip2));
 //            two.setSynStatus(GNote.NEW);
+        two.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(two);
 
         tmpCal.add(Calendar.DAY_OF_MONTH, -1);
@@ -1024,6 +1047,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         three.setCalToTime(tmpCal);
         three.setContent(getResources().getString(R.string.tip3));
 //            three.setSynStatus(GNote.NEW);
+        three.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(three);
 
         preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, 3).apply();
@@ -1361,6 +1385,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         return true;
     }
 
+    private static final int UPGRADE_28_START = 280;
+    private static final int UPGRADE_28_END = 281;
+
     class SyncHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -1371,6 +1398,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                     break;
                 case Evernote.SYNC_END:
                     hideProgressBar();
+                    break;
+                case UPGRADE_28_START:
+                    showDialog(OPERATE);
+                    break;
+                case UPGRADE_28_END:
+                    dismissDialog(OPERATE);
                     break;
                 default:
                     break;

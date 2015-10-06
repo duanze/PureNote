@@ -50,7 +50,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentText(Html.fromHtml(gNote.getContent()))
                 .setSmallIcon(R.drawable.small_logo)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.logo))
+                        R.drawable.notebook))
                 .setTicker(Html.fromHtml(gNote.getContent()))
                 .setContentIntent(pi)
                 .build();

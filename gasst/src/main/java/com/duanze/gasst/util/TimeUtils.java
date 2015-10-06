@@ -73,6 +73,12 @@ public class TimeUtils {
         if (diff >= HALF_HOUR_Millis) {
             return context.getString(R.string.before_half_hour);
         }
+
+        if (diff >= 3 * MINUTE_Millis) {
+            int min = (int) (diff / MINUTE_Millis);
+            return context.getString(R.string.before_minute, min);
+        }
+
         return context.getString(R.string.just_now);
     }
 

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
@@ -33,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Handler;
 
 
 public class AlarmService extends Service {
@@ -159,9 +161,9 @@ public class AlarmService extends Service {
                             item.coerceToHtmlText(mContext),
                             extractLocation, mContext);
                     if (extractGroup != null) {
-                        Toast.makeText(mContext, getString(R.string.already_extract_to) + extractGroup, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.already_extract_to) + extractGroup, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(mContext, R.string.extract_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.extract_error, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -201,8 +203,7 @@ public class AlarmService extends Service {
             maybeStop();
         } else if (NOTHING == command) {
             LogUtil.i(TAG, "nothing");
-        }
-        else if (SHOW_OR_HIDE == command) {
+        } else if (SHOW_OR_HIDE == command) {
             showOrHideService();
         } else {
             LogUtil.i(TAG, "command error");
@@ -215,7 +216,7 @@ public class AlarmService extends Service {
 
 
     private void showOrHideService() {
-        boolean b = preferences.getBoolean(Settings.NOTIFICATION_ALWAYS_SHOW,false);
+        boolean b = preferences.getBoolean(Settings.NOTIFICATION_ALWAYS_SHOW, false);
         if (b) {
             refreshAlarmTasks();
             refreshNotification();
@@ -231,7 +232,7 @@ public class AlarmService extends Service {
         remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
         updateBoltOnClick();
         startForeground(-1, notification);
-        Toast.makeText(mContext, R.string.extract_stop, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.extract_stop, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -242,10 +243,8 @@ public class AlarmService extends Service {
         updateBoltOnClick();
         startForeground(-1, notification);
 
-
-
         preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, false).apply();
-        Toast.makeText(mContext, R.string.extract_stop, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.extract_stop, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -257,7 +256,7 @@ public class AlarmService extends Service {
         remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
         updateBoltOnClick();
         startForeground(-1, notification);
-        Toast.makeText(mContext, R.string.extract_start, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -268,9 +267,8 @@ public class AlarmService extends Service {
         updateBoltOnClick();
         startForeground(-1, notification);
 
-
         preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, true).apply();
-        Toast.makeText(mContext, R.string.extract_start, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -282,7 +280,6 @@ public class AlarmService extends Service {
 
 
     private void refreshNotification() {
-
         String str;
         if (cnt <= 0) {
             cnt = 0;
@@ -294,7 +291,6 @@ public class AlarmService extends Service {
         }
 
         maybeStop();
-
         remoteViews = new RemoteViews(getPackageName(), R.layout.notification_purenote);
         remoteViews.setTextViewText(R.id.tv_up, getResources().getString(R.string.app_name));
         remoteViews.setTextViewText(R.id.tv_down, str);
@@ -307,21 +303,18 @@ public class AlarmService extends Service {
         PendingIntent writeNotePendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_new_note, writeNotePendingIntent);
 
-
         if (isExtract) {
             remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
 //特殊路径，初始启动
-            Toast.makeText(mContext, R.string.extract_start, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
         } else {
             remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
         }
 //switch lightning extract
         updateBoltOnClick();
 
-
         Intent myIntent = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, myIntent, 0);
-
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setOngoing(false);
@@ -329,11 +322,9 @@ public class AlarmService extends Service {
         builder.setContent(remoteViews);
         builder.setSmallIcon(R.drawable.small_logo);
 
-
         notification = builder.build();
         notification.flags = Notification.FLAG_NO_CLEAR;
         notification.contentIntent = pi;
-
 
         startForeground(-1, notification);
     }
@@ -341,9 +332,9 @@ public class AlarmService extends Service {
 
     private void maybeStop() {
 //检测是否常驻通知栏与是否开启闪电摘录
-        boolean b = preferences.getBoolean(Settings.NOTIFICATION_ALWAYS_SHOW,false);
-        boolean isExtract = preferences.getBoolean(Settings.LIGHTNING_EXTRACT,false);
-        if (!b && cnt == 0 && !isExtract){
+        boolean b = preferences.getBoolean(Settings.NOTIFICATION_ALWAYS_SHOW, false);
+        boolean isExtract = preferences.getBoolean(Settings.LIGHTNING_EXTRACT, false);
+        if (!b && cnt == 0 && !isExtract) {
             stopSelf();
         }
     }
@@ -389,7 +380,6 @@ public class AlarmService extends Service {
     }
 
 
-
     private void refreshAlarmTasks() {
         List<GNote> list = db.loadGNotes();
         cnt = 0;
@@ -430,7 +420,6 @@ public class AlarmService extends Service {
                     + tmp.get(Calendar.MINUTE) + ":"
                     + tmp.get(Calendar.SECOND));
 
-
             Date d2 = df.parse(allInfo[0] + "-"
                     + (Integer.parseInt(allInfo[1]) + 1) + "-"
                     + allInfo[2] + " "
@@ -441,15 +430,12 @@ public class AlarmService extends Service {
             e.printStackTrace();
         }
 
-
         if (diff < 0) {
             return;
         }
 
-
 //有效任务数量加一
         cnt++;
-
 
         LogUtil.i(TAG, "diff:" + diff);
         LogUtil.i(TAG, "no:" + no);

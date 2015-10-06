@@ -12,6 +12,8 @@ public class MinusTextView extends TextView {
 
     private static int width;
     private static int height;
+    private static final float GOLDEN_PROPORTION = (float) 0.618;
+    private static final float ACTUAL_PROPORTION = (float) 0.418;
 
     {
         WindowManager wm = (WindowManager) getContext().getSystemService(
@@ -33,8 +35,8 @@ public class MinusTextView extends TextView {
         int widthSize = getMeasuredWidth();
         int heightSize = getMeasuredHeight();
 
-        if (heightSize > height * 0.618) {
-            heightSize = (int) (height * 0.618);
+        if (heightSize > height * ACTUAL_PROPORTION) {
+            heightSize = (int) (height * ACTUAL_PROPORTION);
         }
 
         setMeasuredDimension(widthSize, heightSize);

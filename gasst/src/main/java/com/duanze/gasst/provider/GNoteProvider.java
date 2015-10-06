@@ -33,7 +33,7 @@ public class GNoteProvider extends ContentProvider {
             GNoteDB.ALERT_TIME, GNoteDB.IS_PASSED, GNoteDB.CONTENT, GNoteDB.IS_DONE, GNoteDB
             .COLOR, GNoteDB.EDIT_TIME, GNoteDB.CREATED_TIME, GNoteDB.SYN_STATUS, GNoteDB.GUID,
             GNoteDB.BOOK_GUID, GNoteDB.DELETED, GNoteDB.GNOTEBOOK_ID};
-    public static final String STANDARD_SORT_ORDER = GNoteDB.TIME + " desc";
+    public static final String STANDARD_SORT_ORDER = GNoteDB.EDIT_TIME + " desc";
 
     public static final String[] NOTEBOOK_PROJECTION = {GNoteDB.ID + " AS _id", GNoteDB.NAME,
             GNoteDB.SYN_STATUS, GNoteDB.NOTEBOOK_GUID, GNoteDB.DELETED, GNoteDB.NOTES_NUM,

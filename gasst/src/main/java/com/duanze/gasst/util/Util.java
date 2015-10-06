@@ -195,9 +195,9 @@ public class Util {
             groupName = context.getResources().getString(R.string.all_notes);
         }
         if (find) {
-            extractNoteToDB(context,preferences, db, str, groupId);
+            extractNoteToDB(context, preferences, db, str, groupId);
         } else {
-            extractNoteToDB(context,preferences, db, str, 0);
+            extractNoteToDB(context, preferences, db, str, 0);
         }
         return groupName;
     }
@@ -210,7 +210,7 @@ public class Util {
      * @param str
      * @param groupId
      */
-    public static void extractNoteToDB(Context context,SharedPreferences preferences, GNoteDB db, String str, int groupId) {
+    public static void extractNoteToDB(Context context, SharedPreferences preferences, GNoteDB db, String str, int groupId) {
         Calendar cal = Calendar.getInstance();
         GNote gNote = new GNote();
         gNote.setCalToTime(cal);
@@ -220,9 +220,9 @@ public class Util {
 //        设置笔记本id
         gNote.setGNotebookId(groupId);
 
+        gNote.setEditTime(TimeUtils.getCurrentTimeInLong());
 //        db.saveGNote(gNote);
-        ContentValues contentValues=gNote.toContentValues();
-        context.getContentResolver().insert(GNoteProvider.BASE_URI,contentValues);
+        ProviderUtil.insertGNote(context, gNote);
 
 //        更新笔记本
         updateGNotebook(preferences, db, groupId, +1, false);
@@ -309,7 +309,7 @@ public class Util {
         return "1.0.0";
     }
 
-    public static int getVersionCode(Context context){
+    public static int getVersionCode(Context context) {
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);

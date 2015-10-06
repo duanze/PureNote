@@ -40,6 +40,7 @@ import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.ProviderUtil;
+import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
@@ -630,6 +631,11 @@ public class Note extends FragmentActivity {
     }
 
     private void createNote() {
+//        不允许新建一条空内空的笔记
+        if (0 == editText.getText().toString().trim().length()) {
+            return;
+        }
+
         gNote.setNoteToHtml(editText.getText());
         //needCreate
         gNote.setSynStatus(GNote.NEW);
@@ -643,6 +649,8 @@ public class Note extends FragmentActivity {
             //快写模式将存储至特定目录下
             groupId = gNote.getGNotebookId();
         }
+
+        gNote.setEditTime(TimeUtils.getCurrentTimeInLong());
 //        物理数据存储
         ProviderUtil.insertGNote(mContext, gNote);
 //        db.saveGNote(gNote);
@@ -688,6 +696,7 @@ public class Note extends FragmentActivity {
             updateGNotebook(tmpGnoteBookId, +1, true);
         }
 
+        gNote.setEditTime(TimeUtils.getCurrentTimeInLong());
         //        物理数据存储
         ProviderUtil.updateGNote(mContext, gNote);
 //        db.updateGNote(gNote);

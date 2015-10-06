@@ -59,8 +59,8 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
             holder = new Holder();
             holder.listItem = (RelativeLayout) view.findViewById(R.id.rl_list_item);
             holder.noteColor = (TextView) view.findViewById(R.id.tv_note_color);
-            holder.title = (TextView) view.findViewById(R.id.note_title);
-            holder.time = (TextView) view.findViewById(R.id.note_time);
+            holder.title = (TextView) view.findViewById(R.id.note_content);
+            holder.time = (TextView) view.findViewById(R.id.edit_time);
             view.setTag(holder);
         } else {
             view = convertView;
