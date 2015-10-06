@@ -137,8 +137,8 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         findViewById(R.id.ll_quick_write_location_container).setOnClickListener(this);
         findViewById(R.id.ll_lightning_container).setOnClickListener(this);
         findViewById(R.id.ll_extract_location_container).setOnClickListener(this);
-        findViewById(R.id.ll_fold_container).setOnClickListener(this);
-        findViewById(R.id.ll_maxlines_container).setOnClickListener(this);
+//        findViewById(R.id.ll_fold_container).setOnClickListener(this);
+//        findViewById(R.id.ll_maxlines_container).setOnClickListener(this);
         findViewById(R.id.ll_quick_write).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,43 +169,45 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     private Switch alwaysShow;
     private TextView extractLocationSummary;
     private TextView quickLocationSummary;
-    private CheckBox fold;
-    private Spinner spinner;
+    //    private CheckBox fold;
+//    private Spinner spinner;
     private CheckBox universal;
     private CheckBox prefNote;
 
     private void initButtons() {
 // CheckBox newNote = (CheckBox) findViewById(R.id.new_note);
-        fold = (CheckBox) findViewById(R.id.fold);
 
-        spinner = (Spinner) findViewById(R.id.m_spinner);
-        final String[] maxLinesArr = {"2", "3", "4", "5", "6", "7"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, maxLinesArr);
-        spinner.setAdapter(adapter);
 
-        spinner.setSelection(preferences.getInt(MAX_LINES, DEFAULT_MAX_LINES) - 2);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                preferences.edit().putInt(MAX_LINES, i + 2).apply();
-                settingChanged = true;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        fold.setChecked(preferences.getBoolean(FOLD, false));
-        fold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                preferences.edit().putBoolean(FOLD, b).apply();
-                settingChanged = true;
-            }
-        });
+//        fold = (CheckBox) findViewById(R.id.fold);
+//
+//        spinner = (Spinner) findViewById(R.id.m_spinner);
+//        final String[] maxLinesArr = {"2", "3", "4", "5", "6", "7"};
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, maxLinesArr);
+//        spinner.setAdapter(adapter);
+//
+//        spinner.setSelection(preferences.getInt(MAX_LINES, DEFAULT_MAX_LINES) - 2);
+//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                preferences.edit().putInt(MAX_LINES, i + 2).apply();
+//                settingChanged = true;
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//
+//        fold.setChecked(preferences.getBoolean(FOLD, false));
+//        fold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                preferences.edit().putBoolean(FOLD, b).apply();
+//                settingChanged = true;
+//            }
+//        });
 
         passwordGurad = (TextView) findViewById(R.id.tv_password_guard);
         boolean b = preferences.getBoolean(PASSWORD_GUARD, false);
@@ -363,7 +365,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     private void showCreatePasswordDialog() {
         View view = getLayoutInflater().inflate(R.layout.password_dialog, (ViewGroup) getWindow()
                 .getDecorView
-                (), false);
+                        (), false);
         final EditText password = (EditText) view.findViewById(R.id.et_password);
         final EditText confirm = (EditText) view.findViewById(R.id.et_confirm);
         final EditText hint = (EditText) view.findViewById(R.id.et_hint);
@@ -600,13 +602,13 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 extractLocationSummary.performClick();
                 break;
 
-            case R.id.ll_fold_container:
-                fold.performClick();
-                break;
-
-            case R.id.ll_maxlines_container:
-                spinner.performClick();
-                break;
+//            case R.id.ll_fold_container:
+//                fold.performClick();
+//                break;
+//
+//            case R.id.ll_maxlines_container:
+//                spinner.performClick();
+//                break;
 
             case R.id.ll_notification_container:
                 alwaysShow.performClick();

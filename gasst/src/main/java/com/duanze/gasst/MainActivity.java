@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.DialogPreference;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -80,6 +81,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         FooterInterface, CompoundButton.OnCheckedChangeListener, LoaderManager
                 .LoaderCallbacks<Cursor>, GNotebookAdapter.ItemLongPressedListener,
         GNotebookAdapter.OnItemSelectListener, GNotebookAdapter.OnItemClickListener {
+
     public static final String TAG = "MainActivity";
 
     public static final boolean TINT_STATUS_BAR = false;
@@ -1152,33 +1154,47 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
     //    一次性评分弹窗
     private void rateForPureNote() {
-        if (preferences.getInt(Note.EditCount, 0) >= Note.EDIT_COUNT && !preferences.getBoolean
-                (ShownRate, false)) {
+        if (!preferences.getBoolean(ShownRate, false)) {
+            int editCnt = preferences.getInt(Note.EditCount, 0);
+            if ((editCnt - Note.EDIT_COUNT) % Note.INTERVAL == 0) {
+                new AlertDialog.Builder(mContext).setMessage(R.string.rate_for_purenote)
+                        .setPositiveButton(R.string.rate_rate,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Uri uri = Uri.parse("market://details?id=" + mContext
+                                                .getPackageName());
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage(R.string.rate_for_purenote).setPositiveButton(R.string.rate_rate,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Uri uri = Uri.parse("market://details?id=" + mContext.getPackageName());
-                            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                            try {
-                                startActivity(goToMarket);
-                            } catch (ActivityNotFoundException e) {
-                                Toast.makeText(mContext, "Couldn't launch the market!", Toast
-                                        .LENGTH_SHORT).show();
+                                        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                                        try {
+                                            startActivity(goToMarket);
+                                            preferences.edit().putBoolean(ShownRate, true).apply();
+                                        } catch (ActivityNotFoundException e) {
+                                            Toast.makeText(mContext, "Couldn't launch the " +
+                                                    "market!", Toast
+                                                    .LENGTH_SHORT).show();
+                                        }
+                                    }
+                                })
+                        .setNeutralButton(R.string.dont_care, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int count = preferences.getInt(Note.EditCount, 0);
+                                count++;
+                                preferences.edit().putInt(Note.EditCount, count).apply();
                             }
-                        }
-                    }).setNeutralButton(R.string.dont_care, null).setNegativeButton(R.string
-                    .rate_feedback, new DialogInterface
-                    .OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Util.feedback(mContext);
-                }
-            }).create().show();
-
-            preferences.edit().putBoolean(ShownRate, true).apply();
+                        })
+                        .setNegativeButton(R.string.rate_feedback, new DialogInterface
+                                .OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Util.feedback(mContext);
+                                preferences.edit().putBoolean(ShownRate, true).apply();
+                            }
+                        })
+                        .setCancelable(false)
+                        .create().show();
+            }
         }
     }
 

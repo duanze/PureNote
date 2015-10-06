@@ -160,6 +160,7 @@
     <string name="rate_for_purenote">喜欢PureNote？</string>
     <string name="rate_rate">去评价</string>
     <string name="rate_feedback">我要吐槽!</string>
+    <string name="dont_care">下次再说</string>
 
     <!--settings fragment-->
     <string name="general_settings">常规</string>
@@ -228,7 +229,6 @@
     <!-- Context Menu -->
 
     <string name="title_activity_license">代码许可</string>
-    <string name="dont_care">没兴致</string>
 
     <string name="mode_new">新建笔记</string>
     <string name="mode_edit">编辑笔记</string>

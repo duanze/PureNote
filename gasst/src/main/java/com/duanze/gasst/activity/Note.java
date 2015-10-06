@@ -62,6 +62,7 @@ public class Note extends FragmentActivity {
     public static final int MODE_TODAY = 3;
 
     public static final int EDIT_COUNT = 13;
+    public static final int INTERVAL = 8;
 
     private int mode;
     private GNote gNote;
@@ -731,7 +732,7 @@ public class Note extends FragmentActivity {
      * 退出时的操作，用于 重写Back键 与 导航键
      */
     private void exitOperation() {
-        String tmp = editText.getText().toString().trim();
+        String tmp = editText.getText().toString();
 
         if (mode == MODE_NEW || MODE_TODAY == mode) {
             if (tmp.length() > 0) {
@@ -739,7 +740,7 @@ public class Note extends FragmentActivity {
             }
         } else if (mode == MODE_EDIT) {
             if (tmp.length() > 0) {
-                if (!tmp.equals(gNote.getNoteFromHtml().toString().trim())) {
+                if (!tmp.equals(gNote.getNoteFromHtml().toString())) {
                     dbFlag = DB_UPDATE;
                 }
             } else {
@@ -769,8 +770,8 @@ public class Note extends FragmentActivity {
     }
 
     private void addEditCount() {
-        int count = preferences.getInt(EditCount, 0);
-        if (count < EDIT_COUNT) {
+        if (!preferences.getBoolean(MainActivity.ShownRate, false)) {
+            int count = preferences.getInt(EditCount, 0);
             count++;
             preferences.edit().putInt(EditCount, count).apply();
         }
