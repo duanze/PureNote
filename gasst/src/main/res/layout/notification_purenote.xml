@@ -47,7 +47,7 @@
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@id/iv_new_note"
         android:padding="8dp"
-        android:text="@string/notification_lightning_extract"
+        android:text="@string/notification_lightning_extract_on"
         android:textSize="25sp" />
 
     <TextView
