@@ -11,23 +11,44 @@
         android:layout_centerVertical="true"
         android:background="@drawable/notebook" />
 
-    <ImageView
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_new_note"-->
+    <!--android:layout_width="36dp"-->
+    <!--android:layout_height="36dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="5dp"-->
+    <!--android:background="@drawable/actionbar_add_note" />-->
+
+    <TextView
         android:id="@+id/iv_new_note"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
-        android:background="@drawable/actionbar_add_note" />
+        android:padding="8dp"
+        android:text="@string/notification_quick_write"
+        android:textSize="25sp" />
 
-    <ImageView
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_bolt"-->
+    <!--android:layout_width="36dp"-->
+    <!--android:layout_height="36dp"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="5dp"-->
+    <!--android:layout_toLeftOf="@id/iv_new_note"-->
+    <!--android:background="@drawable/bolt_off_big" />-->
+    <TextView
         android:id="@+id/iv_bolt"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@id/iv_new_note"
-        android:background="@drawable/bolt_off_big" />
+        android:padding="8dp"
+        android:text="@string/notification_lightning_extract"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/tv_up"

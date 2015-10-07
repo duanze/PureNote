@@ -241,4 +241,7 @@
     <string name="mode_new">新建笔记</string>
     <string name="mode_edit">编辑笔记</string>
     <string name="mode_view">阅读笔记</string>
+
+    <string name="notification_quick_write">快</string>
+    <string name="notification_lightning_extract">闪</string>
 </resources>

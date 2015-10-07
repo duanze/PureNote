@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
@@ -34,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Handler;
 
 
 public class AlarmService extends Service {
@@ -229,46 +227,41 @@ public class AlarmService extends Service {
     private void stopExtract() {
         if (null == remoteViews) return;
         isExtract = false;
-        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
-        updateBoltOnClick();
+//        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
+        toggleBoltBtnStatus();
         startForeground(-1, notification);
         Toast.makeText(getApplicationContext(), R.string.extract_stop, Toast.LENGTH_SHORT).show();
     }
-
-
-    private void rapidStopExtract() {
-        if (null == remoteViews) return;
-        isExtract = false;
-        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
-        updateBoltOnClick();
-        startForeground(-1, notification);
-
-        preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, false).apply();
-        Toast.makeText(getApplicationContext(), R.string.extract_stop, Toast.LENGTH_SHORT).show();
-    }
-
 
     private void startExtract() {
         if (null == remoteViews) return;
         isExtract = true;
-
-
-        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
-        updateBoltOnClick();
+//        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
+        toggleBoltBtnStatus();
         startForeground(-1, notification);
         Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
     }
 
+    private void rapidStopExtract() {
+        if (null == remoteViews) return;
+//        isExtract = false;
+////        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
+//        toggleBoltBtnStatus();
+//        startForeground(-1, notification);
+//        Toast.makeText(getApplicationContext(), R.string.extract_stop, Toast.LENGTH_SHORT).show();
+        stopExtract();
+        preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, false).apply();
+    }
 
     private void rapidStartExtract() {
         if (null == remoteViews) return;
-        isExtract = true;
-        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
-        updateBoltOnClick();
-        startForeground(-1, notification);
-
+//        isExtract = true;
+////        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
+//        toggleBoltBtnStatus();
+//        startForeground(-1, notification);
+//        Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
+        startExtract();
         preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, true).apply();
-        Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -303,15 +296,15 @@ public class AlarmService extends Service {
         PendingIntent writeNotePendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_new_note, writeNotePendingIntent);
 
-        if (isExtract) {
-            remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
-//特殊路径，初始启动
-//            Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
-        } else {
-            remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
-        }
+//        if (isExtract) {
+//            remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
+////特殊路径，初始启动
+////            Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
+//        } else {
+//            remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
+//        }
 //switch lightning extract
-        updateBoltOnClick();
+        toggleBoltBtnStatus();
 
         Intent myIntent = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, myIntent, 0);
@@ -340,16 +333,16 @@ public class AlarmService extends Service {
     }
 
 
-    private void updateBoltOnClick() {
+    private void toggleBoltBtnStatus() {
         if (null == remoteViews) return;
         if (isExtract) {
-            LogUtil.i(TAG, "Now isExtract,setRapidStop");
+            LogUtil.i(TAG, "Now isExtract on, setRapidStop");
             Intent intent = new Intent(this, AlarmService.class);
             intent.putExtra("command", AlarmService.RAPID_STOP_EXTRACT);
             PendingIntent rapidStop = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.iv_bolt, rapidStop);
         } else {
-            LogUtil.i(TAG, "Now !isExtract,setRapidStart");
+            LogUtil.i(TAG, "Now !isExtract off, setRapidStart");
             Intent intent = new Intent(this, AlarmService.class);
             intent.putExtra("command", AlarmService.RAPID_START_EXTRACT);
             PendingIntent rapidStart = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
