@@ -121,7 +121,7 @@ public class GNoteAdapter extends CursorAdapter implements View.OnClickListener,
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         GNote gNote = new GNote(cursor);
-        mHolder.title.setText(gNote.getNoteFromHtml().toString().trim());
+        mHolder.title.setText(gNote.getContent());
         //如果设置了过期单行折叠并且该条note已过期
         if (isFold && gNote.compareToCalendar(today) < 0) {
             mHolder.title.setMaxLines(1);

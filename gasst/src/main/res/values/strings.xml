@@ -11,7 +11,7 @@
     <string name="recycle_bin">回收站</string>
 
     <string name="initial">初始化…</string>
-    <string name="operate">请等待…</string>
+    <string name="operate">升级中，请等待…</string>
 
     <!-- date -->
     <string name="month1">壹月</string>
@@ -59,11 +59,11 @@
     <string name="day31">叁拾壹</string>
 
     <!-- tips -->
-    <string name="tip0">强烈推荐您于设置中开启本应用独有的王牌功能：闪电摘录。仅需复制，就能快速保存一条新笔记。回想起来，我开发这款应用的初衷就是要实现这个功能吧:)</string>
-    <string name="tip_optional">回归初心，化繁为简。出于这点，我对整个应用进行了从内而外的修改。除了提升性能以外，原本的左滑菜单被长按所取代。极简笔记一直在进步，如有任何建议敬请反馈。</string>
-    <string name="tip1">Tip1:人生苦短，想做的事如果不迅速付诸行动，99% 都会无疾而终哦</string>
-    <string name="tip2">Tip2:长按进行批量操作，善用分享功能可令文本保存至其他应用</string>
-    <string name="tip3">Tip3:设置中可以绑定EverNote帐户，启动密码保护等，有任何意见和建议欢迎反馈</string>
+    <string name="tip0">强烈推荐您于设置中开启本应用独有的王牌功能：闪电摘录。\n仅需复制，就能快速保存一条新笔记。回想起来，我开发这款应用的初衷就是要实现这个功能吧:)</string>
+    <string name="tip_optional">回归初心，化繁为简。\n出于这点，我对整个应用进行了从内而外的修改。除了提升性能以外，原本的左滑菜单被长按所取代。极简笔记一直在进步，如有任何建议敬请反馈。</string>
+    <string name="tip1">人生苦短，想做的事如果不迅速付诸行动，99% 都会无疾而终哦(・8・)</string>
+    <string name="tip2">感谢您下载使用极简笔记，以下为您奉上几点使用指南：\n长按笔记进行批量操作，善用分享功能可令文本保存至其他应用\n右滑呼出抽屉菜单，可以创建笔记分组，长按笔记分组可以重命名\n定时提醒、闪电摘录这类功能有可能需要您添加权限，让进程不被清理才能正常使用\n设置中可以绑定EverNote帐户，启动密码保护等\n最后，有任何意见和建议敬请反馈</string>
+    <string name="tip3">亲爱的用户：为了今后的功能拓展，自2.1.8版本起极简笔记采用了新的文本解析技术，如您的旧有笔记在新版中出现乱码，烦请将绑定EverNote帐号，同步所有数据至云端，然后卸载应用、重新下载、安装同步即可恢复正常，不便之处还请见谅。</string>
     <string name="date_error">无效日期</string>
 
     <!-- foreground service -->
@@ -121,6 +121,8 @@
     <string name="create_folder_title">新建笔记分组</string>
     <string name="create_folder">创建</string>
     <string name="create_folder_err">笔记分组创建失败！</string>
+    <string name="rename_folder_title">重命名笔记分组</string>
+    <string name="rename_folder_err">重命名笔记分组失败！</string>
 
     <!-- setting -->
     <string name="logout_evernote_username_null">退出登录</string>

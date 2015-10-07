@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +40,6 @@ import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
-import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -319,10 +317,10 @@ public class Note extends FragmentActivity {
         if (mode == MODE_NEW || mode == MODE_EDIT || MODE_TODAY == mode) {
             textView.setVisibility(View.GONE);
             editText.setVisibility(View.VISIBLE);
-            editText.setText(gNote.getNoteFromHtml());
+            editText.setText(gNote.getContent());
             editText.setSelection(0);
         } else if (mode == MODE_SHOW) {
-            textView.setText(gNote.getNoteFromHtml());
+            textView.setText(gNote.getContent());
 //            textView.setMovementMethod(ScrollingMovementMethod.getInstance());
         }
 
@@ -636,7 +634,7 @@ public class Note extends FragmentActivity {
             return;
         }
 
-        gNote.setNoteToHtml(editText.getText());
+        gNote.setContent(editText.getText().toString());
         //needCreate
         gNote.setSynStatus(GNote.NEW);
 
@@ -683,7 +681,7 @@ public class Note extends FragmentActivity {
     }
 
     private void updateNote() {
-        gNote.setNoteToHtml(editText.getText());
+        gNote.setContent(editText.getText().toString());
         if (gNote.getSynStatus() == GNote.NOTHING) {
             //needUpdate
             gNote.setSynStatus(GNote.UPDATE);
@@ -749,7 +747,7 @@ public class Note extends FragmentActivity {
             }
         } else if (mode == MODE_EDIT) {
             if (tmp.length() > 0) {
-                if (!tmp.equals(gNote.getNoteFromHtml().toString())) {
+                if (!tmp.equals(gNote.getContent())) {
                     dbFlag = DB_UPDATE;
                 }
             } else {

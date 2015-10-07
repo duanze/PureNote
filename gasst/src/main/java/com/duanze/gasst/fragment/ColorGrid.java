@@ -185,7 +185,7 @@ public class ColorGrid extends Fragment {
                     }
                     if (gNoteList.get(index).compareToCalendar(tmpCal) == 0) {
                         final GNote note = gNoteList.get(index);
-                        gridUnit.setViewNote(note.getNoteFromHtml().toString().trim());
+                        gridUnit.setViewNote(note.getContent());
 
                         //判断格子色彩
                         if (randomColor()) {

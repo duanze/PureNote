@@ -284,7 +284,6 @@ public class Evernote {
         try {
             Note responseNote = mEvernoteSession.getClientFactory().createNoteStore().updateNote
                     (mEvernoteSession.getAuthToken(), gNote.toNote());
-
             updateGNote(gNote, responseNote);
             LogUtil.i(TAG, "Note更新成功");
             return responseNote;
@@ -329,11 +328,9 @@ public class Evernote {
     }
 
     private void saveNote(Note note) {
-        GNote gNote = GNote.parseGNote(note);
-
+        GNote gNote = GNote.parseFromNote(note);
 //        db.saveGNote(gNote);
         ProviderUtil.insertGNote(mContext, gNote);
-
         updateGNotebook(0, +1);
     }
 
@@ -347,8 +344,8 @@ public class Evernote {
                 if (gNotebook.getId() == id) {
                     int cnt = gNotebook.getNotesNum();
                     gNotebook.setNotesNum(cnt + value);
-
-                    db.updateGNotebook(gNotebook);
+//                    db.updateGNotebook(gNotebook);
+                    ProviderUtil.updateGNotebook(mContext,gNotebook);
                     break;
                 }
             }
@@ -361,9 +358,7 @@ public class Evernote {
             Note note = mEvernoteSession.getClientFactory().createNoteStore().getNote
                     (mEvernoteSession.getAuthToken(), guid, true, false, false, false);
             LogUtil.e(TAG, "获取到的文本：" + note.getContent());
-
             saveNote(note);
-
         } catch (TTransportException e) {
         } catch (EDAMUserException e) {
         } catch (EDAMSystemException e) {
@@ -379,13 +374,11 @@ public class Evernote {
                     (mEvernoteSession.getAuthToken(), guid, true, false, false, false);
 
             if (gNote != null) {
-                gNote.setContent(note.getContent());
+                gNote.setContentFromNote(note);
                 gNote.setEditTime(note.getUpdated());
-
 //                db.updateGNote(gNote);
                 ProviderUtil.updateGNote(mContext, gNote);
             }
-
         } catch (TTransportException e) {
             e.printStackTrace();
         } catch (EDAMUserException e) {

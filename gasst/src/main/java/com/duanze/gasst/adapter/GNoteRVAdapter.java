@@ -123,12 +123,13 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
         gNoteItemHolder.itemLayout.setTag(R.string.gnote_data, gNote);
         gNoteItemHolder.itemLayout.setOnClickListener(this);
         gNoteItemHolder.itemLayout.setOnLongClickListener(this);
-        gNoteItemHolder.title.setText(gNote.getNoteFromHtml().toString().trim());
+//        gNoteItemHolder.title.setText(gNote.getContentFromHtml().toString().trim());
+        gNoteItemHolder.title.setText(gNote.getContent());
         gNoteItemHolder.editTime.setText(TimeUtils.getConciseTime(gNote.getEditTime(), mContext));
         if (!gNote.getIsPassed()) {
             gNoteItemHolder.alertTime.setText(Util.timeString(gNote));
             gNoteItemHolder.alertTime.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             gNoteItemHolder.alertTime.setVisibility(View.GONE);
         }
 

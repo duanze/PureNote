@@ -89,7 +89,6 @@ public class GNote implements Parcelable {
         return values;
     }
 
-
     public int getGNotebookId() {
         return gNoteBookId;
     }
@@ -182,18 +181,6 @@ public class GNote implements Parcelable {
         return alertTime;
     }
 
-    public int getPassed() {
-        return isPassed;
-    }
-
-    public Spanned getNoteFromHtml() {
-        //莫名错误预防
-        if (content == null) {
-            content = "";
-        }
-        return Html.fromHtml(content);
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -206,11 +193,15 @@ public class GNote implements Parcelable {
         this.isPassed = isPassed;
     }
 
+    public int getPassed() {
+        return isPassed;
+    }
+
     public void setAlertTime(String alertTime) {
         this.alertTime = alertTime;
     }
 
-    public void setNoteToHtml(Spanned note) {
+    public void setContentToHtml(Spanned note) {
         this.content = Html.toHtml(note);
     }
 
@@ -259,16 +250,26 @@ public class GNote implements Parcelable {
                 + Util.twoDigit(day);
     }
 
-    public static GNote parseGNote(Note n) {
+    public void setContentFromNote(Note note) {
+        String content = Html.fromHtml(note.getContent()).toString();
+        int length = content.length();
+        this.content = content.substring(0, length - 2);//去除掉最后的两个换行符-_-||
+    }
+
+    public static GNote parseFromNote(Note note) {
         GNote gNote = new GNote();
-        gNote.content = n.getContent();
-        gNote.guid = n.getGuid();
-        gNote.bookGuid = n.getNotebookGuid();
-        gNote.createdTime = n.getCreated();
-        gNote.editTime = n.getUpdated();
+
+        String content = Html.fromHtml(note.getContent()).toString();
+        int length = content.length();
+        gNote.content = content.substring(0, length - 2);//去除掉最后的两个换行符-_-||
+
+        gNote.guid = note.getGuid();
+        gNote.bookGuid = note.getNotebookGuid();
+        gNote.createdTime = note.getCreated();
+        gNote.editTime = note.getUpdated();
 
         boolean setTime = false;
-        String title = n.getTitle();
+        String title = note.getTitle();
         String[] tmp = title.split(" ");
         if (tmp.length == 2) {
             String[] allInfo = tmp[1].split("\\.");
@@ -291,11 +292,16 @@ public class GNote implements Parcelable {
     }
 
     private String convertContentToEvernote() {
-        String EvernoteContent = EvernoteUtil.NOTE_PREFIX
-                + content.replace("<br>", "<br/>")
+//        String EvernoteContent = EvernoteUtil.NOTE_PREFIX
+//                + content.replace("<br>", "<br/>")
+//                + EvernoteUtil.NOTE_SUFFIX;
+
+        // / Learn from lgp,nice job.
+        String evernoteContent = EvernoteUtil.NOTE_PREFIX
+                + getContent().replace("\n", "<br/>")
                 + EvernoteUtil.NOTE_SUFFIX;
-        LogUtil.i(TAG, "同步文字:" + EvernoteContent);
-        return EvernoteContent;
+        LogUtil.i(TAG, "同步文字:" + evernoteContent);
+        return evernoteContent;
     }
 
     public static GNote buildFromContentValues(ContentValues values) {
@@ -405,4 +411,6 @@ public class GNote implements Parcelable {
             return new GNote[i];
         }
     };
+
+
 }

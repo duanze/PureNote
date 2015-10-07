@@ -21,7 +21,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
     private boolean isFold;
     private int maxLines;
     private Calendar today;
-//    private boolean customizeColor;
+    //    private boolean customizeColor;
     private AbsListView mListView;
 
     public NoteAdapter(Context context, int textViewResourceId, List<GNote> objects) {
@@ -35,7 +35,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
         mListView = listView;
     }
 
-    public void setValues(boolean fold,Calendar cal,int lines) {
+    public void setValues(boolean fold, Calendar cal, int lines) {
         isFold = fold;
         today = cal;
         maxLines = lines;
@@ -67,7 +67,7 @@ public class NoteAdapter extends ArrayAdapter<GNote> {
             holder = (Holder) view.getTag();
         }
 
-        holder.title.setText(gNote.getNoteFromHtml().toString().trim());
+        holder.title.setText(gNote.getContent());
         //如果设置了过期单行折叠并且该条note已过期
         if (isFold && gNote.compareToCalendar(today) < 0) {
             holder.title.setMaxLines(1);

@@ -83,6 +83,8 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
     public interface ItemLongPressedListener {
         void startActionMode();
+
+        void onLongPress(GNotebook gNotebook);
     }
 
     public interface OnItemSelectListener {
@@ -261,7 +263,10 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
     @Override
     public boolean onLongClick(View v) {
         if (!mCheckMode) {
-
+            if (null != mItemLongPressedListener) {
+                GNotebook gNotebook = (GNotebook) v.getTag(R.string.gnotebook_data);
+                mItemLongPressedListener.onLongPress(gNotebook);
+            }
         }
 
         return true;

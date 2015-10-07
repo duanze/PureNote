@@ -160,7 +160,7 @@ public class AlarmService extends Service {
 
 
                     String extractGroup = Util.extractNote(preferences, db,
-                            item.coerceToHtmlText(mContext),
+                            item.getText().toString(),
                             extractLocation, mContext);
                     if (extractGroup != null) {
                         Toast.makeText(getApplicationContext(), getString(R.string.already_extract_to) + extractGroup, Toast.LENGTH_SHORT).show();
@@ -324,7 +324,11 @@ public class AlarmService extends Service {
         builder.setSmallIcon(R.drawable.small_logo);
 
         notification = builder.build();
-        notification.flags = Notification.FLAG_NO_CLEAR;
+
+        notification.flags = Notification.FLAG_ONGOING_EVENT;
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
+
         notification.contentIntent = pi;
 
         startForeground(-1, notification);

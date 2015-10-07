@@ -16,13 +16,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.DialogPreference;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +31,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -61,7 +60,6 @@ import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
-import com.duanze.gasst.view.GridUnit;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
@@ -284,6 +282,13 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     }
 
     @Override
+    public void onLongPress(GNotebook gNotebook) {
+        if (null != gNotebook) {
+            showRenameFolderDialog(gNotebook);
+        }
+    }
+
+    @Override
     public void onItemClick(View view) {
 //进行删除操作时无视之
         if (Folder.MODE_FOOTER_DELETE == modeFooter) return;
@@ -446,22 +451,25 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             insertProud();
             setVersionCode();
         } else {
-            int v = preferences.getInt("version_code", 0);
+            int versionCode = preferences.getInt("version_code", 14);
 //                below_version_2.0.4
-            if (v < 15) {
+            if (versionCode < 15) {
                 upgradeTo15();
             }
-            if (v < 21) {
+            if (versionCode < 21) {
                 upgradeTo21();
             }
-            if (v < 23) {
+            if (versionCode < 23) {
                 insertProud();
             }
-            if (v < 27) {
+            if (versionCode < 27) {
                 upgradeTo27();
             }
-            if (v < 28) {
+            if (versionCode < 28) {
                 upgradeTo28();
+            }
+            if (versionCode < 29) {
+                upgradeTo29();
             }
             setVersionCode();
         }
@@ -469,12 +477,37 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         setActionBarTitle();
     }
 
+    private void upgradeTo29() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SyncHandler syncHandler = new SyncHandler();
+                syncHandler.sendEmptyMessage(UPGRADE_START);
+                List<GNote> list = db.loadGNotes();
+                for (GNote gNote : list) {
+                    String content = Html.fromHtml(gNote.getContent()).toString();
+                    gNote.setContent(content);
+                    db.updateGNote(gNote);
+                }
+                syncHandler.sendEmptyMessage(UPGRADE_END);
+            }
+        }).run();
+
+        GNote zero = new GNote();
+        zero.setContent(getResources().getString(R.string.tip2));
+        zero.setEditTime(TimeUtils.getCurrentTimeInLong());
+        db.saveGNote(zero);
+
+        int n = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 0);
+        preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, n + 1).apply();
+    }
+
     private void upgradeTo28() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 SyncHandler syncHandler = new SyncHandler();
-                syncHandler.sendEmptyMessage(UPGRADE_28_START);
+                syncHandler.sendEmptyMessage(UPGRADE_START);
                 List<GNote> list = db.loadGNotes();
                 for (GNote gNote : list) {
                     if (0 == gNote.getEditTime()) {
@@ -482,17 +515,13 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                         db.updateGNote(gNote);
                     }
                 }
-                syncHandler.sendEmptyMessage(UPGRADE_28_END);
+                syncHandler.sendEmptyMessage(UPGRADE_END);
             }
         }).run();
     }
 
     private void upgradeTo27() {
         GNote zero = new GNote();
-        Calendar tomorrow = (Calendar) today.clone();
-        tomorrow.add(Calendar.DAY_OF_MONTH, +1);
-
-        zero.setCalToTime(tomorrow);
         zero.setContent(getResources().getString(R.string.tip_optional));
 //            two.setSynStatus(GNote.NEW);
         zero.setEditTime(TimeUtils.getCurrentTimeInLong());
@@ -688,24 +717,50 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 .getDecorView(), false);
         final EditText editText = (EditText) view.findViewById(R.id.et_in_dialog);
 
-        final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
-                .create_folder_title).setView(view).setPositiveButton(R.string.create_folder, new
-                DialogInterface.OnClickListener() {
+        final Dialog dialog = new AlertDialog.Builder(mContext)
+                .setTitle(R.string.create_folder_title)
+                .setView(view)
+                .setPositiveButton(R.string.create_folder, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (editText.getText().toString().trim().length() == 0) {
-                            Toast.makeText(mContext, R.string.create_folder_err, Toast
-                                    .LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.create_folder_err, Toast.LENGTH_SHORT).show();
                         } else {
                             createFolder(editText.getText().toString().trim());
 //                    refreshFolderList();
                         }
                     }
-                }).setNegativeButton(R.string.folder_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        }).create();
+                })
+                .setNegativeButton(R.string.folder_cancel, null)
+                .create();
+
+        dialog.show();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
+                .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    }
+
+    private void showRenameFolderDialog(final GNotebook gNotebook) {
+        View view = getLayoutInflater().inflate(R.layout.dialog_edittext, (ViewGroup) getWindow()
+                .getDecorView(), false);
+        final EditText editText = (EditText) view.findViewById(R.id.et_in_dialog);
+        editText.setText(gNotebook.getName());
+        editText.setSelection(gNotebook.getName().length());
+        final Dialog dialog = new AlertDialog.Builder(mContext)
+                .setTitle(R.string.rename_folder_title)
+                .setView(view)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (editText.getText().toString().trim().length() == 0) {
+                            Toast.makeText(mContext, R.string.rename_folder_err, Toast.LENGTH_SHORT).show();
+                        } else {
+                            gNotebook.setName(editText.getText().toString().trim());
+                            ProviderUtil.updateGNotebook(mContext, gNotebook);
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create();
 
         dialog.show();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
@@ -1008,7 +1063,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         tomorrow.add(Calendar.DAY_OF_MONTH, +1);
 
         zero.setCalToTime(tomorrow);
-        zero.setContent(getResources().getString(R.string.tip0));
+        zero.setContent(getString(R.string.tip0));
 //            two.setSynStatus(GNote.NEW);
 //        zero.setColor(GridUnit.GOLD);
         zero.setEditTime(TimeUtils.getCurrentTimeInLong());
@@ -1026,7 +1081,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
         GNote one = new GNote();
         one.setCalToTime(today);
-        one.setContent(getResources().getString(R.string.tip1) + "(・8・)");
+        one.setContent(getResources().getString(R.string.tip1));
 //            one.setSynStatus(GNote.NEW);
 //        one.setColor(GridUnit.PURPLE);
         one.setEditTime(TimeUtils.getCurrentTimeInLong());
@@ -1042,15 +1097,15 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         two.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(two);
 
-        tmpCal.add(Calendar.DAY_OF_MONTH, -1);
-        GNote three = new GNote();
-        three.setCalToTime(tmpCal);
-        three.setContent(getResources().getString(R.string.tip3));
-//            three.setSynStatus(GNote.NEW);
-        three.setEditTime(TimeUtils.getCurrentTimeInLong());
-        db.saveGNote(three);
+//        tmpCal.add(Calendar.DAY_OF_MONTH, -1);
+//        GNote three = new GNote();
+//        three.setCalToTime(tmpCal);
+//        three.setContent(getResources().getString(R.string.tip3));
+////            three.setSynStatus(GNote.NEW);
+//        three.setEditTime(TimeUtils.getCurrentTimeInLong());
+//        db.saveGNote(three);
 
-        preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, 3).apply();
+        preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, 2).commit();
 //            GNotebook test = new GNotebook();
 //            test.setName("Test");
 //            db.saveGNotebook(test);
@@ -1164,7 +1219,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
             LogUtil.i(TAG, "readingSetting & updateUI in onResume.");
         }
-
 
         //evernote
         if (bindItem != null) {
@@ -1385,8 +1439,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         return true;
     }
 
-    private static final int UPGRADE_28_START = 280;
-    private static final int UPGRADE_28_END = 281;
+    private static final int UPGRADE_START = 280;
+    private static final int UPGRADE_END = 281;
 
     class SyncHandler extends Handler {
         @Override
@@ -1399,10 +1453,10 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                 case Evernote.SYNC_END:
                     hideProgressBar();
                     break;
-                case UPGRADE_28_START:
+                case UPGRADE_START:
                     showDialog(OPERATE);
                     break;
-                case UPGRADE_28_END:
+                case UPGRADE_END:
                     dismissDialog(OPERATE);
                     break;
                 default:
