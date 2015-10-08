@@ -147,6 +147,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         });
         findViewById(R.id.ll_notification_container).setOnClickListener(this);
         findViewById(R.id.ll_pref_note).setOnClickListener(this);
+        findViewById(R.id.ll_one_column).setOnClickListener(this);
     }
 
 
@@ -173,6 +174,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 //    private Spinner spinner;
     private CheckBox universal;
     private CheckBox prefNote;
+    private CheckBox oneColumn;
 
     private void initButtons() {
 // CheckBox newNote = (CheckBox) findViewById(R.id.new_note);
@@ -317,6 +319,9 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 showSelectQuickLocationDialog(quickLocationSummary);
             }
         });
+
+        oneColumn= (CheckBox) findViewById(R.id.cb_one_column);
+        oneColumn.
     }
 
     private void setGuardText(boolean b) {

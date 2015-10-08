@@ -183,6 +183,10 @@
     <string name="pref_note">首选阅读</string>
     <string name="pref_note_summary">勾选后，点击笔记进入阅读模式而非编辑模式</string>
 
+    <string name="one_column_title">单列模式</string>
+    <string name="one_column_summary">勾选后，界面由双列瀑布流调整为单列</string>
+    <string name="one_column_key">one_column_key</string>
+
     <string name="password_guard">密码保护</string>
     <string name="password_guard_summary">设定应用启动时的密码以保护您的数据安全</string>
     <string name="password_guard_key">password_guard</string>

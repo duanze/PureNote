@@ -15,7 +15,6 @@ import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 
 public class GNoteProvider extends ContentProvider {
-    public static final int NOTES_WITH_DELETED = 0;
     public static final int NOTE_DIR = 1;
     public static final int NOTE_ITEM = 2;
     public static final int NOTEBOOK_DIR = 3;
@@ -26,14 +25,15 @@ public class GNoteProvider extends ContentProvider {
     public static final String TABLE_NOTEBOOK = GNoteDB.TABLE_NOTEBOOK;
 
     public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NOTE);
-    public static final Uri NOTEBOOK_URI = Uri.parse("content://" + AUTHORITY + "/" +
-            TABLE_NOTEBOOK);
+    public static final Uri NOTEBOOK_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NOTEBOOK);
 
     public static final String[] STANDARD_PROJECTION = {GNoteDB.ID + " AS _id", GNoteDB.TIME,
             GNoteDB.ALERT_TIME, GNoteDB.IS_PASSED, GNoteDB.CONTENT, GNoteDB.IS_DONE, GNoteDB
             .COLOR, GNoteDB.EDIT_TIME, GNoteDB.CREATED_TIME, GNoteDB.SYN_STATUS, GNoteDB.GUID,
             GNoteDB.BOOK_GUID, GNoteDB.DELETED, GNoteDB.GNOTEBOOK_ID};
     public static final String STANDARD_SORT_ORDER = GNoteDB.EDIT_TIME + " desc";
+    public static final String STANDARD_SELECTION = GNoteDB.DELETED + " != ?";
+    public static final String[] STANDARD_SELECTION_ARGS = new String[]{"" + GNote.TRUE};
 
     public static final String[] NOTEBOOK_PROJECTION = {GNoteDB.ID + " AS _id", GNoteDB.NAME,
             GNoteDB.SYN_STATUS, GNoteDB.NOTEBOOK_GUID, GNoteDB.DELETED, GNoteDB.NOTES_NUM,
