@@ -1,41 +1,69 @@
 # PureNote极简笔记
 A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>
-<br>See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)<br>
+<br>~~See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)~~暂停更新<br>
 [小米应用商店](http://app.mi.com/detail/85433)
-#【特点】<br>
-·唯快不破，启动进入新记事，记事快如闪电，灵感不再溜走<br>
-·随机彩格视图，任务计划、灵感足迹一目了然<br>
-·高度自适应列表，灵活显示，彩色标签清新标注重点<br>
-·绑定EverNote，同步笔记至云端，精彩文字永不遗失<br>
-·定时提醒、笔记分组、全屏模式、彩色Note、快速分享保存……更多精彩等你发现<br>
-I am trying to make it better through the nice OpenSource projects help.<br>
-
-#Lastest Action近期动作
-Record voice,picture and so on.<br>
-录音及图片的记录功能开发中<br>
-<br>
-
-~~笔记分组，实用的小功能~~<br>
-![](https://github.com/duanze/PureNote/raw/master/Screenshot_2015-05-23-23-12-52.jpeg)
-<br>
-
-<br>
-~~ClassicList mode,the new colorful mark.~~<br>
-~~为经典列表模式增加新的彩色标签。~~<br>
-![](https://github.com/duanze/PureNote/raw/master/mark.png)
-<br>
-<br>
-~~Trying to make it can supply EverNote service.But the sdk give me so many "no retern value",asynchronized functions.I am so confused to design a Class for using it.~~<br>
-~~尝试支持EverNote服务，但新版sdk给的全是无返回值的异步函数，使用起来如此困难。~~<br>
-![](https://github.com/duanze/PureNote/raw/master/evernote.jpeg) 
+#一切皆为虚妄
+-
 #更新历史
+v2.1.8<br>
+新功能：回收站<br>
+现在，可以通过长按来重命名笔记分组<br>
+修改了通知栏RemoteViews右侧按键为文字，采用了新的文本解析<br>
+增加兼容性，4.0也可使用<br>
+<br>
+v2.1.7<br>
+全面改版，全新感受<br>
+少即是多，进一步精化应用，细心打磨每一分细节<br>
+重构代码，全面Loader化，进一步提升性能及流畅度，即使内存吃紧也毫无压力<br>
+增加代码许可，向无私的开源者致敬<br>
+更多功能，即将到来……<br>
+<br>
+v2.1.6<br>
+现在，可以通过长按笔记来进行批量操作<br>
+调整阅读编辑模式<br>
+取消笔记字数限制<br>
+重构代码，增加性能及流畅性<br>
+fix some bugs<br>
+<br>
+v2.1.2<br>
+新增：独创的闪电摘录功能，轻松记下或精美或深凝的价值文字<br>
+新增：通知栏快写模式，不让任何一丝灵感流失<br>
+fix bugs<br>
+<br>
+v2.1.1<br>
+新增api19以上的沉浸式适配，忘记密码处理方案<br>
+笔记分组功能的优化<br>
+修正了几个bug<br>
 
+<br>
+v2.1.0<br>
+新增：密码保护<br>
+优化代码提升性能<br>
+由于旧有代码不够健壮，彩格视图暂且取消，将在之后重制<br>
+<br>
+v2.0.9<br>
+1.修正重复删除通知栏提醒的bug<br>
+2.修正了一个4.0版本下的适配问题<br>
+<br>
+v2.0.8<br>
+1.修正了一个初始程序的崩溃问题<br>
+2.修正列表模式下时间戳12月缩写错误<br>
+<br>
+v2.0.7<br>
+1.重新设计笔记分组<br>
+2.解决了一个彩格视图模式下的bug<br>
+3.低版本适配<br>
+<br>
+v2.0.5<br>
+1.重新制件笔记分组为侧滑抽屉<br>
+2.优化代码提升性能<br>
+<br>
 v2.0.4<br>
 1.新功能，笔记分组，让一切井井有条！<br>
 2.解决了一个彩格视图模式下的严重bug<br>
 3.多处细节优化<br>
-
+<br>
 v2.0.3<br>
 1.全新彩色标签功能<br>
 2.优化代码提升性能<br>
