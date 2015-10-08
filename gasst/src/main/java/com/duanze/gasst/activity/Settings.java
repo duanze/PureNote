@@ -166,15 +166,15 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
     }
 
     private TextView passwordGurad;
-    private Switch lightningExtract;
-    private Switch alwaysShow;
+    private com.rey.material.widget.Switch lightningExtract;
+    private com.rey.material.widget.Switch alwaysShow;
     private TextView extractLocationSummary;
     private TextView quickLocationSummary;
     //    private CheckBox fold;
 //    private Spinner spinner;
     private CheckBox universal;
     private CheckBox prefNote;
-    private CheckBox oneColumn;
+    private com.rey.material.widget.CheckBox oneColumn;
 
     private void initButtons() {
 // CheckBox newNote = (CheckBox) findViewById(R.id.new_note);
@@ -260,12 +260,12 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             view.setVisibility(View.VISIBLE);
         }
 
-        lightningExtract = (Switch) findViewById(R.id.s_lightning_extract);
+        lightningExtract = (com.rey.material.widget.Switch) findViewById(R.id.s_lightning_extract);
         b = preferences.getBoolean(LIGHTNING_EXTRACT, false);
         lightningExtract.setChecked(b);
-        lightningExtract.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        lightningExtract.setOnCheckedChangeListener(new com.rey.material.widget.Switch.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(com.rey.material.widget.Switch aSwitch, boolean b) {
                 preferences.edit().putBoolean(LIGHTNING_EXTRACT, b).apply();
                 if (b) {
                     if (Util.isServiceWork(mContext, "com.duanze.gasst.service.AlarmService")) {
@@ -283,20 +283,19 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                         LogUtil.i(TAG, "服务未启动");
                     }
                 }
-
-
             }
         });
 
-        alwaysShow = (Switch) findViewById(R.id.s_notification_always_show);
+        alwaysShow = (com.rey.material.widget.Switch) findViewById(R.id.s_notification_always_show);
         b = preferences.getBoolean(NOTIFICATION_ALWAYS_SHOW, false);
         alwaysShow.setChecked(b);
-        alwaysShow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        alwaysShow.setOnCheckedChangeListener(new com.rey.material.widget.Switch.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(com.rey.material.widget.Switch aSwitch, boolean b) {
                 preferences.edit().putBoolean(NOTIFICATION_ALWAYS_SHOW, b).apply();
                 AlarmService.showOrHide(mContext);
             }
+
         });
 
         extractLocationSummary = (TextView) findViewById(R.id.tv_extract_location_summary);
@@ -320,7 +319,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             }
         });
 
-        oneColumn = (CheckBox) findViewById(R.id.cb_one_column);
+        oneColumn = (com.rey.material.widget.CheckBox) findViewById(R.id.cb_one_column);
         boolean isOneColumn = preferences.getBoolean(getString(R.string.one_column_key), false);
         oneColumn.setChecked(isOneColumn);
         oneColumn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -609,7 +608,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 quickLocationSummary.performClick();
                 break;
             case R.id.ll_lightning_container:
-                lightningExtract.performClick();
+                lightningExtract.toggle();
                 break;
             case R.id.ll_extract_location_container:
                 extractLocationSummary.performClick();
@@ -624,7 +623,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 //                break;
 
             case R.id.ll_notification_container:
-                alwaysShow.performClick();
+                alwaysShow.toggle();
                 break;
 
             case R.id.ll_pref_note:
