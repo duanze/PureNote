@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".Donate">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Donate">
 
     <View
         android:id="@+id/divide_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/divider_line_color"/>
+        android:background="@color/divider_line_color" />
 
     <ImageView
         android:id="@+id/alipay_img"
@@ -18,16 +18,28 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:src="@drawable/donate_duanze"/>
+        android:src="@drawable/donate_duanze" />
 
-    <TextView
-        android:layout_width="200dp"
+    <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:lineSpacingExtra="6dp"
-        android:text="@string/donate_me_tip"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/dimgrey"/>
+        app:mrl_rippleOverlay="true">
+
+        <Button
+            android:id="@+id/btn_save_donate_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/white_button_background"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:padding="12dp"
+            android:text="@string/donate_me_tip"
+            android:textColor="@color/dimgrey"
+            android:textSize="@dimen/category_text_size" />
+    </com.balysv.materialripple.MaterialRippleLayout>
+
 </LinearLayout>

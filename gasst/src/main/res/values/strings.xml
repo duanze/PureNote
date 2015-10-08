@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="saved_picture_to">图片已保存至：</string>
+
     <string name="before_minute" formatted="false">%d\u0020分钟\u0020前</string>
     <string name="before_hour" formatted="false">%d\u0020小时\u0020前</string>
     <string name="before_day" formatted="false">%d\u0020天\u0020前</string>
@@ -129,7 +131,7 @@
     <string name="gift_for_purenote">给极简笔记好评</string>
     <string name="comment_purenote">评价应用</string>
     <string name="donate_developer">捐赠作者</string>
-    <string name="donate_me_tip">随性资助鼓励，让我有动力完善极简笔记，五毛一块也很好啊(・8・)</string>
+    <string name="donate_me_tip">随性资助鼓励，让我有动力完善极简笔记\n~～戳我一下～~(・8・)</string>
     <string name="situation">【全局设置】</string>
     <string name="color_grid">【彩格视图】</string>
     <string name="classic_list">【经典列表】</string>
