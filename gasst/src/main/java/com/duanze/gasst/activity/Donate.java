@@ -75,7 +75,7 @@ public class Donate extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         Bitmap donate = BitmapFactory.decodeResource(getResources(), R.drawable.donate_duanze);
         StringBuilder path = new StringBuilder();
-        if (PictureUtils.saveImageToGallery(mContext, donate, path,false)) {
+        if (PictureUtils.saveImageToGallery(mContext, donate, path, true)) {
             Toast.makeText(mContext, getString(R.string.saved_picture_to) + path.toString(), Toast.LENGTH_SHORT).show();
         }
         if (!donate.isRecycled()) {

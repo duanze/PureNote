@@ -76,7 +76,13 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
             savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gnote_recycler, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv_gnotes);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,
+
+        boolean isOneColumn = preferences.getBoolean(getString(R.string.one_column_key), false);
+        int columnNum = 2;
+        if (isOneColumn) {
+            columnNum = 1;
+        }
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columnNum,
                 StaggeredGridLayoutManager.VERTICAL));
         mAdapter = new GNoteRVAdapter(mContext, null, this, this);
         mAdapter.setPreferences(preferences);

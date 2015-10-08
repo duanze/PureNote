@@ -320,8 +320,16 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             }
         });
 
-        oneColumn= (CheckBox) findViewById(R.id.cb_one_column);
-        oneColumn.
+        oneColumn = (CheckBox) findViewById(R.id.cb_one_column);
+        boolean isOneColumn = preferences.getBoolean(getString(R.string.one_column_key), false);
+        oneColumn.setChecked(isOneColumn);
+        oneColumn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                preferences.edit().putBoolean(getString(R.string.one_column_key), isChecked).apply();
+                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setGuardText(boolean b) {
@@ -621,6 +629,9 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 
             case R.id.ll_pref_note:
                 prefNote.performClick();
+                break;
+            case R.id.ll_one_column:
+                oneColumn.performClick();
                 break;
             default:
                 break;
