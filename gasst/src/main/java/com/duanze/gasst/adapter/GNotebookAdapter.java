@@ -200,6 +200,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         mHolder.num.setText("" + notesNum);
         mHolder.checkBox.setVisibility(View.INVISIBLE);
         mHolder.divider.setVisibility(View.VISIBLE);
+        mHolder.itemLayout.setTag(R.string.gnotebook_data, null);//似乎很有必要
     }
 
     @Override
