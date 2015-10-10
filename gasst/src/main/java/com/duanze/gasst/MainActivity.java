@@ -1386,7 +1386,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-                    gNoteRecyclerView.getFilter().filter(s);
+                    gNoteRecyclerView.getGNoteRVAdapter().getFilter().filter(s);
                     return true;
                 }
             });

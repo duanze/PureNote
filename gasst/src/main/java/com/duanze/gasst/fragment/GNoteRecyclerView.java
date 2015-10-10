@@ -66,6 +66,10 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         preferences = ((MainActivity) mContext).getPreferences();
     }
 
+    public GNoteRVAdapter getGNoteRVAdapter() {
+        return mAdapter;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -325,62 +329,5 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onCancelSelect() {
         updateActionMode();
-    }
-
-    public Filter getFilter() {
-        return new GNoteFilter(mAdapter, mAdapter.getCursor());
-    }
-
-    private static class GNoteFilter extends Filter {
-
-        public static final String[] PROJECTION = {"_id", GNoteDB.TIME,
-                GNoteDB.ALERT_TIME, GNoteDB.IS_PASSED, GNoteDB.CONTENT, GNoteDB.IS_DONE, GNoteDB
-                .COLOR, GNoteDB.EDIT_TIME, GNoteDB.CREATED_TIME, GNoteDB.SYN_STATUS, GNoteDB.GUID,
-                GNoteDB.BOOK_GUID, GNoteDB.DELETED, GNoteDB.GNOTEBOOK_ID};
-
-        private final GNoteRVAdapter adapter;
-        private final Cursor data;
-
-        private GNoteFilter(GNoteRVAdapter adapter, Cursor data) {
-            super();
-            this.adapter = adapter;
-            this.data = data;
-        }
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            MatrixCursor matrixCursor = new MatrixCursor(PROJECTION);
-            if (data != null && data.getCount() > 0) {
-                String[] columns = new String[PROJECTION.length];
-                while (data.moveToNext()) {
-                    for (int i = 0; i < PROJECTION.length; i++) {
-                        columns[i] = data.getString(i);
-                    }
-                    LogUtil.i(TAG, columns[4]);
-                    if (columns[4].contains(constraint)) {
-                        matrixCursor.addRow(columns);
-                    }
-                }
-
-            } else {
-                LogUtil.i(TAG, "data == null :" + (data == null));
-                LogUtil.i(TAG, "data.getCount() :" + data.getCount());
-            }
-
-            final FilterResults results = new FilterResults();
-            if (0 != matrixCursor.getCount()) {
-                results.values = matrixCursor;
-                results.count = matrixCursor.getCount();
-            } else {
-                results.values = data;
-                results.count = data.getCount();
-            }
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            adapter.swapCursor((Cursor) results.values);
-        }
     }
 }
