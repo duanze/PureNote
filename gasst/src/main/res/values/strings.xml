@@ -255,4 +255,5 @@
     <string name="notification_quick_write">快</string>
     <string name="notification_lightning_extract_on">闪</string>
     <string name="notification_lightning_extract_off">凝</string>
+    <string name="search_note">搜索笔记</string>
 </resources>

@@ -21,9 +21,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +37,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.duanze.gasst.activity.About;
@@ -1371,6 +1374,46 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             } else {
                 logoutNow();
             }
+
+            MenuItem searchItem = menu.findItem(R.id.menu_search);
+            SearchView searchView = (SearchView) searchItem.getActionView();
+            searchView.setQueryHint(getString(R.string.search_note));
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    gNoteRecyclerView.getFilter().filter(s);
+                    return true;
+                }
+            });
+            searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    Log.d("TAG", "on expand");
+                    if (null == gNoteRecyclerView) {
+                        LogUtil.e(TAG, "onMenuItemActionExpand(MenuItem item),null==gNoteRecyclerView");
+                        return true;
+                    }
+                    gNoteRecyclerView.dismissFAB();
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    Log.d("TAG", "on collapse");
+                    if (null == gNoteRecyclerView) {
+                        LogUtil.e(TAG, "onMenuItemActionCollapse(MenuItem item),null==gNoteRecyclerView");
+                        return true;
+                    }
+                    gNoteRecyclerView.showFAB();
+                    return true;
+                }
+            });
+
         }
 
         return true;

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -22,8 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Filter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -32,14 +33,14 @@ import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Settings;
-import com.duanze.gasst.adapter.GNoteAdapter;
 import com.duanze.gasst.adapter.GNoteRVAdapter;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.provider.GNoteProvider;
-import com.duanze.gasst.util.Util;
+import com.duanze.gasst.util.LogUtil;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,6 +59,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     //nice FloatingButton
     private FloatingActionButton fabButton;
     private GNoteRVAdapter mAdapter;
+    private Filter filter;
 
     private void initValues() {
         mContext = getActivity();
@@ -197,13 +199,13 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
     };
 
-    private void dismissFAB() {
+    public void dismissFAB() {
         if (fabButton.isLock()) return;
         fabButton.hide(true);
         fabButton.setLock(true);
     }
 
-    private void showFAB() {
+    public void showFAB() {
         if (!fabButton.isLock()) return;
         fabButton.setLock(false);
         fabButton.hide(false);
@@ -323,5 +325,62 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onCancelSelect() {
         updateActionMode();
+    }
+
+    public Filter getFilter() {
+        return new GNoteFilter(mAdapter, mAdapter.getCursor());
+    }
+
+    private static class GNoteFilter extends Filter {
+
+        public static final String[] PROJECTION = {"_id", GNoteDB.TIME,
+                GNoteDB.ALERT_TIME, GNoteDB.IS_PASSED, GNoteDB.CONTENT, GNoteDB.IS_DONE, GNoteDB
+                .COLOR, GNoteDB.EDIT_TIME, GNoteDB.CREATED_TIME, GNoteDB.SYN_STATUS, GNoteDB.GUID,
+                GNoteDB.BOOK_GUID, GNoteDB.DELETED, GNoteDB.GNOTEBOOK_ID};
+
+        private final GNoteRVAdapter adapter;
+        private final Cursor data;
+
+        private GNoteFilter(GNoteRVAdapter adapter, Cursor data) {
+            super();
+            this.adapter = adapter;
+            this.data = data;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            MatrixCursor matrixCursor = new MatrixCursor(PROJECTION);
+            if (data != null && data.getCount() > 0) {
+                String[] columns = new String[PROJECTION.length];
+                while (data.moveToNext()) {
+                    for (int i = 0; i < PROJECTION.length; i++) {
+                        columns[i] = data.getString(i);
+                    }
+                    LogUtil.i(TAG, columns[4]);
+                    if (columns[4].contains(constraint)) {
+                        matrixCursor.addRow(columns);
+                    }
+                }
+
+            } else {
+                LogUtil.i(TAG, "data == null :" + (data == null));
+                LogUtil.i(TAG, "data.getCount() :" + data.getCount());
+            }
+
+            final FilterResults results = new FilterResults();
+            if (0 != matrixCursor.getCount()) {
+                results.values = matrixCursor;
+                results.count = matrixCursor.getCount();
+            } else {
+                results.values = data;
+                results.count = data.getCount();
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            adapter.swapCursor((Cursor) results.values);
+        }
     }
 }

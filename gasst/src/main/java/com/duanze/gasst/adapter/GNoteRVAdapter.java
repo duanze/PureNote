@@ -61,6 +61,10 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
         this.mOnItemSelectListener = mOnItemSelectListener;
     }
 
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
     public GNoteRVAdapter(Context context, Cursor cursor) {
         mContext = context;
         mInflater = LayoutInflater.from(context);

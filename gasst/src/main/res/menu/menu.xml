@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.duanze.gasst.MainActivity"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.duanze.gasst.MainActivity">
 
     <!--<item-->
     <!--android:id="@+id/action_plus"-->
@@ -29,13 +29,14 @@
 
     <item
         android:id="@+id/menu_search"
-        android:title="@string/menu_search"
-        android:showAsAction="always"/>
+        android:actionViewClass="android.widget.SearchView"
+        android:showAsAction="always|collapseActionView"
+        android:title="@string/menu_search" />
 
     <item
         android:id="@+id/bind_evernote"
         android:icon="@drawable/evernote"
-        android:title="@string/bind_evernote"/>
+        android:title="@string/bind_evernote" />
 
     <!--<item-->
     <!--android:id="@+id/evaluate"-->
@@ -50,9 +51,9 @@
     <item
         android:id="@+id/setting"
         android:icon="@drawable/sliders_up_2"
-        android:title="@string/action_setting"/>
+        android:title="@string/action_setting" />
     <item
         android:id="@+id/about"
         android:icon="@drawable/tea_cup"
-        android:title="@string/action_about"/>
+        android:title="@string/action_about" />
 </menu>
