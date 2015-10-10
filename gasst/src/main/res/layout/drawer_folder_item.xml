@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -9,16 +8,16 @@
         android:id="@+id/ll_folder_unit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:descendantFocusability="blocksDescendants"
         android:background="@drawable/setting_item"
+        android:descendantFocusability="blocksDescendants"
         android:orientation="horizontal"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
 
         <ImageView
             android:id="@+id/iv_folder_unit_flag"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="@dimen/folder_unit_flag"
+            android:layout_height="@dimen/folder_unit_flag"
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:src="@drawable/icon_selected"
@@ -43,8 +42,9 @@
             android:textColor="@color/darkgrey"
             android:textSize="17sp" />
 
-        <CheckBox
+        <com.rey.material.widget.CheckBox
             android:id="@+id/cb_folder_unit"
+            style="@style/Material.Drawable.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -56,5 +56,5 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/divider_line_color"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 </LinearLayout>

@@ -1364,7 +1364,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //        }
 
             //bind-evernote item
-            bindItem = menu.getItem(0);
+            bindItem = menu.findItem(R.id.bind_evernote);
             //evernote
             if (mEvernote.isLogin()) {
                 loginNow();

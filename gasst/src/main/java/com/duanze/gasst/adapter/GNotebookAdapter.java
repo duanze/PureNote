@@ -165,7 +165,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
             mHolder.flag = (ImageView) mView.findViewById(R.id.iv_folder_unit_flag);
             mHolder.name = (TextView) mView.findViewById(R.id.tv_folder_unit_name);
             mHolder.num = (TextView) mView.findViewById(R.id.tv_folder_unit_num);
-            mHolder.checkBox = (CheckBox) mView.findViewById(R.id.cb_folder_unit);
+            mHolder.checkBox = (com.rey.material.widget.CheckBox) mView.findViewById(R.id.cb_folder_unit);
             mHolder.divider = mView.findViewById(R.id.v_divider);
             mView.setTag(mHolder);
         } else {
@@ -244,7 +244,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         ImageView flag;
         TextView name;
         TextView num;
-        CheckBox checkBox;
+        com.rey.material.widget.CheckBox checkBox;
         View divider;
     }
 

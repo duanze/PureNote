@@ -33,5 +33,6 @@
     <!--<dimen name="rv_item_padding_left_right">9dp</dimen>-->
     <dimen name="rv_item_padding_left_right">7dp</dimen>
     <dimen name="item_rounded">3dp</dimen>
+    <dimen name="folder_unit_flag">28dp</dimen>
 
 </resources>
