@@ -59,7 +59,6 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     //nice FloatingButton
     private FloatingActionButton fabButton;
     private GNoteRVAdapter mAdapter;
-    private Filter filter;
 
     private void initValues() {
         mContext = getActivity();

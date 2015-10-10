@@ -1381,12 +1381,13 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {
+
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-                    gNoteRecyclerView.getGNoteRVAdapter().getFilter().filter(s);
+//                    Learn from Android Dialer source code
                     return true;
                 }
             });
