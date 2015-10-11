@@ -102,7 +102,7 @@
     <string name="syn_evernote">同步数据</string>
     <string name="m_color_grid">彩格视图</string>
     <string name="m_classic_list">经典列表</string>
-    <string name="menu_search">搜</string>
+    <string name="menu_search">搜索</string>
 
     <!-- delete dialog -->
     <string name="alert">提示</string>

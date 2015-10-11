@@ -3,6 +3,7 @@ package com.duanze.gasst;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -26,7 +28,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -48,6 +52,7 @@ import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.DrawerNotebookAdapter;
 import com.duanze.gasst.adapter.GNotebookAdapter;
 import com.duanze.gasst.fragment.ColorGrid;
+import com.duanze.gasst.fragment.FiltratePage;
 import com.duanze.gasst.fragment.FolderFooter;
 import com.duanze.gasst.fragment.FolderFooterDelete;
 import com.duanze.gasst.fragment.FooterInterface;
@@ -378,6 +383,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //        LogUtil.i(TAG, "backgroundColor:tohex" + Integer.toHexString(backgroundColor));
 //        fff3f3f3
 //        LogUtil.i(TAG, "onCreate before ... end.");
+
+        getActionBar().setDisplayShowHomeEnabled(false);
     }
 
     public static final int OPERATE = 103;
@@ -1114,12 +1121,48 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //            db.saveGNotebook(test);
     }
 
+
     private GNoteList gNoteList;
     private ColorGrid colorGrid;
     private GNoteRecyclerView gNoteRecyclerView;
+    private FiltratePage filtratePage;
+    private boolean isInFiltrate = false;
+
+    private void enterFiltratePage() {
+        if (isInFiltrate) return;
+        isInFiltrate = true;
+//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        lockDrawerLock();
+        gNoteRecyclerView.dismissFAB();
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (null == filtratePage) {
+            transaction.add(R.id.fl_main_content, new FiltratePage());
+        } else {
+            transaction.show(filtratePage);
+            filtratePage.clearResult();
+        }
+        transaction.hide(gNoteRecyclerView).commit();
+        gNoteRecyclerView.setUserVisibleHint(false);
+    }
+
+    private void exitFiltratePage() {
+        if (!isInFiltrate) return;
+        isInFiltrate = false;
+//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        unlockDrawerLock();
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (null == filtratePage) {
+            return;
+        } else {
+            transaction.hide(filtratePage);
+        }
+        transaction.show(gNoteRecyclerView).commit();
+        gNoteRecyclerView.setUserVisibleHint(true);
+        gNoteRecyclerView.showFAB();
+        gNoteRecyclerView.refreshUI();
+    }
 
     public void changeContent() {
-
         if (mode == MODE_LIST) {
 //            if (null == gNoteList) {
 //                gNoteList = new GNoteList();
@@ -1178,6 +1221,16 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         GNote note = new GNote();
         note.setCalToTime(cal);
         Note.actionStart(this, note, Note.MODE_NEW);
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        if (fragment instanceof FiltratePage) {
+            LogUtil.i(TAG, "filtratePage = (FiltratePage) fragment;");
+            filtratePage = (FiltratePage) fragment;
+        }
     }
 
     /**
@@ -1387,30 +1440,38 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-//                    Learn from Android Dialer source code
+//                    It's really weird
+                    if (null != filtratePage) {
+                        if (0 != s.length()) {
+                            filtratePage.startFiltrate(FiltratePage.SELECTION, new String[]{"%" + s + "%"});
+                        } else {
+                            filtratePage.clearResult();
+                        }
+                    }
                     return true;
                 }
             });
             searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
                 @Override
                 public boolean onMenuItemActionExpand(MenuItem item) {
-                    Log.d("TAG", "on expand");
+                    Log.d(TAG, "on expand");
                     if (null == gNoteRecyclerView) {
                         LogUtil.e(TAG, "onMenuItemActionExpand(MenuItem item),null==gNoteRecyclerView");
                         return true;
                     }
-                    gNoteRecyclerView.dismissFAB();
+//                    Learn from Android Dialer source code
+                    enterFiltratePage();
                     return true;
                 }
 
                 @Override
                 public boolean onMenuItemActionCollapse(MenuItem item) {
-                    Log.d("TAG", "on collapse");
+                    Log.d(TAG, "on collapse");
                     if (null == gNoteRecyclerView) {
                         LogUtil.e(TAG, "onMenuItemActionCollapse(MenuItem item),null==gNoteRecyclerView");
                         return true;
                     }
-                    gNoteRecyclerView.showFAB();
+                    exitFiltratePage();
                     return true;
                 }
             });
@@ -1469,6 +1530,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //                    changeContent();
 //                }
 //                break;
+
+            case R.id.menu_search:
+                break;
 
             //evernote
             case R.id.bind_evernote:

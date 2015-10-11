@@ -304,6 +304,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void startActionMode() {
+//        mActionMode 在Destroy中重赋为了 null
         if (mActionMode != null) {
             return;
         }

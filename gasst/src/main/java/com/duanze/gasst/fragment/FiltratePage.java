@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -30,8 +29,6 @@ import android.widget.Toast;
 
 import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.Note;
-import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.GNoteRVAdapter;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
@@ -43,9 +40,9 @@ import java.util.List;
 /**
  * Created by duanze on 2015/9/19.
  */
-public class GNoteRVWithFilter extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+public class FiltratePage extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         GNoteRVAdapter.ItemLongPressedListener, GNoteRVAdapter.OnItemSelectListener {
-    public static final String TAG = GNoteRVWithFilter.class.getSimpleName();
+    public static final String TAG = FiltratePage.class.getSimpleName();
 
     private static final int LOADER_ID = 113 + 1;//以示区分
     //MODE_LIST相关
@@ -105,10 +102,16 @@ public class GNoteRVWithFilter extends Fragment implements LoaderManager.LoaderC
 //        randomFABButtonColor();
     }
 
-//    public void randomFABButtonColor() {
+    //    public void randomFABButtonColor() {
 //        Util.randomBackground(fabButton);
 //    }
 
+    public void clearResult() {
+        if (null == mAdapter) return;
+        mAdapter.swapCursor(null);
+    }
+
+    public static final String SELECTION = GNoteDB.CONTENT + " LIKE ?";
     private String selection;
     private String[] selectionArgs;
 
