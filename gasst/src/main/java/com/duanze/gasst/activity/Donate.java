@@ -6,28 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.util.PictureUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 /**
  * Created by duanze on 2015/7/11.
  */
-public class Donate extends Activity implements View.OnClickListener {
+public class Donate extends BaseActivity implements View.OnClickListener {
     private static final String TAG = Donate.class.getSimpleName();
     private Context mContext;
 
@@ -42,7 +33,7 @@ public class Donate extends Activity implements View.OnClickListener {
         mContext = this;
         setContentView(R.layout.activity_donate);
 
-        if (MainActivity.TINT_STATUS_BAR) {
+        if (StartActivity.TINT_STATUS_BAR) {
             //沉浸式时，对状态栏染色
             // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -53,7 +44,7 @@ public class Donate extends Activity implements View.OnClickListener {
 //        tintManager.setNavigationBarTintEnabled(true);
         }
 
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (null != actionBar) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }

@@ -29,8 +29,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.duanze.gasst.MainActivity;
-import com.duanze.gasst.MyPickerListener;
+import com.duanze.gasst.util.MyPickerListener;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
@@ -50,7 +49,7 @@ import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.List;
 
-public class Note extends FragmentActivity {
+public class Note extends BaseActivity {
     public static final String TAG = "NoteActivity";
 
     public static final String EditCount = "edit_count";
@@ -68,7 +67,7 @@ public class Note extends FragmentActivity {
     private EditText editText;
     private TextView textView;
     private GNoteDB db;
-    private ActionBar actionBar;
+    private android.support.v7.app.ActionBar actionBar;
     private Calendar today;
 
     @Override
@@ -203,7 +202,7 @@ public class Note extends FragmentActivity {
 
         setContentView(R.layout.activity_note);
 
-        if (MainActivity.TINT_STATUS_BAR) {
+        if (StartActivity.TINT_STATUS_BAR) {
             //沉浸式时，对状态栏染色
             // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -217,7 +216,7 @@ public class Note extends FragmentActivity {
         setOverflowShowingAlways();
         initValues();
 
-        actionBar = getActionBar();
+        actionBar = getSupportActionBar();
         if (null != actionBar) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             if (MODE_NEW == mode) {
@@ -585,7 +584,6 @@ public class Note extends FragmentActivity {
      */
     private void trash() {
         new AlertDialog.Builder(this).
-                setTitle(R.string.alert).
                 setMessage(R.string.delete_text).
                 setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
@@ -717,7 +715,7 @@ public class Note extends FragmentActivity {
      */
     private void uiShouldUpdate() {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(MainActivity.UPDATE_UI, true).apply();
+        editor.putBoolean(StartActivity.UPDATE_UI, true).apply();
     }
 
     /**
@@ -777,7 +775,7 @@ public class Note extends FragmentActivity {
     }
 
     private void addEditCount() {
-        if (!preferences.getBoolean(MainActivity.ShownRate, false)) {
+        if (!preferences.getBoolean(StartActivity.ShownRate, false)) {
             int count = preferences.getInt(EditCount, 0);
             count++;
             preferences.edit().putInt(EditCount, count).apply();

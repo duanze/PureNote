@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <View
-        android:id="@+id/divide_line"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/divider_line_color" />
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/primary_color"
+              android:orientation="vertical">
+
+    <!--<View-->
+        <!--android:id="@+id/divide_line"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:background="@color/divider_line_color"/>-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -15,8 +17,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
         android:text="@string/app_name"
-        android:textColor="@color/dimgrey"
-        android:textSize="34sp" />
+        android:textColor="@android:color/white"
+        android:textSize="34sp"/>
 
     <TextView
         android:id="@+id/tv_version"
@@ -24,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:textColor="@color/dimgrey"
-        android:textSize="20sp" />
+        android:textColor="@android:color/white"
+        android:textSize="20sp"/>
 
     <com.balysv.materialripple.MaterialRippleLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -42,8 +44,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button_background"
             android:text="@string/action_feedback"
-            android:textColor="@color/grey"
-            android:textSize="@dimen/category_text_size" />
+            android:textColor="@color/primary_color"
+            android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
 
     <com.balysv.materialripple.MaterialRippleLayout
@@ -61,8 +63,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button_background"
             android:text="@string/comment_purenote"
-            android:textColor="@color/grey"
-            android:textSize="@dimen/category_text_size" />
+            android:textColor="@color/primary_color"
+
+            android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
 
     <com.balysv.materialripple.MaterialRippleLayout
@@ -80,8 +83,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button_background"
             android:text="@string/donate_developer"
-            android:textColor="@color/grey"
-            android:textSize="@dimen/category_text_size" />
+            android:textColor="@color/primary_color"
+
+            android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
 
     <com.balysv.materialripple.MaterialRippleLayout
@@ -99,8 +103,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button_background"
             android:text="@string/title_activity_license"
-            android:textColor="@color/grey"
-            android:textSize="@dimen/category_text_size" />
+            android:textColor="@color/primary_color"
+
+            android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
 
     <TextView
@@ -111,8 +116,8 @@
         android:gravity="center|bottom"
         android:paddingBottom="20dp"
         android:text="@string/proudly"
-        android:textColor="@color/grey"
-        android:textSize="12sp" />
+        android:textColor="@android:color/white"
+        android:textSize="12sp"/>
 
 
 </LinearLayout>

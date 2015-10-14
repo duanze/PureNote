@@ -3,15 +3,13 @@ package com.duanze.gasst.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.duanze.gasst.MainActivity;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
-import com.duanze.gasst.util.LogUtil;
 
 /**
  * Created by Duanze on 2015/5/22.
@@ -44,8 +42,8 @@ public class FolderFooterDelete extends Fragment {
             }
         });
 
-//        LogUtil.i(TAG, "updateDeleteNum(((MainActivity) mContext).getDeleteNum());");
-        updateDeleteNum(((MainActivity) mContext).getDeleteNum());
+//        LogUtil.i(TAG, "updateDeleteNum(((StartActivity) mContext).getDeleteNum());");
+        updateDeleteNum(((StartActivity) mContext).getDeleteNum());
 
         folderNum.setOnClickListener(new View.OnClickListener() {
             @Override

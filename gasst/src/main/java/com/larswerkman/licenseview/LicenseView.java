@@ -56,6 +56,9 @@ public class LicenseView extends ScrollView {
 				LayoutParams.MATCH_PARENT));
 		mContainer.setOrientation(LinearLayout.VERTICAL);
 		addView(mContainer);
+
+		// / Added by duanze
+		setOverScrollMode(OVER_SCROLL_NEVER);
 	}
 
 	public void setLicenses(int id) throws NotFoundException,

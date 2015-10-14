@@ -17,7 +17,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 
-import com.duanze.gasst.MainActivity;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Settings;
@@ -314,7 +314,7 @@ public class AlarmService extends Service {
 //switch lightning extract
         toggleBoltBtnStatus();
 
-        Intent myIntent = new Intent(this, MainActivity.class);
+        Intent myIntent = new Intent(this, StartActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, myIntent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);

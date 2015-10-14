@@ -18,8 +18,8 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.duanze.gasst.MainActivity;
-import com.duanze.gasst.MyPickerListener;
+import com.duanze.gasst.activity.StartActivity;
+import com.duanze.gasst.util.MyPickerListener;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.Note;
@@ -84,7 +84,7 @@ public class ClassicList extends Fragment {
 //      这种后台刷新的方式不够即时，在这里不适用
 //        new RefreshTask(new RefreshHandler()).execute();
 
-        MainActivity activity = (MainActivity) mContext;
+        StartActivity activity = (StartActivity) mContext;
 
 //        List<GNote> tmpList = db.loadGNotes();
         List<GNote> tmpList = db.loadGNotesByBookId(activity.getGNotebookId());
@@ -104,7 +104,7 @@ public class ClassicList extends Fragment {
         today = Calendar.getInstance();
         db = GNoteDB.getInstance(mContext);
 //        gNoteList = db.loadGNotes();
-        gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getGNotebookId());
+        gNoteList = db.loadGNotesByBookId(((StartActivity) mContext).getGNotebookId());
 
         pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(mContext, today, listener),
                 today.get(Calendar.YEAR), today.get(Calendar.MONTH),
@@ -129,7 +129,7 @@ public class ClassicList extends Fragment {
         View view = inflater.inflate(R.layout.fragment_classic_list, container, false);
         noteListView = (SwipeMenuListView) view.findViewById(R.id.swipe_lv);
         noteAdapter = new NoteAdapter(mContext, R.layout.classic_list_item, gNoteList, noteListView);
-        MainActivity activity = (MainActivity) mContext;
+        StartActivity activity = (StartActivity) mContext;
         noteAdapter.setValues(activity.getIsFold(), activity.getToday(), activity.getMaxLines());
         noteListView.setAdapter(noteAdapter);
         noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -150,7 +150,7 @@ public class ClassicList extends Fragment {
                     case 0:
                         // remind
                         gNote = gNoteList.get(position);
-                        pickerDialog.show(((MainActivity) mContext).getSupportFragmentManager(),
+                        pickerDialog.show(((StartActivity) mContext).getSupportFragmentManager(),
                                 DATEPICKER_TAG);
                         break;
                     case 1:
@@ -180,7 +180,7 @@ public class ClassicList extends Fragment {
 
     private void operateNote(int i) {
         GNote gNote = gNoteList.get(i);
-        boolean prefNote = ((MainActivity) mContext).getPreferences().getBoolean(Settings.PREF_NOTE_KEY, false);
+        boolean prefNote = ((StartActivity) mContext).getPreferences().getBoolean(Settings.PREF_NOTE_KEY, false);
         if (prefNote) {
             Note.actionStart(
                     mContext, gNote, Note.MODE_SHOW);
@@ -215,9 +215,9 @@ public class ClassicList extends Fragment {
 
     private void updateGNotebook(int id, int value) {
         if (id == 0) {
-            int cnt = ((MainActivity) getActivity()).getPreferences().getInt(Folder.PURENOTE_NOTE_NUM,
+            int cnt = ((StartActivity) getActivity()).getPreferences().getInt(Folder.PURENOTE_NOTE_NUM,
                     3);
-            ((MainActivity) getActivity()).getPreferences().edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+            ((StartActivity) getActivity()).getPreferences().edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
         } else {
             List<GNotebook> gNotebooks = db.loadGNotebooks();
             for (GNotebook gNotebook : gNotebooks) {
@@ -286,11 +286,11 @@ public class ClassicList extends Fragment {
             switch (msg.what) {
                 case REFRESH_START:
                     LogUtil.i(TAG,"REFRESH_START");
-                    ((MainActivity) mContext).showDialog();
+                    ((StartActivity) mContext).showDialog();
                     break;
                 case REFRESH_END:
                     LogUtil.i(TAG,"REFRESH_END");
-                    ((MainActivity) mContext).removeDialog();
+                    ((StartActivity) mContext).removeDialog();
                     break;
                 case REFRESH_SUCCESS:
                     LogUtil.i(TAG,"REFRESH_SUCCESS");
@@ -320,7 +320,7 @@ public class ClassicList extends Fragment {
         protected Void doInBackground(Void... params) {
             publishProgress(REFRESH_START);
             try {
-                MainActivity activity = (MainActivity) mContext;
+                StartActivity activity = (StartActivity) mContext;
 //        List<GNote> tmpList = db.loadGNotes();
                 List<GNote> tmpList = db.loadGNotesByBookId(activity.getGNotebookId());
                 gNoteList.clear();

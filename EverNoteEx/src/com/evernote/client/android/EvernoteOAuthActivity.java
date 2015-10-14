@@ -26,6 +26,7 @@
 package com.evernote.client.android;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -34,6 +35,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -166,7 +169,11 @@ public class EvernoteOAuthActivity extends Activity {
             mSupportAppLinkedNotebooks = intent.getBooleanExtra(EXTRA_SUPPORT_APP_LINKED_NOTEBOOKS, false);
         }
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if (null != actionBar) {
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override

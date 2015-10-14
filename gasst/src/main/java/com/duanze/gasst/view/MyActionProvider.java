@@ -9,16 +9,16 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.SubMenu;
 import android.view.View;
 
-import com.duanze.gasst.MainActivity;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 
 public class MyActionProvider extends ActionProvider {
-    MainActivity activity;
+    StartActivity activity;
     SharedPreferences preferences;
 
     public MyActionProvider(Context context) {
         super(context);
-        activity = (MainActivity) context;
+        activity = (StartActivity) context;
         preferences = activity.getSharedPreferences("data",
                 Activity.MODE_PRIVATE);
     }
@@ -35,9 +35,9 @@ public class MyActionProvider extends ActionProvider {
         subMenu.add(R.string.m_color_grid).setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (activity.getMode() != MainActivity.MODE_GRID) {
-                    preferences.edit().putInt("mode", MainActivity.MODE_GRID).apply();
-                    activity.setMode(MainActivity.MODE_GRID);
+                if (activity.getMode() != StartActivity.MODE_GRID) {
+                    preferences.edit().putInt("mode", StartActivity.MODE_GRID).apply();
+                    activity.setMode(StartActivity.MODE_GRID);
                     activity.changeContent();
 //                    activity.gridRefresh();
                 }
@@ -47,9 +47,9 @@ public class MyActionProvider extends ActionProvider {
         subMenu.add(R.string.m_classic_list).setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (activity.getMode() != MainActivity.MODE_LIST) {
-                    preferences.edit().putInt("mode", MainActivity.MODE_LIST).apply();
-                    activity.setMode(MainActivity.MODE_LIST);
+                if (activity.getMode() != StartActivity.MODE_LIST) {
+                    preferences.edit().putInt("mode", StartActivity.MODE_LIST).apply();
+                    activity.setMode(StartActivity.MODE_LIST);
                     activity.changeContent();
 //                    activity.listRefresh();
                 }

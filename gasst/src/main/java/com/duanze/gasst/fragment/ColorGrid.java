@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.duanze.gasst.MainActivity;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
@@ -148,7 +148,7 @@ public class ColorGrid extends Fragment {
 
     public void refreshUI() {
 //        List<GNote> gNoteList = db.loadGNotes();
-        List<GNote> gNoteList = db.loadGNotesByBookId(((MainActivity) mContext).getGNotebookId());
+        List<GNote> gNoteList = db.loadGNotesByBookId(((StartActivity) mContext).getGNotebookId());
         int index = gNoteList.size() - 1;
         tmpCal = (Calendar) today.clone();
 
@@ -249,11 +249,11 @@ public class ColorGrid extends Fragment {
     }
 
     private boolean randomColor() {
-        return ((MainActivity) mContext).isRandomColor();
+        return ((StartActivity) mContext).isRandomColor();
     }
 
 //    private boolean customizeColor(){
-//        return ((MainActivity)mContext).isCustomizeColor();
+//        return ((StartActivity)mContext).isCustomizeColor();
 //    }
 
     private void gridUnitOpenNew(GridUnit gridUnit, final Calendar cal) {

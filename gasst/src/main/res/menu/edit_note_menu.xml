@@ -9,17 +9,16 @@
 
     <item
         android:id="@+id/action_remind"
-        android:icon="@drawable/remind"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_remind"/>
+        android:title="@string/action_remind"
+        purenote:showAsAction="always"/>
     <item
         android:id="@+id/action_cancel_remind"
         android:icon="@drawable/cancel_remind"
         android:title="@string/action_cancel_remind"/>
     <!--<item-->
-        <!--android:id="@+id/action_move_ac"-->
-        <!--android:icon="@drawable/folder"-->
-        <!--android:title="@string/action_move"/>-->
+    <!--android:id="@+id/action_move_ac"-->
+    <!--android:icon="@drawable/folder"-->
+    <!--android:title="@string/action_move"/>-->
     <item
         android:id="@+id/action_move"
         android:icon="@drawable/map_pin_angle_3"

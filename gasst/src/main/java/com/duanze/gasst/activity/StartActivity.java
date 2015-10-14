@@ -1,11 +1,11 @@
-package com.duanze.gasst;
+package com.duanze.gasst.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,20 +17,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -41,14 +39,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.duanze.gasst.activity.About;
-import com.duanze.gasst.activity.Folder;
-import com.duanze.gasst.activity.Note;
-import com.duanze.gasst.activity.Password;
-import com.duanze.gasst.activity.Settings;
+import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.DrawerNotebookAdapter;
 import com.duanze.gasst.adapter.GNotebookAdapter;
 import com.duanze.gasst.fragment.ColorGrid;
@@ -84,12 +77,12 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends FragmentActivity implements Evernote.EvernoteLoginCallback,
+public class StartActivity extends BaseActivity implements Evernote.EvernoteLoginCallback,
         FooterInterface, CompoundButton.OnCheckedChangeListener, LoaderManager
                 .LoaderCallbacks<Cursor>, GNotebookAdapter.ItemLongPressedListener,
         GNotebookAdapter.OnItemSelectListener, GNotebookAdapter.OnItemClickListener {
 
-    public static final String TAG = "MainActivity";
+    public static final String TAG = "StartActivity";
 
     public static final boolean TINT_STATUS_BAR = false;
 
@@ -349,7 +342,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
             GNote gNote = new GNote();
             gNote.setTimeFromDate(year, month, day);
-            Note.actionStart(MainActivity.this, gNote, Note.MODE_NEW);
+            Note.actionStart(StartActivity.this, gNote, Note.MODE_NEW);
         }
     }
 
@@ -384,7 +377,6 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //        fff3f3f3
 //        LogUtil.i(TAG, "onCreate before ... end.");
 
-        getActionBar().setDisplayShowHomeEnabled(false);
     }
 
     public static final int OPERATE = 103;
@@ -393,11 +385,11 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DIALOG_PROGRESS:
-                return new ProgressDialog(MainActivity.this);
+                return new ProgressDialog(StartActivity.this);
             case INITIAL:
-                return new ProgressDialog(MainActivity.this);
+                return new ProgressDialog(StartActivity.this);
             case OPERATE:
-                return new ProgressDialog(MainActivity.this);
+                return new ProgressDialog(StartActivity.this);
         }
         // TODO onCreateDialog(int) is deprecated
         return super.onCreateDialog(id);
@@ -550,7 +542,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             bookName = db.getGNotebookById(bookId).getName();
         }
 
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(bookName);
         }
@@ -595,8 +587,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
     // TODO 待优化～～～～～
     private void trash() {
         new AlertDialog.Builder(this).
-                setTitle(R.string.alert).
-                setMessage(R.string.delete_text).
+                setMessage(R.string.delete_folder_title).
                 setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -800,15 +791,14 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         mDrawerTitle = getResources().getString(R.string.app_name);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerRoot = findViewById(R.id.left_drawer);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R
-                .string.action_folder, R.string.app_name) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 if (!isRecycleShown) {
                     setActionBarTitle();
                 } else {
-                    ActionBar actionBar = getActionBar();
+                    android.support.v7.app.ActionBar actionBar = getSupportActionBar();
                     if (null != actionBar) {
                         actionBar.setTitle(R.string.recycle_bin);
                     }
@@ -820,12 +810,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                ActionBar actionBar = getActionBar();
+                android.support.v7.app.ActionBar actionBar = getSupportActionBar();
                 if (null != actionBar) {
                     actionBar.setTitle(mDrawerTitle);
                 }
 
-                loaderManager.restartLoader(NOTEBOOK_LOADER_ID, null, MainActivity.this);
+                loaderManager.restartLoader(NOTEBOOK_LOADER_ID, null, StartActivity.this);
 //                refreshFolderList();
                 modeFooter = Folder.MODE_FOOTER;
                 if (null != mAdapter) {
@@ -842,10 +832,9 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
         }
 
         folderListView = (ListView) findViewById(R.id.lv_folder);
@@ -1133,7 +1122,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         isInFiltrate = true;
 //        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         lockDrawerLock();
-        gNoteRecyclerView.dismissFAB();
+//        gNoteRecyclerView.dismissFAB();
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (null == filtratePage) {
             transaction.add(R.id.fl_main_content, new FiltratePage());
@@ -1158,8 +1147,8 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
         }
         transaction.show(gNoteRecyclerView).commit();
         gNoteRecyclerView.setUserVisibleHint(true);
-        gNoteRecyclerView.showFAB();
-        gNoteRecyclerView.refreshUI();
+//        gNoteRecyclerView.showFAB();
+//        gNoteRecyclerView.refreshUI();
     }
 
     public void changeContent() {
@@ -1429,7 +1418,12 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
             }
 
             MenuItem searchItem = menu.findItem(R.id.menu_search);
-            SearchView searchView = (SearchView) searchItem.getActionView();
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+//            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//            ComponentName componentName = getComponentName();
+//            searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
+
             searchView.setQueryHint(getString(R.string.search_note));
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -1451,7 +1445,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
                     return true;
                 }
             });
-            searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            MenuItemCompat.setOnActionExpandListener(searchItem,new MenuItemCompat.OnActionExpandListener() {
                 @Override
                 public boolean onMenuItemActionExpand(MenuItem item) {
                     Log.d(TAG, "on expand");
@@ -1517,7 +1511,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //            case R.id.m_color_grid:
 //                if (!mi.isChecked()) {
 //                    mi.setChecked(true);
-//                    preferences.edit().putInt("mode", MainActivity.MODE_GRID).apply();
+//                    preferences.edit().putInt("mode", StartActivity.MODE_GRID).apply();
 //                    mode = MODE_GRID;
 //                    changeContent();
 //                }
@@ -1525,7 +1519,7 @@ public class MainActivity extends FragmentActivity implements Evernote.EvernoteL
 //            case R.id.m_classic_list:
 //                if (!mi.isChecked()) {
 //                    mi.setChecked(true);
-//                    preferences.edit().putInt("mode", MainActivity.MODE_LIST).apply();
+//                    preferences.edit().putInt("mode", StartActivity.MODE_LIST).apply();
 //                    mode = MODE_LIST;
 //                    changeContent();
 //                }

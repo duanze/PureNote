@@ -1,6 +1,5 @@
 package com.duanze.gasst.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -9,16 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
@@ -27,7 +24,6 @@ import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.util.GNotebookUtil;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.ProviderUtil;
-import com.duanze.gasst.util.Util;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -43,7 +39,6 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
     private ItemLongPressedListener mItemLongPressedListener;
     private OnItemSelectListener mOnItemSelectListener;
     private OnItemClickListener mOnItemClickListener;
-
     private SharedPreferences preferences;
 
     @Override
@@ -133,7 +128,6 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         mOnItemClickListener = onItemClickListener;
     }
 
-
     public HashMap<Integer, GNotebook> getCheckedItems() {
         return mCheckedItems;
     }
@@ -149,6 +143,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
     private View mView;
     private Holder mHolder;
+    private int currentPostion;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -165,7 +160,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
             mHolder.flag = (ImageView) mView.findViewById(R.id.iv_folder_unit_flag);
             mHolder.name = (TextView) mView.findViewById(R.id.tv_folder_unit_name);
             mHolder.num = (TextView) mView.findViewById(R.id.tv_folder_unit_num);
-            mHolder.checkBox = (com.rey.material.widget.CheckBox) mView.findViewById(R.id.cb_folder_unit);
+            mHolder.checkBox = (CheckBox) mView.findViewById(R.id.cb_folder_unit);
             mHolder.divider = mView.findViewById(R.id.v_divider);
             mView.setTag(mHolder);
         } else {
@@ -173,6 +168,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
             mHolder = (Holder) mView.getTag();
         }
 
+        currentPostion = position;
         if (position == 0) {
             bindFirstView(mView);
         } else {
@@ -193,13 +189,16 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         int bookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
         int notesNum = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
         if (0 == bookId) {
-            mHolder.flag.setVisibility(View.VISIBLE);
+//            mHolder.flag.setVisibility(View.VISIBLE);
+            mHolder.itemLayout.setBackground(mContext.getDrawable(R.drawable.abc_list_pressed_holo_dark));
         } else {
-            mHolder.flag.setVisibility(View.INVISIBLE);
+//            mHolder.flag.setVisibility(View.INVISIBLE);
+            mHolder.itemLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         }
         mHolder.num.setText("" + notesNum);
         mHolder.checkBox.setVisibility(View.INVISIBLE);
-        mHolder.divider.setVisibility(View.VISIBLE);
+//        mHolder.divider.setVisibility(View.VISIBLE);
+        mHolder.divider.setVisibility(View.GONE);
         mHolder.itemLayout.setTag(R.string.gnotebook_data, null);//似乎很有必要
     }
 
@@ -216,13 +215,16 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
     public void bindView(View view, Context context, Cursor cursor) {
         GNotebook gNotebook = new GNotebook(cursor);
         if (gNotebook.isSelected()) {
-            mHolder.flag.setVisibility(View.VISIBLE);
+//            mHolder.flag.setVisibility(View.VISIBLE);
+            mHolder.itemLayout.setBackgroundResource(R.drawable.abc_list_pressed_holo_dark);
         } else {
-            mHolder.flag.setVisibility(View.INVISIBLE);
+//            mHolder.flag.setVisibility(View.INVISIBLE);
+            mHolder.itemLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         }
         mHolder.name.setText(gNotebook.getName());
         mHolder.num.setText("" + gNotebook.getNotesNum());
-        mHolder.divider.setVisibility(View.INVISIBLE);
+//        mHolder.divider.setVisibility(View.INVISIBLE);
+        mHolder.divider.setVisibility(View.GONE);
         mHolder.itemLayout.setTag(R.string.gnotebook_data, gNotebook);
 
         mHolder.checkBox.setOnCheckedChangeListener(null);
@@ -244,7 +246,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         ImageView flag;
         TextView name;
         TextView num;
-        com.rey.material.widget.CheckBox checkBox;
+        CheckBox checkBox;
         View divider;
     }
 

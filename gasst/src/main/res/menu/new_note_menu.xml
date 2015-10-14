@@ -2,16 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:purenote="http://schemas.android.com/apk/res-auto">
     <!--<item-->
-        <!--android:id="@+id/edit_date"-->
-        <!--android:icon="@drawable/actionbar_add_note"-->
-        <!--android:showAsAction="ifRoom"-->
-        <!--android:title="@string/edit_date"/>-->
+    <!--android:id="@+id/edit_date"-->
+    <!--android:icon="@drawable/actionbar_add_note"-->
+    <!--android:showAsAction="ifRoom"-->
+    <!--android:title="@string/edit_date"/>-->
 
     <item
         android:id="@+id/action_remind"
-        android:icon="@drawable/remind"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_remind"/>
+        android:title="@string/action_remind"
+        purenote:showAsAction="always"/>
     <item
         android:id="@+id/action_cancel_remind"
         android:icon="@drawable/cancel_remind"

@@ -12,14 +12,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 /**
  * Created by duanze on 2015/7/11.
  */
-public class Password extends Activity {
+public class Password extends BaseActivity {
     private TextView hint;
     private EditText input;
     private String password;
@@ -38,13 +37,11 @@ public class Password extends Activity {
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         setContentView(R.layout.activity_password);
 
-        if (MainActivity.TINT_STATUS_BAR) {
+        if (StartActivity.TINT_STATUS_BAR) {
             //沉浸式时，对状态栏染色
             // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
-
             tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-
             // enable status bar tint
             tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint

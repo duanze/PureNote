@@ -1,4 +1,4 @@
-package com.duanze.gasst;
+package com.duanze.gasst.util;
 
 /**
  * Created by Duanze on 2015/3/19.
@@ -8,6 +8,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
+import com.duanze.gasst.R;
 import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.Util;
 import com.fourmob.datetimepicker.date.DatePickerDialog;

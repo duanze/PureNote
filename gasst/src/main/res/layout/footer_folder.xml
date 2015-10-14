@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:background="@null"
             android:text="@string/folder_delete"
+            android:textColor="@android:color/white"
             />
     </com.balysv.materialripple.MaterialRippleLayout>
 
@@ -38,6 +39,7 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:text="@string/folder_new"
+            android:textColor="@android:color/white"
             />
     </com.balysv.materialripple.MaterialRippleLayout>
 </LinearLayout>

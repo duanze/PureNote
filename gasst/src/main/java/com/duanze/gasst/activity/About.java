@@ -1,7 +1,5 @@
 package com.duanze.gasst.activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.util.Util;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -20,13 +17,12 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 /**
  * Created by duanze on 2015/7/11.
  */
-public class About extends Activity implements View.OnClickListener {
+public class About extends BaseActivity implements View.OnClickListener {
 
     private Context mContext;
 
     public static void activityStart(Context context) {
         Intent intent = new Intent(context, About.class);
-
         context.startActivity(intent);
     }
 
@@ -36,21 +32,21 @@ public class About extends Activity implements View.OnClickListener {
 
         setContentView(R.layout.activity_about);
 
-        if (MainActivity.TINT_STATUS_BAR) {
+        if (StartActivity.TINT_STATUS_BAR) {
             //沉浸式时，对状态栏染色
             // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
-
             tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-
             // enable status bar tint
             tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
 //        tintManager.setNavigationBarTintEnabled(true);
         }
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (null!=actionBar) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         mContext = this;
         TextView version = (TextView) findViewById(R.id.tv_version);

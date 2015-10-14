@@ -6,11 +6,12 @@
               android:focusableInTouchMode="true"
               android:orientation="vertical">
 
-    <View
-        android:id="@+id/divide_line"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/divider_line_color"/>
+    <include layout="@layout/toolbar_shadow_layout"/>
+    <!--<View-->
+    <!--android:id="@+id/divide_line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1px"-->
+    <!--android:background="@color/divider_line_color"/>-->
 
     <ScrollView
         android:layout_width="match_parent"

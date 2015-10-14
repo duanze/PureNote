@@ -26,7 +26,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.duanze.gasst.MainActivity;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Settings;
@@ -76,7 +76,7 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
 
     private void initValues() {
         mContext = getActivity();
-        preferences = ((MainActivity) mContext).getPreferences();
+        preferences = ((StartActivity) mContext).getPreferences();
 //        pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(mContext, today,
 // listener),
 //                today.get(Calendar.YEAR), today.get(Calendar.MONTH),
@@ -104,8 +104,8 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         View view = inflater.inflate(R.layout.fragment_gnote_list, container, false);
         ListView gNoteList = (ListView) view.findViewById(R.id.lv_gnotes);
         mAdapter = new GNoteAdapter(mContext, null, 0, this, this);
-        MainActivity mainActivity = ((MainActivity) mContext);
-        mAdapter.setValues(mainActivity.getIsFold(), mainActivity.getToday(), mainActivity
+        StartActivity startActivity = ((StartActivity) mContext);
+        mAdapter.setValues(startActivity.getIsFold(), startActivity.getToday(), startActivity
                 .getMaxLines());
         mAdapter.setPreferences(preferences);
         gNoteList.setAdapter(mAdapter);
@@ -162,8 +162,8 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
     }
 
     public void refreshUI() {
-        MainActivity mainActivity = ((MainActivity) mContext);
-        mAdapter.setValues(mainActivity.getIsFold(), mainActivity.getToday(), mainActivity
+        StartActivity startActivity = ((StartActivity) mContext);
+        mAdapter.setValues(startActivity.getIsFold(), startActivity.getToday(), startActivity
                 .getMaxLines());
         loaderManager.restartLoader(LOADER_ID, null, this);
     }
@@ -200,7 +200,7 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
 
         @Override
         public void onDestroyActionMode(ActionMode arg0) {
-            ((MainActivity) mContext).unlockDrawerLock();
+            ((StartActivity) mContext).unlockDrawerLock();
 
             showFAB();
 
@@ -211,7 +211,7 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
 
         @Override
         public boolean onPrepareActionMode(ActionMode arg0, Menu menu) {
-            ((MainActivity) mContext).lockDrawerLock();
+            ((StartActivity) mContext).lockDrawerLock();
 
             dismissFAB();
 
@@ -289,11 +289,11 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
                         public void onClick(DialogInterface dialog, int which) {
 //                                        dialog.dismiss();
 
-//                                        ((MainActivity) mContext).showDialog(MainActivity.OPERATE);
-//                                        ((MainActivity) mContext).showProgressBar();
+//                                        ((StartActivity) mContext).showDialog(StartActivity.OPERATE);
+//                                        ((StartActivity) mContext).showProgressBar();
                             mAdapter.moveSelectedNotes(tmpGNoteBookId);
-//                                        ((MainActivity) mContext).hideProgressBar();
-//                                        ((MainActivity) mContext).dismissDialog(MainActivity.OPERATE);
+//                                        ((StartActivity) mContext).hideProgressBar();
+//                                        ((StartActivity) mContext).dismissDialog(StartActivity.OPERATE);
                             if (mActionMode != null) {
                                 mActionMode.finish();
                             }
@@ -318,11 +318,11 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
                         public void onClick(DialogInterface dialog, int which) {
 //                                        dialog.dismiss();
 
-//                                        ((MainActivity) mContext).showDialog(MainActivity.OPERATE);
-//                                        ((MainActivity) mContext).showProgressBar();
+//                                        ((StartActivity) mContext).showDialog(StartActivity.OPERATE);
+//                                        ((StartActivity) mContext).showProgressBar();
                             mAdapter.deleteSelectedNotes();
-//                                        ((MainActivity) mContext).hideProgressBar();
-//                                        ((MainActivity) mContext).dismissDialog(MainActivity.OPERATE);
+//                                        ((StartActivity) mContext).hideProgressBar();
+//                                        ((StartActivity) mContext).dismissDialog(StartActivity.OPERATE);
                             if (mActionMode != null) {
                                 mActionMode.finish();
                             }
@@ -339,7 +339,7 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         if (mActionMode != null) {
             return;
         }
-        mActionMode = ((MainActivity) mContext).startActionMode(mActionModeCallback);
+        mActionMode = ((StartActivity) mContext).startActionMode(mActionModeCallback);
     }
 
     public void updateActionMode() {

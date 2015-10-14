@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.duanze.gasst.MainActivity;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNotebook;
@@ -129,7 +129,7 @@ public class DrawerNotebookAdapter extends ArrayAdapter<GNotebook> {
 //        下面这句注意，num为Int类型，运行时被当作resourceId报错
             holder.num.setText("" + gNotebook.getNotesNum());
             holder.chk.setVisibility(View.INVISIBLE);
-            holder.chk.setOnCheckedChangeListener((MainActivity) mContext);
+            holder.chk.setOnCheckedChangeListener((StartActivity) mContext);
         }
 
         return view;

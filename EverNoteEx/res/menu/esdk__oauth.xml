@@ -5,6 +5,6 @@
     <item
         android:id="@+id/esdk__switch_service"
         android:title=""
-        evermemo:showAsAction="always"/>
+        android:showAsAction="always"/>
 
 </menu>

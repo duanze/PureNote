@@ -1,8 +1,6 @@
 package com.duanze.gasst.activity;
 
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,8 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -23,13 +19,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.duanze.gasst.MainActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
@@ -45,7 +39,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.List;
 
 
-public class Settings extends Activity implements View.OnClickListener, Evernote
+public class Settings extends BaseActivity implements View.OnClickListener, Evernote
         .EvernoteLoginCallback {
     public static final String TAG = "Settings";
 
@@ -103,7 +97,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         db = GNoteDB.getInstance(mContext);
         setContentView(R.layout.activity_settings);
 
-        if (MainActivity.TINT_STATUS_BAR) {
+        if (StartActivity.TINT_STATUS_BAR) {
 //沉浸式时，对状态栏染色
 // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -115,7 +109,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         }
 
         initButtons();
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.action_setting);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -165,16 +159,16 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
         }
     }
 
-    private TextView passwordGurad;
-    private com.rey.material.widget.Switch lightningExtract;
-    private com.rey.material.widget.Switch alwaysShow;
+    private TextView passwordGuard;
+    private Switch lightningExtract;
+    private Switch alwaysShow;
     private TextView extractLocationSummary;
     private TextView quickLocationSummary;
     //    private CheckBox fold;
 //    private Spinner spinner;
     private CheckBox universal;
     private CheckBox prefNote;
-    private com.rey.material.widget.CheckBox oneColumn;
+    private CheckBox oneColumn;
 
     private void initButtons() {
 // CheckBox newNote = (CheckBox) findViewById(R.id.new_note);
@@ -211,10 +205,10 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 //            }
 //        });
 
-        passwordGurad = (TextView) findViewById(R.id.tv_password_guard);
+        passwordGuard = (TextView) findViewById(R.id.tv_password_guard);
         boolean b = preferences.getBoolean(PASSWORD_GUARD, false);
         setGuardText(b);
-        passwordGurad.setOnClickListener(new View.OnClickListener() {
+        passwordGuard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!preferences.getBoolean(PASSWORD_GUARD, false)) {
@@ -260,14 +254,14 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             view.setVisibility(View.VISIBLE);
         }
 
-        lightningExtract = (com.rey.material.widget.Switch) findViewById(R.id.s_lightning_extract);
+        lightningExtract = (Switch) findViewById(R.id.s_lightning_extract);
         b = preferences.getBoolean(LIGHTNING_EXTRACT, false);
         lightningExtract.setChecked(b);
-        lightningExtract.setOnCheckedChangeListener(new com.rey.material.widget.Switch.OnCheckedChangeListener() {
+        lightningExtract.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(com.rey.material.widget.Switch aSwitch, boolean b) {
-                preferences.edit().putBoolean(LIGHTNING_EXTRACT, b).apply();
-                if (b) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                preferences.edit().putBoolean(LIGHTNING_EXTRACT, isChecked).apply();
+                if (isChecked) {
                     if (Util.isServiceWork(mContext, "com.duanze.gasst.service.AlarmService")) {
                         LogUtil.i(TAG, "服务已启动");
                         AlarmService.startExtractTask(mContext);
@@ -286,16 +280,15 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             }
         });
 
-        alwaysShow = (com.rey.material.widget.Switch) findViewById(R.id.s_notification_always_show);
+        alwaysShow = (Switch) findViewById(R.id.s_notification_always_show);
         b = preferences.getBoolean(NOTIFICATION_ALWAYS_SHOW, false);
         alwaysShow.setChecked(b);
-        alwaysShow.setOnCheckedChangeListener(new com.rey.material.widget.Switch.OnCheckedChangeListener() {
+        alwaysShow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(com.rey.material.widget.Switch aSwitch, boolean b) {
-                preferences.edit().putBoolean(NOTIFICATION_ALWAYS_SHOW, b).apply();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                preferences.edit().putBoolean(NOTIFICATION_ALWAYS_SHOW, isChecked).apply();
                 AlarmService.showOrHide(mContext);
             }
-
         });
 
         extractLocationSummary = (TextView) findViewById(R.id.tv_extract_location_summary);
@@ -319,7 +312,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
             }
         });
 
-        oneColumn = (com.rey.material.widget.CheckBox) findViewById(R.id.cb_one_column);
+        oneColumn = (CheckBox) findViewById(R.id.cb_one_column);
         boolean isOneColumn = preferences.getBoolean(getString(R.string.one_column_key), false);
         oneColumn.setChecked(isOneColumn);
         oneColumn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -333,9 +326,9 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
 
     private void setGuardText(boolean b) {
         if (b) {
-            passwordGurad.setText(R.string.password_guard_on);
+            passwordGuard.setText(R.string.password_guard_on);
         } else {
-            passwordGurad.setText(R.string.password_guard_off);
+            passwordGuard.setText(R.string.password_guard_off);
         }
     }
 
@@ -597,7 +590,7 @@ public class Settings extends Activity implements View.OnClickListener, Evernote
                 }
                 break;
             case R.id.ll_password_container:
-                passwordGurad.performClick();
+                passwordGuard.performClick();
                 break;
             case R.id.ll_universal:
                 if (universal != null) {

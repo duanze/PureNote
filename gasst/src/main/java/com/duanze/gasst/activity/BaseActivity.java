@@ -1,4 +1,4 @@
-package com.duanze.gasst;
+package com.duanze.gasst.activity;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import com.duanze.gasst.R;
 
 /**
  * Created by duanze on 15-8-20.
@@ -21,10 +23,10 @@ public class BaseActivity extends AppCompatActivity {
         // 这句很关键，注意是调用父类的方法
         super.setContentView(R.layout.activity_base);
         // 经测试在代码里直接声明透明状态栏更有效
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+//            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+//        }
         initToolbar();
     }
 
@@ -33,6 +35,10 @@ public class BaseActivity extends AppCompatActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+    }
+
+    public Toolbar getToolbar() {
+        return (Toolbar) findViewById(R.id.toolbar);
     }
 
     @Override

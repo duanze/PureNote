@@ -24,7 +24,7 @@
     <dimen name="category_text_size">14sp</dimen>
     <dimen name="title_text_size">17sp</dimen>
 
-    <dimen name="toolbar_padding_top">25dp</dimen>
+    <dimen name="toolbar_padding_top">0dp</dimen>
     <dimen name="note_time_padding_right">15dp</dimen>
     <dimen name="note_title_padding_top_bottom">15dp</dimen>
     <dimen name="note_title_padding_left_right">17dp</dimen>
@@ -34,5 +34,7 @@
     <dimen name="rv_item_padding_left_right">7dp</dimen>
     <dimen name="item_rounded">3dp</dimen>
     <dimen name="folder_unit_flag">28dp</dimen>
+    <dimen name="password_dialog_padding">20dp</dimen>
+    <dimen name="password_dialog_text_size">15sp</dimen>
 
 </resources>

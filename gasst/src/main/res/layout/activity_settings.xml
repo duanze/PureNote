@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              tools:context="com.duanze.gasst.activity.Settings">
 
-    <View
-        android:id="@+id/divide_line"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/divider_line_color"/>
+    <include layout="@layout/toolbar_shadow_layout"/>
+    <!--<View-->
+    <!--android:id="@+id/divide_line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1px"-->
+    <!--android:background="@color/divider_line_color"/>-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,7 +32,7 @@
                 android:layout_marginTop="@dimen/category_margin_top"
                 android:gravity="center_vertical"
                 android:text="@string/general_settings"
-                android:textColor="@color/dimgrey"
+                android:textColor="@color/primary_color"
                 android:textSize="@dimen/category_text_size"/>
 
             <com.balysv.materialripple.MaterialRippleLayout
@@ -175,9 +178,8 @@
                             android:textSize="@dimen/category_text_size"/>
                     </LinearLayout>
 
-                    <com.rey.material.widget.CheckBox
+                    <CheckBox
                         android:id="@+id/cb_one_column"
-                        style="@style/Material.Drawable.CheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -306,7 +308,7 @@
                 android:layout_marginTop="@dimen/category_margin_top"
                 android:gravity="center_vertical"
                 android:text="@string/notification_tools"
-                android:textColor="@color/dimgrey"
+                android:textColor="@color/primary_color"
                 android:textSize="@dimen/category_text_size"/>
 
             <com.balysv.materialripple.MaterialRippleLayout
@@ -339,9 +341,8 @@
 
                     </LinearLayout>
 
-                    <com.rey.material.widget.Switch
+                    <Switch
                         android:id="@+id/s_notification_always_show"
-                        style="@style/Material.Widget.Switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -484,9 +485,8 @@
                             android:textSize="@dimen/category_text_size"/>
                     </LinearLayout>
 
-                    <com.rey.material.widget.Switch
+                    <Switch
                         android:id="@+id/s_lightning_extract"
-                        style="@style/Material.Widget.Switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

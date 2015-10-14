@@ -17,7 +17,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-public class Licenses extends Activity {
+public class Licenses extends BaseActivity {
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, Licenses.class);
@@ -37,8 +37,10 @@ public class Licenses extends Activity {
         } catch (IOException e1) {
         }
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (null!=actionBar) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override

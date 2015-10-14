@@ -7,15 +7,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,13 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.duanze.gasst.MainActivity;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.activity.Settings;
@@ -37,10 +35,8 @@ import com.duanze.gasst.adapter.GNoteRVAdapter;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.provider.GNoteProvider;
-import com.duanze.gasst.util.LogUtil;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,7 +58,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
     private void initValues() {
         mContext = getActivity();
-        preferences = ((MainActivity) mContext).getPreferences();
+        preferences = ((StartActivity) mContext).getPreferences();
     }
 
     public GNoteRVAdapter getGNoteRVAdapter() {
@@ -180,7 +176,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
         @Override
         public void onDestroyActionMode(ActionMode arg0) {
-            ((MainActivity) mContext).unlockDrawerLock();
+            ((StartActivity) mContext).unlockDrawerLock();
 
             showFAB();
 
@@ -191,7 +187,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
         @Override
         public boolean onPrepareActionMode(ActionMode arg0, Menu menu) {
-            ((MainActivity) mContext).lockDrawerLock();
+            ((StartActivity) mContext).lockDrawerLock();
 
             dismissFAB();
 
@@ -284,19 +280,21 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
                     .LENGTH_SHORT).show();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage(R.string.delete_all_confirm).setTitle(R.string
-                    .delete_title).setPositiveButton(R.string.delete_sure, new
-                    DialogInterface.OnClickListener() {
+            builder.setMessage(R.string.delete_all_confirm)
+                    .setPositiveButton(R.string.delete_sure, new
+                            DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mAdapter.deleteSelectedNotes();
-                            if (mActionMode != null) {
-                                mActionMode.finish();
-                            }
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mAdapter.deleteSelectedNotes();
+                                    if (mActionMode != null) {
+                                        mActionMode.finish();
+                                    }
 
-                        }
-                    }).setNegativeButton(R.string.delete_cancel, null).create().show();
+                                }
+                            })
+                    .setNegativeButton(R.string.delete_cancel, null)
+                    .create().show();
         }
     }
 
@@ -308,7 +306,8 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         if (mActionMode != null) {
             return;
         }
-        mActionMode = ((MainActivity) mContext).startActionMode(mActionModeCallback);
+//        mActionMode = ((StartActivity) mContext).startActionMode(mActionModeCallback);
+        mActionMode = ((StartActivity) mContext).startSupportActionMode(mActionModeCallback);
     }
 
     public void updateActionMode() {

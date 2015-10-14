@@ -5,7 +5,8 @@
     <color name="item_selected_color">#fffb82</color>
     <color name="background_color">#E7E7E7</color>
 
-    <color name="primary_color">@color/background_color</color>
+    <color name="primary_color">@color/dark_deep_purple</color>
+
     <color name="divider_line_color">#CFCFCF</color>
     <color name="setting_press">#dadada</color>
     <color name="transparent">#00000000</color>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?android:attr/activatedBackgroundIndicator"
+              android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/ll_folder_unit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/setting_item"
         android:descendantFocusability="blocksDescendants"
         android:orientation="horizontal"
         android:paddingLeft="5dp"
@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:src="@drawable/icon_selected"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/tv_folder_unit_name"
@@ -30,8 +30,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="@string/all_notes"
-            android:textColor="@color/dimgrey"
-            android:textSize="17sp" />
+            android:textColor="@android:color/white"
+            android:textSize="17sp"/>
 
         <TextView
             android:id="@+id/tv_folder_unit_num"
@@ -39,22 +39,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="0"
-            android:textColor="@color/darkgrey"
-            android:textSize="17sp" />
+            android:textColor="@android:color/white"
+            android:textSize="17sp"/>
 
-        <com.rey.material.widget.CheckBox
+        <CheckBox
             android:id="@+id/cb_folder_unit"
-            style="@style/Material.Drawable.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="invisible" />
+            android:layout_gravity="center"/>
     </LinearLayout>
 
     <View
         android:id="@+id/v_divider"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/divider_line_color"
-        android:visibility="invisible" />
+        android:background="@color/divider_line_color"/>
 </LinearLayout>

@@ -23,6 +23,6 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="16dp"
         app:drawable="@drawable/ic_content_new"
-        app:fab_color="@color/message_checked"/>
+        app:fab_color="@color/primary_color"/>
 
 </FrameLayout>

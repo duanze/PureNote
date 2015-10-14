@@ -27,7 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.duanze.gasst.MainActivity;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.GNoteRVAdapter;
 import com.duanze.gasst.model.GNoteDB;
@@ -56,7 +56,7 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
 
     private void initValues() {
         mContext = getActivity();
-        preferences = ((MainActivity) mContext).getPreferences();
+        preferences = ((StartActivity) mContext).getPreferences();
     }
 
     public GNoteRVAdapter getGNoteRVAdapter() {
@@ -176,7 +176,7 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
 
         @Override
         public void onDestroyActionMode(ActionMode arg0) {
-            ((MainActivity) mContext).unlockDrawerLock();
+            ((StartActivity) mContext).unlockDrawerLock();
 
             showFAB();
 
@@ -187,7 +187,7 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
 
         @Override
         public boolean onPrepareActionMode(ActionMode arg0, Menu menu) {
-            ((MainActivity) mContext).lockDrawerLock();
+            ((StartActivity) mContext).lockDrawerLock();
 
             dismissFAB();
 
@@ -303,7 +303,7 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
         if (mActionMode != null) {
             return;
         }
-        mActionMode = ((MainActivity) mContext).startActionMode(mActionModeCallback);
+        mActionMode = ((StartActivity) mContext).startActionMode(mActionModeCallback);
     }
 
     public void updateActionMode() {
