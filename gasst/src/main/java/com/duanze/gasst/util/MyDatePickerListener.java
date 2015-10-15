@@ -20,7 +20,7 @@ import java.util.Calendar;
 /**
  * 监听时间选择器专用
  */
-public class MyPickerListener implements DatePickerDialog.OnDateSetListener,
+public class MyDatePickerListener implements DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener {
     public static final String TIMEPICKER_TAG = "timepicker";
 
@@ -32,7 +32,7 @@ public class MyPickerListener implements DatePickerDialog.OnDateSetListener,
     private DateTimePickerCallback dateTimePickerCallback;
     private Context context;
 
-    public MyPickerListener(Context context, Calendar today, DateTimePickerCallback dateTimePickerCallback) {
+    public MyDatePickerListener(Context context, Calendar today, DateTimePickerCallback dateTimePickerCallback) {
         this.context = context;
         this.today = today;
         this.dateTimePickerCallback = dateTimePickerCallback;

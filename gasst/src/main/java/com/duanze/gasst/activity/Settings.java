@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
@@ -33,8 +33,6 @@ import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
-
 
 import java.util.List;
 
@@ -97,17 +95,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         db = GNoteDB.getInstance(mContext);
         setContentView(R.layout.activity_settings);
 
-        if (StartActivity.TINT_STATUS_BAR) {
-//沉浸式时，对状态栏染色
-// create our manager instance after the content view is set
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-// enable status bar tint
-            tintManager.setStatusBarTintEnabled(true);
-// // enable navigation bar tint
-// tintManager.setNavigationBarTintEnabled(true);
-        }
-
         initButtons();
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -127,6 +114,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
 //container perform click
         findViewById(R.id.ll_password_container).setOnClickListener(this);
+        findViewById(R.id.ll_note_max_length).setOnClickListener(this);
         findViewById(R.id.ll_universal).setOnClickListener(this);
         findViewById(R.id.ll_quick_write_location_container).setOnClickListener(this);
         findViewById(R.id.ll_lightning_container).setOnClickListener(this);
@@ -140,7 +128,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             }
         });
         findViewById(R.id.ll_notification_container).setOnClickListener(this);
-        findViewById(R.id.ll_pref_note).setOnClickListener(this);
         findViewById(R.id.ll_one_column).setOnClickListener(this);
     }
 
@@ -160,6 +147,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     }
 
     private TextView passwordGuard;
+    private TextView maxLengthRatio;
     private Switch lightningExtract;
     private Switch alwaysShow;
     private TextView extractLocationSummary;
@@ -167,7 +155,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     //    private CheckBox fold;
 //    private Spinner spinner;
     private CheckBox universal;
-    private CheckBox prefNote;
     private CheckBox oneColumn;
 
     private void initButtons() {
@@ -219,6 +206,9 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             }
         });
 
+        maxLengthRatio = (TextView) findViewById(R.id.tv_note_max_length);
+        float ratio = preferences.getFloat(getString(R.string.note_max_length_key), (float) 0.418);
+        maxLengthRatio.setText(String.valueOf(ratio));
 
         universal = (CheckBox) findViewById(R.id.cb_universal);
         boolean useUniversalPassword = preferences.getBoolean(USE_UNIVERSAL_PASSWORD, true);
@@ -226,22 +216,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         universal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-// if (b){
-// Toast.makeText(mContext,"打开万能密码:-_-#",Toast.LENGTH_SHORT).show();
-// }else {
-// Toast.makeText(mContext,"关闭万能密码:-_-#",Toast.LENGTH_SHORT).show();
-// }
                 preferences.edit().putBoolean(USE_UNIVERSAL_PASSWORD, b).apply();
-            }
-        });
-
-        prefNote = (CheckBox) findViewById(R.id.cb_pref_note);
-        boolean usePrefNote = preferences.getBoolean(PREF_NOTE_KEY, false);
-        prefNote.setChecked(usePrefNote);
-        prefNote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                preferences.edit().putBoolean(PREF_NOTE_KEY, b).apply();
             }
         });
 
@@ -574,7 +549,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
                     builder.setMessage(R.string.logout_text)
-                            .setTitle(R.string.alert)
                             .setPositiveButton(R.string.confirm,
                                     new DialogInterface.OnClickListener() {
 
@@ -591,6 +565,9 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                 break;
             case R.id.ll_password_container:
                 passwordGuard.performClick();
+                break;
+            case R.id.ll_note_max_length:
+                inputMaxLengthRatio();
                 break;
             case R.id.ll_universal:
                 if (universal != null) {
@@ -618,16 +595,44 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             case R.id.ll_notification_container:
                 alwaysShow.toggle();
                 break;
-
-            case R.id.ll_pref_note:
-                prefNote.performClick();
-                break;
             case R.id.ll_one_column:
                 oneColumn.performClick();
                 break;
             default:
                 break;
         }
+    }
+
+    private void inputMaxLengthRatio() {
+        View view = getLayoutInflater().inflate(R.layout.dialog_edittext, (ViewGroup) getWindow().getDecorView(), false);
+        final EditText editText = (EditText) view.findViewById(R.id.et_in_dialog);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        String originalRatio = maxLengthRatio.getText().toString();
+        editText.setText(originalRatio);
+        editText.setSelection(originalRatio.length());
+
+        final Dialog dialog = new AlertDialog.Builder(mContext)
+                .setTitle(R.string.note_max_length_dialog_title)
+                .setView(view)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String ratio = editText.getText().toString();
+                        float r = Float.valueOf(ratio);
+                        float rMin = Float.valueOf(getString(R.string.note_max_length_min));
+                        float rMax = Float.valueOf(getString(R.string.note_max_length_max));
+                        if (r >= rMin && r <= rMax) {
+                            preferences.edit().putFloat(getString(R.string.note_max_length_key), r).apply();
+                            maxLengthRatio.setText(ratio);
+                            Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create();
+
+        dialog.show();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     @Override

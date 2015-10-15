@@ -33,17 +33,6 @@ public class Donate extends BaseActivity implements View.OnClickListener {
         mContext = this;
         setContentView(R.layout.activity_donate);
 
-        if (StartActivity.TINT_STATUS_BAR) {
-            //沉浸式时，对状态栏染色
-            // create our manager instance after the content view is set
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-            // enable status bar tint
-            tintManager.setStatusBarTintEnabled(true);
-//        // enable navigation bar tint
-//        tintManager.setNavigationBarTintEnabled(true);
-        }
-
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (null != actionBar) {
             actionBar.setDisplayHomeAsUpEnabled(true);

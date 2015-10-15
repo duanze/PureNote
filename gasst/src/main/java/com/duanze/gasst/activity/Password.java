@@ -37,18 +37,6 @@ public class Password extends BaseActivity {
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         setContentView(R.layout.activity_password);
 
-        if (StartActivity.TINT_STATUS_BAR) {
-            //沉浸式时，对状态栏染色
-            // create our manager instance after the content view is set
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-            // enable status bar tint
-            tintManager.setStatusBarTintEnabled(true);
-//        // enable navigation bar tint
-//        tintManager.setNavigationBarTintEnabled(true);
-        }
-
-
         input = (EditText) findViewById(R.id.et_input);
         hint = (TextView) findViewById(R.id.tv_hint);
 

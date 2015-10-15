@@ -6,19 +6,6 @@
               android:orientation="vertical"
               tools:context="com.duanze.gasst.activity.StartActivity">
 
-    <!--<View-->
-    <!--android:id="@+id/divide_line"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1px"-->
-    <!--android:background="@color/divider_line_color"/>-->
-
-    <ProgressBar
-        android:id="@+id/pb_blue"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:indeterminateDrawable="@drawable/ic_progress_indeterminate"
-        android:visibility="gone"/>
-
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -28,6 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/pb_blue"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:indeterminateDrawable="@drawable/ic_progress_indeterminate"
+                android:visibility="gone"/>
 
             <include layout="@layout/toolbar_shadow_layout"/>
 

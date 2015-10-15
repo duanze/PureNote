@@ -8,12 +8,16 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class MinusTextView extends TextView {
+import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.PreferencesUtils;
 
+public class MinusTextView extends TextView {
+    public static final String TAG = MinusTextView.class.getSimpleName();
     private static int width;
     private static int height;
     private static final float GOLDEN_PROPORTION = (float) 0.618;
     private static final float ACTUAL_PROPORTION = (float) 0.418;
+    private PreferencesUtils preferencesUtils;
 
     {
         WindowManager wm = (WindowManager) getContext().getSystemService(
@@ -27,6 +31,7 @@ public class MinusTextView extends TextView {
 
     public MinusTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        preferencesUtils = PreferencesUtils.getInstance(context);
     }
 
     @Override
@@ -35,10 +40,15 @@ public class MinusTextView extends TextView {
         int widthSize = getMeasuredWidth();
         int heightSize = getMeasuredHeight();
 
-        if (heightSize > height * ACTUAL_PROPORTION) {
-            heightSize = (int) (height * ACTUAL_PROPORTION);
-        }
+//        if (heightSize > height * ACTUAL_PROPORTION) {
+//            heightSize = (int) (height * ACTUAL_PROPORTION);
+//        }
 
+        float ratio = preferencesUtils.getMaxLengthRatio();
+//        LogUtil.i(TAG, "" + ratio);
+        if (heightSize > height * ratio) {
+            heightSize = (int) (height * ratio);
+        }
         setMeasuredDimension(widthSize, heightSize);
         requestLayout();
     }

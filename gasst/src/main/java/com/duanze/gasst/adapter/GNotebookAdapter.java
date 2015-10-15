@@ -12,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.duanze.gasst.R;
@@ -143,7 +142,6 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
     private View mView;
     private Holder mHolder;
-    private int currentPostion;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -168,7 +166,6 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
             mHolder = (Holder) mView.getTag();
         }
 
-        currentPostion = position;
         if (position == 0) {
             bindFirstView(mView);
         } else {
@@ -190,11 +187,13 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
         int notesNum = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
         if (0 == bookId) {
 //            mHolder.flag.setVisibility(View.VISIBLE);
-            mHolder.itemLayout.setBackground(mContext.getDrawable(R.drawable.abc_list_pressed_holo_dark));
+            mHolder.itemLayout.setBackgroundResource(R.drawable.abc_list_pressed_holo_dark);
         } else {
 //            mHolder.flag.setVisibility(View.INVISIBLE);
             mHolder.itemLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         }
+
+        mHolder.name.setText(R.string.all_notes);
         mHolder.num.setText("" + notesNum);
         mHolder.checkBox.setVisibility(View.INVISIBLE);
 //        mHolder.divider.setVisibility(View.VISIBLE);

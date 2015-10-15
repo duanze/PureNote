@@ -59,13 +59,8 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
         preferences = ((StartActivity) mContext).getPreferences();
     }
 
-    public GNoteRVAdapter getGNoteRVAdapter() {
-        return mAdapter;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         initValues();
     }
@@ -280,19 +275,19 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
                     .LENGTH_SHORT).show();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage(R.string.delete_all_confirm).setTitle(R.string
-                    .delete_title).setPositiveButton(R.string.delete_sure, new
-                    DialogInterface.OnClickListener() {
+            builder.setMessage(R.string.delete_all_confirm)
+                    .setPositiveButton(R.string.delete_sure, new
+                            DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mAdapter.deleteSelectedNotes();
-                            if (mActionMode != null) {
-                                mActionMode.finish();
-                            }
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mAdapter.deleteSelectedNotes();
+                                    if (mActionMode != null) {
+                                        mActionMode.finish();
+                                    }
 
-                        }
-                    }).setNegativeButton(R.string.delete_cancel, null).create().show();
+                                }
+                            }).setNegativeButton(R.string.delete_cancel, null).create().show();
         }
     }
 

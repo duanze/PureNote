@@ -77,7 +77,7 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
     private void initValues() {
         mContext = getActivity();
         preferences = ((StartActivity) mContext).getPreferences();
-//        pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(mContext, today,
+//        pickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(mContext, today,
 // listener),
 //                today.get(Calendar.YEAR), today.get(Calendar.MONTH),
 //                today.get(Calendar.DAY_OF_MONTH), false);
@@ -310,25 +310,25 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
                     .LENGTH_SHORT).show();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage(R.string.delete_all_confirm).setTitle(R.string
-                    .delete_title).setPositiveButton(R.string.delete_sure, new
-                    DialogInterface.OnClickListener() {
+            builder.setMessage(R.string.delete_all_confirm)
+                    .setPositiveButton(R.string.delete_sure, new
+                            DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 //                                        dialog.dismiss();
 
 //                                        ((StartActivity) mContext).showDialog(StartActivity.OPERATE);
 //                                        ((StartActivity) mContext).showProgressBar();
-                            mAdapter.deleteSelectedNotes();
+                                    mAdapter.deleteSelectedNotes();
 //                                        ((StartActivity) mContext).hideProgressBar();
 //                                        ((StartActivity) mContext).dismissDialog(StartActivity.OPERATE);
-                            if (mActionMode != null) {
-                                mActionMode.finish();
-                            }
+                                    if (mActionMode != null) {
+                                        mActionMode.finish();
+                                    }
 
-                        }
-                    }).setNegativeButton(R.string.delete_cancel, null).create().show();
+                                }
+                            }).setNegativeButton(R.string.delete_cancel, null).create().show();
         }
     }
 

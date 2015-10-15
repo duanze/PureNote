@@ -35,6 +35,7 @@ import com.duanze.gasst.adapter.GNoteRVAdapter;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.provider.GNoteProvider;
+import com.duanze.gasst.util.PreferencesUtils;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -61,13 +62,8 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         preferences = ((StartActivity) mContext).getPreferences();
     }
 
-    public GNoteRVAdapter getGNoteRVAdapter() {
-        return mAdapter;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         initValues();
     }
@@ -89,6 +85,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         mAdapter.setPreferences(preferences);
         recyclerView.setAdapter(mAdapter);
 
+        PreferencesUtils.getInstance(mContext).refreshData();
         loaderManager = getLoaderManager();
         loaderManager.initLoader(LOADER_ID, null, this);
 

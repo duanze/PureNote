@@ -1,5 +1,4 @@
 <resources>
-
     <!--
         Base application theme for API 14+. This theme completely replaces
         AppBaseTheme from BOTH res/values/styles.xml and
@@ -13,17 +12,6 @@
         <item name="android:windowContentOverlay">@drawable/window_overlay_line</item>
         <item name="android:windowBackground">@color/background_color</item>
         <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>
-
-        <!-- Customize your theme here. -->
-        <!-- colorPrimary is used for the default action bar background -->
-        <item name="colorPrimary">@color/background_color</item>
-        <!-- colorPrimaryDark is used for the status bar -->
-        <item name="colorPrimaryDark">@color/item_background_color</item>
-        <!-- colorAccent is used as the default value for colorControlActivated
-             which is used to tint widgets -->
-        <item name="colorAccent">@color/message_checked</item>
-        <!-- You can also set colorControlNormal, colorControlActivated
-             colorControlHighlight & colorSwitchThumbNormal. -->
     </style>
 
     <style name="MenuTextStyle">

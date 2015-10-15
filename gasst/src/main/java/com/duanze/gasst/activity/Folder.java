@@ -298,7 +298,6 @@ public class Folder extends Activity implements FooterInterface, CompoundButton.
      */
     private void trash() {
         new AlertDialog.Builder(this).
-                setTitle(R.string.alert).
                 setMessage(R.string.delete_text).
                 setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

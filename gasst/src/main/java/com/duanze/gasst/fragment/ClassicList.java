@@ -19,7 +19,7 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.duanze.gasst.activity.StartActivity;
-import com.duanze.gasst.util.MyPickerListener;
+import com.duanze.gasst.util.MyDatePickerListener;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.Note;
@@ -106,7 +106,7 @@ public class ClassicList extends Fragment {
 //        gNoteList = db.loadGNotes();
         gNoteList = db.loadGNotesByBookId(((StartActivity) mContext).getGNotebookId());
 
-        pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(mContext, today, listener),
+        pickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(mContext, today, listener),
                 today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                 today.get(Calendar.DAY_OF_MONTH), false);
         pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10,

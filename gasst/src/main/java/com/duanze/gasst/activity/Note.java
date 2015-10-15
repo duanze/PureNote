@@ -1,6 +1,5 @@
 package com.duanze.gasst.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,7 +11,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +27,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.duanze.gasst.util.MyPickerListener;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
@@ -41,7 +38,6 @@ import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.view.GridUnit;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
@@ -50,15 +46,14 @@ import java.util.Calendar;
 import java.util.List;
 
 public class Note extends BaseActivity {
-    public static final String TAG = "NoteActivity";
-
-    public static final String EditCount = "edit_count";
+    public static final String TAG = Note.class.getSimpleName();
 
     public static final int MODE_NEW = 0;
     public static final int MODE_SHOW = 1;
     public static final int MODE_EDIT = 2;
     public static final int MODE_TODAY = 3;
 
+    public static final String EditCount = "edit_count";
     public static final int EDIT_COUNT = 13;
     public static final int INTERVAL = 8;
 
@@ -84,7 +79,7 @@ public class Note extends BaseActivity {
         MobclickAgent.onResume(this);
     }
 
-    private DatePickerDialog pickerDialog;
+    private DatePickerDialog timePickerDialog;
     private DatePickerDialog datePickerDialog;
     public static final String DATEPICKER_TAG = "datepicker";
     public static final String TIMEPICKER_TAG = "timepicker";
@@ -107,15 +102,10 @@ public class Note extends BaseActivity {
 
     private SharedPreferences preferences;
 
-//    private boolean customizeColor;
-
     /**
      * 原本是否有定时提醒
      */
     private int isPassed;
-
-    //    是否成功发动了activity Folder ，及是否将笔记移动至其他文件夹中
-    private boolean launchFolder = false;
     private int bookId;
 
     private Context mContext;
@@ -161,11 +151,6 @@ public class Note extends BaseActivity {
         ((Activity) mContext).overridePendingTransition(0, 0);
     }
 
-    public static void quickWriteNewNote(Context mContext) {
-        GNote note = new GNote();
-        Note.actionStart(mContext, note, Note.MODE_TODAY);
-    }
-
     /**
      * 内部类，监听时间选择器专用
      */
@@ -176,7 +161,6 @@ public class Note extends BaseActivity {
             gNote.setIsPassed(GNote.FALSE);
             checkDbFlag();
 
-//            updateActionBarTitle();
         }
 
         @Override
@@ -190,28 +174,15 @@ public class Note extends BaseActivity {
         public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
             gNote.setTimeFromDate(year, month, day);
             checkDbFlag();
-//            updateActionBarTitle();
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        overrideStartAnim();
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
 
         setContentView(R.layout.activity_note);
-
-        if (StartActivity.TINT_STATUS_BAR) {
-            //沉浸式时，对状态栏染色
-            // create our manager instance after the content view is set
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-            // enable status bar tint
-            tintManager.setStatusBarTintEnabled(true);
-//        // enable navigation bar tint
-//        tintManager.setNavigationBarTintEnabled(true);
-        }
 
         setOverflowShowingAlways();
         initValues();
@@ -225,10 +196,7 @@ public class Note extends BaseActivity {
                 actionBar.setTitle(R.string.mode_view);
             }
         }
-    }
 
-    private void overrideStartAnim() {
-        overridePendingTransition(R.anim.in_fadein, R.anim.out_stable);
     }
 
     private void initValues() {
@@ -240,25 +208,17 @@ public class Note extends BaseActivity {
         bookId = gNote.getGNotebookId();
 
         db = GNoteDB.getInstance(this);
-//        hsvColorBtns = (HorizontalScrollView) findViewById(R.id.hsv_btns);
 
         textView = (TextView) findViewById(R.id.tv_note_show);
         editText = (EditText) findViewById(R.id.et_note_edit);
         initMode();
 
-//        customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
         if (mode == MODE_NEW) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams
                     .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             editText.requestFocus();
 
-//            hsvColorBtns.setVisibility(View.VISIBLE);
-//            initBtns();
         } else if (mode == MODE_EDIT) {
-//            hsvColorBtns.setVisibility(View.VISIBLE);
-//            initBtns();
-
-//            editText.setCursorVisible(false);
             editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -276,21 +236,15 @@ public class Note extends BaseActivity {
             gNote.setCalToTime(today);
             gNote.setGNotebookId(preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0));
 
-//            hsvColorBtns.setVisibility(View.VISIBLE);
-//            initBtns();
-        } else {
-//            hsvColorBtns.setVisibility(View.GONE);
         }
-
-//        checkColorRead();
     }
 
     private void initDateTimePicker() {
-        pickerDialog = DatePickerDialog.newInstance(new MyPickerListener(this, today, listener),
+        timePickerDialog = DatePickerDialog.newInstance(new com.duanze.gasst.util.MyDatePickerListener(this, today, listener),
                 today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
                         .DAY_OF_MONTH), false);
-        pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
-        pickerDialog.setCloseOnSingleTapDay(true);
+        timePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
+        timePickerDialog.setCloseOnSingleTapDay(true);
 
         datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
                         (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
@@ -449,12 +403,11 @@ public class Note extends BaseActivity {
                 trash();
                 return true;
             case R.id.action_remind:
-                pickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+                timePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
                 return true;
             case R.id.action_cancel_remind:
                 if (!gNote.getIsPassed()) {
                     gNote.setIsPassed(GNote.TRUE);
-//                    updateActionBarTitle();
                     checkDbFlag();
                 }
                 return true;
@@ -462,12 +415,6 @@ public class Note extends BaseActivity {
                 actionStart(this, gNote, MODE_EDIT);
                 finish();
                 return true;
-//            case R.id.edit_date:
-//                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
-//                return true;
-//            case R.id.action_move_ac:
-//                launchFolderForResult();
-//                return true;
             case R.id.action_move:
                 showSelectFolderDialog();
                 return true;
@@ -537,30 +484,6 @@ public class Note extends BaseActivity {
         dialog.show();
     }
 
-    private void launchFolderForResult() {
-        Intent intent = new Intent(this, Folder.class);
-        intent.putExtra("mode", Folder.MODE_MOVE);
-        startActivityForResult(intent, 0);
-
-    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (resultCode) {
-//            case RESULT_OK:
-//                bookId = data.getExtras().getInt(Folder.BOOK_ID_FOR_NOTE, -1);
-//                LogUtil.i(TAG, "get gNotebook id:" + bookId);
-//                if (bookId != -1) {
-//                    launchFolder = true;
-//                    checkDbFlag();
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-
     /**
      * 分享按钮
      */
@@ -598,7 +521,6 @@ public class Note extends BaseActivity {
                         //需不是新建记事，方可从数据库中删除数据
                         if (mode != MODE_NEW && MODE_TODAY != mode) {
                             deleteNote();
-//                            uiShouldUpdate();
                         }
                         finish();
                     }
@@ -606,7 +528,6 @@ public class Note extends BaseActivity {
     }
 
     private void deleteNote() {
-//        db.deleteGNote(gNote.getId());
         //        物理数据存储，以改代删
         gNote.setDeleted(GNote.TRUE);
         if (!"".equals(gNote.getGuid())) {
@@ -618,7 +539,6 @@ public class Note extends BaseActivity {
             AlarmService.cancelTask(Note.this, gNote);
         }
 //        更新笔记本状态
-//        int notebookId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);   this is a bug;(
         int notebookId = gNote.getGNotebookId();
         updateGNotebook(notebookId, -1, false);
         if (notebookId != 0) {
@@ -649,7 +569,6 @@ public class Note extends BaseActivity {
         gNote.setEditTime(TimeUtils.getCurrentTimeInLong());
 //        物理数据存储
         ProviderUtil.insertGNote(mContext, gNote);
-//        db.saveGNote(gNote);
 
 //        更新笔记本
         updateGNotebook(groupId, +1, false);
@@ -695,7 +614,6 @@ public class Note extends BaseActivity {
         gNote.setEditTime(TimeUtils.getCurrentTimeInLong());
         //        物理数据存储
         ProviderUtil.updateGNote(mContext, gNote);
-//        db.updateGNote(gNote);
 
         //当有定时提醒
         if (!gNote.getIsPassed()) {
@@ -709,21 +627,6 @@ public class Note extends BaseActivity {
     protected void onPostResume() {
         super.onPostResume();
     }
-
-    /**
-     * 修改参数，表明返回MainActivity时需要更新UI
-     */
-    private void uiShouldUpdate() {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(StartActivity.UPDATE_UI, true).apply();
-    }
-
-    /**
-     * 仅用于更新ActionBarTitle文字
-     */
-//    private void updateActionBarTitle() {
-//        actionBar.setTitle(Util.timeString(gNote));
-//    }
 
     /**
      * 捕获Back按键
@@ -755,23 +658,15 @@ public class Note extends BaseActivity {
 
         if (dbFlag == DB_SAVE) {
             createNote();
-//            uiShouldUpdate();
             addEditCount();
         } else if (dbFlag == DB_UPDATE) {
             updateNote();
-//            uiShouldUpdate();
             addEditCount();
         } else if (dbFlag == DB_DELETE) {
             deleteNote();
-//            uiShouldUpdate();
             addEditCount();
         }
         finish();
-//        overrideEndAnim();
-    }
-
-    private void overrideEndAnim() {
-        overridePendingTransition(R.anim.in_stable, R.anim.out_fadeout);
     }
 
     private void addEditCount() {

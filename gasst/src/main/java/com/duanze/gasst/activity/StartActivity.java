@@ -84,8 +84,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
     public static final String TAG = "StartActivity";
 
-    public static final boolean TINT_STATUS_BAR = false;
-
     // version code
     private int versionCode;
 
@@ -313,8 +311,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
 //                关闭抽屉
         mDrawerLayout.closeDrawer(drawerRoot);
-//                showDialog();
-
         isRecycleShown = false;
 //                }
 
@@ -423,17 +419,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         readSetting();
         setContentView(R.layout.activity_main);
-
-        if (TINT_STATUS_BAR) {
-            //沉浸式时，对状态栏染色
-            // create our manager instance after the content view is set
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.background_color));
-            // enable status bar tint
-            tintManager.setStatusBarTintEnabled(true);
-//        // enable navigation bar tint
-//        tintManager.setNavigationBarTintEnabled(true);
-        }
 
         dm = getResources().getDisplayMetrics();
         today = Calendar.getInstance();
@@ -815,12 +800,12 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                     actionBar.setTitle(mDrawerTitle);
                 }
 
-                loaderManager.restartLoader(NOTEBOOK_LOADER_ID, null, StartActivity.this);
-//                refreshFolderList();
-                modeFooter = Folder.MODE_FOOTER;
                 if (null != mAdapter) {
                     mAdapter.setCheckMode(false);
                 }
+                loaderManager.restartLoader(NOTEBOOK_LOADER_ID, null, StartActivity.this);
+//                refreshFolderList();
+                modeFooter = Folder.MODE_FOOTER;
                 setFooter();
 
                 isDrawerOpened = true;
@@ -1445,7 +1430,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                     return true;
                 }
             });
-            MenuItemCompat.setOnActionExpandListener(searchItem,new MenuItemCompat.OnActionExpandListener() {
+            MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
                 @Override
                 public boolean onMenuItemActionExpand(MenuItem item) {
                     Log.d(TAG, "on expand");
