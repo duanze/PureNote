@@ -9,6 +9,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.widget.Toast;
 
 import com.duanze.gasst.R;
@@ -294,7 +295,8 @@ public class Util {
         // intent.putExtra(Intent.EXTRA_CC, email); // 抄送人
         intent.putExtra(Intent.EXTRA_SUBJECT, "PureNote用户反馈" + " Version:" + getVersionName(mContext));
         // 主题
-        intent.putExtra(Intent.EXTRA_TEXT, ""); // 正文
+        intent.putExtra(Intent.EXTRA_TEXT, "Manufacturer:" + Build.MANUFACTURER +
+                " - Device name: " + Build.MODEL + " - SDK Version: " + Build.VERSION.SDK_INT+"  "); // 正文
         mContext.startActivity(Intent.createChooser(intent, "Select email client"));
     }
 

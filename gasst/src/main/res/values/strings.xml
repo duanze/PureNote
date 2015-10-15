@@ -187,12 +187,12 @@
     <string name="one_column_result">设置已经更改，重启软件生效</string>
 
     <string name="note_max_length_title">笔记高度</string>
-    <string name="note_max_length_summary">笔记的最大高度由相对于设备的比例系数决定，其值在0.05~0.85之间</string>
+    <string name="note_max_length_summary">笔记的最大高度由相对于设备的比例系数决定，其值在0.05~0.75之间</string>
     <string name="note_max_length_key">note_max_length_key</string>
     <string name="note_max_length_default">0.418</string>
     <string name="note_max_length_min">0.05</string>
-    <string name="note_max_length_max">0.85</string>
-    <string name="note_max_length_dialog_title">输入长度系数</string>
+    <string name="note_max_length_max">0.75</string>
+    <string name="note_max_length_dialog_title">输入比例系数</string>
 
     <string name="password_guard">密码保护</string>
     <string name="password_guard_summary">设定应用启动时的密码以保护您的数据安全</string>
