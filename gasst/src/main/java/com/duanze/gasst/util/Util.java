@@ -71,10 +71,10 @@ public class Util {
         String[] allInfo;
         allInfo = gNote.getAlertTime().split(",");
         if (allInfo.length == 5) {
-            tmp = "Link"
-                    + twoDigit(Integer.parseInt(allInfo[1]) + 1)
+            tmp = twoDigit(Integer.parseInt(allInfo[1]) + 1)
+                    + "."
                     + allInfo[2]
-                    + "At"
+                    + " - "
                     + allInfo[3]
                     + ":"
                     + allInfo[4];
