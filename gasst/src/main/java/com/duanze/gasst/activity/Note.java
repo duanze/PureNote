@@ -1,5 +1,6 @@
 package com.duanze.gasst.activity;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +12,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -197,6 +200,12 @@ public class Note extends BaseActivity {
             }
         }
 
+        findViewById(R.id.transparent_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleActionBar();
+            }
+        });
     }
 
     private void initValues() {
@@ -674,6 +683,38 @@ public class Note extends BaseActivity {
             int count = preferences.getInt(EditCount, 0);
             count++;
             preferences.edit().putInt(EditCount, count).apply();
+        }
+    }
+
+
+    private boolean mIsActionBarSlidUp = false;
+
+    private void slideActionBar(boolean slideUp, boolean animate) {
+        final ActionBar actionBar = getSupportActionBar();
+        if (null == actionBar) return;
+
+        if (animate) {
+            ValueAnimator animator =
+                    slideUp ? ValueAnimator.ofFloat(0, 1) : ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    final float value = (float) animation.getAnimatedValue();
+                    actionBar.setHideOffset((int) (actionBar.getHeight() * value));
+                }
+            });
+            animator.start();
+        } else {
+            actionBar.setHideOffset(slideUp ? actionBar.getHeight() : 0);
+        }
+        mIsActionBarSlidUp = slideUp;
+    }
+
+    private void toggleActionBar() {
+        if (mIsActionBarSlidUp) {
+            slideActionBar(false, true);
+        } else {
+            slideActionBar(true, true);
         }
     }
 }
