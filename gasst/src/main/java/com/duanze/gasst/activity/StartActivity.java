@@ -142,10 +142,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
     //当前所用的笔记本id
     private int gNotebookId;
 
-    public SharedPreferences getPreferences() {
-        return preferences;
-    }
-
     SharedPreferences preferences;
 
     private MenuItem bindItem;

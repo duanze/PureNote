@@ -76,7 +76,7 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
 
     private void initValues() {
         mContext = getActivity();
-        preferences = ((StartActivity) mContext).getPreferences();
+        preferences = mContext.getSharedPreferences(Settings.DATA, Context.MODE_PRIVATE);
 //        pickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(mContext, today,
 // listener),
 //                today.get(Calendar.YEAR), today.get(Calendar.MONTH),

@@ -1,6 +1,7 @@
 package com.duanze.gasst.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -55,6 +56,7 @@ public class ClassicList extends Fragment {
     private Calendar today;
     private GNote gNote;
     private GNoteDB db;
+    private SharedPreferences preferences;
 
     public static final String DATEPICKER_TAG = "datepicker";
     private DatePickerDialog pickerDialog;
@@ -112,6 +114,8 @@ public class ClassicList extends Fragment {
         pickerDialog.setYearRange(today.get(Calendar.YEAR) - 10,
                 today.get(Calendar.YEAR) + 10);
         pickerDialog.setCloseOnSingleTapDay(true);
+
+        preferences = mContext.getSharedPreferences(Settings.DATA, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -180,7 +184,7 @@ public class ClassicList extends Fragment {
 
     private void operateNote(int i) {
         GNote gNote = gNoteList.get(i);
-        boolean prefNote = ((StartActivity) mContext).getPreferences().getBoolean(Settings.PREF_NOTE_KEY, false);
+        boolean prefNote = preferences.getBoolean(Settings.PREF_NOTE_KEY, false);
         if (prefNote) {
             Note.actionStart(
                     mContext, gNote, Note.MODE_SHOW);
@@ -215,9 +219,9 @@ public class ClassicList extends Fragment {
 
     private void updateGNotebook(int id, int value) {
         if (id == 0) {
-            int cnt = ((StartActivity) getActivity()).getPreferences().getInt(Folder.PURENOTE_NOTE_NUM,
+            int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM,
                     3);
-            ((StartActivity) getActivity()).getPreferences().edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
         } else {
             List<GNotebook> gNotebooks = db.loadGNotebooks();
             for (GNotebook gNotebook : gNotebooks) {

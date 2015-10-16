@@ -59,7 +59,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
     private void initValues() {
         mContext = getActivity();
-        preferences = ((StartActivity) mContext).getPreferences();
+        preferences = mContext.getSharedPreferences(Settings.DATA, Context.MODE_PRIVATE);
     }
 
     @Override

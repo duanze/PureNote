@@ -27,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.GNoteRVAdapter;
@@ -56,7 +57,7 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
 
     private void initValues() {
         mContext = getActivity();
-        preferences = ((StartActivity) mContext).getPreferences();
+        preferences = mContext.getSharedPreferences(Settings.DATA, Context.MODE_PRIVATE);
     }
 
     @Override

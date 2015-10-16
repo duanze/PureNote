@@ -344,8 +344,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
     private void showCreatePasswordDialog() {
         View view = getLayoutInflater().inflate(R.layout.password_dialog, (ViewGroup) getWindow()
-                .getDecorView
-                        (), false);
+                .getDecorView(), false);
         final EditText password = (EditText) view.findViewById(R.id.et_password);
         final EditText confirm = (EditText) view.findViewById(R.id.et_confirm);
         final EditText hint = (EditText) view.findViewById(R.id.et_hint);
