@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.duanze.gasst.activity.Settings">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.duanze.gasst.activity.Settings">
 
-    <include layout="@layout/toolbar_shadow_layout"/>
+    <include layout="@layout/toolbar_shadow_layout" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,10 +28,9 @@
                 android:gravity="center_vertical"
                 android:text="@string/general_settings"
                 android:textColor="@color/primary_color"
-                android:textSize="@dimen/category_text_size"/>
+                android:textSize="@dimen/category_text_size" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -52,7 +51,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:contentDescription="@null"
-                        android:src="@drawable/evernote"/>
+                        android:src="@drawable/evernote" />
 
                     <TextView
                         android:id="@+id/login_text"
@@ -62,7 +61,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/login_evernote"
-                        android:textSize="@dimen/title_text_size"/>
+                        android:textSize="@dimen/title_text_size" />
 
                     <ImageView
                         android:id="@+id/bind_arrow"
@@ -70,14 +69,13 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:contentDescription="@null"
-                        android:src="@drawable/next"/>
+                        android:src="@drawable/next" />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <include layout="@layout/divider_line"/>
+            <include layout="@layout/divider_line" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -102,7 +100,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/one_column_title"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -110,7 +108,7 @@
                             android:layout_marginTop="@dimen/grid_margin"
                             android:text="@string/one_column_summary"
                             android:textColor="@color/dimgrey"
-                            android:textSize="@dimen/category_text_size"/>
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
 
                     <CheckBox
@@ -118,14 +116,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:clickable="true"/>
+                        android:clickable="true" />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <include layout="@layout/divider_line"/>
+            <include layout="@layout/divider_line" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -151,7 +148,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/note_max_length_title"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -159,7 +156,7 @@
                             android:layout_marginTop="@dimen/grid_margin"
                             android:text="@string/note_max_length_summary"
                             android:textColor="@color/dimgrey"
-                            android:textSize="@dimen/category_text_size"/>
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
 
                     <TextView
@@ -169,14 +166,13 @@
                         android:layout_gravity="center"
                         android:text="@string/note_max_length_default"
                         android:textColor="@color/darkgrey"
-                        android:textSize="@dimen/category_text_size"/>
+                        android:textSize="@dimen/category_text_size" />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <include layout="@layout/divider_line"/>
+            <include layout="@layout/divider_line" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -202,7 +198,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/password_guard"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -210,7 +206,7 @@
                             android:layout_marginTop="@dimen/grid_margin"
                             android:text="@string/password_guard_summary"
                             android:textColor="@color/dimgrey"
-                            android:textSize="@dimen/category_text_size"/>
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
 
                     <TextView
@@ -220,7 +216,7 @@
                         android:layout_gravity="center"
                         android:text="@string/password_guard_off"
                         android:textColor="@color/darkgrey"
-                        android:textSize="@dimen/category_text_size"/>
+                        android:textSize="@dimen/category_text_size" />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
@@ -231,11 +227,10 @@
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
                 android:layout_marginRight="@dimen/material_margin_lower_level"
                 android:background="@color/divider_line_color"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/mr_universal_container"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -261,7 +256,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/universal_password"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -269,14 +264,14 @@
                             android:layout_marginTop="@dimen/grid_margin"
                             android:text="@string/universal_password_summary"
                             android:textColor="@color/dimgrey"
-                            android:textSize="@dimen/category_text_size"/>
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
 
                     <CheckBox
                         android:id="@+id/cb_universal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center" />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
@@ -289,10 +284,9 @@
                 android:gravity="center_vertical"
                 android:text="@string/notification_tools"
                 android:textColor="@color/primary_color"
-                android:textSize="@dimen/category_text_size"/>
+                android:textSize="@dimen/category_text_size" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -310,6 +304,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/content_margin_right"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -317,8 +312,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/notification_always_show"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:text="@string/notification_always_show_summary"
+                            android:textColor="@color/dimgrey"
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
 
                     <Switch
@@ -326,14 +328,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:clickable="true"/>
+                        android:clickable="true" />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <include layout="@layout/divider_line"/>
+            <include layout="@layout/divider_line" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -357,7 +358,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/quick_write"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -365,15 +366,14 @@
                             android:layout_marginTop="@dimen/grid_margin"
                             android:text="@string/quick_write_summary"
                             android:textColor="@color/dimgrey"
-                            android:textSize="@dimen/category_text_size"/>
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <include layout="@layout/divider_line"/>
+            <include layout="@layout/divider_line" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -397,7 +397,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/quick_write_location"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
                         <TextView
                             android:id="@+id/tv_quick_location_summary"
@@ -406,15 +406,14 @@
                             android:layout_marginTop="@dimen/grid_margin"
                             android:text="@string/quick_write_summary"
                             android:textColor="@color/dimgrey"
-                            android:textSize="@dimen/category_text_size"/>
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <include layout="@layout/divider_line"/>
+            <include layout="@layout/divider_line" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -439,7 +438,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/lightning_extract"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -447,7 +446,7 @@
                             android:layout_marginTop="@dimen/grid_margin"
                             android:text="@string/lightning_extract_summary"
                             android:textColor="@color/dimgrey"
-                            android:textSize="@dimen/category_text_size"/>
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
 
                     <Switch
@@ -455,14 +454,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:clickable="true"/>
+                        android:clickable="true" />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <include layout="@layout/divider_line"/>
+            <include layout="@layout/divider_line" />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/material_margin_lower_level"
@@ -486,7 +484,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/extract_location"
-                            android:textSize="@dimen/title_text_size"/>
+                            android:textSize="@dimen/title_text_size" />
 
                         <TextView
                             android:id="@+id/tv_extract_location_summary"
@@ -495,7 +493,7 @@
                             android:layout_marginTop="@dimen/grid_margin"
                             android:text="@string/quick_write_summary"
                             android:textColor="@color/dimgrey"
-                            android:textSize="@dimen/category_text_size"/>
+                            android:textSize="@dimen/category_text_size" />
                     </LinearLayout>
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>

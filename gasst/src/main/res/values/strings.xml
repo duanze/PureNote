@@ -205,6 +205,7 @@
     <string name="notification_tools">通知栏工具</string>
 
     <string name="notification_always_show">常驻通知栏</string>
+    <string name="notification_always_show_summary">某些机型可能需要设置进程免杀才能正常工作</string>
 
     <string name="lightning_extract">闪电摘录</string>
     <string name="lightning_extract_summary">开启后监视剪切板，只需复制即可摘录文字至特定位置</string>
