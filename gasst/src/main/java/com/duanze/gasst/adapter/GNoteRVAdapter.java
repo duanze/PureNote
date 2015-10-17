@@ -14,6 +14,7 @@ import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.util.GNotebookUtil;
+import com.duanze.gasst.util.PreferencesUtils;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
@@ -125,7 +126,13 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
         gNoteItemHolder.itemLayout.setOnLongClickListener(this);
 //        gNoteItemHolder.title.setText(gNote.getContentFromHtml().toString().trim());
         gNoteItemHolder.title.setText(gNote.getContent());
-        gNoteItemHolder.editTime.setText(TimeUtils.getConciseTime(gNote.getEditTime(), mContext));
+
+        if (!PreferencesUtils.getInstance(mContext).isUseCreateOrder()) {
+            gNoteItemHolder.editTime.setText(TimeUtils.getConciseTime(gNote.getEditTime(), mContext));
+        } else {
+            gNoteItemHolder.editTime.setText(Util.timeStamp(gNote));
+        }
+
         if (!gNote.getIsPassed()) {
             gNoteItemHolder.alertTime.setText(Util.timeString(gNote));
             gNoteItemHolder.alertTime.setVisibility(View.VISIBLE);

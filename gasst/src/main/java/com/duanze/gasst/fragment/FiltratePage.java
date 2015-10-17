@@ -34,6 +34,7 @@ import com.duanze.gasst.adapter.GNoteRVAdapter;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.provider.GNoteProvider;
+import com.duanze.gasst.util.PreferencesUtils;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -120,9 +121,13 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        String sortOrder = GNoteProvider.STANDARD_SORT_ORDER;
+        if (PreferencesUtils.getInstance(mContext).isUseCreateOrder()) {
+            sortOrder = GNoteProvider.STANDARD_SORT_ORDER2;
+        }
+
         CursorLoader cursorLoader = new CursorLoader(mContext, GNoteProvider.BASE_URI,
-                GNoteProvider.STANDARD_PROJECTION, selection, selectionArgs, GNoteProvider
-                .STANDARD_SORT_ORDER);
+                GNoteProvider.STANDARD_PROJECTION, selection, selectionArgs, sortOrder);
         return cursorLoader;
     }
 

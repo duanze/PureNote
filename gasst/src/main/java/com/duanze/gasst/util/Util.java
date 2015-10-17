@@ -90,11 +90,11 @@ public class Util {
         //不知原因的数组越界，故暂时在此进行检测
         if (allInfo.length == 3 && (Integer.parseInt(allInfo[2]) >= 1 && Integer.parseInt
                 (allInfo[2]) <= 31)) {
-            tmp = MONTH_ARR[Integer.parseInt(allInfo[1])]
+            tmp = allInfo[0]
                     + "."
-                    + DATE_ARR[Integer.parseInt(allInfo[2]) - 1]
+                    + (Integer.parseInt(allInfo[1]) + 1)
                     + "."
-                    + allInfo[0];
+                    + Integer.parseInt(allInfo[2]);
         }
         return tmp;
     }
@@ -296,7 +296,7 @@ public class Util {
         intent.putExtra(Intent.EXTRA_SUBJECT, "PureNote用户反馈" + " Version:" + getVersionName(mContext));
         // 主题
         intent.putExtra(Intent.EXTRA_TEXT, "Manufacturer:" + Build.MANUFACTURER +
-                " - Device name: " + Build.MODEL + " - SDK Version: " + Build.VERSION.SDK_INT+"  "); // 正文
+                " - Device name: " + Build.MODEL + " - SDK Version: " + Build.VERSION.SDK_INT + "  "); // 正文
         mContext.startActivity(Intent.createChooser(intent, "Select email client"));
     }
 

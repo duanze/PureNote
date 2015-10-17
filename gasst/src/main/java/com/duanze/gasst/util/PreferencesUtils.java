@@ -12,6 +12,7 @@ import com.duanze.gasst.activity.Settings;
 public class PreferencesUtils {
 
     private float maxLengthRatio;
+    private boolean UseCreateOrder;
     private Context mContext;
     private SharedPreferences preferences;
     private boolean mValid = false;
@@ -32,6 +33,7 @@ public class PreferencesUtils {
 
     public void refreshData() {
         maxLengthRatio = preferences.getFloat(mContext.getString(R.string.note_max_length_key), (float) 0.418);
+        UseCreateOrder = preferences.getBoolean(mContext.getString(R.string.create_order_key), false);
         mValid = true;
     }
 
@@ -40,8 +42,13 @@ public class PreferencesUtils {
         return maxLengthRatio;
     }
 
+    public boolean isUseCreateOrder() {
+        checkValid();
+        return UseCreateOrder;
+    }
+
     private void checkValid() {
-        if (!mValid){
+        if (!mValid) {
             throw new IllegalStateException("this should only be called when the data you want are not fetched once");
         }
     }

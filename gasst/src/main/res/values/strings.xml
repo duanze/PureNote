@@ -187,6 +187,10 @@
     <string name="one_column_key">one_column_key</string>
     <string name="one_column_result">设置已经更改，重启软件生效</string>
 
+    <string name="create_order_title">排序依据</string>
+    <string name="create_order_summary">勾选前，依据为最后修改时间；勾选后，依据为笔记创建时间</string>
+    <string name="create_order_key">create_order_key</string>
+
     <string name="note_max_length_title">笔记高度</string>
     <string name="note_max_length_summary">笔记的最大高度由相对于设备的比例系数决定，其值在0.05~0.75之间</string>
     <string name="note_max_length_key">note_max_length_key</string>

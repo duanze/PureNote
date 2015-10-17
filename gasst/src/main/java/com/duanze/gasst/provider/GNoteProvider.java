@@ -32,6 +32,8 @@ public class GNoteProvider extends ContentProvider {
             .COLOR, GNoteDB.EDIT_TIME, GNoteDB.CREATED_TIME, GNoteDB.SYN_STATUS, GNoteDB.GUID,
             GNoteDB.BOOK_GUID, GNoteDB.DELETED, GNoteDB.GNOTEBOOK_ID};
     public static final String STANDARD_SORT_ORDER = GNoteDB.EDIT_TIME + " desc";
+    public static final String STANDARD_SORT_ORDER2 = GNoteDB.TIME + " desc";
+
     public static final String STANDARD_SELECTION = GNoteDB.DELETED + " != ?";
     public static final String[] STANDARD_SELECTION_ARGS = new String[]{"" + GNote.TRUE};
 

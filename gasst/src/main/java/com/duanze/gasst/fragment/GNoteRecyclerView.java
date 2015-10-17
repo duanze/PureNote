@@ -121,9 +121,13 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
             selectionArgs = null;
         }
 
+        String sortOrder = GNoteProvider.STANDARD_SORT_ORDER;
+        if (PreferencesUtils.getInstance(mContext).isUseCreateOrder()) {
+            sortOrder = GNoteProvider.STANDARD_SORT_ORDER2;
+        }
+
         CursorLoader cursorLoader = new CursorLoader(mContext, GNoteProvider.BASE_URI,
-                GNoteProvider.STANDARD_PROJECTION, selection, selectionArgs, GNoteProvider
-                .STANDARD_SORT_ORDER);
+                GNoteProvider.STANDARD_PROJECTION, selection, selectionArgs, sortOrder);
         return cursorLoader;
     }
 

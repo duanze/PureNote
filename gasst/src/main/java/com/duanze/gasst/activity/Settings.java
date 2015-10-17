@@ -129,6 +129,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         });
         findViewById(R.id.ll_notification_container).setOnClickListener(this);
         findViewById(R.id.ll_one_column).setOnClickListener(this);
+        findViewById(R.id.ll_create_order).setOnClickListener(this);
     }
 
 
@@ -156,6 +157,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 //    private Spinner spinner;
     private CheckBox universal;
     private CheckBox oneColumn;
+    private CheckBox createOrder;
 
     private void initButtons() {
 // CheckBox newNote = (CheckBox) findViewById(R.id.new_note);
@@ -294,6 +296,17 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 preferences.edit().putBoolean(getString(R.string.one_column_key), isChecked).apply();
+                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        createOrder = (CheckBox) findViewById(R.id.cb_create_order);
+        boolean isUseCreateOrder = preferences.getBoolean(getString(R.string.create_order_key), false);
+        createOrder.setChecked(isUseCreateOrder);
+        createOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                preferences.edit().putBoolean(getString(R.string.create_order_key), isChecked).apply();
                 Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
             }
         });
@@ -596,6 +609,9 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                 break;
             case R.id.ll_one_column:
                 oneColumn.performClick();
+                break;
+            case R.id.ll_create_order:
+                createOrder.performClick();
                 break;
             default:
                 break;
