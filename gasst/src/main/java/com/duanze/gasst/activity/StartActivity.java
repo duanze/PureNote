@@ -58,6 +58,7 @@ import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.syn.Evernote;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.PreferencesUtils;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
@@ -413,6 +414,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
     private void init() {
         mContext = this;
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
+        PreferencesUtils.getInstance(mContext).refreshData();
         readSetting();
         setContentView(R.layout.activity_main);
 
@@ -456,7 +458,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
             }
             setVersionCode();
         }
-
         setActionBarTitle();
     }
 
@@ -1170,14 +1171,14 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
      * 读取应用设置数据
      */
     private void readSetting() {
-        //是否启动时开启新记事
-        isOpenNewNote = preferences.getBoolean(Settings.NEW_NOTE, false);
-        //是否过期记事折叠
-        isFold = preferences.getBoolean(Settings.FOLD, false);
-        //记事格子随机填色
-        randomColor = preferences.getBoolean(Settings.RANDOM_COLOR, true);
-        //最大显示行数
-        maxLines = preferences.getInt(Settings.MAX_LINES, Settings.DEFAULT_MAX_LINES);
+//        //是否启动时开启新记事
+//        isOpenNewNote = preferences.getBoolean(Settings.NEW_NOTE, false);
+//        //是否过期记事折叠
+//        isFold = preferences.getBoolean(Settings.FOLD, false);
+//        //记事格子随机填色
+//        randomColor = preferences.getBoolean(Settings.RANDOM_COLOR, true);
+//        //最大显示行数
+//        maxLines = preferences.getInt(Settings.MAX_LINES, Settings.DEFAULT_MAX_LINES);
 //        customizeColor = preferences.getBoolean(Settings.CUSTOMIZE_COLOR, true);
         gNotebookId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
         passwordGuard = preferences.getBoolean(Settings.PASSWORD_GUARD, false);

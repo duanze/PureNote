@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -26,7 +27,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
@@ -39,7 +39,6 @@ import com.duanze.gasst.util.PreferencesUtils;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
-import com.duanze.gasst.view.GridUnit;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -201,7 +200,6 @@ public class Note extends BaseActivity {
     }
 
     private void listenSoftInput() {
-//        final LinearLayout rootLayout = getRootLayout();
         final View scroll = findViewById(R.id.sv_just);
         scroll.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -236,8 +234,10 @@ public class Note extends BaseActivity {
         initMode();
 
         if (mode == MODE_NEW) {
-//            editText.requestFocus();
-//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            if (!PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
+                editText.requestFocus();
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            }
         } else if (mode == MODE_EDIT) {
             editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -317,24 +317,6 @@ public class Note extends BaseActivity {
 //            }
 //        }
 //    }
-
-    private void resetSelectColorBtns() {
-        for (int i = 0; i < 9; i++) {
-            if (chooseColorBtnStates[i]) {
-                chooseColorBtnStates[i] = false;
-                chooseColorBtns[i].setBackgroundColor(GridUnit.colorArr[i]);
-
-                break;
-            }
-        }
-    }
-
-    private void chosenBtn(int i) {
-        gNote.setColor(GridUnit.colorArr[i]);
-        chooseColorBtnStates[i] = true;
-        chooseColorBtns[i].setBackgroundDrawable(chooseColorBtnDrawables[i]); // 设置背景（效果就是有边框及底色）
-
-    }
 
     private void checkDbFlag() {
         if (mode == MODE_EDIT || mode == MODE_SHOW || MODE_TODAY == mode) {
@@ -498,12 +480,7 @@ public class Note extends BaseActivity {
     private void trash() {
         new AlertDialog.Builder(this).
                 setMessage(R.string.delete_text).
-                setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-                    }
-                }).
+                setNegativeButton(R.string.cancel, null).
                 setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

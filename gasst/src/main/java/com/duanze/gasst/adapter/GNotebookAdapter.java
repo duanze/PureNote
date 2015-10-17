@@ -344,7 +344,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
 //        针对 所有笔记 减少数目
             if (null != preferences) {
-                GNotebookUtil.updateGNotebook(mContext, preferences, 0, -cursor.getCount());
+                GNotebookUtil.updateGNotebook(mContext, 0, -cursor.getCount());
             }
         }
 

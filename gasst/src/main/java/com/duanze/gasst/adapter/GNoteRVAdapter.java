@@ -38,8 +38,6 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
     private ItemLongPressedListener mItemLongPressedListener;
     private OnItemSelectListener mOnItemSelectListener;
 
-    private SharedPreferences preferences;
-
     public interface ItemLongPressedListener {
         void startActionMode();
     }
@@ -48,10 +46,6 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
         void onSelect();
 
         void onCancelSelect();
-    }
-
-    public void setPreferences(SharedPreferences preferences) {
-        this.preferences = preferences;
     }
 
     public void setmItemLongPressedListener(ItemLongPressedListener mItemLongPressedListener) {
@@ -263,13 +257,11 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
                     affectedNotebooks.put(gNote.getGNotebookId(), num + 1);
                 }
             }
-            if (null != preferences) {
-                GNotebookUtil.updateGNotebook(mContext, preferences, 0, -mCheckedItems.size());
-                for (int i = 0; i < affectedNotebooks.size(); i++) {
-                    int key = affectedNotebooks.keyAt(i);
-                    int value = affectedNotebooks.valueAt(i);
-                    GNotebookUtil.updateGNotebook(mContext, preferences, key, -value);
-                }
+            GNotebookUtil.updateGNotebook(mContext, 0, -mCheckedItems.size());
+            for (int i = 0; i < affectedNotebooks.size(); i++) {
+                int key = affectedNotebooks.keyAt(i);
+                int value = affectedNotebooks.valueAt(i);
+                GNotebookUtil.updateGNotebook(mContext, key, -value);
             }
 
             mCheckedItems.clear();
@@ -301,16 +293,13 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
                 ProviderUtil.updateGNote(mContext, gNote);
 
             }
-            if (null != preferences) {
-                if (0 != toNotebookId) {
-                    GNotebookUtil.updateGNotebook(mContext, preferences, toNotebookId,
-                            +mCheckedItems.size());
-                }
-                for (int i = 0; i < affectedNotebooks.size(); i++) {
-                    int key = affectedNotebooks.keyAt(i);
-                    int value = affectedNotebooks.valueAt(i);
-                    GNotebookUtil.updateGNotebook(mContext, preferences, key, -value);
-                }
+            if (0 != toNotebookId) {
+                GNotebookUtil.updateGNotebook(mContext, toNotebookId, +mCheckedItems.size());
+            }
+            for (int i = 0; i < affectedNotebooks.size(); i++) {
+                int key = affectedNotebooks.keyAt(i);
+                int value = affectedNotebooks.valueAt(i);
+                GNotebookUtil.updateGNotebook(mContext, key, -value);
             }
 
             mCheckedItems.clear();

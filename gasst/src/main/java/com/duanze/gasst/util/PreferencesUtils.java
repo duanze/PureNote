@@ -14,6 +14,8 @@ public class PreferencesUtils {
     private float maxLengthRatio;
     private boolean useCreateOrder;
     private boolean concentrateWrite;
+    private boolean oneColumn;
+    private int gNotebookId;
     private Context mContext;
     private SharedPreferences preferences;
     private boolean mValid = false;
@@ -32,11 +34,24 @@ public class PreferencesUtils {
         return sMe;
     }
 
+    public SharedPreferences getPreferences() {
+        return preferences;
+    }
+
     public void refreshData() {
         maxLengthRatio = preferences.getFloat(mContext.getString(R.string.note_max_length_key), (float) 0.418);
         useCreateOrder = preferences.getBoolean(mContext.getString(R.string.create_order_key), false);
         concentrateWrite = preferences.getBoolean(mContext.getString(R.string.concentrate_write_key), true);
+        oneColumn = preferences.getBoolean(mContext.getString(R.string.one_column_key), false);
+
+        gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
         mValid = true;
+    }
+
+    private void checkValid() {
+        if (!mValid) {
+            throw new IllegalStateException("this should only be called when the data you want are not fetched once");
+        }
     }
 
     public float getMaxLengthRatio() {
@@ -54,9 +69,17 @@ public class PreferencesUtils {
         return concentrateWrite;
     }
 
-    private void checkValid() {
-        if (!mValid) {
-            throw new IllegalStateException("this should only be called when the data you want are not fetched once");
-        }
+    public boolean isOneColumn() {
+        checkValid();
+        return oneColumn;
+    }
+
+    public int getGNotebookId() {
+        checkValid();
+        return gNotebookId;
+    }
+
+    public int fetchGNotebookId() {
+        return gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
     }
 }

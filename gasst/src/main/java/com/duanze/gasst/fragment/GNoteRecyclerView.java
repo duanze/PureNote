@@ -50,7 +50,6 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     private static final int LOADER_ID = 113;
     //MODE_LIST相关
     private Context mContext;
-    private SharedPreferences preferences;
     private LoaderManager loaderManager;
 
     //nice FloatingButton
@@ -59,7 +58,6 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
     private void initValues() {
         mContext = getActivity();
-        preferences = mContext.getSharedPreferences(Settings.DATA, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -74,18 +72,15 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         View view = inflater.inflate(R.layout.fragment_gnote_recycler, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv_gnotes);
 
-        boolean isOneColumn = preferences.getBoolean(getString(R.string.one_column_key), false);
         int columnNum = 2;
-        if (isOneColumn) {
+        if (PreferencesUtils.getInstance(mContext).isOneColumn()) {
             columnNum = 1;
         }
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columnNum,
                 StaggeredGridLayoutManager.VERTICAL));
         mAdapter = new GNoteRVAdapter(mContext, null, this, this);
-        mAdapter.setPreferences(preferences);
         recyclerView.setAdapter(mAdapter);
 
-        PreferencesUtils.getInstance(mContext).refreshData();
         loaderManager = getLoaderManager();
         loaderManager.initLoader(LOADER_ID, null, this);
 
@@ -103,7 +98,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        int bookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+        int bookId = PreferencesUtils.getInstance(mContext).fetchGNotebookId();
         String selection = GNoteDB.GNOTEBOOK_ID + " = ?";
         String[] selectionArgs = {"" + bookId};
         if (0 == bookId) {

@@ -12,9 +12,9 @@ import com.duanze.gasst.model.GNotebook;
  */
 public class GNotebookUtil {
 
-    public static void updateGNotebook(Context context, SharedPreferences preferences, int id,
-                                        int diff) {
+    public static void updateGNotebook(Context context, int id, int diff) {
         if (id == 0) {
+            SharedPreferences preferences = PreferencesUtils.getInstance(context).getPreferences();
             int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
             preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + diff).apply();
         } else {

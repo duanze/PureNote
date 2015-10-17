@@ -49,7 +49,6 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
     private static final int LOADER_ID = 113 + 1;//以示区分
     //MODE_LIST相关
     private Context mContext;
-    private SharedPreferences preferences;
     private LoaderManager loaderManager;
 
     //nice FloatingButton
@@ -58,7 +57,6 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
 
     private void initValues() {
         mContext = getActivity();
-        preferences = mContext.getSharedPreferences(Settings.DATA, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -73,15 +71,13 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
         View view = inflater.inflate(R.layout.fragment_gnote_recycler, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv_gnotes);
 
-        boolean isOneColumn = preferences.getBoolean(getString(R.string.one_column_key), false);
         int columnNum = 2;
-        if (isOneColumn) {
+        if (PreferencesUtils.getInstance(mContext).isOneColumn()) {
             columnNum = 1;
         }
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columnNum,
                 StaggeredGridLayoutManager.VERTICAL));
         mAdapter = new GNoteRVAdapter(mContext, null, null, null);
-        mAdapter.setPreferences(preferences);
         recyclerView.setAdapter(mAdapter);
 
         loaderManager = getLoaderManager();
@@ -92,16 +88,6 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
 
         return view;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        randomFABButtonColor();
-    }
-
-    //    public void randomFABButtonColor() {
-//        Util.randomBackground(fabButton);
-//    }
 
     public void clearResult() {
         if (null == mAdapter) return;
