@@ -187,6 +187,10 @@
     <string name="login_evernote">同步至EverNote</string>
     <string name="logout_evernote">%1$s\u0020退出登录</string>
 
+    <string name="concentrate_write_title">专注写作</string>
+    <string name="concentrate_write_summary">开启后监听软键盘，写笔记时自动消隐标题栏</string>
+    <string name="concentrate_write_key">concentrate_write_key</string>
+
     <string name="one_column_title">单列模式</string>
     <string name="one_column_summary">勾选后，界面由双列瀑布流调整为单列</string>
     <string name="one_column_key">one_column_key</string>

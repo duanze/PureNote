@@ -62,7 +62,6 @@ public class Note extends BaseActivity {
     private int mode;
     private GNote gNote;
     private EditText editText;
-    private TextView textView;
     private GNoteDB db;
     private android.support.v7.app.ActionBar actionBar;
     private Calendar today;
@@ -196,13 +195,9 @@ public class Note extends BaseActivity {
             }
         }
 
-        listenSoftInput();
-//        findViewById(R.id.transparent_btn).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                toggleActionBar();
-//            }
-//        });
+        if (PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
+            listenSoftInput();
+        }
     }
 
     private void listenSoftInput() {
@@ -491,12 +486,7 @@ public class Note extends BaseActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, R.string.action_share);
-        String text;
-        if (mode == MODE_NEW || mode == MODE_EDIT || MODE_TODAY == mode) {
-            text = editText.getText().toString();
-        } else {//mode == MODE_SHOW
-            text = textView.getText().toString();
-        }
+        String text = editText.getText().toString();
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(Intent.createChooser(intent, "Share"));

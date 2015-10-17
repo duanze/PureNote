@@ -12,7 +12,8 @@ import com.duanze.gasst.activity.Settings;
 public class PreferencesUtils {
 
     private float maxLengthRatio;
-    private boolean UseCreateOrder;
+    private boolean useCreateOrder;
+    private boolean concentrateWrite;
     private Context mContext;
     private SharedPreferences preferences;
     private boolean mValid = false;
@@ -33,7 +34,8 @@ public class PreferencesUtils {
 
     public void refreshData() {
         maxLengthRatio = preferences.getFloat(mContext.getString(R.string.note_max_length_key), (float) 0.418);
-        UseCreateOrder = preferences.getBoolean(mContext.getString(R.string.create_order_key), false);
+        useCreateOrder = preferences.getBoolean(mContext.getString(R.string.create_order_key), false);
+        concentrateWrite = preferences.getBoolean(mContext.getString(R.string.concentrate_write_key), true);
         mValid = true;
     }
 
@@ -44,7 +46,12 @@ public class PreferencesUtils {
 
     public boolean isUseCreateOrder() {
         checkValid();
-        return UseCreateOrder;
+        return useCreateOrder;
+    }
+
+    public boolean isConcentrateWrite() {
+        checkValid();
+        return concentrateWrite;
     }
 
     private void checkValid() {
