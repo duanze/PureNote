@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="word_count">字数统计</string>
+    <string name="characters_no_spaces">字符数（不包含空格）：</string>
+    <string name="characters_without_spaces">字符数（包含空格）：</string>
+    <string name="words">字数：</string>
+
     <string name="write_something">写点什么吧</string>
     <string name="saved_picture_to">图片已保存至：</string>
 
@@ -91,8 +96,8 @@
     <string name="action_edit">编辑</string>
     <string name="action_remind">定时提醒</string>
     <string name="action_cancel_remind">取消提醒</string>
-    <string name="action_share">分享至…</string>
-    <string name="action_move">移动至…</string>
+    <string name="action_share">分享</string>
+    <string name="action_move">移动</string>
     <string name="action_weather">天气</string>
     <string name="action_setting">设置</string>
     <string name="action_feedback">意见反馈</string>

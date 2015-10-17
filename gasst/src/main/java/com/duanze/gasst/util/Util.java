@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Random;
 
 public class Util {
+    public static final String TAG = Util.class.getSimpleName();
+
     public static final String[] MONTH_ARR = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
             "Aug", "Sep", "Oct", "Nov", "Dec"};
     public static final String[] DATE_ARR = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th",
@@ -320,5 +322,54 @@ public class Util {
             e.printStackTrace();
         }
         return 1;
+    }
+
+    public static void wordCount(String str, int[] res) {
+        if (res.length < 3) {
+            throw new IllegalStateException("the arg {int[] res} length must >= 3");
+        }
+
+//        计算 字数 = 英文单词 + 中文字
+        boolean finding = false;//是否正在寻找单词结尾
+        int engCnt = 0;
+        int gbkCnt = 0;
+        int spaceCnt = 0;//空白字符
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (Character.isDigit(c)
+                    || 'a' <= (int) c && (int) c <= 'z'
+                    || 'A' <= (int) c && (int) c <= 'Z') {
+                if (finding) {
+//                    连成一个单词
+                } else {
+                    finding = true;
+                }
+            } else if (Character.isSpaceChar(c)) {
+                if (finding) {
+                    finding = false;
+                    engCnt++;
+                }
+                spaceCnt++;
+            } else if (0x4e00 <= (int) c && (int) c <= 0x9fa5) {
+                if (finding) {
+                    finding = false;
+                    engCnt++;
+                }
+                gbkCnt++;
+            } else {
+                if (finding) {
+                    finding = false;
+                    engCnt++;
+                }
+            }
+        }
+        //最后一个
+        if (finding) {
+            engCnt++;
+        }
+
+        res[2] = str.length();
+        res[1] = res[2] - spaceCnt;
+        res[0] = engCnt + gbkCnt;
     }
 }

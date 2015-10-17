@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical">
 
-    <include layout="@layout/toolbar_shadow_layout" />
+    <include layout="@layout/toolbar_shadow_layout"/>
     <!--<View-->
     <!--android:id="@+id/divide_line"-->
     <!--android:layout_width="match_parent"-->
@@ -25,15 +25,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_note_show"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingMultiplier="1.3"
-                android:padding="13dp"
-                android:textColor="@color/dimgrey"
-                android:textSize="17sp" />
-
             <EditText
                 android:id="@+id/et_note_edit"
                 style="@android:style/Widget.TextView"
@@ -44,93 +35,93 @@
                 android:lineSpacingMultiplier="1.3"
                 android:padding="13dp"
                 android:textColor="@color/dimgrey"
-                android:textColorHint="@color/gray"
+                android:textColorHint="@color/darkgrey"
                 android:textSize="17sp"
-                android:visibility="gone" />
+                />
         </LinearLayout>
     </ScrollView>
 
     <!--<HorizontalScrollView-->
-        <!--android:id="@+id/hsv_btns"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom"-->
-        <!--android:scrollbars="none"-->
-        <!--android:visibility="gone">-->
+    <!--android:id="@+id/hsv_btns"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:scrollbars="none"-->
+    <!--android:visibility="gone">-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:baselineAligned="false"-->
-            <!--android:orientation="horizontal">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:baselineAligned="false"-->
+    <!--android:orientation="horizontal">-->
 
-            <!--<Button-->
-                <!--android:id="@+id/transparent_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#00000000"-->
-                <!--android:gravity="center"-->
-                <!--android:text="None"-->
-                <!--android:textColor="@color/dimgrey"-->
-                <!--android:textSize="12sp" />-->
+    <!--<Button-->
+    <!--android:id="@+id/transparent_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#00000000"-->
+    <!--android:gravity="center"-->
+    <!--android:text="None"-->
+    <!--android:textColor="@color/dimgrey"-->
+    <!--android:textSize="12sp" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/light_grey_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#2AC0C0C0" />-->
+    <!--<Button-->
+    <!--android:id="@+id/light_grey_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#2AC0C0C0" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/blue_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#22FF0000" />-->
+    <!--<Button-->
+    <!--android:id="@+id/blue_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#22FF0000" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/green_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#4AFFC0CB" />-->
+    <!--<Button-->
+    <!--android:id="@+id/green_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#4AFFC0CB" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/yellow_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#4ADA70D6" />-->
+    <!--<Button-->
+    <!--android:id="@+id/yellow_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#4ADA70D6" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/gold_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#6AADD8E6" />-->
+    <!--<Button-->
+    <!--android:id="@+id/gold_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#6AADD8E6" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/pink_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#3AFFD700" />-->
+    <!--<Button-->
+    <!--android:id="@+id/pink_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#3AFFD700" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/red_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#52FFFF00" />-->
+    <!--<Button-->
+    <!--android:id="@+id/red_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#52FFFF00" />-->
 
-            <!--<Button-->
-                <!--android:id="@+id/purple_btn"-->
-                <!--android:layout_width="@dimen/color_picker_size"-->
-                <!--android:layout_height="@dimen/color_picker_size"-->
-                <!--android:layout_margin="@dimen/color_picker_margin"-->
-                <!--android:background="#4A90EE90" />-->
+    <!--<Button-->
+    <!--android:id="@+id/purple_btn"-->
+    <!--android:layout_width="@dimen/color_picker_size"-->
+    <!--android:layout_height="@dimen/color_picker_size"-->
+    <!--android:layout_margin="@dimen/color_picker_margin"-->
+    <!--android:background="#4A90EE90" />-->
 
-        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</HorizontalScrollView>-->
 </LinearLayout>

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -20,8 +19,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -29,7 +26,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.duanze.gasst.R;
@@ -39,14 +35,15 @@ import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.PreferencesUtils;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
+import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.GridUnit;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.List;
 
@@ -165,7 +162,6 @@ public class Note extends BaseActivity {
             gNote.setAlertTime(result);
             gNote.setIsPassed(GNote.FALSE);
             checkDbFlag();
-
         }
 
         @Override
@@ -186,9 +182,7 @@ public class Note extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
-
         setContentView(R.layout.activity_note);
-
         setOverflowShowingAlways();
         initValues();
 
@@ -242,7 +236,6 @@ public class Note extends BaseActivity {
 
         db = GNoteDB.getInstance(this);
 
-        textView = (TextView) findViewById(R.id.tv_note_show);
         editText = (EditText) findViewById(R.id.et_note_edit);
         editText.setHint(R.string.write_something);
         initMode();
@@ -283,37 +276,19 @@ public class Note extends BaseActivity {
         datePickerDialog.setCloseOnSingleTapDay(true);
     }
 
-    private void checkColorRead() {
-//        boolean colorRead = preferences.getBoolean(Settings.COLOR_READ, true);
-//        if (colorRead && customizeColor) {
-        if (mode == MODE_SHOW) {
-            textView.setBackgroundColor(gNote.getColor());
-        } else {
-            editText.setBackgroundColor(gNote.getColor());
-        }
-//        }
-    }
-
     private void initMode() {
         mode = getIntent().getIntExtra("mode", 0);
         if (mode == MODE_NEW || mode == MODE_EDIT || MODE_TODAY == mode) {
-            textView.setVisibility(View.GONE);
-            editText.setVisibility(View.VISIBLE);
             editText.setText(gNote.getContent());
             editText.setSelection(0);
-        } else if (mode == MODE_SHOW) {
-            textView.setText(gNote.getContent());
-//            textView.setMovementMethod(ScrollingMovementMethod.getInstance());
         }
 
         int no = getIntent().getIntExtra("no", -1);
         //传入了no表明是从定时任务传来，先取消通知栏显示，[再表明需更新UI(使用Loader后，这一步不需要了:) ])
         if (no != -1) {
             LogUtil.i(TAG, "no:" + no);
-            NotificationManager manager = (NotificationManager) getSystemService
-                    (NOTIFICATION_SERVICE);
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             manager.cancel(no);
-//                uiShouldUpdate();
         }
     }
 
@@ -389,12 +364,13 @@ public class Note extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (mode == MODE_SHOW) {
-            getMenuInflater().inflate(R.menu.show_note_menu, menu);
-        } else if (mode == MODE_NEW || MODE_TODAY == mode) {
+        if (mode == MODE_NEW || MODE_TODAY == mode) {
             getMenuInflater().inflate(R.menu.new_note_menu, menu);
         } else if (mode == MODE_EDIT) {
             getMenuInflater().inflate(R.menu.edit_note_menu, menu);
+            if (!PreferencesUtils.getInstance(mContext).isUseCreateOrder()) {
+                menu.findItem(R.id.edit_date).setVisible(false);
+            }
         }
         return true;
     }
@@ -407,9 +383,6 @@ public class Note extends BaseActivity {
                 return true;
             case R.id.action_share:
                 share();
-                return true;
-            case R.id.action_trash:
-                trash();
                 return true;
             case R.id.action_remind:
                 timePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
@@ -427,13 +400,31 @@ public class Note extends BaseActivity {
             case R.id.action_move:
                 showSelectFolderDialog();
                 return true;
+            case R.id.word_count:
+                showWordCount();
+                return true;
+            case R.id.edit_date:
+                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+                return true;
             default:
                 return true;
         }
     }
 
+    private void showWordCount() {
+        int[] res = new int[3];
+        Util.wordCount(editText.getText().toString(), res);
+        String msg = getString(R.string.words) + "\n" + res[0] + "\n\n"
+                + getString(R.string.characters_no_spaces) + "\n" + res[1] + "\n\n"
+                + getString(R.string.characters_without_spaces) + "\n" + res[2] + "\n";
+        new AlertDialog.Builder(mContext).setTitle(R.string.word_count)
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.ok, null)
+                .create().show();
+    }
+
     private boolean changedFolder = false;
-    private int tmpGnoteBookId = -1;
+    private int tmpGNoteBookId = -1;
 
     private void showSelectFolderDialog() {
         View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow
@@ -456,7 +447,7 @@ public class Note extends BaseActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        tmpGnoteBookId = gNotebook.getId();
+                        tmpGNoteBookId = gNotebook.getId();
                     }
                 }
             });
@@ -469,7 +460,7 @@ public class Note extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    tmpGnoteBookId = 0;
+                    tmpGNoteBookId = 0;
                 }
             }
         });
@@ -479,7 +470,7 @@ public class Note extends BaseActivity {
                         .OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (tmpGnoteBookId != -1) {
+                        if (tmpGNoteBookId != -1) {
                             dbFlag = DB_UPDATE;
                             changedFolder = true;
                         }
@@ -615,9 +606,9 @@ public class Note extends BaseActivity {
 
         if (changedFolder) {
             LogUtil.i(TAG, "original bookid" + bookId);
-            gNote.setGNotebookId(tmpGnoteBookId);
+            gNote.setGNotebookId(tmpGNoteBookId);
             updateGNotebook(bookId, -1, true);
-            updateGNotebook(tmpGnoteBookId, +1, true);
+            updateGNotebook(tmpGNoteBookId, +1, true);
         }
 
         gNote.setEditTime(TimeUtils.getCurrentTimeInLong());

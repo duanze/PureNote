@@ -102,16 +102,6 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-//        randomFABButtonColor();
-    }
-
-//    public void randomFABButtonColor() {
-//        Util.randomBackground(fabButton);
-//    }
-
-    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         int bookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
         String selection = GNoteDB.GNOTEBOOK_ID + " = ?";
