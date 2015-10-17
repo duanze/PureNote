@@ -52,8 +52,8 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public Toolbar getToolbar() {
-        return (Toolbar) findViewById(R.id.toolbar);
+    public LinearLayout getRootLayout() {
+        return rootLayout;
     }
 
     @Override

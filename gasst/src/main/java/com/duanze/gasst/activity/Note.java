@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -28,6 +29,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.duanze.gasst.R;
@@ -99,9 +101,9 @@ public class Note extends BaseActivity {
     private Button[] chooseColorBtns = new Button[9];
     private boolean[] chooseColorBtnStates = new boolean[9];
     private GradientDrawable[] chooseColorBtnDrawables = new GradientDrawable[9];
-    public static final int[] BTN_ARR = {R.id.transparent_btn, R.id.light_grey_btn, R.id
-            .blue_btn, R.id.green_btn, R.id.yellow_btn, R.id.gold_btn, R.id.pink_btn, R.id
-            .red_btn, R.id.purple_btn};
+//    public static final int[] BTN_ARR = {R.id.transparent_btn, R.id.light_grey_btn, R.id
+//            .blue_btn, R.id.green_btn, R.id.yellow_btn, R.id.gold_btn, R.id.pink_btn, R.id
+//            .red_btn, R.id.purple_btn};
 
     private SharedPreferences preferences;
 
@@ -200,12 +202,34 @@ public class Note extends BaseActivity {
             }
         }
 
-        findViewById(R.id.transparent_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleActionBar();
-            }
-        });
+        listenSoftInput();
+//        findViewById(R.id.transparent_btn).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toggleActionBar();
+//            }
+//        });
+    }
+
+    private void listenSoftInput() {
+//        final LinearLayout rootLayout = getRootLayout();
+        final View scroll = findViewById(R.id.sv_just);
+        scroll.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        int rootHeight = scroll.getRootView().getHeight();
+                        int heightDiff = rootHeight - scroll.getHeight();
+                        Log.e(TAG, "getRootView().getHeight() = " + rootHeight);
+                        Log.e(TAG, "rootLayout.getHeight() = " + scroll.getHeight());
+
+                        if (heightDiff > 0.33 * rootHeight) { // 说明键盘是弹出状态
+                            hideToolbar();
+                        } else {
+                            showToolbar();
+                        }
+                    }
+                });
     }
 
     private void initValues() {
@@ -220,13 +244,12 @@ public class Note extends BaseActivity {
 
         textView = (TextView) findViewById(R.id.tv_note_show);
         editText = (EditText) findViewById(R.id.et_note_edit);
+        editText.setHint(R.string.write_something);
         initMode();
 
         if (mode == MODE_NEW) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams
-                    .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-            editText.requestFocus();
-
+//            editText.requestFocus();
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         } else if (mode == MODE_EDIT) {
             editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -238,13 +261,10 @@ public class Note extends BaseActivity {
                 }
             });
         } else if (MODE_TODAY == mode) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams
-                    .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-            editText.requestFocus();
-
             gNote.setCalToTime(today);
             gNote.setGNotebookId(preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0));
-
+//            editText.requestFocus();
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
@@ -297,36 +317,36 @@ public class Note extends BaseActivity {
         }
     }
 
-    private void initBtns() {
-        for (int i = 0; i < 9; i++) {
-            chooseColorBtns[i] = (Button) findViewById(BTN_ARR[i]);
-
-            chooseColorBtnDrawables[i] = new GradientDrawable();
-            chooseColorBtnDrawables[i].setShape(GradientDrawable.RECTANGLE); // 画框
-            chooseColorBtnDrawables[i].setStroke(1, Color.BLACK); // 边框粗细及颜色
-            chooseColorBtnDrawables[i].setColor(GridUnit.colorArr[i]); // 边框内部颜色
-
-            final int tmp = i;
-            chooseColorBtns[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!chooseColorBtnStates[tmp]) {
-                        resetSelectColorBtns();
-                        chosenBtn(tmp);
-
-                        checkColorRead();
-                        checkDbFlag();
-                    }
-                }
-            });
-
-            chooseColorBtns[i].setBackgroundColor(GridUnit.colorArr[i]);
-
-            if (gNote.getColor() == GridUnit.colorArr[i]) {
-                chosenBtn(i);
-            }
-        }
-    }
+//    private void initBtns() {
+//        for (int i = 0; i < 9; i++) {
+//            chooseColorBtns[i] = (Button) findViewById(BTN_ARR[i]);
+//
+//            chooseColorBtnDrawables[i] = new GradientDrawable();
+//            chooseColorBtnDrawables[i].setShape(GradientDrawable.RECTANGLE); // 画框
+//            chooseColorBtnDrawables[i].setStroke(1, Color.BLACK); // 边框粗细及颜色
+//            chooseColorBtnDrawables[i].setColor(GridUnit.colorArr[i]); // 边框内部颜色
+//
+//            final int tmp = i;
+//            chooseColorBtns[i].setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (!chooseColorBtnStates[tmp]) {
+//                        resetSelectColorBtns();
+//                        chosenBtn(tmp);
+//
+//                        checkColorRead();
+//                        checkDbFlag();
+//                    }
+//                }
+//            });
+//
+//            chooseColorBtns[i].setBackgroundColor(GridUnit.colorArr[i]);
+//
+//            if (gNote.getColor() == GridUnit.colorArr[i]) {
+//                chosenBtn(i);
+//            }
+//        }
+//    }
 
     private void resetSelectColorBtns() {
         for (int i = 0; i < 9; i++) {
@@ -350,26 +370,6 @@ public class Note extends BaseActivity {
         if (mode == MODE_EDIT || mode == MODE_SHOW || MODE_TODAY == mode) {
             dbFlag = DB_UPDATE;
         }
-    }
-
-    /**
-     * 令Overflow菜单项能显示icon
-     */
-    @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-        if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
-            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
-                try {
-                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible",
-                            Boolean.TYPE);
-                    m.setAccessible(true);
-                    m.invoke(menu, true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return super.onMenuOpened(featureId, menu);
     }
 
     /**
@@ -690,8 +690,10 @@ public class Note extends BaseActivity {
     private boolean mIsActionBarSlidUp = false;
 
     private void slideActionBar(boolean slideUp, boolean animate) {
+        final LinearLayout rootLayout = getRootLayout();
         final ActionBar actionBar = getSupportActionBar();
         if (null == actionBar) return;
+        final int height = actionBar.getHeight();
 
         if (animate) {
             ValueAnimator animator =
@@ -700,21 +702,27 @@ public class Note extends BaseActivity {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     final float value = (float) animation.getAnimatedValue();
-                    actionBar.setHideOffset((int) (actionBar.getHeight() * value));
+//                    actionBar.setHideOffset((int) (actionBar.getHeight() * value));
+                    LinearLayout.MarginLayoutParams params = (LinearLayout.MarginLayoutParams) rootLayout.getLayoutParams();
+                    params.setMargins(0, -(int) (height * value), 0, 0);
+                    rootLayout.setLayoutParams(params);
+                    rootLayout.requestLayout();
                 }
             });
             animator.start();
         } else {
-            actionBar.setHideOffset(slideUp ? actionBar.getHeight() : 0);
+//            actionBar.setHideOffset(slideUp ? actionBar.getHeight() : 0);
         }
         mIsActionBarSlidUp = slideUp;
     }
 
-    private void toggleActionBar() {
-        if (mIsActionBarSlidUp) {
-            slideActionBar(false, true);
-        } else {
-            slideActionBar(true, true);
-        }
+    private void hideToolbar() {
+        if (mIsActionBarSlidUp) return;
+        slideActionBar(true, true);
+    }
+
+    private void showToolbar() {
+        if (!mIsActionBarSlidUp) return;
+        slideActionBar(false, true);
     }
 }

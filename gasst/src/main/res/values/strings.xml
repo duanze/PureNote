@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="write_something">写点什么吧</string>
     <string name="saved_picture_to">图片已保存至：</string>
 
     <string name="before_minute" formatted="false">%d\u0020分钟\u0020前</string>
