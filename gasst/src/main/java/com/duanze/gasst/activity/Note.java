@@ -370,13 +370,13 @@ public class Note extends BaseActivity {
                     checkDbFlag();
                 }
                 return true;
-            case R.id.action_edit:
-                actionStart(this, gNote, MODE_EDIT);
-                finish();
-                return true;
-            case R.id.action_move:
-                showSelectFolderDialog();
-                return true;
+//            case R.id.action_edit:
+//                actionStart(this, gNote, MODE_EDIT);
+//                finish();
+//                return true;
+//            case R.id.action_move:
+//                showSelectFolderDialog();
+//                return true;
             case R.id.word_count:
                 showWordCount();
                 return true;

@@ -9,9 +9,6 @@
         android:id="@+id/action_cancel_remind"
         android:title="@string/action_cancel_remind"/>
     <item
-        android:id="@+id/action_move"
-        android:title="@string/action_move"/>
-    <item
         android:id="@+id/action_share"
         android:title="@string/action_share"/>
     <item
