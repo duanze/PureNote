@@ -82,4 +82,8 @@ public class PreferencesUtils {
     public int fetchGNotebookId() {
         return gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
     }
+
+    public boolean fetchIsConcentrate() {
+        return concentrateWrite = preferences.getBoolean(mContext.getString(R.string.concentrate_write_key), true);
+    }
 }

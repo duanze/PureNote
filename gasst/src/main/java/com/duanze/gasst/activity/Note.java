@@ -251,8 +251,10 @@ public class Note extends BaseActivity {
         } else if (MODE_TODAY == mode) {
             gNote.setCalToTime(today);
             gNote.setGNotebookId(preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0));
-//            editText.requestFocus();
-//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            if (!PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
+                editText.requestFocus();
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            }
         }
     }
 
