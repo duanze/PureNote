@@ -4,12 +4,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.duanze.gasst.R;
+import com.duanze.gasst.util.PreferencesUtils;
+import com.duanze.gasst.util.ThemeUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 /**
@@ -21,6 +24,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        initTheme();
         super.onCreate(savedInstanceState);
         // 这句很关键，注意是调用父类的方法
         super.setContentView(R.layout.activity_base);
@@ -35,7 +39,7 @@ public class BaseActivity extends AppCompatActivity {
             //沉浸式时，对状态栏染色
             // create our manager instance after the content view is set
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.primary_color));
+            tintManager.setStatusBarTintColor(getStatusBarColor());
             // enable status bar tint
             tintManager.setStatusBarTintEnabled(true);
 //        // enable navigation bar tint
@@ -43,6 +47,21 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         initToolbar();
+    }
+
+    private void initTheme() {
+        PreferencesUtils.Theme theme = PreferencesUtils.getInstance(this).getTheme();
+        ThemeUtils.changTheme(this, theme);
+    }
+
+    public int getStatusBarColor() {
+        return getColorPrimary();
+    }
+
+    public int getColorPrimary() {
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+        return typedValue.data;
     }
 
     private void initToolbar() {

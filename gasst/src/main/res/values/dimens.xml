@@ -36,5 +36,7 @@
     <dimen name="folder_unit_flag">28dp</dimen>
     <dimen name="password_dialog_padding">20dp</dimen>
     <dimen name="password_dialog_text_size">15sp</dimen>
+    <dimen name="md_simplelist_icon">40dp</dimen>
+    <dimen name="md_dialog_frame_margin">24dp</dimen>
 
 </resources>

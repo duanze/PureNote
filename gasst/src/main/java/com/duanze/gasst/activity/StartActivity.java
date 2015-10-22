@@ -414,7 +414,8 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
     private void init() {
         mContext = this;
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
-        PreferencesUtils.getInstance(mContext).refreshData();
+//        已在父类 BaseActivity 中对Preferences进行初始化
+//        PreferencesUtils.getInstance(mContext).refreshData();
         readSetting();
         setContentView(R.layout.activity_main);
 
@@ -1227,6 +1228,12 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         rateForPureNote();
         //        umeng
         MobclickAgent.onResume(this);
+
+        boolean needRecreate = PreferencesUtils.getInstance(mContext).isActivityNeedRecreate();
+        if (needRecreate){
+            PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(false);
+            recreate();
+        }
     }
 
     private void uiOperation() {

@@ -187,6 +187,7 @@
     <string name="login_evernote">同步至EverNote</string>
     <string name="logout_evernote">%1$s\u0020退出登录</string>
 
+    <string name="activity_need_recreate">activity_need_recreate</string>
     <string name="choose_theme_title">设置主题</string>
     <string name="choose_theme_key">choose_theme_key</string>
 

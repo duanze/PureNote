@@ -27,7 +27,7 @@
                 android:layout_marginTop="@dimen/category_margin_top"
                 android:gravity="center_vertical"
                 android:text="@string/general_settings"
-                android:textColor="@color/primary_color"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="@dimen/category_text_size"/>
 
             <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -70,6 +70,49 @@
                         android:layout_gravity="center"
                         android:contentDescription="@null"
                         android:src="@drawable/next"/>
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <include layout="@layout/divider_line"/>
+
+            <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_marginLeft="@dimen/material_margin_lower_level"
+                                                            android:layout_marginRight="@dimen/material_margin_lower_level"
+                                                            app:mrl_rippleOverlay="true">
+
+                <LinearLayout
+                    android:id="@+id/ll_choose_theme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/material_padding">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/content_margin_right"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/choose_theme_title"
+                            android:textSize="@dimen/title_text_size"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/grid_margin"
+                            android:text="@string/concentrate_write_summary"
+                            android:textColor="@color/dimgrey"
+                            android:textSize="@dimen/category_text_size"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
@@ -324,14 +367,15 @@
                 android:background="@color/divider_line_color"
                 android:visibility="invisible"/>
 
-            <com.balysv.materialripple.MaterialRippleLayout android:id="@+id/mr_universal_container"
-                                                            xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_marginLeft="@dimen/material_margin_lower_level"
-                                                            android:layout_marginRight="@dimen/material_margin_lower_level"
-                                                            android:visibility="gone"
-                                                            app:mrl_rippleOverlay="true">
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/mr_universal_container"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/material_margin_lower_level"
+                android:layout_marginRight="@dimen/material_margin_lower_level"
+                android:visibility="gone"
+                app:mrl_rippleOverlay="true">
 
                 <LinearLayout
                     android:id="@+id/ll_universal"
@@ -378,7 +422,7 @@
                 android:layout_marginTop="@dimen/category_margin_top"
                 android:gravity="center_vertical"
                 android:text="@string/notification_tools"
-                android:textColor="@color/primary_color"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="@dimen/category_text_size"/>
 
             <com.balysv.materialripple.MaterialRippleLayout xmlns:app="http://schemas.android.com/apk/res-auto"

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/primary_color"
+              android:background="?attr/colorPrimary"
               android:orientation="vertical">
 
     <!--<View-->
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button_background"
             android:text="@string/action_feedback"
-            android:textColor="@color/primary_color"
+            android:textColor="?attr/colorPrimary"
             android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
 
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button_background"
             android:text="@string/comment_purenote"
-            android:textColor="@color/primary_color"
+            android:textColor="?attr/colorPrimary"
 
             android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button_background"
             android:text="@string/donate_developer"
-            android:textColor="@color/primary_color"
+            android:textColor="?attr/colorPrimary"
 
             android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button_background"
             android:text="@string/title_activity_license"
-            android:textColor="@color/primary_color"
+            android:textColor="?attr/colorPrimary"
 
             android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
