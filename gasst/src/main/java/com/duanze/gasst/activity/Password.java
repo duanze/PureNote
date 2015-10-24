@@ -24,7 +24,7 @@ public class Password extends BaseActivity {
     private String password;
     private SharedPreferences preferences;
 
-    public static void activityStart(Context context, String hint, String password) {
+    public static void actionStart(Context context, String hint, String password) {
         Intent intent = new Intent(context, Password.class);
         intent.putExtra(Settings.PASSWORD_HINT, hint);
         intent.putExtra(Settings.PASSWORD, password);

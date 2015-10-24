@@ -102,31 +102,41 @@ public class Util {
     }
 
     public static String parseTimeStamp(String[] info) {
-        String year = info[2];
-        int month = 0;
-        int day = 1;
-
-        for (int i = 0; i < MONTH_ARR.length; i++) {
-            String m = MONTH_ARR[i];
-            if (m.equals(info[0])) {
-                month = i;
-                break;
-            }
+        if (info.length != 3) {
+            throw new IllegalStateException("the length of arg {String[] info} must be 3");
         }
 
-        for (int i = 0; i < DATE_ARR.length; i++) {
-            String d = DATE_ARR[i];
-            if (d.equals(info[1])) {
-                day = i + 1;
-                break;
-            }
-        }
+        return info[0]
+                + ","
+                + Util.twoDigit(Integer.parseInt(info[1]) - 1)
+                + ","
+                + Util.twoDigit(info[2]);
 
-        return year
-                + ","
-                + Util.twoDigit(month)
-                + ","
-                + Util.twoDigit(day);
+//        String year = info[2];
+//        int month = 0;
+//        int day = 1;
+//
+//        for (int i = 0; i < MONTH_ARR.length; i++) {
+//            String m = MONTH_ARR[i];
+//            if (m.equals(info[0])) {
+//                month = i;
+//                break;
+//            }
+//        }
+//
+//        for (int i = 0; i < DATE_ARR.length; i++) {
+//            String d = DATE_ARR[i];
+//            if (d.equals(info[1])) {
+//                day = i + 1;
+//                break;
+//            }
+//        }
+//
+//        return year
+//                + ","
+//                + Util.twoDigit(month)
+//                + ","
+//                + Util.twoDigit(day);
     }
 
     /**
@@ -214,9 +224,9 @@ public class Util {
      * @param groupId
      */
     public static void extractNoteToDB(Context context, SharedPreferences preferences, GNoteDB db, String str, int groupId) {
-        Calendar cal = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
         GNote gNote = new GNote();
-        gNote.setCalToTime(cal);
+        gNote.setCalToTime(today);
         gNote.setContent(str);
         //needCreate
         gNote.setSynStatus(GNote.NEW);

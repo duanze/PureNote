@@ -105,8 +105,8 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
         ListView gNoteList = (ListView) view.findViewById(R.id.lv_gnotes);
         mAdapter = new GNoteAdapter(mContext, null, 0, this, this);
         StartActivity startActivity = ((StartActivity) mContext);
-        mAdapter.setValues(startActivity.getIsFold(), startActivity.getToday(), startActivity
-                .getMaxLines());
+//        mAdapter.setValues(startActivity.getIsFold(), startActivity.getToday(), startActivity
+//                .getMaxLines());
         mAdapter.setPreferences(preferences);
         gNoteList.setAdapter(mAdapter);
 
@@ -163,8 +163,8 @@ public class GNoteList extends Fragment implements LoaderManager.LoaderCallbacks
 
     public void refreshUI() {
         StartActivity startActivity = ((StartActivity) mContext);
-        mAdapter.setValues(startActivity.getIsFold(), startActivity.getToday(), startActivity
-                .getMaxLines());
+//        mAdapter.setValues(startActivity.getIsFold(), startActivity.getToday(), startActivity
+//                .getMaxLines());
         loaderManager.restartLoader(LOADER_ID, null, this);
     }
 

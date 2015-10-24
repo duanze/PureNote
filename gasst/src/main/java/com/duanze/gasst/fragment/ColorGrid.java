@@ -147,8 +147,8 @@ public class ColorGrid extends Fragment {
     }
 
     public void refreshUI() {
-//        List<GNote> gNoteList = db.loadGNotes();
-        List<GNote> gNoteList = db.loadGNotesByBookId(((StartActivity) mContext).getGNotebookId());
+        List<GNote> gNoteList = db.loadGNotes();
+//        List<GNote> gNoteList = db.loadGNotesByBookId(((StartActivity) mContext).getGNotebookId());
         int index = gNoteList.size() - 1;
         tmpCal = (Calendar) today.clone();
 
@@ -188,15 +188,15 @@ public class ColorGrid extends Fragment {
                         gridUnit.setViewNote(note.getContent());
 
                         //判断格子色彩
-                        if (randomColor()) {
-                            gridUnit.randomSetBackground();
-                        } else {
-//                            if (customizeColor()) {
-                            gridUnit.setBackgroundColor(note.getColor());
-//                            } else {
-//                                gridUnits[i][j].setBackgroundColor(GridUnit.TRANSPARENT);
-//                            }
-                        }
+//                        if (randomColor()) {
+//                            gridUnit.randomSetBackground();
+//                        } else {
+////                            if (customizeColor()) {
+//                            gridUnit.setBackgroundColor(note.getColor());
+////                            } else {
+////                                gridUnits[i][j].setBackgroundColor(GridUnit.TRANSPARENT);
+////                            }
+//                        }
 
                         button.setVisibility(View.VISIBLE);
                         if (!note.isDone()) {
@@ -247,14 +247,6 @@ public class ColorGrid extends Fragment {
             }
         }
     }
-
-    private boolean randomColor() {
-        return ((StartActivity) mContext).isRandomColor();
-    }
-
-//    private boolean customizeColor(){
-//        return ((StartActivity)mContext).isCustomizeColor();
-//    }
 
     private void gridUnitOpenNew(GridUnit gridUnit, final Calendar cal) {
         gridUnit.setOnClickListener(new View.OnClickListener() {
@@ -432,7 +424,6 @@ public class ColorGrid extends Fragment {
     static final int NEXT = 0;
     static final int PREVIOUS = 1;
 
-
     private synchronized void complete(int flag) {
         weekViews[curWeekNo].setVisibility(View.GONE);
         //将当前（移动发生之前）的ImageView移动到（0，0）位置因为在滑动时它的位置被改变
@@ -442,10 +433,8 @@ public class ColorGrid extends Fragment {
         } else if (flag == PREVIOUS) {
             curWeekNo = curWeekNo - 1;
         }
-
         nextWeekNo = curWeekNo + 1;
         previousWeekNo = curWeekNo - 1;
-
         myViewFlipper.setDisplayedChild(curWeekNo);
 
     }
@@ -514,7 +503,7 @@ public class ColorGrid extends Fragment {
 
             //暂时去除点击效果
 //            myViewFlipper.setClickable(false);
-            myViewFlipper.setEnabled(false);
+//            myViewFlipper.setEnabled(false);
 
             // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
             while (true) {

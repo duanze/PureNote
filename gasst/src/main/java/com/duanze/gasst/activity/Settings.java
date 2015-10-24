@@ -9,13 +9,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -25,15 +28,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duanze.gasst.R;
+import com.duanze.gasst.adapter.ColorsListAdapter;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.syn.Evernote;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.PreferencesUtils;
+import com.duanze.gasst.util.ThemeUtils;
 import com.duanze.gasst.util.Util;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -131,6 +138,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         findViewById(R.id.ll_one_column).setOnClickListener(this);
         findViewById(R.id.ll_create_order).setOnClickListener(this);
         findViewById(R.id.ll_concentrate_write).setOnClickListener(this);
+        findViewById(R.id.ll_choose_theme).setOnClickListener(this);
     }
 
 
@@ -166,7 +174,8 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         passwordGuard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!preferences.getBoolean(PASSWORD_GUARD, false)) {
+                boolean ans = preferences.getBoolean(PASSWORD_GUARD, false);
+                if (!ans) {
                     showCreatePasswordDialog();
                 } else {
                     showCancelPasswordDialog();
@@ -240,8 +249,9 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         concentrateWrite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                preferences.edit().putBoolean(getString(R.string.concentrate_write_key), isChecked).apply();
-                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+//                preferences.edit().putBoolean(getString(R.string.concentrate_write_key), isChecked).apply();
+//                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+                PreferencesUtils.getInstance(mContext).setConcentrateWrite(isChecked);
             }
         });
 
@@ -272,8 +282,10 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         oneColumn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                preferences.edit().putBoolean(getString(R.string.one_column_key), isChecked).apply();
-                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+//                preferences.edit().putBoolean(getString(R.string.one_column_key), isChecked).apply();
+//                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+                PreferencesUtils.getInstance(mContext).setOneColumn(isChecked);
+                activityNeedRecreate();
             }
         });
 
@@ -283,10 +295,16 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         createOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                preferences.edit().putBoolean(getString(R.string.create_order_key), isChecked).apply();
-                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+//                preferences.edit().putBoolean(getString(R.string.create_order_key), isChecked).apply();
+//                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+                PreferencesUtils.getInstance(mContext).setUseCreateOrder(isChecked);
+                activityNeedRecreate();
             }
         });
+    }
+
+    private void activityNeedRecreate() {
+        PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(true);
     }
 
     private void setGuardText(boolean b) {
@@ -314,13 +332,11 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                                 true);
                         if (ans.equals(_password) ||
                                 useUniversal && Settings.UNIVERSAL_PASSWORD.equals(_password)) {
-                            preferences.edit()
-                                    .putBoolean(PASSWORD_GUARD, false)
-                                    .apply();
                             setGuardText(false);
-                            Toast.makeText(mContext, "密码保护已停用", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.password_guard_stop, Toast.LENGTH_SHORT).show();
+                            PreferencesUtils.getInstance(mContext).setPasswordGuard(false);
                         } else {
-                            Toast.makeText(mContext, "密码错误", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.password_error, Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -328,8 +344,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                 .create();
 
         dialog.show();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
-                .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     private void showCreatePasswordDialog() {
@@ -351,13 +366,13 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                             preferences.edit()
                                     .putString(PASSWORD, _password)
                                     .putString(PASSWORD_HINT, _hint)
-                                    .putBoolean(PASSWORD_GUARD, true)
                                     .apply();
 
                             setGuardText(true);
-                            Toast.makeText(mContext, "密码保护已启用", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.password_guard_start, Toast.LENGTH_SHORT).show();
+                            PreferencesUtils.getInstance(mContext).setPasswordGuard(true);
                         } else {
-                            Toast.makeText(mContext, "两次输入的密码不一致", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.passwords_differ, Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -584,9 +599,40 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             case R.id.ll_concentrate_write:
                 concentrateWrite.performClick();
                 break;
+            case R.id.ll_choose_theme:
+                chooseThemeDialog();
+                break;
             default:
                 break;
         }
+    }
+
+    private void chooseThemeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(R.string.choose_theme_title);
+        Integer[] res = new Integer[]{R.drawable.green_round, R.drawable.yellow_round, R.drawable.pink_round, R.drawable.blue_round};
+        List<Integer> list = Arrays.asList(res);
+        ColorsListAdapter adapter = new ColorsListAdapter(this, list);
+        adapter.setCheckItem(ThemeUtils.getCurrentTheme(this).getIntValue());
+        GridView gridView = (GridView) LayoutInflater.from(this).inflate(R.layout.colors_panel_layout, null);
+        gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+        gridView.setCacheColorHint(0);
+        gridView.setAdapter(adapter);
+        builder.setView(gridView);
+        final AlertDialog dialog = builder.show();
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                dialog.dismiss();
+                onThemeChosen(position);
+            }
+        });
+    }
+
+    private void onThemeChosen(int position) {
+        PreferencesUtils.getInstance(mContext).setTheme(position);
+        PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(true);
+        recreate();
     }
 
     private void inputMaxLengthRatio() {
@@ -608,9 +654,11 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                         float rMin = Float.valueOf(getString(R.string.note_max_length_min));
                         float rMax = Float.valueOf(getString(R.string.note_max_length_max));
                         if (r >= rMin && r <= rMax) {
-                            preferences.edit().putFloat(getString(R.string.note_max_length_key), r).apply();
+//                            preferences.edit().putFloat(getString(R.string.note_max_length_key), r).apply();
                             maxLengthRatio.setText(ratio);
-                            Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
+                            PreferencesUtils.getInstance(mContext).setMaxLengthRatio(r);
+                            activityNeedRecreate();
                         }
                     }
                 })

@@ -1,6 +1,4 @@
 <resources>
-
-
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -36,5 +34,7 @@
     <dimen name="folder_unit_flag">28dp</dimen>
     <dimen name="password_dialog_padding">20dp</dimen>
     <dimen name="password_dialog_text_size">15sp</dimen>
+    <dimen name="md_simplelist_icon">40dp</dimen>
+    <dimen name="md_dialog_frame_margin">24dp</dimen>
 
 </resources>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/primary_color"
+              android:background="@color/item_background_color"
               android:orientation="vertical">
 
     <ListView
@@ -18,8 +18,4 @@
         android:layout_height="50dp"
         android:orientation="vertical">
     </FrameLayout>
-    <!--<include-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="50dp"-->
-    <!--layout="@layout/footer_folder"/>-->
 </LinearLayout>

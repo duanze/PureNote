@@ -20,7 +20,8 @@
 
     <color name="yellow">#FF9800</color>
     <color name="dark_yellow">#F57C00</color>
-    <color name="accent_yellow">#FF9800</color>
+    <!--<color name="accent_yellow">#FF9800</color>-->
+    <color name="accent_yellow">#ffb61c</color>
 
     <color name="deep_purple">#673AB7</color>
     <color name="dark_deep_purple">#512DA8</color>

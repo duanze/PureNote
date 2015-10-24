@@ -86,6 +86,8 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
         fabButton = (FloatingActionButton) view.findViewById(R.id.fabbutton);
         fabButton.setVisibility(View.GONE);
 
+        // / In this fragment,we don't need it
+        view.findViewById(R.id.refresher).setEnabled(false);
         return view;
     }
 
@@ -129,6 +131,14 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
 
     public void refreshUI() {
         loaderManager.restartLoader(LOADER_ID, null, this);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (null != mAdapter && null != mAdapter.getCursor()) {
+            mAdapter.getCursor().close();
+        }
+        super.onDestroy();
     }
 
     //    The followings are about ActionMode

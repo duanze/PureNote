@@ -30,7 +30,6 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="@string/all_notes"
-            android:textColor="@android:color/white"
             android:textSize="17sp"/>
 
         <TextView
@@ -39,7 +38,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="0"
-            android:textColor="@android:color/white"
             android:textSize="17sp"/>
 
         <CheckBox
