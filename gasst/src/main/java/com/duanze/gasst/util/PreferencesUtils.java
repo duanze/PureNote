@@ -18,6 +18,7 @@ public class PreferencesUtils {
     private int gNotebookId;
     private Theme theme;
     private boolean activityNeedRecreate;
+    private boolean passwordGuard;
 
     private Context mContext;
     private SharedPreferences preferences;
@@ -25,11 +26,12 @@ public class PreferencesUtils {
 
     private static PreferencesUtils sMe;
 
+    // / Theme...
     public enum Theme {
-        DEEP_PURPLE(0),
-        PINK(1),
-        YELLOW(2),
-        GREEN(3);
+        GREEN(0),
+        YELLOW(1),
+        PINK(2),
+        DEEP_PURPLE(3);
 
         private int intValue;
 
@@ -44,13 +46,14 @@ public class PreferencesUtils {
                 }
             }
             // If run here, return default
-            return DEEP_PURPLE;
+            return GREEN;
         }
 
         public int getIntValue() {
             return intValue;
         }
     }
+    // / End
 
     private PreferencesUtils(Context context) {
         mContext = context;
@@ -78,6 +81,7 @@ public class PreferencesUtils {
         theme = Theme.mapValueToTheme(preferences.getInt(mContext.getString(R.string.choose_theme_key), 0));
         activityNeedRecreate = false;
 
+        passwordGuard = preferences.getBoolean(Settings.PASSWORD_GUARD, false);
         gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
         mValid = true;
     }
@@ -169,5 +173,15 @@ public class PreferencesUtils {
     public void setActivityNeedRecreate(boolean activityNeedRecreate) {
         this.activityNeedRecreate = activityNeedRecreate;
         preferences.edit().putBoolean(mContext.getString(R.string.activity_need_recreate), activityNeedRecreate).apply();
+    }
+
+    public boolean isPasswordGuard() {
+        checkValid();
+        return passwordGuard;
+    }
+
+    public void setPasswordGuard(boolean passwordGuard) {
+        this.passwordGuard = passwordGuard;
+        preferences.edit().putBoolean(Settings.PASSWORD_GUARD,passwordGuard).apply();
     }
 }

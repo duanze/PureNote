@@ -65,19 +65,6 @@ public class Note extends BaseActivity {
     private android.support.v7.app.ActionBar actionBar;
     private Calendar today;
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //        umeng
-        MobclickAgent.onPause(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //        umeng
-        MobclickAgent.onResume(this);
-    }
 
     private DatePickerDialog timePickerDialog;
     private DatePickerDialog datePickerDialog;
@@ -109,6 +96,7 @@ public class Note extends BaseActivity {
     private int bookId;
 
     private Context mContext;
+
     /**
      * 设定颜色值的一堆按钮
      */
@@ -289,7 +277,7 @@ public class Note extends BaseActivity {
         }
     }
 
-//    private void initBtns() {
+    //    private void initBtns() {
 //        for (int i = 0; i < 9; i++) {
 //            chooseColorBtns[i] = (Button) findViewById(BTN_ARR[i]);
 //
@@ -319,6 +307,20 @@ public class Note extends BaseActivity {
 //            }
 //        }
 //    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //        umeng
+        MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //        umeng
+        MobclickAgent.onResume(this);
+    }
 
     private void checkDbFlag() {
         if (mode == MODE_EDIT || mode == MODE_SHOW || MODE_TODAY == mode) {
@@ -405,63 +407,6 @@ public class Note extends BaseActivity {
     private boolean changedFolder = false;
     private int tmpGNoteBookId = -1;
 
-    private void showSelectFolderDialog() {
-        View view = getLayoutInflater().inflate(R.layout.dialog_radiogroup, (ViewGroup) getWindow
-                ().getDecorView(), false);
-        final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.rg_dialog);
-        RadioButton purenote = (RadioButton) view.findViewById(R.id.rb_purenote);
-        boolean radioChecked = false;
-        List<GNotebook> list = db.loadGNotebooks();
-        for (final GNotebook gNotebook : list) {
-            RadioButton tempButton = new RadioButton(mContext);
-            tempButton.setText(gNotebook.getName());
-            radioGroup.addView(tempButton, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout
-                    .LayoutParams.WRAP_CONTENT);
-            if (gNotebook.getId() == gNote.getGNotebookId()) {
-                tempButton.setChecked(true);
-                radioChecked = true;
-            }
-
-            tempButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        tmpGNoteBookId = gNotebook.getId();
-                    }
-                }
-            });
-        }
-
-        if (!radioChecked) {
-            purenote.setChecked(true);
-        }
-        purenote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    tmpGNoteBookId = 0;
-                }
-            }
-        });
-
-        final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.action_move)
-                .setView(view).setPositiveButton(R.string.confirm, new DialogInterface
-                        .OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (tmpGNoteBookId != -1) {
-                            dbFlag = DB_UPDATE;
-                            changedFolder = true;
-                        }
-                    }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        changedFolder = false;
-                    }
-                }).create();
-        dialog.show();
-    }
 
     /**
      * 分享按钮

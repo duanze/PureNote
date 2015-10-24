@@ -38,7 +38,6 @@ import java.util.List;
 public class AlarmService extends Service {
     public static final String TAG = "MyService";
 
-
     public static final int NOTHING = -347;
     public static final int DELETE_ALARM = 0;
     public static final int ADD_ALARM = 1;
@@ -49,7 +48,6 @@ public class AlarmService extends Service {
     public static final int RAPID_STOP_EXTRACT = 6;
     public static final int SHOW_OR_HIDE = 7;
 
-
     private GNoteDB db;
     private int cnt;
     private Context mContext;
@@ -57,9 +55,7 @@ public class AlarmService extends Service {
     private Notification notification;
     private SharedPreferences preferences;
 
-
     private boolean isExtract = false;
-
     private String boltOn;
     private String boltOff;
 
@@ -155,13 +151,9 @@ public class AlarmService extends Service {
                 if (isExtract) {
                     ClipData data = cm.getPrimaryClip();
                     ClipData.Item item = data.getItemAt(0);
-                    int extractLocation = preferences.getInt(Settings
-                            .LIGHTNING_EXTRACT_SAVE_LOCATION, 0);
+                    int extractLocation = preferences.getInt(Settings.LIGHTNING_EXTRACT_SAVE_LOCATION, 0);
 
-
-                    String extractGroup = Util.extractNote(preferences, db,
-                            item.getText().toString(),
-                            extractLocation, mContext);
+                    String extractGroup = Util.extractNote(preferences, db, item.getText().toString(), extractLocation, mContext);
                     if (extractGroup != null) {
                         Toast.makeText(getApplicationContext(), getString(R.string.already_extract_to) + extractGroup, Toast.LENGTH_SHORT).show();
                     } else {
@@ -211,7 +203,6 @@ public class AlarmService extends Service {
             LogUtil.i(TAG, "command error");
             stopSelf();
         }
-
 
         return super.onStartCommand(intent, flags, startId);
     }

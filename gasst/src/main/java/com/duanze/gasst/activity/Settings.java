@@ -174,7 +174,8 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         passwordGuard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!preferences.getBoolean(PASSWORD_GUARD, false)) {
+                boolean ans = preferences.getBoolean(PASSWORD_GUARD, false);
+                if (!ans) {
                     showCreatePasswordDialog();
                 } else {
                     showCancelPasswordDialog();
@@ -331,13 +332,11 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                                 true);
                         if (ans.equals(_password) ||
                                 useUniversal && Settings.UNIVERSAL_PASSWORD.equals(_password)) {
-                            preferences.edit()
-                                    .putBoolean(PASSWORD_GUARD, false)
-                                    .apply();
                             setGuardText(false);
-                            Toast.makeText(mContext, "密码保护已停用", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.password_guard_stop, Toast.LENGTH_SHORT).show();
+                            PreferencesUtils.getInstance(mContext).setPasswordGuard(false);
                         } else {
-                            Toast.makeText(mContext, "密码错误", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.password_error, Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -345,8 +344,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                 .create();
 
         dialog.show();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
-                .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     private void showCreatePasswordDialog() {
@@ -368,13 +366,13 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                             preferences.edit()
                                     .putString(PASSWORD, _password)
                                     .putString(PASSWORD_HINT, _hint)
-                                    .putBoolean(PASSWORD_GUARD, true)
                                     .apply();
 
                             setGuardText(true);
-                            Toast.makeText(mContext, "密码保护已启用", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.password_guard_start, Toast.LENGTH_SHORT).show();
+                            PreferencesUtils.getInstance(mContext).setPasswordGuard(true);
                         } else {
-                            Toast.makeText(mContext, "两次输入的密码不一致", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.passwords_differ, Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -612,7 +610,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     private void chooseThemeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(R.string.choose_theme_title);
-        Integer[] res = new Integer[]{R.drawable.deep_purple_round, R.drawable.pink_round, R.drawable.yellow_round, R.drawable.green_round};
+        Integer[] res = new Integer[]{R.drawable.green_round, R.drawable.yellow_round, R.drawable.pink_round, R.drawable.deep_purple_round};
         List<Integer> list = Arrays.asList(res);
         ColorsListAdapter adapter = new ColorsListAdapter(this, list);
         adapter.setCheckItem(ThemeUtils.getCurrentTheme(this).getIntValue());

@@ -214,9 +214,9 @@ public class Util {
      * @param groupId
      */
     public static void extractNoteToDB(Context context, SharedPreferences preferences, GNoteDB db, String str, int groupId) {
-        Calendar cal = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
         GNote gNote = new GNote();
-        gNote.setCalToTime(cal);
+        gNote.setCalToTime(today);
         gNote.setContent(str);
         //needCreate
         gNote.setSynStatus(GNote.NEW);
