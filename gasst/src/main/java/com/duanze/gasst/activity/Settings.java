@@ -610,7 +610,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     private void chooseThemeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(R.string.choose_theme_title);
-        Integer[] res = new Integer[]{R.drawable.green_round, R.drawable.yellow_round, R.drawable.pink_round, R.drawable.deep_purple_round};
+        Integer[] res = new Integer[]{R.drawable.green_round, R.drawable.yellow_round, R.drawable.pink_round, R.drawable.blue_round};
         List<Integer> list = Arrays.asList(res);
         ColorsListAdapter adapter = new ColorsListAdapter(this, list);
         adapter.setCheckItem(ThemeUtils.getCurrentTheme(this).getIntValue());

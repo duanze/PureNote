@@ -19,8 +19,8 @@ public class ThemeUtils {
             case YELLOW:
                 style = R.style.YellowTheme;
                 break;
-            case DEEP_PURPLE:
-                style = R.style.DeepPurpleTheme;
+            case BLUE:
+                style = R.style.BlueTheme;
                 break;
             case PINK:
                 style = R.style.PinkTheme;

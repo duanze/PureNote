@@ -410,18 +410,16 @@ public class Evernote {
             Map<String, Integer> maps = noteCollectionCounts.getNotebookCounts();
             if (maps == null || maps.size() == 0) return;
             int maxCount = maps.get(guid);
-            LogUtil.i(TAG, "-------------服务器端笔记数量：" + maxCount);
+            LogUtil.e(TAG, "-------------服务器端笔记数量：" + maxCount);
             NotesMetadataList list = mEvernoteSession.getClientFactory().createNoteStore()
                     .findNotesMetadata(mEvernoteSession.getAuthToken(), noteFilter, 0, maxCount,
                             notesMetadataResultSpec);
 
             for (int i = 0; i < list.getNotes().size(); i++) {
                 NoteMetadata note = list.getNotes().get(i);
-
                 GNote gNote = db.getGNoteByGuid(note.getGuid());
                 if (gNote != null) {
                     if (gNote.getEditTime() != note.getUpdated()) {
-
                         // 更新数据
                         updateLocalNote(note.getGuid(), gNote);
                     }
@@ -429,9 +427,7 @@ public class Evernote {
                     // 添加数据
                     downloadNote(note.getGuid());
                 }
-
             }
-
         } catch (TTransportException e) {
         } catch (EDAMUserException e) {
         } catch (EDAMSystemException e) {
@@ -496,7 +492,6 @@ public class Evernote {
     public static final int SYNC_SUCCESS = 1000;
 
     class SyncTask extends AsyncTask<Void, Integer, Void> {
-
         Handler mHandler;
         boolean mSyncUp;
         boolean mSyncDown;

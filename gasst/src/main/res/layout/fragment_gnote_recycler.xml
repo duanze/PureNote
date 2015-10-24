@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:orientation="vertical"
              android:layout_width="match_parent"
-             android:layout_height="match_parent">
+             android:layout_height="match_parent"
+             android:orientation="vertical">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_gnotes"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        android:layout_marginLeft="@dimen/rv_margin"
-        android:layout_marginRight="@dimen/rv_margin"
+    <com.duanze.gasst.view.SwipeRefreshLayoutEx
+        android:id="@+id/refresher"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_gnotes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/rv_margin"
+            android:paddingRight="@dimen/rv_margin"
+            android:overScrollMode="never"
+            android:scrollbars="none"/>
+    </com.duanze.gasst.view.SwipeRefreshLayoutEx>
 
     <com.faizmalkani.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabbutton"

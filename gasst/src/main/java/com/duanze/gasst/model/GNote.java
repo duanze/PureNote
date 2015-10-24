@@ -268,6 +268,11 @@ public class GNote implements Parcelable {
         gNote.createdTime = note.getCreated();
         gNote.editTime = note.getUpdated();
 
+        parseTime(note, gNote);
+        return gNote;
+    }
+
+    private static void parseTime(Note note, GNote gNote) {
         boolean setTime = false;
         String title = note.getTitle();
         String[] tmp = title.split(" ");
@@ -282,7 +287,6 @@ public class GNote implements Parcelable {
             Calendar today = Calendar.getInstance();
             gNote.setCalToTime(today);
         }
-        return gNote;
     }
 
     public Note toDeleteNote() {

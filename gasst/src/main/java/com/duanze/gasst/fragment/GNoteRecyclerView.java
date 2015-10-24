@@ -5,13 +5,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -27,15 +27,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.duanze.gasst.activity.BaseActivity;
 import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
-import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.adapter.GNoteRVAdapter;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.util.PreferencesUtils;
+import com.duanze.gasst.view.SwipeRefreshLayoutEx;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -48,10 +49,9 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     public static final String TAG = GNoteRecyclerView.class.getSimpleName();
 
     private static final int LOADER_ID = 113;
-    //MODE_LIST相关
     private Context mContext;
     private LoaderManager loaderManager;
-
+    private SwipeRefreshLayoutEx refreshLayout;
     //nice FloatingButton
     private FloatingActionButton fabButton;
     private GNoteRVAdapter mAdapter;
@@ -93,6 +93,9 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         });
         fabButton.listenTo(recyclerView);
 
+        refreshLayout = (SwipeRefreshLayoutEx) view.findViewById(R.id.refresher);
+        refreshLayout.setColorSchemeColors(((StartActivity) mContext).getColorPrimary());
+        refreshLayout.setOnRefreshListener((StartActivity) mContext);
         return view;
     }
 
@@ -130,7 +133,27 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         loaderManager.restartLoader(LOADER_ID, null, this);
     }
 
-    //    The followings are about ActionMode
+    public SwipeRefreshLayoutEx getRefreshLayout() {
+        return refreshLayout;
+    }
+
+    public boolean setRefresherEnabled(boolean b) {
+        if (null == refreshLayout) {
+            return false;
+        }
+        refreshLayout.setEnabled(b);
+        return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (null != mAdapter && null != mAdapter.getCursor()) {
+            mAdapter.getCursor().close();
+        }
+        super.onDestroy();
+    }
+
+    // / The followings are about ActionMode
     private Menu mContextMenu;
     private int tmpGNoteBookId;
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -169,6 +192,8 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
             mActionMode = null;
             mContextMenu = null;
             mAdapter.setCheckMode(false);
+
+            setRefresherEnabled(true);
         }
 
         @Override
@@ -179,6 +204,8 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
             mContextMenu = menu;
             updateActionMode();
+
+            setRefresherEnabled(false);
             return false;
         }
 

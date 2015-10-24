@@ -21,6 +21,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
@@ -33,7 +34,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -59,6 +59,7 @@ import com.duanze.gasst.util.PreferencesUtils;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
+import com.duanze.gasst.view.SwipeRefreshLayoutEx;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
@@ -76,7 +77,7 @@ import java.util.TimerTask;
 
 public class StartActivity extends BaseActivity implements Evernote.EvernoteLoginCallback,
         FooterInterface, LoaderManager.LoaderCallbacks<Cursor>, GNotebookAdapter.ItemLongPressedListener,
-        GNotebookAdapter.OnItemSelectListener, GNotebookAdapter.OnItemClickListener {
+        GNotebookAdapter.OnItemSelectListener, GNotebookAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "StartActivity";
 
@@ -116,7 +117,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
     //    loader化
     private final int NOTEBOOK_LOADER_ID = 112;
-    private GNotebookAdapter mAdapter;
+    private GNotebookAdapter gNotebookAdapter;
     private LoaderManager loaderManager;
 
     private CharSequence mDrawerTitle;
@@ -134,13 +135,15 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
     private void loginNow() {
         if (null == bindItem) return;
         bindItem.setTitle(R.string.syn_evernote);
-//        bindItem.setIcon(R.drawable.flags);
+
+        gNoteRecyclerView.setRefresherEnabled(true);
     }
 
     private void logoutNow() {
         if (null == bindItem) return;
         bindItem.setTitle(R.string.bind_evernote);
-//        bindItem.setIcon(R.drawable.evernote);
+
+        gNoteRecyclerView.setRefresherEnabled(false);
     }
 
     @Override
@@ -166,14 +169,14 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         if (Folder.MODE_FOOTER == modeFooter) {
             modeFooter = Folder.MODE_FOOTER_DELETE;
 //            showCheckBox();
-            if (null != mAdapter) {
-                mAdapter.setCheckMode(true);
+            if (null != gNotebookAdapter) {
+                gNotebookAdapter.setCheckMode(true);
             }
         } else if (Folder.MODE_FOOTER_DELETE == modeFooter) {
             modeFooter = Folder.MODE_FOOTER;
 //            hideCheckBox();
-            if (null != mAdapter) {
-                mAdapter.setCheckMode(false);
+            if (null != gNotebookAdapter) {
+                gNotebookAdapter.setCheckMode(false);
             }
         }
         setFooter();
@@ -185,7 +188,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
             showCreateFolderDialog();
         } else if (Folder.MODE_FOOTER_DELETE == modeFooter) {
             if (getDeleteNum() > 0) {
-//                mAdapter.deleteItems();
+//                gNotebookAdapter.deleteItems();
                 trash();
                 updateDeleteNum();
             }
@@ -201,12 +204,12 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
+        gNotebookAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+        gNotebookAdapter.swapCursor(null);
     }
 
     @Override
@@ -265,6 +268,11 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
     public void onCancelSelect() {
 //        意义并不是很明确的复用
         updateDeleteNum();
+    }
+
+    @Override
+    public void onRefresh() {
+        mEvernote.sync(true, true, new SyncHandler());
     }
 
     private class MyDatePickerListener implements OnDateSetListener {
@@ -507,7 +515,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                         //快写存储位置
                         int quickId = preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0);
 
-                        HashMap<Integer, GNotebook> map = mAdapter.getCheckedItems();
+                        HashMap<Integer, GNotebook> map = gNotebookAdapter.getCheckedItems();
                         if (null == map || 0 == map.size()) {
                             return;
                         } else {
@@ -530,12 +538,12 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                                     changeToBook(oldId, newId);
                                 }
 
-                                mAdapter.deleteGNotebook(gNotebook);
+                                gNotebookAdapter.deleteGNotebook(gNotebook);
                             }
 
 //这种做法是不对的，因为设计缺陷，处理变得极为复杂，今后还是要统一数据，统一处理
 //                            map = null;
-                            mAdapter.destroyCheckedItems();
+                            gNotebookAdapter.destroyCheckedItems();
 
                         }
                         changeFooter();
@@ -665,8 +673,8 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
     @Override
     public int getDeleteNum() {
-        if (null == mAdapter) return 0;
-        return mAdapter.getSelectedCount();
+        if (null == gNotebookAdapter) return 0;
+        return gNotebookAdapter.getSelectedCount();
     }
 
     private FolderFooter footer;
@@ -694,7 +702,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                         actionBar.setTitle(R.string.recycle_bin);
                     }
                 }
-
                 isDrawerOpened = false;
                 invalidateOptionsMenu();
             }
@@ -705,15 +712,13 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                 if (null != actionBar) {
                     actionBar.setTitle(mDrawerTitle);
                 }
-
-                if (null != mAdapter) {
-                    mAdapter.setCheckMode(false);
+                if (null != gNotebookAdapter) {
+                    gNotebookAdapter.setCheckMode(false);
                 }
                 loaderManager.restartLoader(NOTEBOOK_LOADER_ID, null, StartActivity.this);
 //                refreshFolderList();
                 modeFooter = Folder.MODE_FOOTER;
                 setFooter();
-
                 isDrawerOpened = true;
                 invalidateOptionsMenu();
             }
@@ -729,9 +734,8 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         }
 
         folderListView = (ListView) findViewById(R.id.lv_folder);
-        mAdapter = new GNotebookAdapter(mContext, null, 0, this, this, this);
-        mAdapter.setPreferences(preferences);
-        folderListView.setAdapter(mAdapter);
+        gNotebookAdapter = new GNotebookAdapter(mContext, null, 0, this, this, this);
+        folderListView.setAdapter(gNotebookAdapter);
 
         loaderManager = getSupportLoaderManager();
         loaderManager.initLoader(NOTEBOOK_LOADER_ID, null, this);
@@ -1104,7 +1108,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         }
 
         rateForPureNote();
-        //        umeng
+        // / umeng
         MobclickAgent.onResume(this);
 
         boolean needRecreate = PreferencesUtils.getInstance(mContext).isActivityNeedRecreate();
@@ -1188,7 +1192,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 //            if (null != gNoteList) {
 //                gNoteList.refreshUI();
 //            }
-
             if (null != gNoteRecyclerView) {
                 gNoteRecyclerView.refreshUI();
             }
@@ -1235,6 +1238,9 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
     @Override
     protected void onDestroy() {
+//        if (null != gNotebookAdapter && null != gNotebookAdapter.getCursor()) {
+//            gNotebookAdapter.getCursor().close();
+//        }
         super.onDestroy();
     }
 
@@ -1309,7 +1315,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
             });
 
         }
-
         return true;
     }
 
@@ -1388,10 +1393,10 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
             super.handleMessage(msg);
             switch (msg.what) {
                 case Evernote.SYNC_START:
-                    showProgressBar();
+                    setRefreshing(true);
                     break;
                 case Evernote.SYNC_END:
-                    hideProgressBar();
+                    setRefreshing(false);
                     break;
                 case UPGRADE_START:
                     showDialog(OPERATE);
@@ -1405,21 +1410,33 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         }
     }
 
-    public void hideProgressBar() {
-        findViewById(R.id.pb_blue).setVisibility(View.GONE);
+    private void setRefreshing(boolean b) {
+        if (null == gNoteRecyclerView || !gNoteRecyclerView.isVisible()) return;
+        SwipeRefreshLayoutEx refreshLayout = gNoteRecyclerView.getRefreshLayout();
+        refreshLayout.setRefreshing(b);
+
+        if (b) {
+            refreshLayout.setEnabled(false);
+        } else {
+            refreshLayout.setEnabled(true);
+        }
     }
 
-    public void showProgressBar() {
-        findViewById(R.id.pb_blue).setVisibility(View.VISIBLE);
-    }
-
-    public void removeDialog() {
-        removeDialog(DIALOG_PROGRESS);
-    }
-
-    public void showDialog() {
-        showDialog(DIALOG_PROGRESS);
-    }
+//    public void hideProgressBar() {
+//        findViewById(R.id.pb_blue).setVisibility(View.GONE);
+//    }
+//
+//    public void showProgressBar() {
+//        findViewById(R.id.pb_blue).setVisibility(View.VISIBLE);
+//    }
+//
+//    public void removeDialog() {
+//        removeDialog(DIALOG_PROGRESS);
+//    }
+//
+//    public void showDialog() {
+//        showDialog(DIALOG_PROGRESS);
+//    }
 
     /**
      * Called when the control returns from an activity that we launched.
@@ -1434,5 +1451,4 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                 break;
         }
     }
-
 }

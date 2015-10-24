@@ -19,6 +19,7 @@ public class PreferencesUtils {
     private Theme theme;
     private boolean activityNeedRecreate;
     private boolean passwordGuard;
+    private int notesNum;
 
     private Context mContext;
     private SharedPreferences preferences;
@@ -26,12 +27,13 @@ public class PreferencesUtils {
 
     private static PreferencesUtils sMe;
 
+
     // / Theme...
     public enum Theme {
         GREEN(0),
         YELLOW(1),
         PINK(2),
-        DEEP_PURPLE(3);
+        BLUE(3);
 
         private int intValue;
 
@@ -83,6 +85,7 @@ public class PreferencesUtils {
 
         passwordGuard = preferences.getBoolean(Settings.PASSWORD_GUARD, false);
         gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+        notesNum = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 3);
         mValid = true;
     }
 
@@ -182,6 +185,16 @@ public class PreferencesUtils {
 
     public void setPasswordGuard(boolean passwordGuard) {
         this.passwordGuard = passwordGuard;
-        preferences.edit().putBoolean(Settings.PASSWORD_GUARD,passwordGuard).apply();
+        preferences.edit().putBoolean(Settings.PASSWORD_GUARD, passwordGuard).apply();
+    }
+
+    public int getNotesNum() {
+        checkValid();
+        return notesNum;
+    }
+
+    public void setNotesNum(int notesNum) {
+        this.notesNum = notesNum;
+        preferences.edit().putInt(Settings.PURENOTE_NOTE_NUM, notesNum).apply();
     }
 }

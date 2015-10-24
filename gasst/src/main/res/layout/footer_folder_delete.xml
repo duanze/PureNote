@@ -19,7 +19,6 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:text="@string/folder_cancel"
-            android:textColor="@android:color/white"
             />
     </com.balysv.materialripple.MaterialRippleLayout>
 

@@ -12,6 +12,22 @@
         <!--<item name="popupMenuStyle">@style/popupMenuStyle</item>-->
         <!--<item name="popupTheme">@style/popupTheme</item>-->
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
+
+        <!-- Customize your theme here. -->
+
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/white</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/white</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated
+             which is used to tint widgets -->
+        <item name="colorAccent">@color/white</item>
+
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight & colorSwitchThumbNormal. -->
+        <item name="colorControlActivated">?attr/colorPrimary</item>
     </style>
 
     <style name="AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
@@ -37,12 +53,6 @@
         <item name="android:textColorSecondary">@color/text_second_color_primary</item>
         <item name="android:windowEnterAnimation">@anim/abc_fade_in</item>
         <item name="android:windowExitAnimation">@anim/abc_fade_out</item>
-    </style>
-
-    <style name="WhiteCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@android:color/darker_gray</item>
-        <item name="colorAccent">@android:color/black</item>
     </style>
 
     <style name="YellowTheme" parent="AppTheme">
@@ -95,6 +105,17 @@
         <item name="colorAccent">@color/accent_green</item>
     </style>
 
+    <style name="BlueTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/dark_blue</item>
+        <item name="colorAccent">@color/accent_blue</item>
+    </style>
+
+    <style name="BlueDialogTheme" parent="BaseDialogTheme">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/dark_blue</item>
+        <item name="colorAccent">@color/accent_blue</item>
+    </style>
 
     <!-- Application theme. -->
     <style name="PureNoteTheme" parent="android:Theme.Light"></style>

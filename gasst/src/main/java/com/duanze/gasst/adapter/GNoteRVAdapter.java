@@ -71,6 +71,10 @@ public class GNoteRVAdapter extends RecyclerView.Adapter<GNoteRVAdapter.GNoteIte
         mItemLongPressedListener = itemLongPressedListener;
     }
 
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
     /**
      * Swap in a new Cursor, returning the old Cursor.  Unlike
      * {@link #changeCursor(Cursor)}, the returned old Cursor is <em>not</em>

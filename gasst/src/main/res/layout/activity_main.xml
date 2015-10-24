@@ -16,13 +16,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/pb_blue"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:indeterminateDrawable="@drawable/ic_progress_indeterminate"
-                android:visibility="gone"/>
-
             <include layout="@layout/toolbar_shadow_layout"/>
 
             <FrameLayout

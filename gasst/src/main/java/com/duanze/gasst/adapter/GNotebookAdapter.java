@@ -22,13 +22,14 @@ import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.provider.GNoteProvider;
 import com.duanze.gasst.util.GNotebookUtil;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.PreferencesUtils;
 import com.duanze.gasst.util.ProviderUtil;
 
 import java.util.HashMap;
 import java.util.Set;
 
-public class GNotebookAdapter extends CursorAdapter implements View.OnClickListener, View
-        .OnLongClickListener, CompoundButton.OnCheckedChangeListener {
+public class GNotebookAdapter extends CursorAdapter implements View.OnClickListener,
+        View.OnLongClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = GNotebookAdapter.class.getSimpleName();
 
     public static final int SPECIAL_ITEM_NUM = 1;
@@ -38,7 +39,6 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
     private ItemLongPressedListener mItemLongPressedListener;
     private OnItemSelectListener mOnItemSelectListener;
     private OnItemClickListener mOnItemClickListener;
-    private SharedPreferences preferences;
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -59,7 +59,6 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
     }
 
     public void checkBoxChanged(int _id, GNotebook gNotebook, boolean isChecked) {
-
         if (isChecked) {
             mCheckedItems.put(_id, gNotebook);
 
@@ -89,10 +88,6 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
 
     public interface OnItemClickListener {
         void onItemClick(View view);
-    }
-
-    public void setPreferences(SharedPreferences preferences) {
-        this.preferences = preferences;
     }
 
     public void setItemLongPressedListener(ItemLongPressedListener mItemLongPressedListener) {
@@ -125,6 +120,10 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
                             OnItemClickListener onItemClickListener) {
         this(context, c, flags, itemLongPressedListener, onItemSelectListener);
         mOnItemClickListener = onItemClickListener;
+    }
+
+    public Cursor getCursor() {
+        return mCursor;
     }
 
     public HashMap<Integer, GNotebook> getCheckedItems() {
@@ -179,12 +178,8 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
     }
 
     private void bindFirstView(View mView) {
-        if (null == preferences) {
-            LogUtil.e(TAG, "Error in bindFirstView,null==preferences!!!");
-            return;
-        }
-        int bookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
-        int notesNum = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
+        int bookId = PreferencesUtils.getInstance(mContext).getGNotebookId();
+        int notesNum = PreferencesUtils.getInstance(mContext).getNotesNum();
         if (0 == bookId) {
 //            mHolder.flag.setVisibility(View.VISIBLE);
             mHolder.itemLayout.setBackgroundResource(R.drawable.abc_list_pressed_holo_dark);
@@ -343,9 +338,7 @@ public class GNotebookAdapter extends CursorAdapter implements View.OnClickListe
             } while (cursor.moveToNext());
 
 //        针对 所有笔记 减少数目
-            if (null != preferences) {
-                GNotebookUtil.updateGNotebook(mContext, 0, -cursor.getCount());
-            }
+            GNotebookUtil.updateGNotebook(mContext, 0, -cursor.getCount());
         }
 
         if (null != cursor) {

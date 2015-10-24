@@ -55,12 +55,18 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public int getStatusBarColor() {
-        return getColorPrimary();
+        return getColorPrimaryDark();
+    }
+
+    public int getColorPrimaryDark() {
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+        return typedValue.data;
     }
 
     public int getColorPrimary() {
         TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         return typedValue.data;
     }
 

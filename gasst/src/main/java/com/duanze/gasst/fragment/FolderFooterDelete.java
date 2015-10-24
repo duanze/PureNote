@@ -59,7 +59,7 @@ public class FolderFooterDelete extends Fragment {
         if (n == 0) {
             folderNum.setTextColor(getResources().getColor(R.color.grey));
         } else {
-            folderNum.setTextColor(getResources().getColor(android.R.color.white));
+            folderNum.setTextColor(getResources().getColor(R.color.red));
         }
     }
 }
