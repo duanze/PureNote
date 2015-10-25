@@ -6,16 +6,16 @@
               android:orientation="vertical">
 
     <!--<View-->
-        <!--android:id="@+id/divide_line"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1px"-->
-        <!--android:background="@color/divider_line_color"/>-->
+    <!--android:id="@+id/divide_line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1px"-->
+    <!--android:background="@color/divider_line_color"/>-->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:text="@string/app_name"
         android:textColor="@android:color/white"
         android:textSize="34sp"/>
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         app:mrl_rippleOverlay="true">
 
         <Button
@@ -105,6 +105,26 @@
             android:text="@string/title_activity_license"
             android:textColor="?attr/colorPrimary"
 
+            android:textSize="@dimen/category_text_size"/>
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+    <com.balysv.materialripple.MaterialRippleLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="14dp"
+        app:mrl_rippleOverlay="true">
+
+        <Button
+            android:id="@+id/btn_github"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_button_background"
+            android:text="@string/github_repository"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorPrimary"
             android:textSize="@dimen/category_text_size"/>
     </com.balysv.materialripple.MaterialRippleLayout>
 

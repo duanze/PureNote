@@ -195,8 +195,8 @@ public class Note extends BaseActivity {
                     public void onGlobalLayout() {
                         int rootHeight = scroll.getRootView().getHeight();
                         int heightDiff = rootHeight - scroll.getHeight();
-                        Log.e(TAG, "getRootView().getHeight() = " + rootHeight);
-                        Log.e(TAG, "rootLayout.getHeight() = " + scroll.getHeight());
+//                        Log.e(TAG, "getRootView().getHeight() = " + rootHeight);
+//                        Log.e(TAG, "rootLayout.getHeight() = " + scroll.getHeight());
 
                         if (heightDiff > 0.33 * rootHeight) { // 说明键盘是弹出状态
                             hideToolbar();
@@ -502,7 +502,7 @@ public class Note extends BaseActivity {
             //如果是移动文件，不加不减
             if (isMove) return;
             int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
-            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + diff).apply();
+            PreferencesUtils.getInstance(mContext).setNotesNum(cnt + diff);
         } else {
             GNotebook gNotebook = db.getGNotebookById(id);
             int num = gNotebook.getNotesNum();

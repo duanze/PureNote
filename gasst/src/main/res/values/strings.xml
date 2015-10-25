@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="github_repository">My GitHub</string>
+    
     <string name="word_count">字数统计</string>
     <string name="characters_no_spaces">字符数（不包含空格）：</string>
     <string name="characters_without_spaces">字符数（包含空格）：</string>
@@ -186,7 +188,7 @@
 
     <string name="login_evernote">同步至EverNote</string>
     <string name="logout_evernote">%1$s\u0020退出登录</string>
-    
+
     <string name="activity_need_recreate">activity_need_recreate</string>
 
     <string name="choose_theme_title">设置主题</string>

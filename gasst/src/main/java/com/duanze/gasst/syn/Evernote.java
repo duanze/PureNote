@@ -12,6 +12,7 @@ import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.util.LogUtil;
+import com.duanze.gasst.util.PreferencesUtils;
 import com.duanze.gasst.util.ProviderUtil;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.InvalidAuthenticationException;
@@ -228,7 +229,7 @@ public class Evernote {
     private void deleteGNote(GNote gNote) {
 //        db.deleteGNote(gNote.getId());
         gNote.setSynStatus(GNote.NOTHING);
-        ProviderUtil.updateGNote(mContext,gNote);
+        ProviderUtil.updateGNote(mContext, gNote);
     }
 
     private Note createNote(GNote gNote) throws Exception {
@@ -334,18 +335,18 @@ public class Evernote {
         updateGNotebook(0, +1);
     }
 
-    private void updateGNotebook(int id, int value) {
+    private void updateGNotebook(int id, int diff) {
         if (id == 0) {
             int cnt = mSharedPreferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
-            mSharedPreferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).commit();
+            PreferencesUtils.getInstance(mContext).setNotesNum(cnt + diff);
         } else {
             List<GNotebook> gNotebooks = db.loadGNotebooks();
             for (GNotebook gNotebook : gNotebooks) {
                 if (gNotebook.getId() == id) {
                     int cnt = gNotebook.getNotesNum();
-                    gNotebook.setNotesNum(cnt + value);
+                    gNotebook.setNotesNum(cnt + diff);
 //                    db.updateGNotebook(gNotebook);
-                    ProviderUtil.updateGNotebook(mContext,gNotebook);
+                    ProviderUtil.updateGNotebook(mContext, gNotebook);
                     break;
                 }
             }

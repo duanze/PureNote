@@ -33,7 +33,7 @@ public class About extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_about);
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        if (null!=actionBar) {
+        if (null != actionBar) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -49,6 +49,7 @@ public class About extends BaseActivity implements View.OnClickListener {
         donate.setOnClickListener(this);
 
         findViewById(R.id.btn_licenses).setOnClickListener(this);
+        findViewById(R.id.btn_github).setOnClickListener(this);
     }
 
 
@@ -78,7 +79,16 @@ public class About extends BaseActivity implements View.OnClickListener {
             case R.id.btn_licenses:
                 Licenses.actionStart(mContext);
                 break;
+            case R.id.btn_github:
+                goMyGitHub();
+                break;
         }
+    }
+
+    private void goMyGitHub() {
+        Uri uri = Uri.parse("https://github.com/duanze/PureNote");
+        Intent it = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(it);
     }
 
 

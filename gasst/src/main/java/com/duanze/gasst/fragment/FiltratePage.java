@@ -135,9 +135,9 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onDestroy() {
-        if (null != mAdapter && null != mAdapter.getCursor()) {
-            mAdapter.getCursor().close();
-        }
+//        if (null != mAdapter && null != mAdapter.getCursor()) {
+//            mAdapter.getCursor().close();
+//        }
         super.onDestroy();
     }
 

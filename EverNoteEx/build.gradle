@@ -20,7 +20,7 @@ android {
 //    compileSdkVersion rootProject.compileSdkVersion
     compileSdkVersion 22
 //    buildToolsVersion rootProject.buildToolsVersion
-    buildToolsVersion '22.0.1'
+    buildToolsVersion '23.0.1'
 
     lintOptions {  
       abortOnError false  

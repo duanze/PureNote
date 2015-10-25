@@ -1118,7 +1118,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         }
     }
 
-    private void uiOperation() {
+    public void uiOperation() {
         //evernote
         if (bindItem != null) {
             if (mEvernote.isLogin()) {

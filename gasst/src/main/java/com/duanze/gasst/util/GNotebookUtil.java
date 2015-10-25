@@ -12,17 +12,17 @@ import com.duanze.gasst.model.GNotebook;
  */
 public class GNotebookUtil {
 
-    public static void updateGNotebook(Context context, int id, int diff) {
+    public static void updateGNotebook(Context mContext, int id, int diff) {
         if (id == 0) {
-            SharedPreferences preferences = PreferencesUtils.getInstance(context).getPreferences();
+            SharedPreferences preferences = PreferencesUtils.getInstance(mContext).getPreferences();
             int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
-            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + diff).apply();
+            PreferencesUtils.getInstance(mContext).setNotesNum(cnt + diff);
         } else {
-            GNoteDB db = GNoteDB.getInstance(context);
+            GNoteDB db = GNoteDB.getInstance(mContext);
             GNotebook gNotebook = db.getGNotebookById(id);
             int num = gNotebook.getNotesNum();
             gNotebook.setNotesNum(num + diff);
-            ProviderUtil.updateGNotebook(context, gNotebook);
+            ProviderUtil.updateGNotebook(mContext, gNotebook);
         }
     }
 }

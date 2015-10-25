@@ -147,9 +147,9 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onDestroy() {
-        if (null != mAdapter && null != mAdapter.getCursor()) {
-            mAdapter.getCursor().close();
-        }
+//        if (null != mAdapter && null != mAdapter.getCursor()) {
+//            mAdapter.getCursor().close();
+//        }
         super.onDestroy();
     }
 
@@ -186,6 +186,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         @Override
         public void onDestroyActionMode(ActionMode arg0) {
             ((StartActivity) mContext).unlockDrawerLock();
+            ((StartActivity) mContext).uiOperation();
 
             showFAB();
 
@@ -193,7 +194,6 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
             mContextMenu = null;
             mAdapter.setCheckMode(false);
 
-            setRefresherEnabled(true);
         }
 
         @Override
