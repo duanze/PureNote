@@ -4,8 +4,14 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>~~See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)~~暂停更新<br>
 [小米应用商店](http://app.mi.com/detail/85433)
 #一切皆为虚妄
--
+-[Notes](https://github.com/lguipeng/Notes)
+
 #更新历史
+v2.2.1<br>
+比较趋近完善。
+
+
+
 v2.1.8<br>
 新功能：回收站<br>
 现在，可以通过长按来重命名笔记分组<br>
@@ -116,4 +122,5 @@ v1.2<br>
 <br>daimajia,[EverMemo](https://github.com/daimajia/EverMemo)
 <br>flavienlaurent，[DateTimePicker](https://github.com/flavienlaurent/datetimepicker)
 <br>FaizMalkani，[FloatingActionButton](https://github.com/ FaizMalkani/FloatingActionButton)
-<br> baoyongzhang，[SwipeMenuListView](https://github.com/baoyongzhang/SwipeMenuListView)
+<br>baoyongzhang，[SwipeMenuListView](https://github.com/baoyongzhang/SwipeMenuListView)
+<br>lguipeng，[Notes](https://github.com/lguipeng/Notes)
