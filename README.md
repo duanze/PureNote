@@ -4,11 +4,34 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>~~See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)~~暂停更新<br>
 [小米应用商店](http://app.mi.com/detail/85433)
 #一切皆为虚妄
--[Notes](https://github.com/lguipeng/Notes)
+-声明：虽然肉眼看上去跟这个项目[Notes](https://github.com/lguipeng/Notes)极为相似，但实现原理上其实完全不同，见码即知
+<br>另外，虽然撞名了，但本项目其实很久很久以前就开始了……
+<br>-本质上，这是本人学会新知识后进行实践的第一场所，也正是因为这点，迭代了非常多次，废弃代码占据了相当比例（一些代码风格迥异请见谅）
+<br>
+<br>对于Android新手来说，这份代码的价值有：
+<br>-所涵盖知识点较为全面，完全读懂这份代码，国产教材可以丢了
+<br>-纯原生写法，易读————相对于使用各种框架、lambda表达式、各种基类继承的项目来说（嘛，其实是自己太懒，没把这份代码往高大上的路数去整）
+
+
+<br>-知识点细目：
+<br>+[stormzhang](http://www.stormzhang.com/)分享的Toolbar适配方案使用实例
+<br>+[Notes](https://github.com/lguipeng/Notes)中的Material Design风格，只用v7包就可轻松实现哦
+<br>+Loader加载器的使用，这个自带观察者回调的组件简直碉堡，有了它，再也不用写Observer了，如果Google能把Dialer中那套老得掉渣的数据加载换成这套，我的工作会轻松数倍吧
+<br>+仿[易写](http://app.mi.com/detail/97233?ref=search)的监听软键盘弹出消隐Toolbar效果
+<br>+RecyclerView轻松实现瀑布流，令RecyclerView.Adapter使用Cursor数据集以方便匹配Loader
+<br>+AlarmManager全操作
+<br>+自定义Notification，RemoteViews的使用
+<br>+如何手搓一个Material风格的Preference设置页面，其优点是可自定义空间大（真相是，我在刚开始做设置页时，还未知晓存在PreferenceActivity这种东西...）
+<br>+更多细节还请自行[下载](http://app.mi.com/detail/85433)（可能还未过审）感受
+
+<br>构建环境：
+<br>-Gradle 1.3.0
+<br>-Sdk 22
+<br>-buildtool 23.0.1
 
 #更新历史
 v2.2.1<br>
-比较趋近完善。
+渐趋完善。
 
 
 
@@ -124,3 +147,7 @@ v1.2<br>
 <br>FaizMalkani，[FloatingActionButton](https://github.com/ FaizMalkani/FloatingActionButton)
 <br>baoyongzhang，[SwipeMenuListView](https://github.com/baoyongzhang/SwipeMenuListView)
 <br>lguipeng，[Notes](https://github.com/lguipeng/Notes)
+
+#关于我
+某大2015届软工本科，现居上海，就职于手机行业某公司，通讯组Telephony应用层码农，入职即跟进高压X为项目（这一点跟早前X泰不幸英年高逝的清华哥雷同），目前最大心愿为每天能按时上下班-_-||
+<br>mail:ggigfe347@gmail.com
