@@ -19,6 +19,8 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>+[Notes](https://github.com/lguipeng/Notes)中的Material Design风格，只用v7包就可轻松实现哦
 <br>+Loader加载器的使用，这个自带观察者回调的组件简直碉堡，有了它，再也不用写Observer了，如果Google能把Dialer中那套老得掉渣的数据加载换成这套，我的工作会轻松数倍吧
 <br>+仿[易写](http://app.mi.com/detail/97233?ref=search)的监听软键盘弹出消隐Toolbar效果
+<br>![](https://github.com/duanze/PureNote/blob/master/app_asset/pure.gif)
+<br>
 <br>+RecyclerView轻松实现瀑布流，令RecyclerView.Adapter使用Cursor数据集以方便匹配Loader
 <br>+AlarmManager全操作
 <br>+自定义Notification，RemoteViews的使用
@@ -31,7 +33,11 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>-buildtool 23.0.1
 
 #效果展示
-![](http://github.com/duanze/PureNote/app_asset/Screenshot_2015-10-25-21-01-44.png)
+![](https://github.com/duanze/PureNote/blob/master/app_asset/Screenshot_2015-10-25-21-01-44.png)
+![](https://github.com/duanze/PureNote/blob/master/app_asset/Screenshot_2015-10-25-21-02-10.png)
+![](https://github.com/duanze/PureNote/blob/master/app_asset/Screenshot_2015-10-25-21-15-00.png)
+![](https://github.com/duanze/PureNote/blob/master/app_asset/Screenshot_2015-10-25-21-15-16.png)
+
 <!--
 #更新历史
 v2.2.1<br>
