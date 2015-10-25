@@ -30,6 +30,9 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>-Sdk 22
 <br>-buildtool 23.0.1
 
+#效果展示
+![](http://github.com/duanze/PureNote/app_asset/Screenshot_2015-10-25-21-01-44.png)
+<!--
 #更新历史
 v2.2.1<br>
 渐趋完善。
@@ -141,6 +144,7 @@ v1.2<br>
 1.更改UI呈现，优化多重事件响应<br>
 2.重写天气同步模块，多处icon重制<br>
 3.修正定时提醒失效等若干bug<br>
+-->
 #Special Thanks
 [PixelLove](http://www.pixellove.com/)
 <br>daimajia,[EverMemo](https://github.com/daimajia/EverMemo)
