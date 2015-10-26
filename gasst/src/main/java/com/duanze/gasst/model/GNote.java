@@ -252,16 +252,18 @@ public class GNote implements Parcelable {
 
     public void setContentFromNote(Note note) {
         String content = Html.fromHtml(note.getContent()).toString();
-        int length = content.length();
-        this.content = content.substring(0, length - 2);//去除掉最后的两个换行符-_-||
+//        int length = content.length();
+//        this.content = content.substring(0, length - 2);//去除掉最后的两个换行符-_-||
+        this.content = content.replace("\n\n", "\n");
     }
 
     public static GNote parseFromNote(Note note) {
         GNote gNote = new GNote();
 
         String content = Html.fromHtml(note.getContent()).toString();
-        int length = content.length();
-        gNote.content = content.substring(0, length - 2);//去除掉最后的两个换行符-_-||
+//        int length = content.length();
+//        gNote.content = content.substring(0, length - 2);//去除掉最后的两个换行符-_-||
+        gNote.content = content.replace("\n\n", "\n");
 
         gNote.guid = note.getGuid();
         gNote.bookGuid = note.getNotebookGuid();
