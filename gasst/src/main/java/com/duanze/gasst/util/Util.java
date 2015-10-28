@@ -139,6 +139,24 @@ public class Util {
 //                + Util.twoDigit(day);
     }
 
+    public static int[] parseDateFromGNote(GNote gNote) {
+        int[] date = new int[3];
+        String[] allInfo = gNote.getTime().split(",");
+        if (allInfo.length == 3) {
+            date[0] = Integer.parseInt(allInfo[0]);
+            date[1] = Integer.parseInt(allInfo[1]);
+            date[2] = Integer.parseInt(allInfo[2]);
+        }
+
+        if (11 < date[1] || date[1] < 0) {
+            date[1] = 0;
+        }
+        if (31 < date[2] || date[2] < 1) {
+            date[2] = 1;
+        }
+        return date;
+    }
+
     /**
      * 随机设置fab背景色
      */

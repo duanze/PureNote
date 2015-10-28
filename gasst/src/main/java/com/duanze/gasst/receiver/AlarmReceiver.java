@@ -33,7 +33,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         gNote.setIsPassed(GNote.TRUE);
 //        GNoteDB db = GNoteDB.getInstance(context);
 //        db.updateGNote(gNote);
-        ProviderUtil.updateGNote(context,gNote);
+        ProviderUtil.updateGNote(context, gNote);
 
         int no = intent.getIntExtra("no", 0);
         LogUtil.i("receiver", "no:" + no);
@@ -49,8 +49,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentTitle(Util.timeString(gNote))
                 .setContentText(Html.fromHtml(gNote.getContent()))
                 .setSmallIcon(R.drawable.small_logo)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.notebook))
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.notebook))
                 .setTicker(Html.fromHtml(gNote.getContent()))
                 .setContentIntent(pi)
                 .build();

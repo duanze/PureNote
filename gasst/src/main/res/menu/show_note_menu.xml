@@ -8,8 +8,6 @@
         <!--android:title="@string/action_remind"/>-->
     <item
         android:id="@+id/action_edit"
-        android:icon="@drawable/ruler_pencil"
-        android:showAsAction="ifRoom"
         android:title="@string/action_edit"/>
     <!--<item-->
         <!--android:id="@+id/action_cancel_remind"-->

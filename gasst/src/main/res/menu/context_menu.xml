@@ -1,23 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:purenote="http://schemas.android.com/apk/res-auto">
+      xmlns:purenote="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/selected_counts"
-        android:showAsAction="always"
-        android:title="@string/selected_one_count" />
+        purenote:showAsAction="always"
+        android:title="@string/selected_one_count"/>
     <item
         android:id="@+id/i_select_all"
-        android:showAsAction="never"
-        android:title="@string/select_all" />
+        android:title="@string/select_all"/>
     <item
         android:id="@+id/i_move"
-        android:icon="@drawable/map_pin_angle_3"
-        android:showAsAction="never"
-        android:title="@string/action_move"></item>
+        android:title="@string/action_move"/>
     <item
         android:id="@+id/delete"
-        android:icon="@drawable/trash"
-        android:showAsAction="never"
-        android:title="@string/action_trash"></item>
+        android:title="@string/action_trash"/>
 
 </menu>

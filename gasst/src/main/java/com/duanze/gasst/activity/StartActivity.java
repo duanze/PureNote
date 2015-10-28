@@ -1,6 +1,7 @@
 package com.duanze.gasst.activity;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -62,8 +63,6 @@ import com.duanze.gasst.util.Util;
 import com.duanze.gasst.view.SwipeRefreshLayoutEx;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
-import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
@@ -274,16 +273,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
     public void onRefresh() {
         mEvernote.sync(true, true, new SyncHandler());
     }
-
-    private class MyDatePickerListener implements OnDateSetListener {
-        @Override
-        public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-            GNote gNote = new GNote();
-            gNote.setTimeFromDate(year, month, day);
-            Note.actionStart(StartActivity.this, gNote, Note.MODE_NEW);
-        }
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -922,15 +911,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
 //    滑动抽屉至此结束
 
-    private void initDatePicker() {
-        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
-                        .DAY_OF_MONTH),
-                false);
-        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
-        datePickerDialog.setCloseOnSingleTapDay(true);
-    }
-
     private int upgradeTo15() {
 //      将所有原有数据转移至默认文件夹中
         List<GNote> list = db.loadGNotes();
@@ -1153,7 +1133,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                                         }
                                     }
                                 })
-                        .setNeutralButton(R.string.dont_care, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.dont_care, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 int count = preferences.getInt(Note.EditCount, 0);
@@ -1161,7 +1141,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                                 preferences.edit().putInt(Note.EditCount, count).apply();
                             }
                         })
-                        .setNegativeButton(R.string.rate_feedback, new DialogInterface
+                        .setNeutralButton(R.string.rate_feedback, new DialogInterface
                                 .OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

@@ -117,7 +117,7 @@ public class Folder extends Activity implements FooterInterface, CompoundButton.
             actionBar.setTitle(R.string.action_folder);
         } else if (mode == MODE_MOVE) {
             actionBar.setTitle(R.string.action_move);
-            purenoteFlag.setImageResource(R.drawable.map_pin_angle_3);
+//            purenoteFlag.setImageResource(R.drawable.map_pin_angle_3);
         }
         actionBar.setDisplayHomeAsUpEnabled(true);
 

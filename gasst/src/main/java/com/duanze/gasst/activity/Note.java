@@ -3,7 +3,6 @@ package com.duanze.gasst.activity;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,39 +11,33 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.TimePicker;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
-import com.duanze.gasst.util.DateTimePickerCallback;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.PreferencesUtils;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
 import com.duanze.gasst.util.Util;
-import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
-import java.util.List;
 
 public class Note extends BaseActivity {
     public static final String TAG = Note.class.getSimpleName();
@@ -63,13 +56,6 @@ public class Note extends BaseActivity {
     private EditText editText;
     private GNoteDB db;
     private android.support.v7.app.ActionBar actionBar;
-    private Calendar today;
-
-
-    private DatePickerDialog timePickerDialog;
-    private DatePickerDialog datePickerDialog;
-    public static final String DATEPICKER_TAG = "datepicker";
-    public static final String TIMEPICKER_TAG = "timepicker";
 
 
     /**
@@ -139,31 +125,6 @@ public class Note extends BaseActivity {
         ((Activity) mContext).overridePendingTransition(0, 0);
     }
 
-    /**
-     * 内部类，监听时间选择器专用
-     */
-    private DateTimePickerCallback listener = new DateTimePickerCallback() {
-        @Override
-        public void onFinish(String result) {
-            gNote.setAlertTime(result);
-            gNote.setIsPassed(GNote.FALSE);
-            checkDbFlag();
-        }
-
-        @Override
-        public void onError(Exception e) {
-
-        }
-    };
-
-    private class MyDatePickerListener implements DatePickerDialog.OnDateSetListener {
-        @Override
-        public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-            gNote.setTimeFromDate(year, month, day);
-            checkDbFlag();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,8 +170,7 @@ public class Note extends BaseActivity {
 
     private void initValues() {
         mContext = this;
-        today = Calendar.getInstance();
-        initDateTimePicker();
+        Calendar today = Calendar.getInstance();
         gNote = getIntent().getParcelableExtra("gAsstNote_data");
         isPassed = gNote.getPassed();
         bookId = gNote.getGNotebookId();
@@ -244,21 +204,6 @@ public class Note extends BaseActivity {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             }
         }
-    }
-
-    private void initDateTimePicker() {
-        timePickerDialog = DatePickerDialog.newInstance(new com.duanze.gasst.util.MyDatePickerListener(this, today, listener),
-                today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
-                        .DAY_OF_MONTH), false);
-        timePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
-        timePickerDialog.setCloseOnSingleTapDay(true);
-
-        datePickerDialog = DatePickerDialog.newInstance(new MyDatePickerListener(), today.get
-                        (Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar
-                        .DAY_OF_MONTH),
-                false);
-        datePickerDialog.setYearRange(today.get(Calendar.YEAR) - 10, today.get(Calendar.YEAR) + 10);
-        datePickerDialog.setCloseOnSingleTapDay(true);
     }
 
     private void initMode() {
@@ -366,7 +311,7 @@ public class Note extends BaseActivity {
                 share();
                 return true;
             case R.id.action_remind:
-                timePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+                showDateTimePicker();
                 return true;
             case R.id.action_cancel_remind:
                 if (!gNote.getIsPassed()) {
@@ -385,11 +330,82 @@ public class Note extends BaseActivity {
                 showWordCount();
                 return true;
             case R.id.edit_date:
-                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+                showDatePicker();
                 return true;
             default:
                 return true;
         }
+    }
+
+    private void showDatePicker() {
+        View v = getLayoutInflater().inflate(R.layout.date_picker, null);
+        final DatePicker datePicker = (DatePicker) v.findViewById(R.id.date_picker);
+        int[] date = Util.parseDateFromGNote(gNote);
+        datePicker.init(date[0], date[1], date[2], null);
+        new AlertDialog.Builder(mContext)
+                .setView(v)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int year = datePicker.getYear();
+                        int month = datePicker.getMonth();
+                        int day = datePicker.getDayOfMonth();
+                        gNote.setTimeFromDate(year, month, day);
+                        checkDbFlag();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .create().show();
+    }
+
+    private void showDateTimePicker() {
+        View v = getLayoutInflater().inflate(R.layout.date_picker, null);
+        final DatePicker datePicker = (DatePicker) v.findViewById(R.id.date_picker);
+        new AlertDialog.Builder(mContext)
+                .setView(v)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int[] date = new int[3];
+                        date[0] = datePicker.getYear();
+                        date[1] = datePicker.getMonth();
+                        date[2] = datePicker.getDayOfMonth();
+                        showTimePicker(date);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .create().show();
+    }
+
+    private void showTimePicker(final int[] date) {
+        View v = getLayoutInflater().inflate(R.layout.time_picker, null);
+        final TimePicker timePicker = (TimePicker) v.findViewById(R.id.time_picker);
+        timePicker.setIs24HourView(true);
+        new AlertDialog.Builder(mContext)
+                .setView(v)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int hour = timePicker.getCurrentHour();
+                        int minute = timePicker.getCurrentMinute();
+
+                        String result = date[0]
+                                + ","
+                                + Util.twoDigit(date[1])
+                                + ","
+                                + Util.twoDigit(date[2])
+                                + ","
+                                + Util.twoDigit(hour)
+                                + ","
+                                + Util.twoDigit(minute);
+
+                        gNote.setAlertTime(result);
+                        gNote.setIsPassed(GNote.FALSE);
+                        checkDbFlag();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .create().show();
     }
 
     private void showWordCount() {

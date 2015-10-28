@@ -32,6 +32,5 @@
     </style>
 
     <style name="WeChatActionButtonOverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
-        <item name="android:src">@drawable/actionbar_more_icon</item>
     </style>
 </resources>

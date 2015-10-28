@@ -15,8 +15,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_gravity="center"
-        android:contentDescription="@null"
-        android:src="@drawable/map_pin_angle_3"/>
+        android:contentDescription="@null"/>
 
     <TextView
         android:id="@+id/tv_folder_unit_name"
