@@ -139,13 +139,24 @@ public class Note extends BaseActivity {
             if (MODE_NEW == mode) {
                 actionBar.setTitle(R.string.mode_new);
             } else if (MODE_EDIT == mode) {
-                actionBar.setTitle(R.string.mode_view);
+//                actionBar.setTitle(R.string.mode_view);
+                updateAppBar();
             }
         }
 
         if (PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
             listenSoftInput();
         }
+    }
+
+    private void updateAppBar() {
+        String stamp = "";
+        if (PreferencesUtils.getInstance(mContext).isUseCreateOrder()) {
+            stamp = Util.timeStamp(gNote);
+        } else {
+            stamp = TimeUtils.getConciseTime(gNote.getEditTime(), mContext);
+        }
+        actionBar.setTitle(stamp);
     }
 
     private void listenSoftInput() {
@@ -192,7 +203,7 @@ public class Note extends BaseActivity {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
                         editText.setCursorVisible(true);
-                        actionBar.setTitle(R.string.mode_edit);
+//                        actionBar.setTitle(R.string.mode_edit);
                     }
                 }
             });
@@ -352,6 +363,7 @@ public class Note extends BaseActivity {
                         int day = datePicker.getDayOfMonth();
                         gNote.setTimeFromDate(year, month, day);
                         checkDbFlag();
+                        updateAppBar();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)

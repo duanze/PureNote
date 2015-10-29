@@ -30,10 +30,10 @@ public class PreferencesUtils {
 
     // / Theme...
     public enum Theme {
-        GREEN(0),
+        BLUE(0),
         YELLOW(1),
         PINK(2),
-        BLUE(3);
+        GREEN(3);
 
         private int intValue;
 
@@ -48,7 +48,7 @@ public class PreferencesUtils {
                 }
             }
             // If run here, return default
-            return GREEN;
+            return BLUE;
         }
 
         public int getIntValue() {
