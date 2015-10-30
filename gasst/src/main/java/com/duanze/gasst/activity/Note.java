@@ -378,7 +378,12 @@ public class Note extends BaseActivity implements TextWatcher {
     private void undo() {
         isUndoOrRedo = true;
         mDataParser.undo();
-        setNoteContent(mDataParser.getState().getContent(), mDataParser.getState().getContent().length());
+        setDataToNoteContent();
+    }
+
+    private void setDataToNoteContent() {
+        String content=mDataParser.getState().getContent();
+        setNoteContent(content, content.length());
     }
 
     private void setNoteContent(String content, int length) {
@@ -389,7 +394,7 @@ public class Note extends BaseActivity implements TextWatcher {
     private void redo() {
         isUndoOrRedo = true;
         mDataParser.redo();
-        setNoteContent(mDataParser.getState().getContent(), mDataParser.getState().getContent().length());
+        setDataToNoteContent();
     }
 
     private void showDatePicker() {
