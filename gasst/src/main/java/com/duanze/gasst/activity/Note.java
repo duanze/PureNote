@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +30,8 @@ import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.parser.GNoteDataParser;
+import com.duanze.gasst.parser.GNoteMemo;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.PreferencesUtils;
@@ -39,7 +43,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
-public class Note extends BaseActivity {
+public class Note extends BaseActivity implements TextWatcher {
     public static final String TAG = Note.class.getSimpleName();
 
     public static final int MODE_NEW = 0;
@@ -87,6 +91,19 @@ public class Note extends BaseActivity {
      * 设定颜色值的一堆按钮
      */
     private HorizontalScrollView hsvColorBtns;
+
+    /**
+     * 数据解析器，备忘录模式，轻松实现撤消、重做
+     */
+    private GNoteDataParser mDataParser;
+
+    /**
+     * TextWatcher 中使用，标注是否是使用undo或redo引起的内容改变
+     */
+    private boolean isUndoOrRedo;
+
+    private MenuItem undoItem;
+    private MenuItem redoItem;
 
     /**
      * 启动NoteActivity活动的静态方法，
@@ -185,12 +202,14 @@ public class Note extends BaseActivity {
         gNote = getIntent().getParcelableExtra("gAsstNote_data");
         isPassed = gNote.getPassed();
         bookId = gNote.getGNotebookId();
-
+        mDataParser = new GNoteDataParser(new GNoteMemo(gNote.getContent()));
+        isUndoOrRedo = false;
         db = GNoteDB.getInstance(this);
 
         editText = (EditText) findViewById(R.id.et_note_edit);
         editText.setHint(R.string.write_something);
-        initMode();
+        initMode(mDataParser.getState().getContent());
+        editText.addTextChangedListener(this);
 
         if (mode == MODE_NEW) {
             if (!PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
@@ -217,11 +236,10 @@ public class Note extends BaseActivity {
         }
     }
 
-    private void initMode() {
+    private void initMode(String content) {
         mode = getIntent().getIntExtra("mode", 0);
         if (mode == MODE_NEW || mode == MODE_EDIT || MODE_TODAY == mode) {
-            editText.setText(gNote.getContent());
-            editText.setSelection(0);
+            setNoteContent(content, content.length());
         }
 
         int no = getIntent().getIntExtra("no", -1);
@@ -309,6 +327,9 @@ public class Note extends BaseActivity {
                 menu.findItem(R.id.edit_date).setVisible(false);
             }
         }
+        undoItem = menu.findItem(R.id.action_undo);
+        redoItem = menu.findItem(R.id.action_redo);
+        updateUndoAndRedo();
         return true;
     }
 
@@ -343,9 +364,32 @@ public class Note extends BaseActivity {
             case R.id.edit_date:
                 showDatePicker();
                 return true;
+            case R.id.action_redo:
+                redo();
+                return true;
+            case R.id.action_undo:
+                undo();
+                return true;
             default:
                 return true;
         }
+    }
+
+    private void undo() {
+        isUndoOrRedo = true;
+        mDataParser.undo();
+        setNoteContent(mDataParser.getState().getContent(), mDataParser.getState().getContent().length());
+    }
+
+    private void setNoteContent(String content, int length) {
+        editText.setText(content);
+        editText.setSelection(length);
+    }
+
+    private void redo() {
+        isUndoOrRedo = true;
+        mDataParser.redo();
+        setNoteContent(mDataParser.getState().getContent(), mDataParser.getState().getContent().length());
     }
 
     private void showDatePicker() {
@@ -565,11 +609,6 @@ public class Note extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-
     /**
      * 捕获Back按键
      */
@@ -657,5 +696,31 @@ public class Note extends BaseActivity {
     private void showToolbar() {
         if (!mIsActionBarSlidUp) return;
         slideActionBar(false, true);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (!isUndoOrRedo) {
+            mDataParser.newState(new GNoteMemo(s.toString()));
+        } else {
+            isUndoOrRedo = false;
+        }
+
+        updateUndoAndRedo();
+    }
+
+    private void updateUndoAndRedo() {
+        undoItem.setEnabled(mDataParser.lastSize() > 0);
+        redoItem.setEnabled(mDataParser.nextSize() > 0);
     }
 }

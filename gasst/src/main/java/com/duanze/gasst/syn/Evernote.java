@@ -257,7 +257,7 @@ public class Evernote {
 
         if (note.getGuid() == null) {
             LogUtil.e(TAG, "GUID是空，无需删除");
-//            deleteGNote(gNote);
+            deleteGNote(gNote);
             return true;
         } else {
             try {

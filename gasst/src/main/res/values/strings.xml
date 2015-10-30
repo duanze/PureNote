@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_undo">撤消</string>
+    <string name="menu_redo">重做</string>
     <string name="github_repository">My GitHub</string>
-    
+
     <string name="word_count">字数统计</string>
     <string name="characters_no_spaces">字符数（不包含空格）：</string>
     <string name="characters_without_spaces">字符数（包含空格）：</string>

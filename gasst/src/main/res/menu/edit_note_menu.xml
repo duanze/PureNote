@@ -2,9 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:purenote="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_remind"
-        android:title="@string/action_remind"
+        android:id="@+id/action_undo"
+        android:title="@string/menu_undo"
         purenote:showAsAction="always"/>
+    <item
+        android:id="@+id/action_redo"
+        android:title="@string/menu_redo"
+        purenote:showAsAction="always"/>
+    <item
+        android:id="@+id/action_remind"
+        android:title="@string/action_remind"/>
     <item
         android:id="@+id/action_cancel_remind"
         android:title="@string/action_cancel_remind"/>
