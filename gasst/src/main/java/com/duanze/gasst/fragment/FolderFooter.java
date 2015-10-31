@@ -14,10 +14,9 @@ import com.duanze.gasst.R;
  * Created by Duanze on 2015/5/22.
  */
 public class FolderFooter extends Fragment {
-    public static final String TAG  = "FolderFooter";
+    public static final String TAG = "FolderFooter";
+    public static final int FLAG = 0;
 
-    private Button folderDelete;
-    private Button folderNew;
     private Context mContext;
 
     @Override
@@ -31,19 +30,18 @@ public class FolderFooter extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.footer_folder, container, false);
-        folderDelete = (Button) view.findViewById(R.id.btn_folder_delete);
-        folderNew = (Button) view.findViewById(R.id.btn_folder_new);
-        folderDelete.setOnClickListener(new View.OnClickListener() {
+
+        view.findViewById(R.id.btn_folder_delete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((FooterInterface)mContext).changeFooter();
+                ((FooterInterface) mContext).changeFooter();
             }
         });
 
-        folderNew.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.btn_folder_new).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((FooterInterface)mContext).actionClick();
+                ((FooterInterface) mContext).actionClick();
             }
         });
         return view;

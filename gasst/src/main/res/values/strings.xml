@@ -120,7 +120,7 @@
     <string name="cancel">取消</string>
     <string name="logout_text">确认登出EverNote?</string>
 
-    <!-- activity Folder -->
+    <!-- Drawable layout -->
     <string name="all_notes">所有笔记</string>
     <string name="folder_cancel">取消</string>
     <string name="folder_delete_num">删除(%1$d)</string>

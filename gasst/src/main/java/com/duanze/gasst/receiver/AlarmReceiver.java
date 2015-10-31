@@ -31,8 +31,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         GNote gNote = intent.getParcelableExtra("gAsstNote_data");
         //更新状态并存入数据库
         gNote.setIsPassed(GNote.TRUE);
-//        GNoteDB db = GNoteDB.getInstance(context);
-//        db.updateGNote(gNote);
         ProviderUtil.updateGNote(context, gNote);
 
         int no = intent.getIntExtra("no", 0);

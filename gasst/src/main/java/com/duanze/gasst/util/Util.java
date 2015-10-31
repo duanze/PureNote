@@ -1,7 +1,6 @@
 package com.duanze.gasst.util;
 
 import android.app.ActivityManager;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,11 +12,10 @@ import android.os.Build;
 import android.widget.Toast;
 
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.Folder;
+import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.provider.GNoteProvider;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
@@ -111,32 +109,6 @@ public class Util {
                 + Util.twoDigit(Integer.parseInt(info[1]) - 1)
                 + ","
                 + Util.twoDigit(info[2]);
-
-//        String year = info[2];
-//        int month = 0;
-//        int day = 1;
-//
-//        for (int i = 0; i < MONTH_ARR.length; i++) {
-//            String m = MONTH_ARR[i];
-//            if (m.equals(info[0])) {
-//                month = i;
-//                break;
-//            }
-//        }
-//
-//        for (int i = 0; i < DATE_ARR.length; i++) {
-//            String d = DATE_ARR[i];
-//            if (d.equals(info[1])) {
-//                day = i + 1;
-//                break;
-//            }
-//        }
-//
-//        return year
-//                + ","
-//                + Util.twoDigit(month)
-//                + ","
-//                + Util.twoDigit(day);
     }
 
     public static int[] parseDateFromGNote(GNote gNote) {
@@ -267,21 +239,9 @@ public class Util {
         if (groupId == 0) {
             //如果是移动文件，不加不减
             if (isMove) return;
-            int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
-            preferences.edit().putInt(Folder.PURENOTE_NOTE_NUM, cnt + value).apply();
+            int cnt = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 3);
+            preferences.edit().putInt(Settings.PURENOTE_NOTE_NUM, cnt + value).apply();
         } else {
-
-//            List<GNotebook> gNotebooks = db.loadGNotebooks();
-//            for (GNotebook gNotebook : gNotebooks) {
-//                if (gNotebook.getId() == groupId) {
-//                    int cnt = gNotebook.getNotesNum();
-//                    gNotebook.setNotesNum(cnt + value);
-//
-//                    db.updateGNotebook(gNotebook);
-//                    break;
-//                }
-//            }
-
             GNotebook gNotebook = db.getGNotebookById(groupId);
             if (null != gNotebook) {
                 int cnt = gNotebook.getNotesNum();

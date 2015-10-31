@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -27,10 +26,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.duanze.gasst.activity.BaseActivity;
-import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.activity.Note;
+import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.adapter.GNoteRVAdapter;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
@@ -319,7 +317,6 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         if (mActionMode != null) {
             return;
         }
-//        mActionMode = ((StartActivity) mContext).startActionMode(mActionModeCallback);
         mActionMode = ((StartActivity) mContext).startSupportActionMode(mActionModeCallback);
     }
 

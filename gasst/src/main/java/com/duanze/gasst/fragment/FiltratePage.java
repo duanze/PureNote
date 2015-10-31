@@ -81,6 +81,8 @@ public class FiltratePage extends Fragment implements LoaderManager.LoaderCallba
         recyclerView.setAdapter(mAdapter);
 
         loaderManager = getLoaderManager();
+
+        // / We don't need it begin load immediately when we enter SearchMode
 //        loaderManager.initLoader(LOADER_ID, null, this);
 
         fabButton = (FloatingActionButton) view.findViewById(R.id.fabbutton);

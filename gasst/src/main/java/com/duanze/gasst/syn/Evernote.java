@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 
-import com.duanze.gasst.activity.Folder;
 import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
@@ -64,11 +63,11 @@ public class Evernote {
     private GNoteDB db;
 
     public interface EvernoteLoginCallback {
-        public void onLoginResult(Boolean result);
+        void onLoginResult(Boolean result);
 
-        public void onUserinfo(Boolean result, User user);
+        void onUserinfo(Boolean result, User user);
 
-        public void onLogout(Boolean reuslt);
+        void onLogout(Boolean reuslt);
     }
 
     public Evernote(Context context) {
@@ -171,8 +170,7 @@ public class Evernote {
             if (notebook.getName().equals(name)) {
                 result = true;
                 LogUtil.e(TAG, guid + "笔记本存在");
-                mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, notebook.getGuid())
-                        .commit();
+                mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, notebook.getGuid()).apply();
             }
         } catch (EDAMNotFoundException e) {
             e.printStackTrace();
@@ -201,8 +199,7 @@ public class Evernote {
                     .createNotebook(mEvernoteSession.getAuthToken(), notebook);
             result = true;
             LogUtil.e(TAG, "Notebook" + bookname + "不存在，创建成功");
-            mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, resultNotebook.getGuid())
-                    .commit();
+            mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, resultNotebook.getGuid()).apply();
         } catch (EDAMUserException e) {
             if (e.getErrorCode() == EDAMErrorCode.DATA_CONFLICT) {
                 result = true;
@@ -314,8 +311,7 @@ public class Evernote {
                 for (int i = 0; i < count; i++) {
                     Notebook book = books.get(i);
                     if (book.getName().equals(NotebookName)) {
-                        mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, book.getGuid
-                                ()).commit();
+                        mSharedPreferences.edit().putString(EVERNOTE_NOTEBOOK_GUID, book.getGuid()).apply();
                         return;
                     }
                 }
@@ -330,14 +326,13 @@ public class Evernote {
 
     private void saveNote(Note note) {
         GNote gNote = GNote.parseFromNote(note);
-//        db.saveGNote(gNote);
         ProviderUtil.insertGNote(mContext, gNote);
         updateGNotebook(0, +1);
     }
 
     private void updateGNotebook(int id, int diff) {
         if (id == 0) {
-            int cnt = mSharedPreferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
+            int cnt = mSharedPreferences.getInt(Settings.PURENOTE_NOTE_NUM, 3);
             PreferencesUtils.getInstance(mContext).setNotesNum(cnt + diff);
         } else {
             List<GNotebook> gNotebooks = db.loadGNotebooks();
@@ -345,7 +340,6 @@ public class Evernote {
                 if (gNotebook.getId() == id) {
                     int cnt = gNotebook.getNotesNum();
                     gNotebook.setNotesNum(cnt + diff);
-//                    db.updateGNotebook(gNotebook);
                     ProviderUtil.updateGNotebook(mContext, gNotebook);
                     break;
                 }
@@ -377,7 +371,6 @@ public class Evernote {
             if (gNote != null) {
                 gNote.setContentFromNote(note);
                 gNote.setEditTime(note.getUpdated());
-//                db.updateGNote(gNote);
                 ProviderUtil.updateGNote(mContext, gNote);
             }
         } catch (TTransportException e) {

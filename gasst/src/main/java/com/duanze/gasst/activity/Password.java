@@ -1,6 +1,5 @@
 package com.duanze.gasst.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,14 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.duanze.gasst.R;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 /**
  * Created by duanze on 2015/7/11.
  */
 public class Password extends BaseActivity {
-    private TextView hint;
-    private EditText input;
     private String password;
     private SharedPreferences preferences;
 
@@ -36,17 +32,15 @@ public class Password extends BaseActivity {
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
         setContentView(R.layout.activity_password);
-
-        input = (EditText) findViewById(R.id.et_input);
-        hint = (TextView) findViewById(R.id.tv_hint);
-
         password = getIntent().getStringExtra(Settings.PASSWORD);
         String h = getIntent().getStringExtra(Settings.PASSWORD_HINT);
         if (!"".equals(h)) {
+            TextView hint = (TextView) findViewById(R.id.tv_hint);
             hint.setText("Hint:" + h);
             hint.setVisibility(View.VISIBLE);
         }
 
+        EditText input = (EditText) findViewById(R.id.et_input);
         input.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -92,7 +86,7 @@ public class Password extends BaseActivity {
         intent.putExtra(Intent.EXTRA_TEXT, "只需发送这封邮件即可。"); // 正文
         startActivity(Intent.createChooser(intent, "Select email client"));
 
-        preferences.edit().putBoolean(Settings.SHOW_UNIVERSAL_SWITCH, true).commit();
+        preferences.edit().putBoolean(Settings.SHOW_UNIVERSAL_SWITCH, true).apply();
     }
 
     @Override

@@ -52,14 +52,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     public static final String PURENOTE_NOTE_NUM = "purenote_note_num";
 
     public static final String DATA = "gasst_pref";
-    public static final String NEW_NOTE = "is_open_new_note";
-    public static final String FULL_SCREEN = "is_full_screen";
-    public static final String FOLD = "is_fold";
-    public static final String RANDOM_COLOR = "is_random_color";
-    public static final String MAX_LINES = "max_lines";
-    public static final int DEFAULT_MAX_LINES = 4;
-    public static final String CUSTOMIZE_COLOR = "is_customize_color";
-    public static final String COLOR_READ = "color_read";
     public static final String PASSWORD_GUARD = "password_guard";
     public static final String PASSWORD = "password";
     public static final String PASSWORD_HINT = "password_hint";
@@ -70,7 +62,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     public static final String LIGHTNING_EXTRACT_SAVE_LOCATION = "lightning_extract_save_location";
     public static final String QUICK_WRITE_SAVE_LOCATION = "quick_write_save_location";
 
-    public static final String PREF_NOTE_KEY = "pref_note_key";
     public static final String NOTIFICATION_ALWAYS_SHOW = "notification_always_show";
 
     public static final String SETTINGS_CHANGED = "is_changed";
@@ -94,8 +85,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        overridePendingTransition(R.anim.in_push_right_to_left,
-//                R.anim.out_stable);
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences(DATA, MODE_PRIVATE);
         mContext = this;
@@ -126,8 +115,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         findViewById(R.id.ll_quick_write_location_container).setOnClickListener(this);
         findViewById(R.id.ll_lightning_container).setOnClickListener(this);
         findViewById(R.id.ll_extract_location_container).setOnClickListener(this);
-//        findViewById(R.id.ll_fold_container).setOnClickListener(this);
-//        findViewById(R.id.ll_maxlines_container).setOnClickListener(this);
         findViewById(R.id.ll_quick_write).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -249,8 +236,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         concentrateWrite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                preferences.edit().putBoolean(getString(R.string.concentrate_write_key), isChecked).apply();
-//                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
                 PreferencesUtils.getInstance(mContext).setConcentrateWrite(isChecked);
             }
         });
@@ -282,8 +267,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         oneColumn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                preferences.edit().putBoolean(getString(R.string.one_column_key), isChecked).apply();
-//                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
                 PreferencesUtils.getInstance(mContext).setOneColumn(isChecked);
                 activityNeedRecreate();
             }
@@ -295,8 +278,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         createOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                preferences.edit().putBoolean(getString(R.string.create_order_key), isChecked).apply();
-//                Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
                 PreferencesUtils.getInstance(mContext).setUseCreateOrder(isChecked);
                 activityNeedRecreate();
             }
@@ -539,8 +520,6 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     private void exitOperation() {
         preferences.edit().putBoolean(SETTINGS_CHANGED, settingChanged).apply();
         finish();
-//        overridePendingTransition(R.anim.in_stable,
-//                R.anim.out_push_left_to_right);
     }
 
     @Override
@@ -654,9 +633,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                         float rMin = Float.valueOf(getString(R.string.note_max_length_min));
                         float rMax = Float.valueOf(getString(R.string.note_max_length_max));
                         if (r >= rMin && r <= rMax) {
-//                            preferences.edit().putFloat(getString(R.string.note_max_length_key), r).apply();
                             maxLengthRatio.setText(ratio);
-//                            Toast.makeText(mContext, R.string.one_column_result, Toast.LENGTH_SHORT).show();
                             PreferencesUtils.getInstance(mContext).setMaxLengthRatio(r);
                             activityNeedRecreate();
                         }

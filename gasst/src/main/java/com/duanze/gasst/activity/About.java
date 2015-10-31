@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.util.Util;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 /**
  * Created by duanze on 2015/7/11.

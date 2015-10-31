@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
@@ -84,13 +83,7 @@ public class Note extends BaseActivity implements TextWatcher {
      */
     private int isPassed;
     private int bookId;
-
     private Context mContext;
-
-    /**
-     * 设定颜色值的一堆按钮
-     */
-    private HorizontalScrollView hsvColorBtns;
 
     /**
      * 数据解析器，备忘录模式，轻松实现撤消、重做
@@ -156,7 +149,6 @@ public class Note extends BaseActivity implements TextWatcher {
             if (MODE_NEW == mode) {
                 actionBar.setTitle(R.string.mode_new);
             } else if (MODE_EDIT == mode) {
-//                actionBar.setTitle(R.string.mode_view);
                 updateAppBar();
             }
         }
@@ -167,7 +159,7 @@ public class Note extends BaseActivity implements TextWatcher {
     }
 
     private void updateAppBar() {
-        String stamp = "";
+        String stamp;
         if (PreferencesUtils.getInstance(mContext).isUseCreateOrder()) {
             stamp = Util.timeStamp(gNote);
         } else {
@@ -251,6 +243,7 @@ public class Note extends BaseActivity implements TextWatcher {
         }
     }
 
+    // / 历史代码，仅供参考
     //    private void initBtns() {
 //        for (int i = 0; i < 9; i++) {
 //            chooseColorBtns[i] = (Button) findViewById(BTN_ARR[i]);
@@ -351,13 +344,6 @@ public class Note extends BaseActivity implements TextWatcher {
                     checkDbFlag();
                 }
                 return true;
-//            case R.id.action_edit:
-//                actionStart(this, gNote, MODE_EDIT);
-//                finish();
-//                return true;
-//            case R.id.action_move:
-//                showSelectFolderDialog();
-//                return true;
             case R.id.word_count:
                 showWordCount();
                 return true;
@@ -382,7 +368,7 @@ public class Note extends BaseActivity implements TextWatcher {
     }
 
     private void setDataToNoteContent() {
-        String content=mDataParser.getState().getContent();
+        String content = mDataParser.getState().getContent();
         setNoteContent(content, content.length());
     }
 
@@ -498,26 +484,6 @@ public class Note extends BaseActivity implements TextWatcher {
         startActivity(Intent.createChooser(intent, "Share"));
     }
 
-    /**
-     * 删除按钮的方法
-     */
-    private void trash() {
-        new AlertDialog.Builder(this).
-                setMessage(R.string.delete_text).
-                setNegativeButton(R.string.cancel, null).
-                setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-                        //需不是新建记事，方可从数据库中删除数据
-                        if (mode != MODE_NEW && MODE_TODAY != mode) {
-                            deleteNote();
-                        }
-                        finish();
-                    }
-                }).show();
-    }
-
     private void deleteNote() {
         //        物理数据存储，以改代删
         gNote.setDeleted(GNote.TRUE);
@@ -550,7 +516,7 @@ public class Note extends BaseActivity implements TextWatcher {
 //        设置笔记本id
         int groupId;
         if (MODE_TODAY != mode) {
-            groupId = preferences.getInt(Folder.GNOTEBOOK_ID, 0);
+            groupId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
             gNote.setGNotebookId(groupId);
         } else {
             //快写模式将存储至特定目录下
@@ -578,7 +544,7 @@ public class Note extends BaseActivity implements TextWatcher {
         if (id == 0) {
             //如果是移动文件，不加不减
             if (isMove) return;
-            int cnt = preferences.getInt(Folder.PURENOTE_NOTE_NUM, 3);
+            int cnt = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 3);
             PreferencesUtils.getInstance(mContext).setNotesNum(cnt + diff);
         } else {
             GNotebook gNotebook = db.getGNotebookById(id);

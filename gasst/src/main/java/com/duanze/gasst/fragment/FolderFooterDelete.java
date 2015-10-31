@@ -16,8 +16,8 @@ import com.duanze.gasst.R;
  */
 public class FolderFooterDelete extends Fragment {
     public static final String TAG = "FolderFooterDelete";
+    public static final int FLAG = 1;
 
-    private Button folderCancel;
     private Button folderNum;
     private Context mContext;
 
@@ -32,23 +32,19 @@ public class FolderFooterDelete extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.footer_folder_delete, container, false);
-        ;
-        folderCancel = (Button) view.findViewById(R.id.btn_folder_cancel);
         folderNum = (Button) view.findViewById(R.id.btn_folder_num);
-        folderCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((FooterInterface) mContext).changeFooter();
-            }
-        });
-
-//        LogUtil.i(TAG, "updateDeleteNum(((StartActivity) mContext).getDeleteNum());");
-        updateDeleteNum(((StartActivity) mContext).getDeleteNum());
-
         folderNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((FooterInterface) mContext).actionClick();
+            }
+        });
+        updateDeleteNum(((StartActivity) mContext).getDeleteNum());
+
+        view.findViewById(R.id.btn_folder_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((FooterInterface) mContext).changeFooter();
             }
         });
         return view;

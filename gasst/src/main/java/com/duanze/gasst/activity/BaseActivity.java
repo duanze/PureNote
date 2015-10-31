@@ -19,7 +19,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
  * Created by duanze on 15-8-20.
  */
 public class BaseActivity extends AppCompatActivity {
-    private static final boolean TINT_STATUS_BAR = true;
     private LinearLayout rootLayout;
 
     @Override
