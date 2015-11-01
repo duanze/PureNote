@@ -174,16 +174,8 @@ public class Util {
 
     /**
      * 闪电摘录
-     *
-     * @param preferences
-     * @param db
-     * @param str
-     * @param groupId
-     * @param context
-     * @return
      */
-    public static String extractNote(SharedPreferences preferences, GNoteDB db, String str,
-                                     int groupId, Context context) {
+    public static String extractNote(GNoteDB db, String str, int groupId, Context context) {
         boolean find = false;
         String groupName;
         if (groupId != 0) {
@@ -198,22 +190,17 @@ public class Util {
             groupName = context.getResources().getString(R.string.all_notes);
         }
         if (find) {
-            extractNoteToDB(context, preferences, db, str, groupId);
+            extractNoteToDB(context, db, str, groupId);
         } else {
-            extractNoteToDB(context, preferences, db, str, 0);
+            extractNoteToDB(context, db, str, 0);
         }
         return groupName;
     }
 
     /**
      * 闪电摘录，真实存入db与更新笔记本数量
-     *
-     * @param preferences
-     * @param db
-     * @param str
-     * @param groupId
      */
-    public static void extractNoteToDB(Context context, SharedPreferences preferences, GNoteDB db, String str, int groupId) {
+    public static void extractNoteToDB(Context mContext, GNoteDB db, String str, int groupId) {
         Calendar today = Calendar.getInstance();
         GNote gNote = new GNote();
         gNote.setCalToTime(today);
@@ -224,23 +211,22 @@ public class Util {
         gNote.setGNotebookId(groupId);
 
         gNote.setEditTime(TimeUtils.getCurrentTimeInLong());
-//        db.saveGNote(gNote);
-        ProviderUtil.insertGNote(context, gNote);
+        ProviderUtil.insertGNote(mContext, gNote);
 
 //        更新笔记本
-        updateGNotebook(preferences, db, groupId, +1, false);
+        updateGNotebook(mContext, db, groupId, +1, false);
         if (groupId != 0) {
-            updateGNotebook(preferences, db, 0, +1, false);
+            updateGNotebook(mContext, db, 0, +1, false);
         }
     }
 
-    private static void updateGNotebook(SharedPreferences preferences, GNoteDB db, int groupId, int value,
+    private static void updateGNotebook(Context mContext, GNoteDB db, int groupId, int value,
                                         boolean isMove) {
         if (groupId == 0) {
             //如果是移动文件，不加不减
             if (isMove) return;
-            int cnt = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 3);
-            preferences.edit().putInt(Settings.PURENOTE_NOTE_NUM, cnt + value).apply();
+            int num = PreferencesUtils.getInstance(mContext).getNotesNum();
+            PreferencesUtils.getInstance(mContext).setNotesNum(num + value);
         } else {
             GNotebook gNotebook = db.getGNotebookById(groupId);
             if (null != gNotebook) {

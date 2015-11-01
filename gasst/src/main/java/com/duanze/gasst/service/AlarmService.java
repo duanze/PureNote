@@ -153,11 +153,11 @@ public class AlarmService extends Service {
                     ClipData.Item item = data.getItemAt(0);
                     int extractLocation = preferences.getInt(Settings.LIGHTNING_EXTRACT_SAVE_LOCATION, 0);
 
-                    String extractGroup = Util.extractNote(preferences, db, item.getText().toString(), extractLocation, mContext);
+                    String extractGroup = Util.extractNote(db, item.getText().toString(), extractLocation, mContext);
                     if (extractGroup != null) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.already_extract_to) + extractGroup, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, getString(R.string.already_extract_to) + extractGroup, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), R.string.extract_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.extract_error, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -222,41 +222,29 @@ public class AlarmService extends Service {
     private void stopExtract() {
         if (null == remoteViews) return;
         isExtract = false;
-//        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
         remoteViews.setTextViewText(R.id.iv_bolt, boltOff);
         toggleBoltBtnStatus();
         startForeground(-1, notification);
-        Toast.makeText(getApplicationContext(), R.string.extract_stop, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.extract_stop, Toast.LENGTH_SHORT).show();
     }
 
     private void startExtract() {
         if (null == remoteViews) return;
         isExtract = true;
-//        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
         remoteViews.setTextViewText(R.id.iv_bolt, boltOn);
         toggleBoltBtnStatus();
         startForeground(-1, notification);
-        Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.extract_start, Toast.LENGTH_SHORT).show();
     }
 
     private void rapidStopExtract() {
         if (null == remoteViews) return;
-//        isExtract = false;
-////        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
-//        toggleBoltBtnStatus();
-//        startForeground(-1, notification);
-//        Toast.makeText(getApplicationContext(), R.string.extract_stop, Toast.LENGTH_SHORT).show();
         stopExtract();
         preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, false).apply();
     }
 
     private void rapidStartExtract() {
         if (null == remoteViews) return;
-//        isExtract = true;
-////        remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
-//        toggleBoltBtnStatus();
-//        startForeground(-1, notification);
-//        Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
         startExtract();
         preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, true).apply();
     }
@@ -294,12 +282,9 @@ public class AlarmService extends Service {
         remoteViews.setOnClickPendingIntent(R.id.iv_new_note, writeNotePendingIntent);
 
         if (isExtract) {
-//            remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_on_big);
             remoteViews.setTextViewText(R.id.iv_bolt, boltOn);
 //特殊路径，初始启动
-//            Toast.makeText(getApplicationContext(), R.string.extract_start, Toast.LENGTH_SHORT).show();
         } else {
-//            remoteViews.setImageViewResource(R.id.iv_bolt, R.drawable.bolt_off_big);
             remoteViews.setTextViewText(R.id.iv_bolt, boltOff);
         }
 //switch lightning extract
