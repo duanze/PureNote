@@ -66,11 +66,11 @@ public class GridUnit extends RelativeLayout {
 
     public GridUnit(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.grid_unit, this);
-        date_month = (TextView) this.findViewById(R.id.date_month);
-        date_week = (TextView) this.findViewById(R.id.date_week);
-        note = (TextView) this.findViewById(R.id.note);
-        doneButton = (TextView) this.findViewById(R.id.is_done);
+//        LayoutInflater.from(context).inflate(R.layout.grid_unit, this);
+//        date_month = (TextView) this.findViewById(R.id.date_month);
+//        date_week = (TextView) this.findViewById(R.id.date_week);
+//        note = (TextView) this.findViewById(R.id.note);
+//        doneButton = (TextView) this.findViewById(R.id.is_done);
 
     }
 

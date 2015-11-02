@@ -29,8 +29,8 @@ import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.parser.GNoteDataParser;
-import com.duanze.gasst.parser.GNoteMemo;
+import com.duanze.gasst.memento.Originator;
+import com.duanze.gasst.memento.Memo;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.PreferencesUtils;
@@ -88,7 +88,7 @@ public class Note extends BaseActivity implements TextWatcher {
     /**
      * 数据解析器，备忘录模式，轻松实现撤消、重做
      */
-    private GNoteDataParser mDataParser;
+    private Originator mDataParser;
 
     /**
      * TextWatcher 中使用，标注是否是使用undo或redo引起的内容改变
@@ -194,7 +194,7 @@ public class Note extends BaseActivity implements TextWatcher {
         gNote = getIntent().getParcelableExtra("gAsstNote_data");
         isPassed = gNote.getPassed();
         bookId = gNote.getGNotebookId();
-        mDataParser = new GNoteDataParser(new GNoteMemo(gNote.getContent()));
+        mDataParser = new Originator(new Memo(gNote.getContent()));
         isUndoOrRedo = false;
         db = GNoteDB.getInstance(this);
 
@@ -682,7 +682,7 @@ public class Note extends BaseActivity implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         if (!isUndoOrRedo) {
-            mDataParser.newState(new GNoteMemo(s.toString()));
+            mDataParser.newState(new Memo(s.toString()));
         } else {
             isUndoOrRedo = false;
         }

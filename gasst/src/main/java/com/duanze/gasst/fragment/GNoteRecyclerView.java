@@ -270,7 +270,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
             });
 
             final Dialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string
-                    .action_move).setView(view).setPositiveButton(R.string.confirm,
+                    .action_move).setView(view).setPositiveButton(android.R.string.ok,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -280,7 +280,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
                             }
 
                         }
-                    }).setNegativeButton(R.string.cancel, null).create();
+                    }).setNegativeButton(android.R.string.cancel, null).create();
             dialog.show();
         }
     }
@@ -292,7 +292,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setMessage(R.string.delete_all_confirm)
-                    .setPositiveButton(R.string.delete_sure, new
+                    .setPositiveButton(android.R.string.ok, new
                             DialogInterface.OnClickListener() {
 
                                 @Override
@@ -304,7 +304,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
 
                                 }
                             })
-                    .setNegativeButton(R.string.delete_cancel, null)
+                    .setNegativeButton(android.R.string.cancel, null)
                     .create().show();
         }
     }

@@ -1,12 +1,12 @@
-package com.duanze.gasst.parser;
+package com.duanze.gasst.memento;
 
 /**
  * Created by Duanze on 2015/10/30.
  */
-public class GNoteMemo {
+public class Memo {
     private String content;
 
-    public GNoteMemo(String content) {
+    public Memo(String content) {
         this.content = content;
     }
 

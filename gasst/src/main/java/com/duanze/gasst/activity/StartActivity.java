@@ -40,7 +40,6 @@ import android.widget.Toast;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.GNotebookAdapter;
-import com.duanze.gasst.fragment.ColorGrid;
 import com.duanze.gasst.fragment.FiltratePage;
 import com.duanze.gasst.fragment.FolderFooter;
 import com.duanze.gasst.fragment.FolderFooterDelete;
@@ -535,7 +534,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.rename_folder_title)
                 .setView(view)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (editText.getText().toString().trim().length() == 0) {
@@ -546,7 +545,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                         }
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
         dialog.show();
@@ -747,7 +746,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
     }
 
 
-    private ColorGrid colorGrid;
     private GNoteRecyclerView gNoteRecyclerView;
     private FiltratePage filtratePage;
     private boolean isInFiltrate = false;
@@ -793,11 +791,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
             }
             unlockDrawerLock();//打开手势滑动
         } else if (mode == MODE_GRID) {//暂时弃用
-            if (colorGrid == null) {
-                colorGrid = new ColorGrid();
-            }
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content, colorGrid).commit();
-            lockDrawerLock();
+
         }
     }
 
@@ -928,9 +922,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                 gNoteRecyclerView.refreshUI();
             }
         } else if (mode == MODE_GRID) {
-            if (null != colorGrid) {
-                colorGrid.refreshUI();
-            }
+
         }
     }
 

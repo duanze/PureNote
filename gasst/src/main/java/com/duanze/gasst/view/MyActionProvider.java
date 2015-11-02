@@ -31,31 +31,31 @@ public class MyActionProvider extends ActionProvider {
     @Override
     public void onPrepareSubMenu(SubMenu subMenu) {
 
-        subMenu.clear();
-        subMenu.add(R.string.m_color_grid).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (activity.getMode() != StartActivity.MODE_GRID) {
-                    preferences.edit().putInt("mode", StartActivity.MODE_GRID).apply();
-                    activity.setMode(StartActivity.MODE_GRID);
-                    activity.changeContent();
-//                    activity.gridRefresh();
-                }
-                return true;
-            }
-        });
-        subMenu.add(R.string.m_classic_list).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (activity.getMode() != StartActivity.MODE_LIST) {
-                    preferences.edit().putInt("mode", StartActivity.MODE_LIST).apply();
-                    activity.setMode(StartActivity.MODE_LIST);
-                    activity.changeContent();
-//                    activity.listRefresh();
-                }
-                return true;
-            }
-        });
+//        subMenu.clear();
+//        subMenu.add(R.string.m_color_grid).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                if (activity.getMode() != StartActivity.MODE_GRID) {
+//                    preferences.edit().putInt("mode", StartActivity.MODE_GRID).apply();
+//                    activity.setMode(StartActivity.MODE_GRID);
+//                    activity.changeContent();
+////                    activity.gridRefresh();
+//                }
+//                return true;
+//            }
+//        });
+//        subMenu.add(R.string.m_classic_list).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                if (activity.getMode() != StartActivity.MODE_LIST) {
+//                    preferences.edit().putInt("mode", StartActivity.MODE_LIST).apply();
+//                    activity.setMode(StartActivity.MODE_LIST);
+//                    activity.changeContent();
+////                    activity.listRefresh();
+//                }
+//                return true;
+//            }
+//        });
     }
 
     @Override

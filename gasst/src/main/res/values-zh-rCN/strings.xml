@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_undo">Undo</string>
-    <string name="menu_redo">Redo</string>
+    <string name="menu_undo">撤消</string>
+    <string name="menu_redo">重做</string>
     <string name="github_repository">My GitHub</string>
 
-    <string name="word_count">Word count</string>
-    <string name="characters_no_spaces">Characters(no space):</string>
-    <string name="characters_without_spaces">Characters(with space):</string>
-    <string name="words">Words:</string>
+    <string name="word_count">字数统计</string>
+    <string name="characters_no_spaces">字符数（不包含空格）：</string>
+    <string name="characters_without_spaces">字符数（包含空格）：</string>
+    <string name="words">字数：</string>
 
-    <string name="write_something">Feel free to write.</string>
+    <string name="write_something">写点什么吧</string>
     <string name="saved_picture_to">图片已保存至：</string>
 
     <string name="before_minute" formatted="false">%d\u0020分钟\u0020前</string>
@@ -22,23 +22,22 @@
 
     <string name="recycle_bin">废纸篓</string>
 
-    <string name="initial">Initializing…</string>
-    <string name="operate">Upgrading,please wait…</string>
+    <string name="initial">初始化…</string>
+    <string name="operate">升级中，请等待…</string>
 
     <!-- date -->
-    <string name="month1">JANUARY.</string>
-    <string name="month2">FEBRUARY.</string>
-    <string name="month3">MARCH.</string>
-    <string name="month4">APRIL.</string>
-    <string name="month5">MAY.</string>
-    <string name="month6">JUNE.</string>
-    <string name="month7">JULY.</string>
-    <string name="month8">AUGUST.</string>
-    <string name="month9">SEPTEMBER.</string>
-    <string name="month10">OCTOBER.</string>
-    <string name="month11">NOVEMBER.</string>
-    <string name="month12">DECEMBER.</string>
-
+    <string name="month1">壹月</string>
+    <string name="month2">贰月</string>
+    <string name="month3">叁月</string>
+    <string name="month4">肆月</string>
+    <string name="month5">伍月</string>
+    <string name="month6">陆月</string>
+    <string name="month7">柒月</string>
+    <string name="month8">扒月</string>
+    <string name="month9">玖月</string>
+    <string name="month10">拾月</string>
+    <string name="month11">拾壹月</string>
+    <string name="month12">拾贰月</string>
     <string name="day1">壹日</string>
     <string name="day2">贰日</string>
     <string name="day3">叁日</string>
@@ -80,47 +79,46 @@
     <string name="date_error">无效日期</string>
 
     <!-- foreground service -->
-    <string name="one_reminder">\u0020reminder is counting down.</string>
-    <string name="more_reminder">\u0020reminders are counting down.</string>
+    <string name="one_reminder">\u0020条定时提醒正在倒计时</string>
+    <string name="more_reminder">\u0020条定时提醒正在倒计时</string>
 
     <!-- new password dialog -->
-    <string name="password_title">Start Password guard</string>
-    <string name="stop_password_title">Stop Password guard</string>
-    <string name="new_password">Password:</string>
-    <string name="confirm_password">Confirm:</string>
-    <string name="hint_password">Hint:</string>
-    <string name="forgot_password"><u>Forgot password</u></string>
+    <string name="password_title">开启密码保护</string>
+    <string name="stop_password_title">关闭密码保护</string>
+    <string name="new_password">输入密码：</string>
+    <string name="confirm_password">确认密码：</string>
+    <string name="hint_password">密码提示：</string>
+    <string name="forgot_password"><u>忘记密码</u></string>
 
     <!-- menu -->
     <string name="app_name">PureNote</string>
-    <string name="action_search">Search</string>
-    <string name="action_plus">Plus</string>
-    <string name="edit_date">Edit date</string>
-    <string name="action_change_mode">Change</string>
-    <string name="action_trash">Delete</string>
-    <string name="action_edit">Edit</string>
-    <string name="action_remind">Reminder</string>
-    <string name="action_cancel_remind">Cancel reminder</string>
-    <string name="action_share">Share</string>
-    <string name="action_move">Move</string>
-    <string name="action_setting">Settings</string>
-    <string name="action_feedback">Feedback</string>
-    <string name="action_evaluate">Evaluate</string>
-    <string name="action_about">About</string>
-    <string name="bind_evernote">Bind EverNote</string>
-    <string name="syn_evernote">Synchronize data</string>
-    <string name="menu_search">Search</string>
+    <string name="action_search">搜索</string>
+    <string name="action_plus">添加笔记</string>
+    <string name="edit_date">修改日期</string>
+    <string name="action_change_mode">显示</string>
+    <string name="action_trash">删除</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_remind">定时提醒</string>
+    <string name="action_cancel_remind">取消提醒</string>
+    <string name="action_share">分享</string>
+    <string name="action_setting">设置</string>
+    <string name="action_feedback">意见反馈</string>
+    <string name="action_evaluate">评分</string>
+    <string name="action_about">关于</string>
+    <string name="bind_evernote">绑定EverNote</string>
+    <string name="syn_evernote">同步数据</string>
+    <string name="menu_search">搜索</string>
 
     <!-- delete dialog -->
-    <string name="delete_text">Confirm delete？</string>
-    <string name="logout_text">Confirm logout EverNote?</string>
+    <string name="delete_text">确认删除笔记？</string>
+    <string name="logout_text">确认登出EverNote?</string>
 
     <!-- Drawable layout -->
-    <string name="all_notes">ALL NOTES</string>
-    <string name="folder_cancel">Cancel</string>
-    <string name="folder_delete_num">Delete(%1$s)</string>
-    <string name="folder_delete">Delete</string>
-    <string name="folder_new">New</string>
+    <string name="all_notes">所有笔记</string>
+    <string name="folder_cancel">取消</string>
+    <string name="folder_delete_num">删除(%1$d)</string>
+    <string name="folder_delete">删除</string>
+    <string name="folder_new">新建</string>
 
     <!-- create folder dialog -->
     <string name="create_folder_title">新建笔记分组</string>
@@ -131,42 +129,42 @@
     <string name="rename_folder_err">重命名笔记分组失败！</string>
 
     <!-- setting -->
-    <string name="logout_evernote_username_null">Logout</string>
-    <string name="comment_purenote">Rate PureNote</string>
-    <string name="donate_developer">Donate developer</string>
+    <string name="logout_evernote_username_null">退出登录</string>
+    <string name="comment_purenote">评价应用</string>
+    <string name="donate_developer">捐赠作者</string>
     <string name="donate_me_tip">随性资助鼓励，让我有动力完善极简笔记\n(・8・)\n~～戳这里保存图片,加入图库～~</string>
 
-    <string name="password_guard_on">On</string>
-    <string name="password_guard_off">Off</string>
-    <string name="lightning_extract_on">On</string>
+    <string name="password_guard_on">已启用</string>
+    <string name="password_guard_off">未启用</string>
+    <string name="lightning_extract_on">已启用</string>
     <string name="switch_lightning_extract_on">启动闪电摘录</string>
-    <string name="lightning_extract_off">Off</string>
+    <string name="lightning_extract_off">未启用</string>
     <string name="switch_lightning_extract_off">停止闪电摘录</string>
     <string name="lightning_extract_save_location">选择存储位置</string>
     <string name="alert_stop_lightning_extract">确认停用服务？</string>
     <string name="alert_restart_lightning_extract">启动闪电摘录</string>
     <string name="proudly">Copyright © 2015 PureNote\nMade with love by Duanze</string>
 
-    <!--week array-->
-    <string name="monday">MON</string>
-    <string name="tuesday">TUE</string>
-    <string name="wednesday">WED</string>
-    <string name="thursday">THU</string>
-    <string name="friday">FRI</string>
-    <string name="saturday">SAT</string>
-    <string name="sunday">SUN</string>
+    <!-- week array -->
+    <string name="monday">周一</string>
+    <string name="tuesday">周二</string>
+    <string name="wednesday">周三</string>
+    <string name="thursday">周四</string>
+    <string name="friday">周五</string>
+    <string name="saturday">周六</string>
+    <string name="sunday">周日</string>
 
     <!-- rate for purenote -->
-    <string name="rate_for_purenote">Enjoy PureNote？</string>
-    <string name="rate_rate">Rate it</string>
-    <string name="rate_feedback">No,not good…</string>
-    <string name="dont_care">Later</string>
+    <string name="rate_for_purenote">喜欢PureNote？</string>
+    <string name="rate_rate">去评价</string>
+    <string name="rate_feedback">我要吐槽!</string>
+    <string name="dont_care">下次再说</string>
 
     <!--settings fragment-->
-    <string name="general_settings">General</string>
+    <string name="general_settings">常规</string>
 
-    <string name="login_evernote">Login EverNote</string>
-    <string name="logout_evernote">%1$s Logout</string>
+    <string name="login_evernote">同步至EverNote</string>
+    <string name="logout_evernote">%1$s\u0020退出登录</string>
 
     <string name="activity_need_recreate">activity_need_recreate</string>
 
@@ -229,28 +227,28 @@
     <string name="no_reminder">没有倒计时中的定时提醒</string>
 
     <!-- actionMode -->
-    <string name="delete_confirm">Confirm delete?</string>
-    <string name="delete_all_confirm">Delete all notes selected？</string>
-    <string name="delete_select_nothing">Selected nothing</string>
+    <string name="delete_confirm">确认删除？</string>
+    <string name="delete_all_confirm">删除选中笔记？</string>
+    <string name="delete_select_nothing">没有选择任何笔记</string>
     <!-- Context Menu -->
-    <string name="selected_one_count">Selected %1$d item</string>
-    <string name="selected_more_count">Selected %1$d items</string>
+    <string name="selected_one_count">选择了%1$d个</string>
+    <string name="selected_more_count">选择了%1$d个</string>
 
-    <string name="select_all">Select all</string>
+    <string name="select_all">选择全部</string>
     <!-- Context Menu -->
 
-    <string name="title_activity_license">Licenses</string>
+    <string name="title_activity_license">代码许可</string>
 
-    <string name="mode_new">New Note</string>
-    <string name="mode_edit">Edit Note</string>
-    <string name="mode_view">View Note</string>
+    <string name="mode_new">新建笔记</string>
+    <string name="mode_edit">编辑笔记</string>
+    <string name="mode_view">阅读笔记</string>
 
-    <string name="notification_quick_write">NewNote</string>
-    <string name="notification_lightning_extract_on">ReadyExtract</string>
-    <string name="notification_lightning_extract_off">Waiting</string>
-    <string name="search_note">Search</string>
-    <string name="password_guard_stop">Password guard off</string>
-    <string name="password_error">Password incorrect</string>
-    <string name="password_guard_start">Password guard on</string>
+    <string name="notification_quick_write">快</string>
+    <string name="notification_lightning_extract_on">闪</string>
+    <string name="notification_lightning_extract_off">凝</string>
+    <string name="search_note">搜索笔记</string>
+    <string name="password_guard_stop">密码保护已停用</string>
+    <string name="password_error">密码错误</string>
+    <string name="password_guard_start">密码保护已启用</string>
     <string name="passwords_differ">两次输入的密码不一致</string>
 </resources>

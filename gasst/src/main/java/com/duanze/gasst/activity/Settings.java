@@ -304,7 +304,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.stop_password_title)
                 .setView(view)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String _password = password.getText().toString();
@@ -321,7 +321,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                         }
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
         dialog.show();
@@ -337,7 +337,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.password_title)
                 .setView(view)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String _password = password.getText().toString();
@@ -358,7 +358,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .create();
         dialog.show();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
@@ -414,7 +414,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.lightning_extract_save_location)
                 .setView(view)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         preferences.edit()
@@ -423,7 +423,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                         tv.setText(tmpLocationName);
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .create();
         dialog.show();
     }
@@ -475,7 +475,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.lightning_extract_save_location)
                 .setView(view)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         preferences.edit()
@@ -484,7 +484,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                         tv.setText(tmpLocationName);
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .create();
         dialog.show();
     }
@@ -532,7 +532,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
                     builder.setMessage(R.string.logout_text)
-                            .setPositiveButton(R.string.confirm,
+                            .setPositiveButton(android.R.string.ok,
                                     new DialogInterface.OnClickListener() {
 
 
@@ -542,7 +542,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                                             mEvernote.Logout();
                                         }
                                     })
-                            .setNegativeButton(R.string.cancel, null)
+                            .setNegativeButton(android.R.string.cancel, null)
                             .create().show();
                 }
                 break;
@@ -625,7 +625,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         final Dialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.note_max_length_dialog_title)
                 .setView(view)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String ratio = editText.getText().toString();
@@ -639,7 +639,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                         }
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
         dialog.show();
