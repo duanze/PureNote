@@ -178,7 +178,6 @@
     <string name="one_column_title">单列模式</string>
     <string name="one_column_summary">勾选后，界面由双列瀑布流调整为单列</string>
     <string name="one_column_key">one_column_key</string>
-    <string name="one_column_result">设置已经更改，重启软件生效</string>
 
     <string name="create_order_title">排序依据</string>
     <string name="create_order_summary">勾选前，依据为最后修改时间；勾选后，依据为笔记创建时间</string>
@@ -214,7 +213,7 @@
     <string name="extract_location_key">lightning_extract_save_location</string>
 
     <string name="quick_write">快写工具</string>
-    <string name="quick_write_summary">随前台服务启动后出现，点击图标即可快速写一条新笔记</string>
+    <string name="quick_write_summary">随前台服务启动出现，点击即可快速写一条新笔记</string>
 
     <string name="quick_write_location">快写工具 - 保存位置</string>
     <string name="quick_write_location_key">quick_write_location_key</string>
@@ -223,8 +222,6 @@
     <string name="extract_error">出现错误，未能成功摘录，请重新设置功能！</string>
     <string name="read_save_location_error">读取保存位置出错！</string>
     <string name="already_extract_to">"文本摘录至 "</string>
-    <string name="extract_stop">停用闪电摘录</string>
-    <string name="extract_start">启动闪电摘录</string>
     <string name="no_reminder">没有倒计时中的定时提醒</string>
 
     <!-- actionMode -->

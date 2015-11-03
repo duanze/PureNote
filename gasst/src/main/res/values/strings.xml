@@ -12,11 +12,11 @@
     <string name="write_something">Feel free to write.</string>
     <string name="saved_picture_to">Saved image to:</string>
 
-    <string name="before_minute" formatted="false">%d\u0020 minutes ago</string>
-    <string name="before_hour" formatted="false">%d\u0020 hours ago</string>
-    <string name="before_day" formatted="false">%d\u0020 days ago</string>
-    <string name="before_month" formatted="false">%d\u0020 months ago</string>
-    <string name="before_year" formatted="false">%d\u0020 years ago</string>
+    <string name="before_minute" formatted="false">%d\u0020minutes ago</string>
+    <string name="before_hour" formatted="false">%d\u0020hours ago</string>
+    <string name="before_day" formatted="false">%d\u0020days ago</string>
+    <string name="before_month" formatted="false">%d\u0020months ago</string>
+    <string name="before_year" formatted="false">%d\u0020years ago</string>
     <string name="just_now">moments ago</string>
     <string name="before_half_hour">half hour ago</string>
 
@@ -75,9 +75,9 @@
     <string name="tip0">强烈推荐您于设置中开启本应用独有的王牌功能：闪电摘录。\n仅需复制，就能快速保存一条新笔记。回想起来，我开发这款应用的初衷就是要实现这个功能吧:)</string>
     <string name="tip_optional">回归初心，化繁为简。\n出于这点，我对整个应用进行了从内而外的修改。除了提升性能以外，原本的左滑菜单被长按所取代。极简笔记一直在进步，如有任何建议敬请反馈。</string>
     <string name="tip1">人生苦短，想做的事如果不迅速付诸行动，99% 都会无疾而终哦(・8・)</string>
-    <string name="tip2">感谢您下载使用极简笔记，以下为您奉上几点使用指南：\n长按笔记进行批量操作，善用分享功能可令文本保存至其他应用\n右滑呼出抽屉菜单，可以创建笔记分组，长按笔记分组可以重命名\n定时提醒、闪电摘录这类功能有可能需要您添加权限，让进程不被清理才能正常使用\n设置中可以绑定EverNote帐户，启动密码保护等\n最后，有任何意见和建议敬请反馈</string>
+    <string name="tip2">Thank you for downloading PureNote,the following are some tips：\nLong press to operate plural notes\nSlide right to open drawer where you can create group,and long press group to rename it.\nTo view more functions in Settings page.\nLast,feel free to feedback any opinions and suggestions</string>
     <string name="tip3">亲爱的用户：为了今后的功能拓展，自2.1.8版本起极简笔记采用了新的文本解析技术，如您的旧有笔记在新版中出现乱码，烦请将绑定EverNote帐号，同步所有数据至云端，然后卸载应用、重新下载、安装同步即可恢复正常，不便之处还请见谅。</string>
-    <string name="date_error">无效日期</string>
+    <string name="date_error">Invalidate date</string>
 
     <!-- foreground service -->
     <string name="one_reminder">\u0020reminder is counting down.</string>
@@ -134,17 +134,17 @@
     <string name="logout_evernote_username_null">Logout</string>
     <string name="comment_purenote">Rate PureNote</string>
     <string name="donate_developer">Donate developer</string>
-    <string name="donate_me_tip">随性资助鼓励，让我有动力完善极简笔记\n(・8・)\n~～戳这里保存图片,加入图库～~</string>
+    <string name="donate_me_tip">Feel free to donate,give me motive power to improve PureNote\n(・8・)\n~～Click here to save image～~</string>
 
     <string name="password_guard_on">On</string>
     <string name="password_guard_off">Off</string>
     <string name="lightning_extract_on">On</string>
-    <string name="switch_lightning_extract_on">Start Lightning-Extract</string>
+    <string name="switch_lightning_extract_on">Start LightningExtract</string>
     <string name="lightning_extract_off">Off</string>
-    <string name="switch_lightning_extract_off">Stop Lightning-Extract</string>
-    <string name="lightning_extract_save_location">选择存储位置</string>
-    <string name="alert_stop_lightning_extract">确认停用服务？</string>
-    <string name="alert_restart_lightning_extract">Start Lightning-Extract</string>
+    <string name="switch_lightning_extract_off">Stop LightningExtract</string>
+    <string name="lightning_extract_save_location">Choose the save location</string>
+    <string name="alert_stop_lightning_extract">Confirm stop service?</string>
+    <string name="alert_restart_lightning_extract">Start LightningExtract</string>
     <string name="proudly">Copyright © 2015 PureNote\nMade with love by Duanze</string>
 
     <!--week array-->
@@ -173,61 +173,58 @@
     <string name="choose_theme_title">Choose theme</string>
     <string name="choose_theme_key">choose_theme_key</string>
 
-    <string name="concentrate_write_title">专注写作</string>
-    <string name="concentrate_write_summary">开启后监听软键盘，写笔记时自动消隐标题栏</string>
+    <string name="concentrate_write_title">Focus on writing</string>
+    <string name="concentrate_write_summary">If this is on,listen to SoftInput so that hide title when writing.</string>
     <string name="concentrate_write_key">concentrate_write_key</string>
 
-    <string name="one_column_title">单列模式</string>
-    <string name="one_column_summary">勾选后，界面由双列瀑布流调整为单列</string>
+    <string name="one_column_title">Single column</string>
+    <string name="one_column_summary">After check it,the notes just organize into one column.</string>
     <string name="one_column_key">one_column_key</string>
-    <string name="one_column_result">设置已经更改，重启软件生效</string>
 
-    <string name="create_order_title">排序依据</string>
-    <string name="create_order_summary">勾选前，依据为最后修改时间；勾选后，依据为笔记创建时间</string>
+    <string name="create_order_title">Sort order</string>
+    <string name="create_order_summary">After check it,the notes are sorted by create time.</string>
     <string name="create_order_key">create_order_key</string>
 
-    <string name="note_max_length_title">笔记高度</string>
-    <string name="note_max_length_summary">笔记的最大高度由相对于设备的比例系数决定，其值在0.05~0.75之间</string>
+    <string name="note_max_length_title">Note height</string>
+    <string name="note_max_length_summary">The max height depends on the height ratio that value is between 0.05 and 0.75.</string>
     <string name="note_max_length_key">note_max_length_key</string>
     <string name="note_max_length_default">0.418</string>
     <string name="note_max_length_min">0.05</string>
     <string name="note_max_length_max">0.75</string>
-    <string name="note_max_length_dialog_title">输入比例系数</string>
+    <string name="note_max_length_dialog_title">Input height ratio</string>
 
     <string name="password_guard">Password Guard</string>
     <string name="validate_password">Validate password:</string>
-    <string name="password_guard_summary">设定应用启动时的密码以保护您的数据安全</string>
+    <string name="password_guard_summary">Set a startup password to secure you notes.</string>
     <string name="password_guard_key">password_guard</string>
 
     <string name="universal_password">Universal password</string>
-    <string name="universal_password_summary">以防不测，免除忘记密码带来的尴尬</string>
+    <string name="universal_password_summary">In case of forget password.</string>
     <string name="universal_password_key">use_universal_password</string>
 
     <string name="notification_tools">Notification tools</string>
 
-    <string name="notification_always_show">常驻通知栏</string>
-    <string name="notification_always_show_summary">某些机型可能需要设置进程免杀才能正常工作</string>
+    <string name="notification_always_show">Resident notification</string>
+    <string name="notification_always_show_summary">Some devices maybe should give permissions to make it work well.</string>
 
-    <string name="lightning_extract">闪电摘录</string>
-    <string name="lightning_extract_summary">开启后监视剪切板，只需复制即可摘录文字至特定位置</string>
+    <string name="lightning_extract">LightningExtract</string>
+    <string name="lightning_extract_summary">If this is on，listen to clipboard so that you can save a note by copy.</string>
     <string name="lightning_extract_key">lightning_extract</string>
 
-    <string name="extract_location">闪电摘录 - 保存位置</string>
+    <string name="extract_location">LightningExtract - Save location</string>
     <string name="extract_location_key">lightning_extract_save_location</string>
 
-    <string name="quick_write">快写工具</string>
-    <string name="quick_write_summary">随前台服务启动后出现，点击图标即可快速写一条新笔记</string>
+    <string name="quick_write">QuickWrite</string>
+    <string name="quick_write_summary">Along with the notification startup,click to write a new note.</string>
 
-    <string name="quick_write_location">快写工具 - 保存位置</string>
+    <string name="quick_write_location">QuickWrite - Save location</string>
     <string name="quick_write_location_key">quick_write_location_key</string>
 
     <!--errors alert-->
-    <string name="extract_error">出现错误，未能成功摘录，请重新设置功能！</string>
-    <string name="read_save_location_error">读取保存位置出错！</string>
-    <string name="already_extract_to">"文本摘录至 "</string>
-    <string name="extract_stop">停用闪电摘录</string>
-    <string name="extract_start">启动闪电摘录</string>
-    <string name="no_reminder">没有倒计时中的定时提醒</string>
+    <string name="extract_error">Error when extract,please restart this function.</string>
+    <string name="read_save_location_error">Error when get save path!</string>
+    <string name="already_extract_to">Extracted to\u0020</string>
+    <string name="no_reminder">No reminder.</string>
 
     <!-- actionMode -->
     <string name="delete_confirm">Confirm delete?</string>
@@ -253,5 +250,5 @@
     <string name="password_guard_stop">Password guard off</string>
     <string name="password_error">Password incorrect</string>
     <string name="password_guard_start">Password guard on</string>
-    <string name="passwords_differ">两次输入的密码不一致</string>
+    <string name="passwords_differ">Entered passwords differ!</string>
 </resources>

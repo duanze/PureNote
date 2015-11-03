@@ -225,7 +225,7 @@ public class AlarmService extends Service {
         remoteViews.setTextViewText(R.id.iv_bolt, boltOff);
         toggleBoltBtnStatus();
         startForeground(-1, notification);
-        Toast.makeText(mContext, R.string.extract_stop, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.switch_lightning_extract_off, Toast.LENGTH_SHORT).show();
     }
 
     private void startExtract() {
@@ -234,7 +234,7 @@ public class AlarmService extends Service {
         remoteViews.setTextViewText(R.id.iv_bolt, boltOn);
         toggleBoltBtnStatus();
         startForeground(-1, notification);
-        Toast.makeText(mContext, R.string.extract_start, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.switch_lightning_extract_on, Toast.LENGTH_SHORT).show();
     }
 
     private void rapidStopExtract() {

@@ -75,7 +75,7 @@ public class Util {
             tmp = twoDigit(Integer.parseInt(allInfo[1]) + 1)
                     + "."
                     + allInfo[2]
-                    + " - "
+                    + "-"
                     + allInfo[3]
                     + ":"
                     + allInfo[4];

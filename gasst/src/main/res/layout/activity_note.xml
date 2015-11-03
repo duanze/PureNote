@@ -6,7 +6,9 @@
               android:focusableInTouchMode="true"
               android:orientation="vertical">
 
-    <include layout="@layout/toolbar_shadow_layout"/>
+    <include
+        android:id="@+id/toolbar_shadow"
+        layout="@layout/toolbar_shadow_layout"/>
     <!--<View-->
     <!--android:id="@+id/divide_line"-->
     <!--android:layout_width="match_parent"-->

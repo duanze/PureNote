@@ -636,7 +636,9 @@ public class Note extends BaseActivity implements TextWatcher {
         final LinearLayout rootLayout = getRootLayout();
         final ActionBar actionBar = getSupportActionBar();
         if (null == actionBar) return;
-        final int height = actionBar.getHeight();
+
+        final View shadow = rootLayout.findViewById(R.id.toolbar_shadow);
+        final int height = actionBar.getHeight() + shadow.getHeight();
 
         if (animate) {
             ValueAnimator animator =
