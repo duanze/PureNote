@@ -193,6 +193,7 @@
     <string name="note_max_length_dialog_title">输入比例系数</string>
 
     <string name="password_guard">密码保护</string>
+    <string name="validate_password">验证口令：</string>
     <string name="password_guard_summary">设定应用启动时的密码以保护您的数据安全</string>
     <string name="password_guard_key">password_guard</string>
 
