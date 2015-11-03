@@ -1,7 +1,7 @@
 # PureNote极简笔记
 A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>
-<br>~~See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)~~暂停更新<br>
+<br>See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)<br>
 [小米应用商店](http://app.mi.com/detail/85433)
 #一切皆为虚妄
 -声明：虽然肉眼看上去跟这个项目[Notes](https://github.com/lguipeng/Notes)极为相似，但实现原理上其实完全不同，见码即知
