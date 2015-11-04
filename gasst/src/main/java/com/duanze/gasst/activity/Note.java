@@ -194,7 +194,7 @@ public class Note extends BaseActivity implements TextWatcher {
         gNote = getIntent().getParcelableExtra("gAsstNote_data");
         isPassed = gNote.getPassed();
         bookId = gNote.getGNotebookId();
-        mDataParser = new Originator(new Memo(gNote.getContent()));
+        mDataParser = new Originator(new Memo(gNote.getContent(), 0));
         isUndoOrRedo = false;
         db = GNoteDB.getInstance(this);
 
@@ -369,7 +369,8 @@ public class Note extends BaseActivity implements TextWatcher {
 
     private void setDataToNoteContent() {
         String content = mDataParser.getState().getContent();
-        setNoteContent(content, content.length());
+        int selectionEnd = mDataParser.getState().getSelectionEnd();
+        setNoteContent(content, selectionEnd);
     }
 
     private void setNoteContent(String content, int length) {
@@ -684,7 +685,11 @@ public class Note extends BaseActivity implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         if (!isUndoOrRedo) {
-            mDataParser.newState(new Memo(s.toString()));
+            int selectionLocation = editText.getSelectionEnd();
+            if (-1 == selectionLocation) {
+                selectionLocation = 0;
+            }
+            mDataParser.newState(new Memo(s.toString(), selectionLocation));
         } else {
             isUndoOrRedo = false;
         }

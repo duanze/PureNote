@@ -7,8 +7,8 @@ android {
         applicationId "com.duanze.gasst"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 35
-        versionName "2.2.4"
+        versionCode 36
+        versionName "2.2.5"
     }
     buildTypes {
         release {
