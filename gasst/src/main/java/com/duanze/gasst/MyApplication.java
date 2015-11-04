@@ -3,15 +3,27 @@ package com.duanze.gasst;
 import android.app.Application;
 import android.content.Context;
 
+import com.duanze.gasst.activity.StartActivity.SyncHandler;
+
 public class MyApplication extends Application {
-	private static Context context;
-	@Override
-	public void onCreate(){
-		super.onCreate();
-		context = getApplicationContext();
-	}
-	
-	public static Context getContext(){
-		return context;
-	}
+    private static Context mContext;
+    private SyncHandler mHandler;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = getApplicationContext();
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
+    public SyncHandler getHandler() {
+        return mHandler;
+    }
+
+    public void setHandler(SyncHandler handler) {
+        mHandler = handler;
+    }
 }

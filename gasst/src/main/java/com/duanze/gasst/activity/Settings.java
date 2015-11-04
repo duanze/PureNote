@@ -27,6 +27,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.duanze.gasst.MyApplication;
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.ColorsListAdapter;
 import com.duanze.gasst.model.GNoteDB;
@@ -285,7 +286,9 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     }
 
     private void activityNeedRecreate() {
-        PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(true);
+        MyApplication application = (MyApplication) getApplication();
+        StartActivity.SyncHandler handler = application.getHandler();
+        handler.sendEmptyMessage(StartActivity.NEED_RECREATE);
     }
 
     private void setGuardText(boolean b) {
@@ -589,7 +592,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     private void chooseThemeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(R.string.choose_theme_title);
-        Integer[] res = new Integer[]{R.drawable.blue_round, R.drawable.yellow_round, R.drawable.pink_round,R.drawable.green_round};
+        Integer[] res = new Integer[]{R.drawable.blue_round, R.drawable.yellow_round, R.drawable.pink_round, R.drawable.green_round};
         List<Integer> list = Arrays.asList(res);
         ColorsListAdapter adapter = new ColorsListAdapter(this, list);
         adapter.setCheckItem(ThemeUtils.getCurrentTheme(this).getIntValue());
@@ -610,7 +613,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
     private void onThemeChosen(int position) {
         PreferencesUtils.getInstance(mContext).setTheme(position);
-        PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(true);
+        activityNeedRecreate();
         recreate();
     }
 

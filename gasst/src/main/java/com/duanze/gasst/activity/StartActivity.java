@@ -38,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.duanze.gasst.MyApplication;
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.GNotebookAdapter;
 import com.duanze.gasst.fragment.FiltratePage;
@@ -334,6 +335,9 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
         //evernote
         mEvernote = new Evernote(this, this);
+
+        MyApplication application = (MyApplication) getApplication();
+        application.setHandler(new SyncHandler());
 
         //如果是第一次启动应用，在数据库中添加note
         versionCode = Util.getVersionCode(mContext);
@@ -839,12 +843,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         rateForPureNote();
         // / umeng
         MobclickAgent.onResume(this);
-
-        boolean needRecreate = PreferencesUtils.getInstance(mContext).isActivityNeedRecreate();
-        if (needRecreate) {
-            PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(false);
-            recreate();
-        }
     }
 
     public void uiOperation() {
@@ -1088,8 +1086,9 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
     private static final int UPGRADE_START = 280;
     private static final int UPGRADE_END = 281;
+    public static final int NEED_RECREATE = 0x0010;
 
-    class SyncHandler extends Handler {
+    public class SyncHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -1105,6 +1104,10 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                     break;
                 case UPGRADE_END:
                     dismissDialog(OPERATE);
+                    break;
+
+                case NEED_RECREATE:
+                    recreate();
                     break;
                 default:
                     break;

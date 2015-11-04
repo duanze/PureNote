@@ -17,7 +17,6 @@ public class PreferencesUtils {
     private boolean oneColumn;
     private int gNotebookId;
     private Theme theme;
-    private boolean activityNeedRecreate;
     private boolean passwordGuard;
     private int notesNum;
 
@@ -81,7 +80,6 @@ public class PreferencesUtils {
         concentrateWrite = preferences.getBoolean(mContext.getString(R.string.concentrate_write_key), true);
         oneColumn = preferences.getBoolean(mContext.getString(R.string.one_column_key), false);
         theme = Theme.mapValueToTheme(preferences.getInt(mContext.getString(R.string.choose_theme_key), 0));
-        activityNeedRecreate = false;
 
         passwordGuard = preferences.getBoolean(Settings.PASSWORD_GUARD, false);
         gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
@@ -166,16 +164,6 @@ public class PreferencesUtils {
     public void setTheme(int i) {
         theme = Theme.mapValueToTheme(i);
         preferences.edit().putInt(mContext.getString(R.string.choose_theme_key), i).apply();
-    }
-
-    public boolean isActivityNeedRecreate() {
-        checkValid();
-        return activityNeedRecreate;
-    }
-
-    public void setActivityNeedRecreate(boolean activityNeedRecreate) {
-        this.activityNeedRecreate = activityNeedRecreate;
-        preferences.edit().putBoolean(mContext.getString(R.string.activity_need_recreate), activityNeedRecreate).apply();
     }
 
     public boolean isPasswordGuard() {
