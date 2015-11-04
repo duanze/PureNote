@@ -614,7 +614,11 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     private void onThemeChosen(int position) {
         PreferencesUtils.getInstance(mContext).setTheme(position);
         activityNeedRecreate();
+<<<<<<< HEAD
         recreate();
+=======
+//        recreate();
+>>>>>>> f485cb5aaa32a46f232101416d7b0a504f7426c1
     }
 
     private void inputMaxLengthRatio() {

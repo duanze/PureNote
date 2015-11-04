@@ -75,6 +75,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         GNotebookAdapter.OnItemSelectListener, GNotebookAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "StartActivity";
+    public static final int REQUEST_SETTINGS = 1;
 
     // version code
     private int versionCode;
@@ -1067,7 +1068,9 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                 About.activityStart(mContext);
                 break;
             case R.id.setting:
-                Settings.activityStart(this);
+//                Settings.activityStart(this);
+                Intent intent = new Intent(mContext, Settings.class);
+                startActivityForResult(intent, REQUEST_SETTINGS);
                 break;
             case R.id.menu_search:
                 break;
@@ -1137,6 +1140,12 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
             //Update UI when oauth activity returns result
             case EvernoteSession.REQUEST_CODE_OAUTH:
                 mEvernote.onAuthFinish(resultCode);
+                break;
+
+            case REQUEST_SETTINGS:
+                if (resultCode == RESULT_OK) {
+                    recreate();
+                }
                 break;
         }
     }
