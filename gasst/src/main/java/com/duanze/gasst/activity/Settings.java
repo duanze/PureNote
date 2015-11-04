@@ -269,7 +269,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PreferencesUtils.getInstance(mContext).setOneColumn(isChecked);
-                activityNeedRecreate();
+                refreshStartActivity();
             }
         });
 
@@ -280,12 +280,12 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PreferencesUtils.getInstance(mContext).setUseCreateOrder(isChecked);
-                activityNeedRecreate();
+                refreshStartActivity();
             }
         });
     }
 
-    private void activityNeedRecreate() {
+    private void refreshStartActivity() {
         MyApplication application = (MyApplication) getApplication();
         StartActivity.SyncHandler handler = application.getHandler();
         handler.sendEmptyMessage(StartActivity.NEED_RECREATE);
@@ -613,12 +613,8 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
     private void onThemeChosen(int position) {
         PreferencesUtils.getInstance(mContext).setTheme(position);
-        activityNeedRecreate();
-<<<<<<< HEAD
-        recreate();
-=======
-//        recreate();
->>>>>>> f485cb5aaa32a46f232101416d7b0a504f7426c1
+        refreshStartActivity();
+        finish();
     }
 
     private void inputMaxLengthRatio() {
@@ -642,7 +638,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                         if (r >= rMin && r <= rMax) {
                             maxLengthRatio.setText(ratio);
                             PreferencesUtils.getInstance(mContext).setMaxLengthRatio(r);
-                            activityNeedRecreate();
+                            refreshStartActivity();
                         }
                     }
                 })
