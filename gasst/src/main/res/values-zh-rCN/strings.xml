@@ -101,6 +101,7 @@
     <string name="action_remind">定时提醒</string>
     <string name="action_cancel_remind">取消提醒</string>
     <string name="action_share">分享</string>
+    <string name="action_move">移动</string>
     <string name="action_setting">设置</string>
     <string name="action_feedback">意见反馈</string>
     <string name="action_evaluate">评分</string>

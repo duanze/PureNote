@@ -75,7 +75,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         GNotebookAdapter.OnItemSelectListener, GNotebookAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "StartActivity";
-    public static final int REQUEST_SETTINGS = 1;
 
     // version code
     private int versionCode;
@@ -216,7 +215,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 //进行删除操作时无视之
         if (FolderFooterDelete.FLAG == modeFooter) return;
 
-        int oldId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+        int oldId = PreferencesUtils.getInstance(mContext).getGNotebookId();
         int newId = 0;
         GNotebook gNotebook = (GNotebook) view.getTag(R.string.gnotebook_data);
         if (null != gNotebook) {
@@ -337,6 +336,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         //evernote
         mEvernote = new Evernote(this, this);
 
+        // / 配置全局Handler
         MyApplication application = (MyApplication) getApplication();
         application.setHandler(new SyncHandler());
 
@@ -395,8 +395,8 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         zero.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(zero);
 
-        int n = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
-        preferences.edit().putInt(Settings.PURENOTE_NOTE_NUM, n + 1).apply();
+        int n = PreferencesUtils.getInstance(mContext).getNotesNum();
+        PreferencesUtils.getInstance(mContext).setNotesNum(n + 1);
     }
 
     private void upgradeTo28() {
@@ -425,12 +425,12 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         zero.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(zero);
 
-        int n = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
-        preferences.edit().putInt(Settings.PURENOTE_NOTE_NUM, n + 1).apply();
+        int n = PreferencesUtils.getInstance(mContext).getNotesNum();
+        PreferencesUtils.getInstance(mContext).setNotesNum(n + 1);
     }
 
     private void setActionBarTitle() {
-        int bookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
+        int bookId = PreferencesUtils.getInstance(mContext).getGNotebookId();
         String bookName;
         if (bookId == 0) {
             bookName = getResources().getString(R.string.all_notes);
@@ -629,7 +629,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         if (oldId == newId) return;
         //刷新界面
         LogUtil.i(TAG, "gNotebook id oldId:" + oldId + " newId:" + newId);
-        preferences.edit().putInt(Settings.GNOTEBOOK_ID, newId).commit();
+        PreferencesUtils.getInstance(mContext).setGNotebookId(newId);
         refreshUI();
     }
 
@@ -696,7 +696,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
             db.updateGNote(gNote);
         }
         int n = list.size();
-        preferences.edit().putInt(Settings.PURENOTE_NOTE_NUM, n).apply();
+        PreferencesUtils.getInstance(mContext).setNotesNum(n);
         return n;
     }
 
@@ -719,8 +719,8 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         zero.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(zero);
 
-        int n = preferences.getInt(Settings.PURENOTE_NOTE_NUM, 0);
-        preferences.edit().putInt(Settings.PURENOTE_NOTE_NUM, n + 1).apply();
+        int n = PreferencesUtils.getInstance(mContext).getNotesNum();
+        PreferencesUtils.getInstance(mContext).setNotesNum(n + 1);
     }
 
     private void firstLaunch() {
@@ -747,7 +747,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         two.setEditTime(TimeUtils.getCurrentTimeInLong());
         db.saveGNote(two);
 
-        preferences.edit().putInt(Settings.PURENOTE_NOTE_NUM, 2).commit();
+        PreferencesUtils.getInstance(mContext).setNotesNum(2);
     }
 
 
@@ -1068,9 +1068,7 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                 About.activityStart(mContext);
                 break;
             case R.id.setting:
-//                Settings.activityStart(this);
-                Intent intent = new Intent(mContext, Settings.class);
-                startActivityForResult(intent, REQUEST_SETTINGS);
+                Settings.activityStart(this);
                 break;
             case R.id.menu_search:
                 break;
@@ -1140,12 +1138,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
             //Update UI when oauth activity returns result
             case EvernoteSession.REQUEST_CODE_OAUTH:
                 mEvernote.onAuthFinish(resultCode);
-                break;
-
-            case REQUEST_SETTINGS:
-                if (resultCode == RESULT_OK) {
-                    recreate();
-                }
                 break;
         }
     }
