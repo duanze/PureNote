@@ -285,7 +285,8 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     }
 
     private void activityNeedRecreate() {
-        PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(true);
+//        PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(true);
+        setResult(RESULT_OK);
     }
 
     private void setGuardText(boolean b) {
@@ -610,8 +611,8 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
     private void onThemeChosen(int position) {
         PreferencesUtils.getInstance(mContext).setTheme(position);
-        PreferencesUtils.getInstance(mContext).setActivityNeedRecreate(true);
-        recreate();
+        activityNeedRecreate();
+//        recreate();
     }
 
     private void inputMaxLengthRatio() {
