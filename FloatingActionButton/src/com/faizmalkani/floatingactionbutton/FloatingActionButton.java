@@ -150,9 +150,13 @@ public class FloatingActionButton extends View {
         }
 
         // Store the FAB button's displayed Y position if we are not already aware of it
-        if (mYDisplayed == -1) {
-            mYDisplayed = ViewHelper.getY(this);
-        }
+//        if (mYDisplayed == -1) {
+//            mYDisplayed = ViewHelper.getY(this);
+//        }
+
+        // / Modified by Duanze
+        // Just for the situation that the parent layout is changed
+        mYDisplayed = ViewHelper.getY(this);
     }
 
     @Override
@@ -202,6 +206,7 @@ public class FloatingActionButton extends View {
 
     /**
      * Created by Duanze
+     *
      * @param recyclerView
      */
     public void listenTo(RecyclerView recyclerView) {

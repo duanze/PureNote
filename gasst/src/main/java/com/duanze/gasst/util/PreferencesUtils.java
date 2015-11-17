@@ -16,7 +16,7 @@ public class PreferencesUtils {
     private boolean concentrateWrite;
     private boolean oneColumn;
     private int gNotebookId;
-    private Theme theme;
+    private ThemeUtils.Theme theme;
     private boolean passwordGuard;
     private int notesNum;
 
@@ -25,36 +25,6 @@ public class PreferencesUtils {
     private boolean mValid = false;
 
     private static PreferencesUtils sMe;
-
-
-    // / Theme...
-    public enum Theme {
-        BLUE(0),
-        YELLOW(1),
-        PINK(2),
-        GREEN(3);
-
-        private int intValue;
-
-        Theme(int value) {
-            this.intValue = value;
-        }
-
-        public static Theme mapValueToTheme(final int value) {
-            for (Theme theme : Theme.values()) {
-                if (value == theme.getIntValue()) {
-                    return theme;
-                }
-            }
-            // If run here, return default
-            return BLUE;
-        }
-
-        public int getIntValue() {
-            return intValue;
-        }
-    }
-    // / End
 
     private PreferencesUtils(Context context) {
         mContext = context;
@@ -77,9 +47,9 @@ public class PreferencesUtils {
     public void refreshData() {
         maxLengthRatio = preferences.getFloat(mContext.getString(R.string.note_max_length_key), (float) 0.418);
         useCreateOrder = preferences.getBoolean(mContext.getString(R.string.create_order_key), false);
-        concentrateWrite = preferences.getBoolean(mContext.getString(R.string.concentrate_write_key), true);
+        concentrateWrite = preferences.getBoolean(mContext.getString(R.string.concentrate_write_key), false);
         oneColumn = preferences.getBoolean(mContext.getString(R.string.one_column_key), false);
-        theme = Theme.mapValueToTheme(preferences.getInt(mContext.getString(R.string.choose_theme_key), 0));
+        theme = ThemeUtils.Theme.mapValueToTheme(preferences.getInt(mContext.getString(R.string.choose_theme_key), 0));
 
         passwordGuard = preferences.getBoolean(Settings.PASSWORD_GUARD, false);
         gNotebookId = preferences.getInt(Settings.GNOTEBOOK_ID, 0);
@@ -152,17 +122,17 @@ public class PreferencesUtils {
         preferences.edit().putInt(Settings.GNOTEBOOK_ID, gNotebookId).apply();
     }
 
-    public Theme getTheme() {
+    public ThemeUtils.Theme getTheme() {
         checkValid();
         return theme;
     }
 
-    public Theme fetchTheme() {
-        return theme = Theme.mapValueToTheme(preferences.getInt(mContext.getString(R.string.choose_theme_key), 0));
+    public ThemeUtils.Theme fetchTheme() {
+        return theme = ThemeUtils.Theme.mapValueToTheme(preferences.getInt(mContext.getString(R.string.choose_theme_key), 0));
     }
 
     public void setTheme(int i) {
-        theme = Theme.mapValueToTheme(i);
+        theme = ThemeUtils.Theme.mapValueToTheme(i);
         preferences.edit().putInt(mContext.getString(R.string.choose_theme_key), i).apply();
     }
 

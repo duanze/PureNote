@@ -232,7 +232,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         });
 
         concentrateWrite = (Switch) findViewById(R.id.s_concentrate_write);
-        b = preferences.getBoolean(getString(R.string.concentrate_write_key), true);
+        b = PreferencesUtils.getInstance(mContext).isConcentrateWrite();
         concentrateWrite.setChecked(b);
         concentrateWrite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -269,7 +269,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PreferencesUtils.getInstance(mContext).setOneColumn(isChecked);
-                refreshStartActivity();
+                refreshStartActivity(StartActivity.NEED_RECREATE);
             }
         });
 
@@ -280,15 +280,15 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PreferencesUtils.getInstance(mContext).setUseCreateOrder(isChecked);
-                refreshStartActivity();
+                refreshStartActivity(StartActivity.NEED_RECREATE);
             }
         });
     }
 
-    private void refreshStartActivity() {
+    private void refreshStartActivity(int message) {
         MyApplication application = (MyApplication) getApplication();
         StartActivity.SyncHandler handler = application.getHandler();
-        handler.sendEmptyMessage(StartActivity.NEED_RECREATE);
+        handler.sendEmptyMessage(message);
     }
 
     private void setGuardText(boolean b) {
@@ -529,25 +529,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_evernote:
-                if (!mEvernote.isLogin()) {
-                    LogUtil.i(TAG, "try to login");
-                    mEvernote.auth();
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
-                    builder.setMessage(R.string.logout_text)
-                            .setPositiveButton(android.R.string.ok,
-                                    new DialogInterface.OnClickListener() {
-
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog,
-                                                            int which) {
-                                            mEvernote.Logout();
-                                        }
-                                    })
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .create().show();
-                }
+                loginEverNote();
                 break;
             case R.id.ll_password_container:
                 passwordGuard.performClick();
@@ -589,11 +571,32 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         }
     }
 
+    private void loginEverNote() {
+        if (!mEvernote.isLogin()) {
+            LogUtil.i(TAG, "try to login");
+            mEvernote.auth();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+            builder.setMessage(R.string.logout_text)
+                    .setPositiveButton(android.R.string.ok,
+                            new DialogInterface.OnClickListener() {
+
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    mEvernote.Logout();
+                                }
+                            })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create().show();
+        }
+    }
+
     private void chooseThemeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(R.string.choose_theme_title);
-        Integer[] res = new Integer[]{R.drawable.blue_round, R.drawable.yellow_round, R.drawable.pink_round, R.drawable.green_round};
-        List<Integer> list = Arrays.asList(res);
+        List<Integer> list = Arrays.asList(ThemeUtils.THEME_RES_ARR);
         ColorsListAdapter adapter = new ColorsListAdapter(this, list);
         adapter.setCheckItem(ThemeUtils.getCurrentTheme(this).getIntValue());
         GridView gridView = (GridView) LayoutInflater.from(this).inflate(R.layout.colors_panel_layout, null);
@@ -613,7 +616,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
     private void onThemeChosen(int position) {
         PreferencesUtils.getInstance(mContext).setTheme(position);
-        refreshStartActivity();
+        refreshStartActivity(StartActivity.NEED_RECREATE);
         finish();
     }
 
@@ -638,7 +641,7 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
                         if (r >= rMin && r <= rMax) {
                             maxLengthRatio.setText(ratio);
                             PreferencesUtils.getInstance(mContext).setMaxLengthRatio(r);
-                            refreshStartActivity();
+                            refreshStartActivity(StartActivity.NEED_RECREATE);
                         }
                     }
                 })

@@ -49,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initTheme() {
-        PreferencesUtils.Theme theme = PreferencesUtils.getInstance(this).getTheme();
+        ThemeUtils.Theme theme = PreferencesUtils.getInstance(this).getTheme();
         ThemeUtils.changTheme(this, theme);
     }
 

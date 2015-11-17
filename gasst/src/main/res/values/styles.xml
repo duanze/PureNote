@@ -55,6 +55,18 @@
         <item name="android:windowExitAnimation">@anim/abc_fade_out</item>
     </style>
 
+    <style name="LightPinkTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/light_pink</item>
+        <item name="colorPrimaryDark">@color/dark_light_pink</item>
+        <item name="colorAccent">@color/light_pink</item>
+    </style>
+
+    <style name="GrayTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimaryDark">@color/dark_gray</item>
+        <item name="colorAccent">@color/gray</item>
+    </style>
+
     <style name="BlueTheme" parent="AppTheme">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">@color/dark_blue</item>
@@ -115,6 +127,17 @@
         <item name="colorAccent">@color/accent_green</item>
     </style>
 
+    <style name="BrownTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/brown</item>
+        <item name="colorPrimaryDark">@color/dark_brown</item>
+        <item name="colorAccent">@color/accent_brown</item>
+    </style>
+
+    <style name="BrownDialogTheme" parent="BaseDialogTheme">
+        <item name="colorPrimary">@color/brown</item>
+        <item name="colorPrimaryDark">@color/dark_brown</item>
+        <item name="colorAccent">@color/accent_brown</item>
+    </style>
 
     <!-- Application theme. -->
     <style name="PureNoteTheme" parent="android:Theme.Light"></style>

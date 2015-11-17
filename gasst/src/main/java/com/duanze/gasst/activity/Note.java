@@ -168,6 +168,8 @@ public class Note extends BaseActivity implements TextWatcher {
         actionBar.setTitle(stamp);
     }
 
+    private int lastHeight;
+
     private void listenSoftInput() {
         final View scroll = findViewById(R.id.sv_just);
         scroll.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -180,8 +182,9 @@ public class Note extends BaseActivity implements TextWatcher {
 //                        Log.e(TAG, "rootLayout.getHeight() = " + scroll.getHeight());
 
                         if (heightDiff > 0.33 * rootHeight) { // 说明键盘是弹出状态
+                            lastHeight = scroll.getHeight();
                             hideToolbar();
-                        } else {
+                        } else if (0 != lastHeight && lastHeight < scroll.getHeight()) {
                             showToolbar();
                         }
                     }
@@ -633,7 +636,7 @@ public class Note extends BaseActivity implements TextWatcher {
 
     private boolean mIsActionBarSlidUp = false;
 
-    private void slideActionBar(boolean slideUp, boolean animate) {
+    private void slideAppBar(boolean slideUp) {
         final LinearLayout rootLayout = getRootLayout();
         final ActionBar actionBar = getSupportActionBar();
         if (null == actionBar) return;
@@ -641,35 +644,31 @@ public class Note extends BaseActivity implements TextWatcher {
         final View shadow = rootLayout.findViewById(R.id.toolbar_shadow);
         final int height = actionBar.getHeight() + shadow.getHeight();
 
-        if (animate) {
-            ValueAnimator animator =
-                    slideUp ? ValueAnimator.ofFloat(0, 1) : ValueAnimator.ofFloat(1, 0);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    final float value = (float) animation.getAnimatedValue();
+        ValueAnimator animator =
+                slideUp ? ValueAnimator.ofFloat(0, 1) : ValueAnimator.ofFloat(1, 0);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                final float value = (float) animation.getAnimatedValue();
 //                    actionBar.setHideOffset((int) (actionBar.getHeight() * value));
-                    LinearLayout.MarginLayoutParams params = (LinearLayout.MarginLayoutParams) rootLayout.getLayoutParams();
-                    params.setMargins(0, -(int) (height * value), 0, 0);
-                    rootLayout.setLayoutParams(params);
-                    rootLayout.requestLayout();
-                }
-            });
-            animator.start();
-        } else {
-//            actionBar.setHideOffset(slideUp ? actionBar.getHeight() : 0);
-        }
+                LinearLayout.MarginLayoutParams params = (LinearLayout.MarginLayoutParams) rootLayout.getLayoutParams();
+                params.setMargins(0, -(int) (height * value), 0, 0);
+                rootLayout.setLayoutParams(params);
+                rootLayout.requestLayout();
+            }
+        });
+        animator.start();
         mIsActionBarSlidUp = slideUp;
     }
 
     private void hideToolbar() {
         if (mIsActionBarSlidUp) return;
-        slideActionBar(true, true);
+        slideAppBar(true);
     }
 
     private void showToolbar() {
         if (!mIsActionBarSlidUp) return;
-        slideActionBar(false, true);
+        slideAppBar(false);
     }
 
     @Override
