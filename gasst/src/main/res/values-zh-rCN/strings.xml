@@ -103,7 +103,7 @@
     <string name="action_share">分享</string>
     <string name="action_move">移动</string>
     <string name="action_setting">设置</string>
-    <string name="action_feedback">Bug反馈</string>
+    <string name="action_feedback">使用反馈</string>
     <string name="action_evaluate">评分</string>
     <string name="action_about">关于</string>
     <string name="bind_evernote">绑定EverNote</string>
