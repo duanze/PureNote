@@ -2,7 +2,7 @@
 <resources>
     <string name="menu_undo">Undo</string>
     <string name="menu_redo">Redo</string>
-    <string name="github_repository">My GitHub</string>
+    <string name="github_repository">GitHub Repo</string>
 
     <string name="word_count">Word count</string>
     <string name="characters_no_spaces">Characters(no space):</string>

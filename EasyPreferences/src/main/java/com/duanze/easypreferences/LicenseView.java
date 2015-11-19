@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.larswerkman.licenseview;
-
-import java.io.IOException;
-import java.util.List;
-
-import org.xmlpull.v1.XmlPullParserException;
+package com.duanze.easypreferences;
 
 import android.content.Context;
 import android.content.res.Resources.NotFoundException;
@@ -29,7 +24,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.duanze.gasst.R;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.List;
 
 public class LicenseView extends ScrollView {
 
