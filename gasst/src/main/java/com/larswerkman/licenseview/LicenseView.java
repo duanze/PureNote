@@ -57,7 +57,7 @@ public class LicenseView extends ScrollView {
 		mContainer.setOrientation(LinearLayout.VERTICAL);
 		addView(mContainer);
 
-		// / Added by Duanze
+		// / Added by duanze
 		setOverScrollMode(OVER_SCROLL_NEVER);
 	}
 

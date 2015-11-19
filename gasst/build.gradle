@@ -6,9 +6,9 @@ android {
     defaultConfig {
         applicationId "com.duanze.gasst"
         minSdkVersion 14
-        targetSdkVersion 22
-        versionCode 39
-        versionName "2.2.9"
+        targetSdkVersion 21
+        versionCode 38
+        versionName "2.2.7"
     }
     buildTypes {
         release {
@@ -27,7 +27,6 @@ dependencies {
     compile files('src/main/libs/systembartint-1.0.4.jar')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile project(':EasyPreferences')
 }
 
 repositories {
