@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
+import com.duanze.easypreferences.EasyPreferences;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
@@ -153,7 +154,10 @@ public class Note extends BaseActivity implements TextWatcher {
             }
         }
 
-        if (PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
+//        if (PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
+//            listenSoftInput();
+//        }
+        if (EasyPreferences.getInstance().getBoolean(R.string.concentrate_write_key)) {
             listenSoftInput();
         }
     }
@@ -207,10 +211,12 @@ public class Note extends BaseActivity implements TextWatcher {
         editText.addTextChangedListener(this);
 
         if (mode == MODE_NEW) {
-            if (!PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
-                editText.requestFocus();
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-            }
+//            if (!PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
+//                editText.requestFocus();
+//                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//            }
+            editText.requestFocus();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         } else if (mode == MODE_EDIT) {
             editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override

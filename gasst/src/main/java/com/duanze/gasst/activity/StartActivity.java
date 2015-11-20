@@ -38,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.duanze.easypreferences.EasyPreferences;
 import com.duanze.gasst.MyApplication;
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.GNotebookAdapter;
@@ -61,6 +62,9 @@ import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
 import com.umeng.analytics.MobclickAgent;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Calendar;
@@ -326,6 +330,14 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 //        已在父类 BaseActivity 中对Preferences进行初始化
 //        PreferencesUtils.getInstance(mContext).refreshData();
         setContentView(R.layout.activity_start);
+
+        try {
+            EasyPreferences.getInstance().init(mContext, R.xml.prefs);
+        } catch (XmlPullParserException x) {
+
+        } catch (IOException i) {
+
+        }
 
         dm = getResources().getDisplayMetrics();
         today = Calendar.getInstance();

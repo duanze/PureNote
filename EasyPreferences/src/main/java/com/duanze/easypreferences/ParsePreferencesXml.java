@@ -1,92 +1,114 @@
-/*
- * Copyright 2013 Lars Werkman
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.larswerkman.licenseview;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.xmlpull.v1.XmlPullParserException;
+package com.duanze.easypreferences;
 
 import android.content.res.XmlResourceParser;
 
-public class ParseLicenseXml {
+import org.xmlpull.v1.XmlPullParserException;
 
-	private static final String TAG_ROOT = "licenses";
-	private static final String TAG_CHILD = "license";
-	private static final String ATTR_NAME = "name";
-	private static final String ATTR_TYPE = "type";
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
-	private static final String VALUE_FILE = "file";
-	private static final String VALUE_LIBRARY = "library";
+public class ParsePreferencesXml {
 
-	public static List<License> Parse(XmlResourceParser parser)
-			throws XmlPullParserException, IOException {
-		List<License> licenses = new ArrayList<License>();
-		int event = parser.getEventType();
+    private static final String TAG_ROOT = "preferences";
+    private static final String TAG_CHILD = "preference";
+    private static final String ATTR_NAME = "name";
 
-		String name = null;
-		String type = null;
-		String license = null;
+    private static final String TAG_KEY = "key";
+    private static final String TAG_DEFAULT_VALUE = "def-value";
 
-		while (event != XmlResourceParser.END_DOCUMENT) {
-			if (event == XmlResourceParser.START_TAG) {
-				if (!parser.getName().equals(TAG_ROOT)
-						&& !parser.getName().equals(TAG_CHILD))
-					throw new XmlPullParserException(
-							"Error in xml: tag isn't '" + TAG_ROOT + "' or '"
-									+ TAG_CHILD + "' at line:"
-									+ parser.getLineNumber());
-				name = parser.getAttributeValue(null, ATTR_NAME);
-				type = parser.getAttributeValue(null, ATTR_TYPE);
-			} else if (event == XmlResourceParser.TEXT) {
-				license = parser.getText();
-			} else if (event == XmlResourceParser.END_TAG) {
-				if (name != null && type != null && license != null
-						&& !parser.getName().equals(TAG_ROOT)) {
-					if (type.equals(VALUE_FILE)) {
-						licenses.add(new License(name, License.TYPE_FILE,
-								license));
-						System.out.println(name);
-					} else if (type.equals(VALUE_LIBRARY)) {
-						licenses.add(new License(name, License.TYPE_LIBRARY,
-								license));
-						System.out.println(name);
-					} else {
-						throw new XmlPullParserException(
-								"Error in xml: 'type' isn't valid at line:"
-										+ parser.getLineNumber());
-					}
-				} else if (name == null) {
-					throw new XmlPullParserException(
-							"Error in xml: doesn't contain a 'name' at line:"
-									+ parser.getLineNumber());
-				} else if (type == null) {
-					throw new XmlPullParserException(
-							"Error in xml: doesn't contain a 'type' at line:"
-									+ parser.getLineNumber());
-				} else if (license == null){
-					throw new XmlPullParserException(
-							"Error in xml: doesn't contain a 'license text' at line:"
-									+ parser.getLineNumber());
-				}
-			}
-			event = parser.next();
-		}
-		parser.close();
-		return licenses;
-	}
+    public static ActualUtil parse(XmlResourceParser parser)
+            throws XmlPullParserException, IOException {
+        Map<String, Preference> map = new HashMap<>();
+        int event = parser.getEventType();
+
+        Preference preference = null;
+        String name = null;
+        Stack<String> tagStack = new Stack<>();
+
+        while (event != XmlResourceParser.END_DOCUMENT) {
+            if (event == XmlResourceParser.START_TAG) {
+                switch (parser.getName()) {
+                    case TAG_ROOT:
+                        name = parser.getAttributeValue(null, ATTR_NAME);
+                        tagStack.push(TAG_ROOT);
+                        if (null == name) {
+                            throw new XmlPullParserException(
+                                    "Error in xml: doesn't contain a 'name' at line:"
+                                            + parser.getLineNumber());
+                        }
+                        break;
+                    case TAG_CHILD:
+                        preference = new Preference();
+                        tagStack.push(TAG_CHILD);
+                        break;
+                    case TAG_KEY:
+                        tagStack.push(TAG_KEY);
+                        break;
+                    case TAG_DEFAULT_VALUE:
+                        tagStack.push(TAG_DEFAULT_VALUE);
+                        break;
+                    default:
+                        throw new XmlPullParserException(
+                                "Error in xml: tag isn't '"
+                                        + TAG_ROOT
+                                        + "' or '"
+                                        + TAG_CHILD
+                                        + "' or '"
+                                        + TAG_KEY
+                                        + "' or '"
+                                        + TAG_DEFAULT_VALUE
+                                        + "' at line:"
+                                        + parser.getLineNumber());
+                }
+
+            } else if (event == XmlResourceParser.TEXT) {
+                switch (tagStack.peek()) {
+                    case TAG_KEY:
+                        preference.key = parser.getText();
+                        break;
+                    case TAG_DEFAULT_VALUE:
+                        preference.defValue = parser.getText();
+                        break;
+                }
+
+            } else if (event == XmlResourceParser.END_TAG) {
+                boolean mismatch = false;
+                switch (parser.getName()) {
+                    case TAG_ROOT:
+                        if (!TAG_ROOT.equals(tagStack.pop())) {
+                            mismatch = true;
+                        }
+                        break;
+                    case TAG_CHILD:
+                        if (!TAG_CHILD.equals(tagStack.pop())) {
+                            mismatch = true;
+                        }
+                        map.put(preference.key, preference);
+                        break;
+                    case TAG_KEY:
+                        if (!TAG_KEY.equals(tagStack.pop())) {
+                            mismatch = true;
+                        }
+                        break;
+                    case TAG_DEFAULT_VALUE:
+                        if (!TAG_DEFAULT_VALUE.equals(tagStack.pop())) {
+                            mismatch = true;
+                        }
+                        break;
+                }
+
+                if (mismatch) {
+                    throw new XmlPullParserException(
+                            "Error in xml: mismatch end tag at line:"
+                                    + parser.getLineNumber());
+                }
+
+            }
+            event = parser.next();
+        }
+        parser.close();
+        return new ActualUtil(name, map);
+    }
 }
