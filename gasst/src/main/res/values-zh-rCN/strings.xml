@@ -2,7 +2,7 @@
 <resources>
     <string name="menu_undo">撤消</string>
     <string name="menu_redo">重做</string>
-    <string name="github_repository">My GitHub</string>
+    <string name="github_repository">GitHub Repo</string>
 
     <string name="word_count">字数统计</string>
     <string name="characters_no_spaces">字符数（不包含空格）：</string>
