@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Duanze
- * <p>
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,18 +67,18 @@ public class ParsePrefsXml {
                     case TAG_DEFAULT_VALUE:
                         tagStack.push(TAG_DEFAULT_VALUE);
                         break;
-                    default:
-                        throw new XmlPullParserException(
-                                "Error in xml: tag isn't '"
-                                        + TAG_ROOT
-                                        + "' or '"
-                                        + TAG_CHILD
-                                        + "' or '"
-                                        + TAG_KEY
-                                        + "' or '"
-                                        + TAG_DEFAULT_VALUE
-                                        + "' at line:"
-                                        + parser.getLineNumber());
+//                    default:
+//                        throw new XmlPullParserException(
+//                                "Error in xml: tag isn't '"
+//                                        + TAG_ROOT
+//                                        + "' or '"
+//                                        + TAG_CHILD
+//                                        + "' or '"
+//                                        + TAG_KEY
+//                                        + "' or '"
+//                                        + TAG_DEFAULT_VALUE
+//                                        + "' at line:"
+//                                        + parser.getLineNumber());
                 }
 
             } else if (event == XmlResourceParser.TEXT) {

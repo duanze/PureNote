@@ -27,7 +27,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.duanze.litepreferences.LitePrefs;
 import com.duanze.gasst.MyApplication;
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.ColorsListAdapter;
@@ -233,15 +232,13 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
         });
 
         concentrateWrite = (Switch) findViewById(R.id.s_concentrate_write);
-//        b = PreferencesUtils.getInstance(mContext).isConcentrateWrite();
-        b = LitePrefs.getInstance().getBoolean(R.string.concentrate_write_key);
+        b = PreferencesUtils.getInstance(mContext).isConcentrateWrite();
 
         concentrateWrite.setChecked(b);
         concentrateWrite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                PreferencesUtils.getInstance(mContext).setConcentrateWrite(isChecked);
-                LitePrefs.getInstance().putBoolean(R.string.concentrate_write_key, isChecked);
+                PreferencesUtils.getInstance(mContext).setConcentrateWrite(isChecked);
             }
         });
 

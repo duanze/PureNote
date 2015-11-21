@@ -25,13 +25,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
-import com.duanze.litepreferences.LitePrefs;
 import com.duanze.gasst.R;
+import com.duanze.gasst.memento.Memo;
+import com.duanze.gasst.memento.Originator;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.memento.Originator;
-import com.duanze.gasst.memento.Memo;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.PreferencesUtils;
@@ -154,10 +153,7 @@ public class Note extends BaseActivity implements TextWatcher {
             }
         }
 
-//        if (PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
-//            listenSoftInput();
-//        }
-        if (LitePrefs.getInstance().getBoolean(R.string.concentrate_write_key)) {
+        if (PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
             listenSoftInput();
         }
     }
@@ -211,10 +207,6 @@ public class Note extends BaseActivity implements TextWatcher {
         editText.addTextChangedListener(this);
 
         if (mode == MODE_NEW) {
-//            if (!PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
-//                editText.requestFocus();
-//                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//            }
             editText.requestFocus();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         } else if (mode == MODE_EDIT) {
@@ -230,10 +222,8 @@ public class Note extends BaseActivity implements TextWatcher {
         } else if (MODE_TODAY == mode) {
             gNote.setCalToTime(today);
             gNote.setGNotebookId(preferences.getInt(Settings.QUICK_WRITE_SAVE_LOCATION, 0));
-            if (!PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
-                editText.requestFocus();
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-            }
+            editText.requestFocus();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
