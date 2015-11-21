@@ -38,7 +38,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.duanze.easypreferences.EasyPreferences;
+import com.duanze.litepreferences.LitePrefs;
 import com.duanze.gasst.MyApplication;
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.GNotebookAdapter;
@@ -332,11 +332,9 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
         setContentView(R.layout.activity_start);
 
         try {
-            EasyPreferences.getInstance().init(mContext, R.xml.prefs);
-        } catch (XmlPullParserException x) {
-
-        } catch (IOException i) {
-
+            LitePrefs.getInstance().initFromXml(mContext, R.xml.prefs);
+        } catch (XmlPullParserException | IOException x) {
+            x.printStackTrace();
         }
 
         dm = getResources().getDisplayMetrics();

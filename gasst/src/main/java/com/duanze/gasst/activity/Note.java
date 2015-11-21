@@ -25,7 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
-import com.duanze.easypreferences.EasyPreferences;
+import com.duanze.litepreferences.LitePrefs;
 import com.duanze.gasst.R;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
@@ -157,7 +157,7 @@ public class Note extends BaseActivity implements TextWatcher {
 //        if (PreferencesUtils.getInstance(mContext).isConcentrateWrite()) {
 //            listenSoftInput();
 //        }
-        if (EasyPreferences.getInstance().getBoolean(R.string.concentrate_write_key)) {
+        if (LitePrefs.getInstance().getBoolean(R.string.concentrate_write_key)) {
             listenSoftInput();
         }
     }

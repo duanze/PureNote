@@ -1,1 +1,1 @@
-include ':gasst', ':EverNoteEx',':FloatingActionButton', ':EasyPreferences'
+include ':gasst', ':EverNoteEx',':FloatingActionButton', ':LitePreferences'

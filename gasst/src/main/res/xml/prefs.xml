@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<preferences name="gasst_pref">
-    <preference>
+<prefs name="gasst_pref">
+    <pref>
         <key>concentrate_write_key</key>
         <def-value>false</def-value>
-    </preference>
-</preferences>
+    </pref>
+</prefs>

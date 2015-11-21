@@ -1,6 +1,24 @@
-package com.duanze.easypreferences;
+/**
+ * Copyright 2015 Duanze
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.duanze.litepreferences.parser;
 
 import android.content.res.XmlResourceParser;
+
+import com.duanze.litepreferences.ActualUtil;
+import com.duanze.litepreferences.model.Pref;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -9,10 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-public class ParsePreferencesXml {
+public class ParsePrefsXml {
 
-    private static final String TAG_ROOT = "preferences";
-    private static final String TAG_CHILD = "preference";
+    private static final String TAG_ROOT = "prefs";
+    private static final String TAG_CHILD = "pref";
     private static final String ATTR_NAME = "name";
 
     private static final String TAG_KEY = "key";
@@ -20,10 +38,10 @@ public class ParsePreferencesXml {
 
     public static ActualUtil parse(XmlResourceParser parser)
             throws XmlPullParserException, IOException {
-        Map<String, Preference> map = new HashMap<>();
+        Map<String, Pref> map = new HashMap<>();
         int event = parser.getEventType();
 
-        Preference preference = null;
+        Pref pref = null;
         String name = null;
         Stack<String> tagStack = new Stack<>();
 
@@ -40,7 +58,7 @@ public class ParsePreferencesXml {
                         }
                         break;
                     case TAG_CHILD:
-                        preference = new Preference();
+                        pref = new Pref();
                         tagStack.push(TAG_CHILD);
                         break;
                     case TAG_KEY:
@@ -66,10 +84,10 @@ public class ParsePreferencesXml {
             } else if (event == XmlResourceParser.TEXT) {
                 switch (tagStack.peek()) {
                     case TAG_KEY:
-                        preference.key = parser.getText();
+                        pref.key = parser.getText();
                         break;
                     case TAG_DEFAULT_VALUE:
-                        preference.defValue = parser.getText();
+                        pref.defValue = parser.getText();
                         break;
                 }
 
@@ -85,7 +103,7 @@ public class ParsePreferencesXml {
                         if (!TAG_CHILD.equals(tagStack.pop())) {
                             mismatch = true;
                         }
-                        map.put(preference.key, preference);
+                        map.put(pref.key, pref);
                         break;
                     case TAG_KEY:
                         if (!TAG_KEY.equals(tagStack.pop())) {

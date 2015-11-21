@@ -27,7 +27,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.duanze.easypreferences.EasyPreferences;
+import com.duanze.litepreferences.LitePrefs;
 import com.duanze.gasst.MyApplication;
 import com.duanze.gasst.R;
 import com.duanze.gasst.adapter.ColorsListAdapter;
@@ -42,9 +42,6 @@ import com.duanze.gasst.util.Util;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.type.User;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -237,17 +234,14 @@ public class Settings extends BaseActivity implements View.OnClickListener, Ever
 
         concentrateWrite = (Switch) findViewById(R.id.s_concentrate_write);
 //        b = PreferencesUtils.getInstance(mContext).isConcentrateWrite();
-
-
-
-        b = EasyPreferences.getInstance().getBoolean(R.string.concentrate_write_key);
+        b = LitePrefs.getInstance().getBoolean(R.string.concentrate_write_key);
 
         concentrateWrite.setChecked(b);
         concentrateWrite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 //                PreferencesUtils.getInstance(mContext).setConcentrateWrite(isChecked);
-                EasyPreferences.getInstance().setBoolean(R.string.concentrate_write_key, isChecked);
+                LitePrefs.getInstance().putBoolean(R.string.concentrate_write_key, isChecked);
             }
         });
 
