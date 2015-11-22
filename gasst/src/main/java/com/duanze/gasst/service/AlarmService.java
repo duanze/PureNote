@@ -9,24 +9,21 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-
-import com.duanze.gasst.activity.StartActivity;
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.Note;
-import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.receiver.AlarmReceiver;
+import com.duanze.gasst.ui.activity.Note;
+import com.duanze.gasst.ui.activity.StartActivity;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
-
+import com.duanze.gasst.util.liteprefs.MyLitePrefs;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -48,12 +45,10 @@ public class AlarmService extends Service {
     public static final int RAPID_STOP_EXTRACT = 6;
     public static final int SHOW_OR_HIDE = 7;
 
-    private GNoteDB db;
     private int cnt;
     private Context mContext;
     private RemoteViews remoteViews;
     private Notification notification;
-    private SharedPreferences preferences;
 
     private boolean isExtract = false;
     private String boltOn;
@@ -137,9 +132,7 @@ public class AlarmService extends Service {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        db = GNoteDB.getInstance(mContext);
-        preferences = getSharedPreferences(Settings.DATA, MODE_PRIVATE);
-        isExtract = preferences.getBoolean(Settings.LIGHTNING_EXTRACT, false);
+        isExtract = MyLitePrefs.getBoolean(MyLitePrefs.LIGHTNING_EXTRACT);
 
         boltOn = getString(R.string.notification_lightning_extract_on);
         boltOff = getString(R.string.notification_lightning_extract_off);
@@ -151,9 +144,9 @@ public class AlarmService extends Service {
                 if (isExtract) {
                     ClipData data = cm.getPrimaryClip();
                     ClipData.Item item = data.getItemAt(0);
-                    int extractLocation = preferences.getInt(Settings.LIGHTNING_EXTRACT_SAVE_LOCATION, 0);
+                    int extractLocation = MyLitePrefs.getInt(MyLitePrefs.LIGHTNING_EXTRACT_SAVE_LOCATION);
 
-                    String extractGroup = Util.extractNote(db, item.getText().toString(), extractLocation, mContext);
+                    String extractGroup = Util.extractNote(item.getText().toString(), extractLocation, mContext);
                     if (extractGroup != null) {
                         Toast.makeText(mContext, getString(R.string.already_extract_to) + extractGroup, Toast.LENGTH_SHORT).show();
                     } else {
@@ -209,7 +202,7 @@ public class AlarmService extends Service {
 
 
     private void showOrHideService() {
-        boolean b = preferences.getBoolean(Settings.NOTIFICATION_ALWAYS_SHOW, false);
+        boolean b = MyLitePrefs.getBoolean(MyLitePrefs.NOTIFICATION_ALWAYS_SHOW);
         if (b) {
             refreshAlarmTasks();
             refreshNotification();
@@ -240,13 +233,13 @@ public class AlarmService extends Service {
     private void rapidStopExtract() {
         if (null == remoteViews) return;
         stopExtract();
-        preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, false).apply();
+        MyLitePrefs.putBoolean(MyLitePrefs.LIGHTNING_EXTRACT, false);
     }
 
     private void rapidStartExtract() {
         if (null == remoteViews) return;
         startExtract();
-        preferences.edit().putBoolean(Settings.LIGHTNING_EXTRACT, true).apply();
+        MyLitePrefs.putBoolean(MyLitePrefs.LIGHTNING_EXTRACT, true);
     }
 
 
@@ -313,8 +306,8 @@ public class AlarmService extends Service {
 
     private void maybeStop() {
 //检测是否常驻通知栏与是否开启闪电摘录
-        boolean b = preferences.getBoolean(Settings.NOTIFICATION_ALWAYS_SHOW, false);
-        boolean isExtract = preferences.getBoolean(Settings.LIGHTNING_EXTRACT, false);
+        boolean b = MyLitePrefs.getBoolean(MyLitePrefs.NOTIFICATION_ALWAYS_SHOW);
+        boolean isExtract = MyLitePrefs.getBoolean(MyLitePrefs.LIGHTNING_EXTRACT);
         if (!b && cnt == 0 && !isExtract) {
             stopSelf();
         }
@@ -362,7 +355,7 @@ public class AlarmService extends Service {
 
 
     private void refreshAlarmTasks() {
-        List<GNote> list = db.loadGNotes();
+        List<GNote> list = GNoteDB.getInstance(mContext).loadGNotes();
         cnt = 0;
         for (int i = 0; i < list.size(); i++) {
             GNote note = list.get(i);

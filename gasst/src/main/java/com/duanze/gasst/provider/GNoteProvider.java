@@ -15,10 +15,10 @@ import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 
 public class GNoteProvider extends ContentProvider {
-    public static final int NOTE_DIR = 1;
-    public static final int NOTE_ITEM = 2;
-    public static final int NOTEBOOK_DIR = 3;
-    public static final int NOTEBOOK_ITEM = 4;
+    private static final int NOTE_DIR = 1;
+    private static final int NOTE_ITEM = 2;
+    private static final int NOTEBOOK_DIR = 3;
+    private static final int NOTEBOOK_ITEM = 4;
 
     public static final String AUTHORITY = "com.duanze.gasst.provider";
     public static final String TABLE_NOTE = GNoteDB.TABLE_NAME;

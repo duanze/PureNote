@@ -5,7 +5,7 @@
              android:layout_height="match_parent"
              android:orientation="vertical">
 
-    <com.duanze.gasst.view.SwipeRefreshLayoutEx
+    <com.duanze.gasst.ui.view.SwipeRefreshLayoutEx
         android:id="@+id/refresher"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -18,7 +18,7 @@
             android:paddingRight="@dimen/rv_margin"
             android:overScrollMode="never"
             android:scrollbars="none"/>
-    </com.duanze.gasst.view.SwipeRefreshLayoutEx>
+    </com.duanze.gasst.ui.view.SwipeRefreshLayoutEx>
 
     <com.faizmalkani.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabbutton"

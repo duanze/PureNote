@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="sync_end">Sync end.</string>
+
     <string name="menu_undo">Undo</string>
     <string name="menu_redo">Redo</string>
     <string name="github_repository">GitHub Repo</string>
@@ -206,6 +208,7 @@
 
     <string name="notification_always_show">Resident notification</string>
     <string name="notification_always_show_summary">Some devices maybe should give permissions to make it work well.</string>
+    <string name="notification_always_show_key">"notification_always_show_key"</string>
 
     <string name="lightning_extract">LightningExtract</string>
     <string name="lightning_extract_summary">If this is on，listen to clipboard so that you can save a note by copy.</string>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.duanze.gasst.R;
+import com.duanze.gasst.util.liteprefs.MyLitePrefs;
 
 
 /**
@@ -49,7 +50,7 @@ public class ThemeUtils {
     }
 
     public static Theme getCurrentTheme(Context context) {
-        return PreferencesUtils.getInstance(context).getTheme();
+        return MyLitePrefs.getTheme();
     }
 
     public enum Theme {

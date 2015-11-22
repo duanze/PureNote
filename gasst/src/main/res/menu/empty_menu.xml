@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.duanze.gasst.activity.StartActivity"
+      tools:context="com.duanze.gasst.ui.activity.StartActivity"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 </menu>

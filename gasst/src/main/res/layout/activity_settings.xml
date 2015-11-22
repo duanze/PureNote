@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.duanze.gasst.activity.Settings">
+    >
 
     <include layout="@layout/toolbar_shadow_layout"/>
 

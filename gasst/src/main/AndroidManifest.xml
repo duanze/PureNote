@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/PureNoteTheme">
         <activity
-            android:name=".activity.StartActivity"
+            android:name=".ui.activity.StartActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
@@ -26,28 +26,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.Note"
+            android:name=".ui.activity.Note"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".activity.Settings"
+            android:name=".ui.activity.SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".activity.Password"
+            android:name=".ui.activity.Password"
             android:label="@string/password_guard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.Donate"
+            android:name=".ui.activity.Donate"
             android:label="@string/donate_developer"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.About"
+            android:name=".ui.activity.About"
             android:label="@string/action_about"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
@@ -82,7 +82,7 @@
             android:theme="@style/PureNoteTheme"/>
 
         <activity
-            android:name=".activity.Licenses"
+            android:name=".ui.activity.Licenses"
             android:label="@string/title_activity_license"
             android:theme="@style/AppTheme">
         </activity>

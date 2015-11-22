@@ -1,4 +1,4 @@
-# PureNote极简笔记
+# PureNote
 A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>
 <br>See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)<br>
@@ -7,11 +7,6 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 -声明：虽然肉眼看上去跟这个项目[Notes](https://github.com/lguipeng/Notes)极为相似，但实现原理上其实完全不同，见码即知
 <br>另外，虽然撞名了，但本项目其实很久很久以前就开始了……
 <br>
-<br>-实际上，这是本人学会新知识后进行实践的第一场所，也正是因为这点，迭代了非常多次，废弃代码占据了相当比例，这一点还请注意（已修整）
-<br>
-<br>对于Android新手来说，这份代码的价值有：
-<br>-所涵盖知识点较为全面，纯原生写法，含有较多的注释，易读————相对于使用各种框架、lambda表达式、各种基类继承的项目来说
-
 
 <br>-知识点细目：
 <br>+[stormzhang](http://www.stormzhang.com/)分享的Toolbar适配方案使用实例

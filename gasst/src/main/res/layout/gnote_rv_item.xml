@@ -7,7 +7,7 @@
     android:layout_margin="@dimen/rv_item_margin"
     android:padding="@dimen/rv_item_padding_left_right">
 
-    <com.duanze.gasst.view.MinusTextView
+    <com.duanze.gasst.ui.view.MinusTextView
         android:id="@+id/note_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

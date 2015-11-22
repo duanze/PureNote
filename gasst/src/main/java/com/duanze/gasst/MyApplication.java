@@ -3,7 +3,7 @@ package com.duanze.gasst;
 import android.app.Application;
 import android.content.Context;
 
-import com.duanze.gasst.activity.StartActivity.SyncHandler;
+import com.duanze.gasst.ui.activity.StartActivity.SyncHandler;
 
 public class MyApplication extends Application {
     private static Context mContext;

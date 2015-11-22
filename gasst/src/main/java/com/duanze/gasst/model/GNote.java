@@ -2,6 +2,7 @@ package com.duanze.gasst.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Html;
@@ -9,7 +10,6 @@ import android.text.Spanned;
 
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.Util;
-import com.duanze.gasst.view.GridUnit;
 import com.evernote.client.android.EvernoteUtil;
 import com.evernote.edam.type.Note;
 
@@ -17,6 +17,23 @@ import java.util.Calendar;
 
 public class GNote implements Parcelable {
     public static final String TAG = "GNote";
+
+    public static final int TRANSPARENT = Color.parseColor("#00000000");
+    public static final int LIGHT_GREY = Color.parseColor("#6AC0C0C0");
+
+    public static final int YELLOW = Color.parseColor("#52FFFF00");
+    public static final int GREEN = Color.parseColor("#5A90EE90");
+    public static final int PINK = Color.parseColor("#6AFFC0CB");
+    public static final int PURPLE = Color.parseColor("#4ADA70D6");
+    public static final int BLUE = Color.parseColor("#7AADD8E6");
+    public static final int RED = Color.parseColor("#32FF0000");
+    public static final int GOLD = Color.parseColor("#6AFFD700");
+
+    public static final int[] COLOR_ARR = {
+            TRANSPARENT, LIGHT_GREY, BLUE,
+            GREEN, YELLOW, GOLD,
+            PINK, RED, PURPLE
+    };
 
     public static final int TRUE = 1;
     public static final int FALSE = 0;
@@ -32,7 +49,7 @@ public class GNote implements Parcelable {
     private int isPassed = TRUE;
     private String content = "";
     private int done = FALSE;
-    private int color = GridUnit.colorArr[0];//初始透明
+    private int color = COLOR_ARR[0];//初始透明
     private long editTime = 0;//最后编辑时间
     private long createdTime = 0;//创建时间
     private int synStatus = NOTHING;//同步状态，仅登录EverNote后有效

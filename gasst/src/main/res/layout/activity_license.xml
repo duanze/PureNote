@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.duanze.gasst.activity.Licenses">
+              tools:context="com.duanze.gasst.ui.activity.Licenses">
 
     <include layout="@layout/toolbar_shadow_layout"/>
     <!--<View-->

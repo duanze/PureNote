@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<prefs name="gasst_pref">
+    <pref>
+        <key>choose_theme_key</key>
+        <def-value>0</def-value>
+        <description>store the theme data,but it should be parse before really use</description>
+    </pref>
+    <pref>
+        <key>concentrate_write_key</key>
+        <def-value>false</def-value>
+    </pref>
+    <pref>
+        <key>one_column_key</key>
+        <def-value>false</def-value>
+    </pref>
+    <pref>
+        <key>create_order_key</key>
+        <def-value>false</def-value>
+    </pref>
+    <pref>
+        <key>note_max_length_key</key>
+        <def-value>0.418</def-value>
+    </pref>
+
+    <!--Password-->
+    <pref>
+        <key>password_guard</key>
+        <def-value>false</def-value>
+    </pref>
+    <pref>
+        <key>show_universal_switch</key>
+        <def-value>false</def-value>
+    </pref>
+    <pref>
+        <key>use_universal_password</key>
+        <def-value>true</def-value>
+        <description>-_-#,need to coordinate with Java code</description>
+    </pref>
+    <pref>
+        <key>password</key>
+        <def-value>"-_-#"</def-value>
+    </pref>
+    <pref>
+        <key>password_hint</key>
+        <def-value>""</def-value>
+    </pref>
+    <!--Password-->
+
+    <pref>
+        <key>notification_always_show_key</key>
+        <def-value>false</def-value>
+    </pref>
+
+    <!--lightning_extract-->
+    <pref>
+        <key>lightning_extract</key>
+        <def-value>false</def-value>
+    </pref>
+    <pref>
+        <key>lightning_extract_save_location</key>
+        <def-value>0</def-value>
+    </pref>
+    <!--lightning_extract-->
+
+    <pref>
+        <key>quick_write_save_location</key>
+        <def-value>0</def-value>
+    </pref>
+
+    <pref>
+        <key>gnotebook_id</key>
+        <def-value>0</def-value>
+    </pref>
+    <pref>
+        <key>purenote_note_num</key>
+        <def-value>2</def-value>
+    </pref>
+
+</prefs>

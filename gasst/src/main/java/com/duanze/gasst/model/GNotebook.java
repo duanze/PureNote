@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.duanze.gasst.util.LogUtil;
+
 public class GNotebook implements Parcelable {
     public static final String TAG = "GNotebook";
     public static final int TRUE = 1;

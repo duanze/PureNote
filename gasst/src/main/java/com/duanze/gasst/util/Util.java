@@ -1,21 +1,23 @@
 package com.duanze.gasst.util;
 
 import android.app.ActivityManager;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.widget.Toast;
 
 import com.duanze.gasst.R;
-import com.duanze.gasst.activity.Settings;
 import com.duanze.gasst.model.GNote;
 import com.duanze.gasst.model.GNoteDB;
 import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.provider.GNoteProvider;
+import com.duanze.gasst.util.liteprefs.MyLitePrefs;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
@@ -24,13 +26,6 @@ import java.util.Random;
 
 public class Util {
     public static final String TAG = Util.class.getSimpleName();
-
-    public static final String[] MONTH_ARR = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-            "Aug", "Sep", "Oct", "Nov", "Dec"};
-    public static final String[] DATE_ARR = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th",
-            "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th", "16th", "17th", "18th",
-            "19th", "20th", "21th", "22th", "23th", "24th", "25th", "26th", "27th", "28th", "29th",
-            "30th", "31th"};
 
     public static final int GREY = Color.parseColor("#808080");
     public static final int HOLO_ORANGE_LIGHT = Color.parseColor("#ffffbb33");
@@ -175,11 +170,18 @@ public class Util {
     /**
      * 闪电摘录
      */
-    public static String extractNote(GNoteDB db, String str, int groupId, Context context) {
+    public static String extractNote(String str, int groupId, Context context) {
         boolean find = false;
         String groupName;
         if (groupId != 0) {
-            GNotebook gNotebook = db.getGNotebookById(groupId);
+            Cursor cursor = context.getContentResolver().query(
+                    ContentUris.withAppendedId(GNoteProvider.NOTEBOOK_URI, groupId),
+                    GNoteProvider.NOTEBOOK_PROJECTION, null, null, null);
+            GNotebook gNotebook = null;
+            if (null != cursor && cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                gNotebook = new GNotebook(cursor);
+            }
             if (gNotebook != null) {
                 groupName = gNotebook.getName();
                 find = true;
@@ -190,9 +192,9 @@ public class Util {
             groupName = context.getResources().getString(R.string.all_notes);
         }
         if (find) {
-            extractNoteToDB(context, db, str, groupId);
+            extractNoteToDB(context, str, groupId);
         } else {
-            extractNoteToDB(context, db, str, 0);
+            extractNoteToDB(context, str, 0);
         }
         return groupName;
     }
@@ -200,7 +202,7 @@ public class Util {
     /**
      * 闪电摘录，真实存入db与更新笔记本数量
      */
-    public static void extractNoteToDB(Context mContext, GNoteDB db, String str, int groupId) {
+    public static void extractNoteToDB(Context mContext, String str, int groupId) {
         Calendar today = Calendar.getInstance();
         GNote gNote = new GNote();
         gNote.setCalToTime(today);
@@ -214,9 +216,14 @@ public class Util {
         ProviderUtil.insertGNote(mContext, gNote);
 
 //        更新笔记本
-        updateGNotebook(mContext, db, groupId, +1, false);
-        if (groupId != 0) {
-            updateGNotebook(mContext, db, 0, +1, false);
+//        updateGNotebook(mContext, db, groupId, +1, false);
+//        if (groupId != 0) {
+//            updateGNotebook(mContext, db, 0, +1, false);
+//        }
+
+        GNotebookUtil.updateGNotebook(mContext, groupId, +1);
+        if (0 != groupId) {
+            GNotebookUtil.updateGNotebook(mContext, 0, +1);
         }
     }
 
@@ -225,8 +232,8 @@ public class Util {
         if (groupId == 0) {
             //如果是移动文件，不加不减
             if (isMove) return;
-            int num = PreferencesUtils.getInstance(mContext).getNotesNum();
-            PreferencesUtils.getInstance(mContext).setNotesNum(num + value);
+            int num = MyLitePrefs.getInt(MyLitePrefs.PURENOTE_NOTE_NUM);
+            MyLitePrefs.putInt(MyLitePrefs.PURENOTE_NOTE_NUM, num + value);
         } else {
             GNotebook gNotebook = db.getGNotebookById(groupId);
             if (null != gNotebook) {
@@ -239,10 +246,9 @@ public class Util {
         }
     }
 
-    public static String readSaveLocation(String lo, SharedPreferences preferences, GNoteDB db,
-                                          Context mContext) {
-        int extractLocation = preferences.getInt(lo, 0);
-        List<GNotebook> list = db.loadGNotebooks();
+    public static String readSaveLocation(String key, Context context) {
+        int extractLocation = MyLitePrefs.getInt(key);
+        List<GNotebook> list = GNoteDB.getInstance(context).loadGNotebooks();
         String extractGroup = "";
 
         if (0 != extractLocation) {
@@ -255,10 +261,10 @@ public class Util {
                 }
             }
             if (!find) {
-                Toast.makeText(mContext, R.string.read_save_location_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.read_save_location_error, Toast.LENGTH_SHORT).show();
             }
         } else {
-            extractGroup = mContext.getResources().getString(R.string.all_notes);
+            extractGroup = context.getResources().getString(R.string.all_notes);
         }
 
         return extractGroup;
