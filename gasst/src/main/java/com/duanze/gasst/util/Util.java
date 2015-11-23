@@ -13,10 +13,10 @@ import android.os.Build;
 import android.widget.Toast;
 
 import com.duanze.gasst.R;
-import com.duanze.gasst.model.GNote;
-import com.duanze.gasst.model.GNoteDB;
-import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.provider.GNoteProvider;
+import com.duanze.gasst.data.model.GNote;
+import com.duanze.gasst.data.model.GNoteDB;
+import com.duanze.gasst.data.model.GNotebook;
+import com.duanze.gasst.data.provider.GNoteProvider;
 import com.duanze.gasst.util.liteprefs.MyLitePrefs;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
@@ -264,7 +264,8 @@ public class Util {
                 Toast.makeText(context, R.string.read_save_location_error, Toast.LENGTH_SHORT).show();
             }
         } else {
-            extractGroup = context.getResources().getString(R.string.all_notes);
+//            extractGroup = context.getResources().getString(R.string.all_notes);
+            extractGroup = MyLitePrefs.getString(MyLitePrefs.ALL_NOTES_STRING);
         }
 
         return extractGroup;

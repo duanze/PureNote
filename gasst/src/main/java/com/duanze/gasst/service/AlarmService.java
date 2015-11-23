@@ -16,8 +16,8 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.duanze.gasst.R;
-import com.duanze.gasst.model.GNote;
-import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.data.model.GNote;
+import com.duanze.gasst.data.model.GNoteDB;
 import com.duanze.gasst.receiver.AlarmReceiver;
 import com.duanze.gasst.ui.activity.Note;
 import com.duanze.gasst.ui.activity.StartActivity;

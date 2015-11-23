@@ -1,11 +1,11 @@
-package com.duanze.gasst.model;
+package com.duanze.gasst.data.model;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.duanze.gasst.db.GNoteOpenHelper;
+import com.duanze.gasst.data.db.GNoteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;

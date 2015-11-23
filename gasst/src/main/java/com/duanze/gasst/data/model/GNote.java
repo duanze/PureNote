@@ -1,4 +1,4 @@
-package com.duanze.gasst.model;
+package com.duanze.gasst.data.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;

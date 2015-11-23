@@ -1,10 +1,10 @@
-package com.duanze.gasst.db;
+package com.duanze.gasst.data.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.data.model.GNoteDB;
 
 public class GNoteOpenHelper extends SQLiteOpenHelper {
 

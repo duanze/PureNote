@@ -1,4 +1,4 @@
-package com.duanze.gasst.provider;
+package com.duanze.gasst.data.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -10,9 +10,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.duanze.gasst.db.GNoteOpenHelper;
-import com.duanze.gasst.model.GNote;
-import com.duanze.gasst.model.GNoteDB;
+import com.duanze.gasst.data.model.GNote;
+import com.duanze.gasst.data.model.GNoteDB;
+import com.duanze.gasst.data.db.GNoteOpenHelper;
 
 public class GNoteProvider extends ContentProvider {
     private static final int NOTE_DIR = 1;

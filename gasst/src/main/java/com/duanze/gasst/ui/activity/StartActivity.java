@@ -40,10 +40,10 @@ import android.widget.Toast;
 
 import com.duanze.gasst.MyApplication;
 import com.duanze.gasst.R;
-import com.duanze.gasst.model.GNote;
-import com.duanze.gasst.model.GNoteDB;
-import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.provider.GNoteProvider;
+import com.duanze.gasst.data.model.GNote;
+import com.duanze.gasst.data.model.GNoteDB;
+import com.duanze.gasst.data.model.GNotebook;
+import com.duanze.gasst.data.provider.GNoteProvider;
 import com.duanze.gasst.sync.Evernote;
 import com.duanze.gasst.ui.activity.base.BaseActivity;
 import com.duanze.gasst.ui.adapter.GNotebookAdapter;
@@ -1087,7 +1087,6 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
                     break;
                 case Evernote.SYNC_END:
                     setRefreshing(false);
-                    Toast.makeText(mContext,)
                     break;
                 case UPGRADE_START:
                     showDialog(OPERATE);

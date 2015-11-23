@@ -1,11 +1,9 @@
-package com.duanze.gasst.model;
+package com.duanze.gasst.data.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.duanze.gasst.util.LogUtil;
 
 public class GNotebook implements Parcelable {
     public static final String TAG = "GNotebook";

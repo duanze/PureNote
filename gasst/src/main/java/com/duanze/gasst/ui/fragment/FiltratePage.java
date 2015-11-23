@@ -29,9 +29,9 @@ import android.widget.Toast;
 import com.duanze.gasst.ui.activity.StartActivity;
 import com.duanze.gasst.R;
 import com.duanze.gasst.ui.adapter.GNoteRVAdapter;
-import com.duanze.gasst.model.GNoteDB;
-import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.provider.GNoteProvider;
+import com.duanze.gasst.data.model.GNoteDB;
+import com.duanze.gasst.data.model.GNotebook;
+import com.duanze.gasst.data.provider.GNoteProvider;
 import com.duanze.gasst.util.liteprefs.MyLitePrefs;
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 

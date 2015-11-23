@@ -12,7 +12,7 @@ import android.text.Html;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.ui.activity.Note;
-import com.duanze.gasst.model.GNote;
+import com.duanze.gasst.data.model.GNote;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.ProviderUtil;

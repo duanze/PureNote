@@ -2,8 +2,8 @@ package com.duanze.gasst.util;
 
 import android.content.Context;
 
-import com.duanze.gasst.model.GNoteDB;
-import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.data.model.GNoteDB;
+import com.duanze.gasst.data.model.GNotebook;
 import com.duanze.gasst.util.liteprefs.MyLitePrefs;
 
 /**

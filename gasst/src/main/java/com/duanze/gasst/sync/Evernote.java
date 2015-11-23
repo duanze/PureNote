@@ -6,9 +6,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 
-import com.duanze.gasst.model.GNote;
-import com.duanze.gasst.model.GNoteDB;
-import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.data.model.GNote;
+import com.duanze.gasst.data.model.GNoteDB;
 import com.duanze.gasst.util.GNotebookUtil;
 import com.duanze.gasst.util.LogUtil;
 import com.duanze.gasst.util.ProviderUtil;

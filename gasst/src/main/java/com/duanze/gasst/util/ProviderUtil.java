@@ -5,9 +5,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 
-import com.duanze.gasst.model.GNote;
-import com.duanze.gasst.model.GNotebook;
-import com.duanze.gasst.provider.GNoteProvider;
+import com.duanze.gasst.data.model.GNote;
+import com.duanze.gasst.data.model.GNotebook;
+import com.duanze.gasst.data.provider.GNoteProvider;
 
 /**
  * Created by Duanze on 2015/9/26.

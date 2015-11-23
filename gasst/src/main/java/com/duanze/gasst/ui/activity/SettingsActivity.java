@@ -27,8 +27,8 @@ import android.widget.Toast;
 
 import com.duanze.gasst.MyApplication;
 import com.duanze.gasst.R;
-import com.duanze.gasst.model.GNoteDB;
-import com.duanze.gasst.model.GNotebook;
+import com.duanze.gasst.data.model.GNoteDB;
+import com.duanze.gasst.data.model.GNotebook;
 import com.duanze.gasst.service.AlarmService;
 import com.duanze.gasst.sync.Evernote;
 import com.duanze.gasst.ui.activity.base.BaseActivity;

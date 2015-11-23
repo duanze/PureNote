@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.util.ThemeUtils;
+import com.duanze.litepreferences.model.StringPref;
 import com.duanze.litepreferences.rawmaterial.BaseLitePrefs;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -39,6 +40,7 @@ public class MyLitePrefs extends BaseLitePrefs {
     public static final String GNOTEBOOK_ID = "gnotebook_id";
     public static final String PURENOTE_NOTE_NUM = "purenote_note_num";
 
+    public static final String ALL_NOTES_STRING = "all_notes_string_key";
 
     public static void initFromXml(Context context) {
         try {
@@ -46,7 +48,7 @@ public class MyLitePrefs extends BaseLitePrefs {
         } catch (IOException | XmlPullParserException e) {
             e.printStackTrace();
         }
-
+        putToMap(ALL_NOTES_STRING, new StringPref(ALL_NOTES_STRING, R.string.all_notes, context.getApplicationContext()));
     }
 
     public static ThemeUtils.Theme getTheme() {

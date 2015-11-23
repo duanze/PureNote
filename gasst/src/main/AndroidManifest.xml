@@ -58,7 +58,7 @@
         <receiver android:name=".receiver.AlarmReceiver"/>
 
         <provider
-            android:name=".provider.GNoteProvider"
+            android:name=".data.provider.GNoteProvider"
             android:authorities="com.duanze.gasst.provider"
             android:enabled="true"
             android:exported="true"/>

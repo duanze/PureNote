@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.duanze.gasst.R;
 import com.duanze.gasst.ui.activity.Note;
-import com.duanze.gasst.model.GNote;
+import com.duanze.gasst.data.model.GNote;
 import com.duanze.gasst.util.GNotebookUtil;
 import com.duanze.gasst.util.ProviderUtil;
 import com.duanze.gasst.util.TimeUtils;
