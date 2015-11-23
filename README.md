@@ -1,7 +1,6 @@
 # PureNote
 A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
-<br>
-<br>See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)<br>
+See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)
 [小米应用商店](http://app.mi.com/detail/85433)
 #一切皆为虚妄
 -非常规知识点细目：
@@ -20,8 +19,8 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 
 #构建环境：
 -Gradle 1.3.0
-<br>-Sdk 22
-<br>-buildtool 23.0.1
+-Sdk 22
+-buildtool 23.0.1
 
 #效果展示
 ![](https://github.com/duanze/PureNote/blob/master/app_asset/Screenshot_2015-10-25-21-01-44.png)

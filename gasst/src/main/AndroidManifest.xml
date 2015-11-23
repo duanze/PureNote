@@ -69,11 +69,7 @@
             android:value="555f243b67e58e446f00248a"/>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="MiMarket"/>
-        <!-- <meta-data -->
-        <!-- android:value="wandoujia" -->
-        <!-- android:name="UMENG_CHANNEL"/> -->
-
+            android:value="${UMENG_CHANNEL_VALUE}"/>
 
         <!-- evernote -->
         <activity
