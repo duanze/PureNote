@@ -264,8 +264,7 @@ public class Util {
                 Toast.makeText(context, R.string.read_save_location_error, Toast.LENGTH_SHORT).show();
             }
         } else {
-//            extractGroup = context.getResources().getString(R.string.all_notes);
-            extractGroup = MyLitePrefs.getString(MyLitePrefs.ALL_NOTES_STRING);
+            extractGroup = context.getResources().getString(R.string.all_notes);
         }
 
         return extractGroup;
