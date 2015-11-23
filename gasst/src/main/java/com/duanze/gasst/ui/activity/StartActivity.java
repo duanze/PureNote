@@ -1076,6 +1076,8 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
     private static final int UPGRADE_START = 280;
     private static final int UPGRADE_END = 281;
     public static final int NEED_RECREATE = 0x0010;
+    public static final int NEED_CONFIG_LAYOUT = 0x0011;
+    public static final int NEED_NOTIFY = 0x0012;
 
     public class SyncHandler extends Handler {
         @Override
@@ -1097,6 +1099,12 @@ public class StartActivity extends BaseActivity implements Evernote.EvernoteLogi
 
                 case NEED_RECREATE:
                     recreate();
+                    break;
+                case NEED_CONFIG_LAYOUT:
+                    gNoteRecyclerView.configLayoutManager();
+                    break;
+                case NEED_NOTIFY:
+                    gNoteRecyclerView.notifyDataSetChanged();
                     break;
                 default:
                     break;

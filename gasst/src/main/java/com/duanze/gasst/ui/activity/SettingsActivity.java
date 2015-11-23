@@ -153,7 +153,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 MyLitePrefs.putBoolean(MyLitePrefs.ONE_COLUMN, isChecked);
-                refreshStartActivity(StartActivity.NEED_RECREATE);
+                refreshStartActivity(StartActivity.NEED_CONFIG_LAYOUT);
             }
         });
 
@@ -163,7 +163,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 MyLitePrefs.putBoolean(MyLitePrefs.CREATE_ORDER, isChecked);
-                refreshStartActivity(StartActivity.NEED_RECREATE);
+                refreshStartActivity(StartActivity.NEED_NOTIFY);
             }
         });
 

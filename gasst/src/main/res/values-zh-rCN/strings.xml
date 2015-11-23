@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sync_end"></string>
+    <string name="sync_end">同步完成</string>
 
     <string name="menu_undo">撤消</string>
     <string name="menu_redo">重做</string>

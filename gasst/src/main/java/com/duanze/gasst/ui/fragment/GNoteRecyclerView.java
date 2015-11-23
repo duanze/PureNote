@@ -52,6 +52,7 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     private SwipeRefreshLayoutEx refreshLayout;
     //nice FloatingButton
     private FloatingActionButton fabButton;
+    private RecyclerView mRecyclerView;
     private GNoteRVAdapter mAdapter;
 
     private void initValues() {
@@ -68,16 +69,10 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gnote_recycler, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv_gnotes);
-
-        int columnNum = 2;
-        if (MyLitePrefs.getBoolean(MyLitePrefs.ONE_COLUMN)) {
-            columnNum = 1;
-        }
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(columnNum,
-                StaggeredGridLayoutManager.VERTICAL));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_gnotes);
+        configLayoutManager();
         mAdapter = new GNoteRVAdapter(mContext, null, this, this);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         loaderManager = getLoaderManager();
         loaderManager.initLoader(LOADER_ID, null, this);
@@ -89,12 +84,25 @@ public class GNoteRecyclerView extends Fragment implements LoaderManager.LoaderC
                 Note.writeTodayNewNote(mContext);
             }
         });
-        fabButton.listenTo(recyclerView);
+        fabButton.listenTo(mRecyclerView);
 
         refreshLayout = (SwipeRefreshLayoutEx) view.findViewById(R.id.refresher);
         refreshLayout.setColorSchemeColors(((StartActivity) mContext).getColorPrimary());
         refreshLayout.setOnRefreshListener((StartActivity) mContext);
         return view;
+    }
+
+    public void configLayoutManager() {
+        int columnNum = 2;
+        if (MyLitePrefs.getBoolean(MyLitePrefs.ONE_COLUMN)) {
+            columnNum = 1;
+        }
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(columnNum,
+                StaggeredGridLayoutManager.VERTICAL));
+    }
+
+    public void notifyDataSetChanged() {
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
