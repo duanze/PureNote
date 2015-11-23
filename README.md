@@ -4,7 +4,7 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>See it in [Google Play](https://play.google.com/store/apps/details?id=com.duanze.gasst)<br>
 [小米应用商店](http://app.mi.com/detail/85433)
 #一切皆为虚妄
-<br>-非常规知识点细目：
+-非常规知识点细目：
 <br>+备忘录模式经典使用，“撤消”、“重做”功能的实现
 <br>+[stormzhang](http://www.stormzhang.com/)分享的Toolbar适配方案使用实例
 <br>+[Notes](https://github.com/lguipeng/Notes)中的Material Design风格，只用v7包就可轻松实现哦
@@ -19,7 +19,7 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>+更多细节还请自行[下载](http://app.mi.com/detail/85433)感受
 
 #构建环境：
-<br>-Gradle 1.3.0
+-Gradle 1.3.0
 <br>-Sdk 22
 <br>-buildtool 23.0.1
 
@@ -38,7 +38,7 @@ A pure,fast,concise Android note app.纯粹，快速，简洁的笔记app.
 <br>lguipeng，[Notes](https://github.com/lguipeng/Notes)
 
 #License
-<br>Copyright 2015 Duanze
+Copyright 2015 Duanze
 <br>
 <br>   Licensed under the Apache License, Version 2.0 (the "License");
 <br>   you may not use this file except in compliance with the License.
