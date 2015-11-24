@@ -313,6 +313,18 @@ public class Note extends BaseActivity implements TextWatcher {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (gNote.getIsPassed()) {
+            menu.findItem(R.id.action_cancel_remind).setVisible(false);
+            menu.findItem(R.id.action_remind).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_cancel_remind).setVisible(true);
+            menu.findItem(R.id.action_remind).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

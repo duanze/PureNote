@@ -21,6 +21,7 @@ android {
         xiaomi {}
         fir {}
         googleplay {}
+        wandoujia {}
     }
 
     productFlavors.all {
